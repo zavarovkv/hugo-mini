@@ -152,4 +152,11 @@
       initThemeToggle();
     }
   })();
+
+  {{- with .Site.Params.consoleEasterEgg }}
+  // Console easter egg
+  (function() {
+    console.log('%c{{ . | safeJS }}', 'color: #0060a0; font-family: monospace; font-size: 13px;');
+  })();
+  {{- end }}
 </script>
