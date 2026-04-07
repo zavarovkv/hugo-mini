@@ -153,10 +153,11 @@
     }
   })();
 
-  {{- with .Site.Params.consoleEasterEgg }}
-  // Console easter egg
+  {{- if .IsHome }}
+  {{- with .Site.Params.consoleArt }}
   (function() {
-    console.log('%c{{ . | safeJS }}', 'color: #0060a0; font-family: monospace; font-size: 13px;');
+    console.log('%c' + {{ . | jsonify }}, 'color: #0060a0; font-family: monospace; font-size: 13px;');
   })();
+  {{- end }}
   {{- end }}
 </script>
