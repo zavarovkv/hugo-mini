@@ -1,0 +1,26 @@
+# {{ site.Title }} — {{ site.BaseURL }}
+
+> {{ site.Params.description }}. Автор — {{ site.Params.authorName }}, Head of Product в Ozon. Контент на русском языке.
+
+## Об авторе
+
+{{ site.Params.authorName }} — Head of Product в Ozon с 12+ годами опыта в IT. Ранее работал в Яндексе, Мегамаркете и Лаборатории Касперского. С 2021 по 2025 год вел курсы в Яндекс Практикуме. Ведет Telegram-канал «Код Продакта» (https://t.me/{{ site.Params.telegramChannel }}).
+
+## Контакты
+
+- Сайт: {{ site.BaseURL }}
+- Telegram: https://t.me/zavarov
+- Telegram-канал: https://t.me/{{ site.Params.telegramChannel }}
+- LinkedIn: https://linkedin.com/in/zavarovkv
+- GitHub: https://github.com/zavarovkv
+
+## Разделы
+
+- Блог: {{ site.BaseURL }}blog/
+- Консультация: {{ site.BaseURL }}consultation/
+
+## Статьи
+{{- $blogSection := site.GetPage "/blog" }}
+{{- range where $blogSection.Pages ".Params.hidden" "ne" true }}
+- [{{ .Title }}]({{ .Permalink }}): {{ .Description }}
+{{- end }}

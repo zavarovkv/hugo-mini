@@ -1,0 +1,87 @@
+[articles]
+other = "Articles"
+
+[misc]
+other = "Miscellaneous"
+
+[home]
+other = "Home"
+
+[subscribe]
+other = "Subscribe"
+
+[tg_cta_title]
+other = "Product Management Channel"
+
+[tg_cta_description]
+other = "Writing about building digital products and managing teams"
+
+[theme_light]
+other = "Switch to light theme"
+
+[theme_dark]
+other = "Switch to dark theme"
+
+[toggle_theme]
+other = "Toggle theme"
+
+[month_january]
+other = "January"
+
+[month_february]
+other = "February"
+
+[month_march]
+other = "March"
+
+[month_april]
+other = "April"
+
+[month_may]
+other = "May"
+
+[month_june]
+other = "June"
+
+[month_july]
+other = "July"
+
+[month_august]
+other = "August"
+
+[month_september]
+other = "September"
+
+[month_october]
+other = "October"
+
+[month_november]
+other = "November"
+
+[month_december]
+other = "December"
+
+# Category display names
+[cat_marketing]
+other = "Marketing"
+
+[cat_strategy]
+other = "Strategy & Frameworks"
+
+[cat_metrics]
+other = "Metrics & Analytics"
+
+[cat_leadership]
+other = "Team & Leadership"
+
+[cat_self-development]
+other = "Self-Development"
+
+[cat_productivity]
+other = "Productivity"
+
+[cat_collections]
+other = "Collections"
+
+[cat_getting-started]
+other = "Getting Started"

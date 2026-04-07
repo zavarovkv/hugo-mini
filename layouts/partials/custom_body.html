@@ -1,0 +1,155 @@
+<script>
+  // Initialize Likely social sharing buttons
+  if (typeof likely !== 'undefined') {
+    likely.initiate();
+  }
+
+  // Mobile menu toggle
+  (function() {
+    function initMobileMenu() {
+      var toggle = document.querySelector('.mobile-menu-toggle');
+      var nav = document.querySelector('.main-nav');
+
+      if (!toggle || !nav) {
+        return;
+      }
+
+      function closeMenu() {
+        nav.classList.remove('active');
+        toggle.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        document.documentElement.classList.remove('menu-open');
+      }
+
+      function openMenu() {
+        window.scrollTo(0, 0);
+        nav.classList.add('active');
+        toggle.classList.add('active');
+        document.body.classList.add('menu-open');
+        document.documentElement.classList.add('menu-open');
+      }
+
+      toggle.addEventListener('click', function() {
+        if (nav.classList.contains('active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      // Close menu when clicking on a link
+      var navLinks = nav.querySelectorAll('a');
+      navLinks.forEach(function(link) {
+        link.addEventListener('click', closeMenu);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+      initMobileMenu();
+    }
+  })();
+
+  // Theme toggle (bi-state: light ↔ dark; follows system until first explicit click)
+  (function() {
+    var STORAGE_KEY = 'theme';
+    var LABELS = { light: {{ i18n "theme_dark" }}, dark: {{ i18n "theme_light" }} };
+    var root = document.documentElement;
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function currentTheme() {
+      return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function storedChoice() {
+      try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+    }
+
+    // Sync Likely social sharing widget with current theme
+    function syncLikelyTheme() {
+      var dark = currentTheme() === 'dark';
+      var widgets = document.querySelectorAll('.likely');
+      for (var i = 0; i < widgets.length; i++) {
+        widgets[i].classList.toggle('likely-dark-theme', dark);
+      }
+    }
+
+    // Rebuild Telegram Discussion widget with correct dark/light theme
+    var tgWidgetLoaded = false;
+    var tgRebuildTimer = null;
+    function syncTelegramWidget() {
+      var container = document.getElementById('tg-comments');
+      if (!container) return;
+      var discussion = container.getAttribute('data-tg-discussion');
+      if (!discussion) return;
+      if (tgRebuildTimer) clearTimeout(tgRebuildTimer);
+      tgRebuildTimer = setTimeout(function() {
+        container.innerHTML = '';
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://telegram.org/js/telegram-widget.js?22';
+        s.setAttribute('data-telegram-discussion', discussion);
+        s.setAttribute('data-comments-limit', container.getAttribute('data-tg-limit') || '20');
+        if (currentTheme() === 'dark') s.setAttribute('data-dark', '1');
+        container.appendChild(s);
+        tgWidgetLoaded = true;
+        tgRebuildTimer = null;
+      }, tgWidgetLoaded ? 500 : 0);
+    }
+
+    // Lazy-load: only load Telegram widget when scrolled into view
+    function observeTelegramWidget() {
+      var container = document.getElementById('tg-comments');
+      if (!container || typeof IntersectionObserver === 'undefined') {
+        syncTelegramWidget();
+        return;
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !tgWidgetLoaded) {
+          syncTelegramWidget();
+          observer.disconnect();
+        }
+      }, { rootMargin: '200px' });
+      observer.observe(container);
+    }
+
+    // Follow system changes until user has made an explicit choice
+    function onSystemChange() {
+      if (storedChoice() === null) {
+        root.setAttribute('data-theme', mql.matches ? 'dark' : 'light');
+        var btn = document.querySelector('.theme-toggle');
+        if (btn) btn.title = LABELS[currentTheme()];
+        syncLikelyTheme();
+        syncTelegramWidget();
+      }
+    }
+    if (mql.addEventListener) {
+      mql.addEventListener('change', onSystemChange);
+    } else if (mql.addListener) {
+      mql.addListener(onSystemChange); // Safari < 14
+    }
+
+    function initThemeToggle() {
+      syncLikelyTheme();
+      observeTelegramWidget();
+      var btn = document.querySelector('.theme-toggle');
+      if (!btn) return;
+      btn.title = LABELS[currentTheme()];
+      btn.addEventListener('click', function() {
+        var next = currentTheme() === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+        root.setAttribute('data-theme', next);
+        btn.title = LABELS[next];
+        syncLikelyTheme();
+        syncTelegramWidget();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initThemeToggle);
+    } else {
+      initThemeToggle();
+    }
+  })();
+</script>

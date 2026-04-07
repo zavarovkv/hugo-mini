@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url={{ "/" | relURL }}">
+  <script>
+    window.location.replace("{{ "/" | relURL }}");
+  </script>
+  <title>404 - Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting to <a href="{{ "/" | relURL }}">home page</a>...</p>
+</body>
+</html>

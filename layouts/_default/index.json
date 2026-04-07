@@ -1,0 +1,28 @@
+{{- $blogSection := site.GetPage "/blog" -}}
+{{- $posts := where $blogSection.Pages ".Params.hidden" "ne" true -}}
+{{- $items := slice -}}
+{{- range $posts.ByDate.Reverse -}}
+  {{- $item := dict
+    "id" .Permalink
+    "url" .Permalink
+    "title" .Title
+    "content_text" (.Plain | truncate 500)
+    "summary" .Description
+    "date_published" (.Date.Format "2006-01-02T15:04:05Z07:00")
+    "date_modified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  -}}
+  {{- if .Params.categories -}}
+    {{- $item = merge $item (dict "tags" .Params.categories) -}}
+  {{- end -}}
+  {{- $items = $items | append $item -}}
+{{- end -}}
+{{- dict
+  "version" "https://jsonfeed.org/version/1.1"
+  "title" site.Title
+  "home_page_url" site.BaseURL
+  "feed_url" (printf "%sindex.json" site.BaseURL)
+  "description" site.Params.description
+  "language" site.LanguageCode
+  "authors" (slice (dict "name" site.Params.authorName "url" site.Params.authorURL))
+  "items" $items
+| jsonify (dict "indent" "  ") -}}

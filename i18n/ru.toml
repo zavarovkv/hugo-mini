@@ -1,0 +1,84 @@
+[articles]
+other = "Статьи"
+
+[misc]
+other = "Разное"
+
+[home]
+other = "Главная"
+
+[subscribe]
+other = "Подписаться"
+
+[tg_cta_title]
+other = "Канал о продуктовом менеджменте"
+
+[tg_cta_description]
+other = "Пишу про создание digital-продуктов и управление командами — без воды"
+
+[theme_light]
+other = "Включить светлую тему"
+
+[theme_dark]
+other = "Включить темную тему"
+
+[toggle_theme]
+other = "Переключить тему"
+
+[month_january]
+other = "января"
+
+[month_february]
+other = "февраля"
+
+[month_march]
+other = "марта"
+
+[month_april]
+other = "апреля"
+
+[month_may]
+other = "мая"
+
+[month_june]
+other = "июня"
+
+[month_july]
+other = "июля"
+
+[month_august]
+other = "августа"
+
+[month_september]
+other = "сентября"
+
+[month_october]
+other = "октября"
+
+[month_november]
+other = "ноября"
+
+[month_december]
+other = "декабря"
+
+# Category display names
+[cat_marketing]
+other = "Маркетинг"
+
+[cat_strategy]
+other = "Стратегия и фреймворки"
+
+[cat_metrics]
+other = "Метрики и аналитика"
+
+[cat_leadership]
+other = "Команда и лидерство"
+
+[cat_self-development]
+other = "Саморазвитие"
+
+[cat_productivity]
+other = "Продуктивность"
+
+[cat_collections]
+other = "Подборки"

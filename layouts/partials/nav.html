@@ -1,0 +1,20 @@
+{{- $currentPath := strings.TrimSuffix "/" .RelPermalink -}}
+{{ range .Site.Menus.main }}
+  {{- $isExternal := or (hasPrefix .URL "http://") (hasPrefix .URL "https://") -}}
+  {{- $isActive := false -}}
+  {{- if not $isExternal -}}
+    {{- $linkPath := strings.TrimSuffix "/" .URL -}}
+    {{- if $linkPath -}}
+      {{- if or (eq $currentPath $linkPath) (hasPrefix $currentPath (printf "%s/" $linkPath)) -}}
+        {{- $isActive = true -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if $isExternal -}}
+    <a href="{{ .URL }}" target="_blank" rel="noopener noreferrer">{{ .Name }}</a>
+  {{- else if $isActive -}}
+    <a href="{{ .URL }}" class="link-selected" aria-current="page">{{ .Name }}</a>
+  {{- else -}}
+    <a href="{{ .URL }}">{{ .Name }}</a>
+  {{- end -}}
+{{- end }}

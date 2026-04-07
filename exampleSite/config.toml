@@ -1,0 +1,38 @@
+baseURL = "https://example.com/"
+title = "Mini Blog"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdirectory = false
+theme = "hugo-mini"
+
+enableRobotsTXT = true
+disableKinds = ["taxonomy"]
+ignoreErrors = ["error-disable-taxonomy"]
+
+[permalinks]
+  blog = "/:slug/"
+
+[params]
+  favicon = "images/favicon.png"
+  authorName = "Jane Doe"
+  authorURL = "https://example.com/"
+  newPostDays = 30
+
+  [params.social]
+    telegram = "https://t.me/janedoe"
+    github = "https://github.com/janedoe"
+    email = "jane@example.com"
+
+  [params.author]
+    jobTitle = "Product Manager"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[menu]
+  [[menu.main]]
+    identifier = "blog"
+    name = "Articles"
+    url = "/blog/"
+    weight = 1

@@ -1,0 +1,42 @@
+{{ define "main" }}
+<article>
+  {{/* Получаем все посты блога (без скрытых) */}}
+  {{ $blogSection := site.GetPage "/blog" }}
+  {{ $allPosts := where $blogSection.Pages ".Params.hidden" "ne" true }}
+
+  {{/* Собираем все уникальные теги */}}
+  {{ $allTags := slice }}
+  {{ range $allPosts }}
+    {{ range .Params.categories }}
+      {{ if and . (not (in $allTags .)) }}
+        {{ $allTags = $allTags | append . }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  <h1>{{ i18n "articles" }}</h1>
+
+  {{/* Собираем все группы: теги + разное (если есть) */}}
+  {{ $groups := slice }}
+  {{ range $allTags }}
+    {{ $groups = $groups | append . }}
+  {{ end }}
+  {{ $hasUntagged := false }}
+  {{ range $allPosts }}
+    {{ if or (not .Params.categories) (eq (len .Params.categories) 0) }}
+      {{ $hasUntagged = true }}
+    {{ end }}
+  {{ end }}
+  {{ if $hasUntagged }}
+    {{ $groups = $groups | append "_untagged" }}
+  {{ end }}
+
+  {{ $half := math.Ceil (div (len $groups) 2.0) }}
+
+  {{/* Все статьи — группируем по тегам в 2 колонки */}}
+  <div class="posts-columns">
+    {{ partial "posts-column.html" (dict "groups" (first (int $half) $groups) "allPosts" $allPosts) }}
+    {{ partial "posts-column.html" (dict "groups" (after (int $half) $groups) "allPosts" $allPosts) }}
+  </div>
+</article>
+{{ end }}

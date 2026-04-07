@@ -1,0 +1,31 @@
+{{ $groups := .groups }}
+{{ $allPosts := .allPosts }}
+<div class="posts-column">
+  {{ range $groups }}
+    {{ if eq . "_untagged" }}
+      <div class="posts-group">
+        <h3 class="posts-group-title">{{ i18n "misc" }}</h3>
+        <ul class="blog-posts">
+          {{ range $allPosts.ByDate.Reverse }}
+            {{ if or (not .Params.categories) (eq (len .Params.categories) 0) }}
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ if ge .Date (now.AddDate 0 0 (int (mul -1 (site.Params.newPostDays | default 30)))) }} <span class="badge-new">New</span>{{ end }}</li>
+            {{ end }}
+          {{ end }}
+        </ul>
+      </div>
+    {{ else }}
+      {{ $tag := . }}
+      <div class="posts-group">
+        {{- $catKey := printf "cat_%s" $tag -}}
+        <h3 class="posts-group-title">{{ i18n $catKey | default $tag }}</h3>
+        <ul class="blog-posts">
+          {{ range $allPosts.ByDate.Reverse }}
+            {{ if in .Params.categories $tag }}
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ if ge .Date (now.AddDate 0 0 (int (mul -1 (site.Params.newPostDays | default 30)))) }} <span class="badge-new">New</span>{{ end }}</li>
+            {{ end }}
+          {{ end }}
+        </ul>
+      </div>
+    {{ end }}
+  {{ end }}
+</div>

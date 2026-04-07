@@ -1,0 +1,122 @@
+{{ if .IsPage }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ .Title | jsonify }},
+  "description": {{ with .Description }}{{ . | jsonify }}{{ else }}{{ .Summary | jsonify }}{{ end }},
+  "author": {
+    "@type": "Person",
+    "name": {{ (.Site.Params.authorName | default .Site.Params.author) | jsonify }}
+    {{ if .Site.Params.authorURL }},
+    "url": {{ .Site.Params.authorURL | jsonify }}
+    {{ end }}
+  },
+  "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+  "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
+  "publisher": {
+    "@type": "Person",
+    "name": {{ (.Site.Params.authorName | default .Site.Params.author) | jsonify }}
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": {{ .Permalink | jsonify }}
+  }{{ if .Params.categories }},
+  "keywords": {{ (delimit .Params.categories ", ") | jsonify }}{{ end }},
+  "image": {
+    "@type": "ImageObject",
+    "url": {{ (printf "%sog.png" .Permalink) | jsonify }},
+    "width": 1200,
+    "height": 630
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": {{ i18n "home" | jsonify }},
+      "item": {{ .Site.Home.Permalink | jsonify }}
+    }{{ if eq .Section "blog" }},
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ i18n "articles" | jsonify }},
+      "item": {{ (printf "%sblog/" .Site.Home.Permalink) | jsonify }}
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ .Title | jsonify }},
+      "item": {{ .Permalink | jsonify }}
+    }{{ else }},
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ .Title | jsonify }},
+      "item": {{ .Permalink | jsonify }}
+    }{{ end }}
+  ]
+}
+</script>
+{{ else if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ .Site.Title | jsonify }},
+  "url": {{ .Site.BaseURL | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ (.Site.Params.authorName | default .Site.Params.author) | jsonify }}
+    {{ if .Site.Params.authorURL }},
+    "url": {{ .Site.Params.authorURL | jsonify }}
+    {{ end }}
+  }
+  {{ if .Site.Params.description }},
+  "description": {{ .Site.Params.description | jsonify }}
+  {{ end }}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ (.Site.Params.authorName | default .Site.Params.author) | jsonify }},
+  "url": {{ .Site.BaseURL | jsonify }},
+  {{ with .Site.Params.author.jobTitle }}"jobTitle": {{ . | jsonify }},{{ end }}
+  "sameAs": [
+    {{- $links := slice }}
+    {{- with .Site.Params.social.telegram }}{{ $links = $links | append . }}{{ end }}
+    {{- with .Site.Params.social.linkedin }}{{ $links = $links | append . }}{{ end }}
+    {{- with .Site.Params.social.github }}{{ $links = $links | append . }}{{ end }}
+    {{- range $i, $l := $links }}{{ if $i }},{{ end }}
+    {{ $l | jsonify }}
+    {{- end }}
+  ]
+}
+</script>
+{{ else }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ .Site.Title | jsonify }},
+  "url": {{ .Site.BaseURL | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ (.Site.Params.authorName | default .Site.Params.author) | jsonify }}
+    {{ if .Site.Params.authorURL }},
+    "url": {{ .Site.Params.authorURL | jsonify }}
+    {{ end }}
+  }
+  {{ if .Site.Params.description }},
+  "description": {{ .Site.Params.description | jsonify }}
+  {{ end }}
+}
+</script>
+{{ end }}

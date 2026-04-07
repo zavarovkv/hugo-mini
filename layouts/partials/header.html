@@ -1,0 +1,19 @@
+<div class="header-container{{ if .IsHome }} home-page{{ end }}">
+  <a href="{{ .Site.Home.RelPermalink }}" class="title{{ if .IsHome }} title-selected{{ end }}"{{ if .IsHome }} aria-current="page"{{ end }}>
+    {{- with .Site.Params.avatar }}
+    <div class="title-avatar-container">
+      <img src="{{ . | relURL }}" alt="{{ $.Site.Params.authorName | default $.Site.Title }}" class="title-avatar title-avatar-default" loading="eager" decoding="sync" width="45" height="45">
+      {{- with $.Site.Params.avatarHover }}
+      <img src="{{ . | relURL }}" alt="" class="title-avatar title-avatar-hover" loading="lazy" decoding="async" width="45" height="45">
+      {{- end }}
+    </div>
+    {{- end }}
+    <span class="title-text">{{ .Site.Title }}</span>
+  </a>
+  <button class="mobile-menu-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <nav class="main-nav">{{- partial "nav.html" . -}}</nav>
+</div>

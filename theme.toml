@@ -1,0 +1,13 @@
+name = "Mini"
+license = "MIT"
+licenselink = "https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE"
+description = "A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integration, and dynamic OG images"
+homepage = "https://github.com/zavarovkv/hugo-mini"
+demosite = "https://zavarov.com/"
+tags = ["blog", "minimal", "dark", "light", "responsive", "multilingual"]
+features = ["dark-light-mode", "i18n", "telegram-comments", "katex-math", "mermaid-diagrams", "og-images", "social-sharing"]
+min_version = "0.145.0"
+
+[author]
+name = "Konstantin Zavarov"
+homepage = "https://zavarov.com"

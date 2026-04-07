@@ -1,0 +1,8 @@
+{{- $postDate := .Date -}}
+{{- $yearsDiff := div (sub now.Unix $postDate.Unix) 31536000 -}}
+{{- if lt $yearsDiff 1 -}}
+  {{- $monthKey := printf "month_%s" ($postDate.Format "January" | lower) -}}
+  {{- printf "%s %s %s" ($postDate.Format "2") (i18n $monthKey) ($postDate.Format "2006") -}}
+{{- else -}}
+  {{- $postDate.Format "2006" -}}
+{{- end -}}

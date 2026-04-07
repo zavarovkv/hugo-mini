@@ -1,0 +1,64 @@
+{{/* OG Image Generator - creates unique 1200x630 images */}}
+{{- $base := resources.Get "og/og-base.png" -}}
+{{- $boldFont := resources.Get "fonts/Inter-Bold.ttf" -}}
+{{- $regularFont := resources.Get "fonts/Inter-Regular.ttf" -}}
+
+{{- if and $base $boldFont $regularFont -}}
+  {{- $title := "" -}}
+  {{- $subtitle := "" -}}
+  {{- $path := "" -}}
+
+  {{- $authorName := .Site.Params.authorName | default .Site.Params.author -}}
+  {{- $attribution := printf "%s · %s" (.Site.BaseURL | replaceRE "^https?://" "" | replaceRE "/$" "") $authorName -}}
+
+  {{- if .IsPage -}}
+    {{/* Blog post: title + attribution */}}
+    {{- $title = .Title -}}
+    {{- $subtitle = $attribution -}}
+    {{- $path = printf "%sog.png" .RelPermalink -}}
+  {{- else if .IsHome -}}
+    {{/* Homepage */}}
+    {{- $title = $authorName -}}
+    {{- $subtitle = cond (eq .Language.Lang "en") "Personal blog about product management" "Личный блог о продакт-менеджменте" -}}
+    {{- $path = printf "%sog.png" .RelPermalink -}}
+  {{- else if .IsSection -}}
+    {{/* Section pages (e.g. /blog/) */}}
+    {{- $title = (.Title | default .Site.Title) -}}
+    {{- $subtitle = $attribution -}}
+    {{- $path = printf "%sog.png" .RelPermalink -}}
+  {{- end -}}
+
+  {{- if $title -}}
+    {{- $img := $base.Filter (images.Text $title (dict
+      "color" "#ffffff"
+      "size" 52
+      "linespacing" 8
+      "x" 80
+      "y" 80
+      "font" $boldFont
+    )) -}}
+
+    {{- $img = $img.Filter (images.Text $subtitle (dict
+      "color" "#888888"
+      "size" 24
+      "x" 80
+      "y" 540
+      "font" $regularFont
+    )) -}}
+
+    {{- $img = resources.Copy $path $img -}}
+
+    <meta property="og:image" content="{{ $img.Permalink }}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="{{ $img.Permalink }}" />
+  {{- end -}}
+{{- else -}}
+  {{/* Fallback: use static default image */}}
+  <meta property="og:image" content="{{ "images/og-default.png" | absURL }}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="{{ "images/og-default.png" | absURL }}" />
+{{- end -}}
