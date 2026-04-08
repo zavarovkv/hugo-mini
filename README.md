@@ -21,13 +21,13 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 ## Quick Start
 
 ```bash
-git submodule add https://github.com/zavarovkv/hugo-mini.git themes/mini
+git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 ```
 
 Set in your `config.toml`:
 
 ```toml
-theme = "mini"
+theme = "hugo-mini"
 ```
 
 ## Configuration
@@ -115,8 +115,10 @@ other = "Marketing"
 
 Override any partial by placing it in your site's `layouts/partials/`:
 
-- `custom_head.html` — additional CSS, verification meta tags
-- `custom_body.html` — additional JS, analytics
+- `header.html` — site header (e.g. custom name/logo layout)
+- `extra_head.html` — additional `<head>` content (verification meta tags, custom CSS)
+- `custom_head.html` — main CSS (override to fully replace theme styles)
+- `custom_body.html` — JS before `</body>` (analytics, additional scripts)
 
 ## Requirements
 
