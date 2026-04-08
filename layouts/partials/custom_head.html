@@ -784,6 +784,7 @@
   .lang-toggle:active {
     display: grid;
     place-items: center;
+    box-sizing: border-box;
     width: 42px;
     height: 28px;
     padding: 0;
@@ -795,7 +796,10 @@
     transition: border-color 0.2s ease, transform 0.15s ease;
   }
 
-  [data-theme="dark"] .lang-toggle {
+  [data-theme="dark"] .lang-toggle,
+  [data-theme="dark"] .lang-toggle:link,
+  [data-theme="dark"] .lang-toggle:visited,
+  [data-theme="dark"] .lang-toggle:active {
     border-color: #333;
   }
 
