@@ -1,38 +1,59 @@
 baseURL = "https://example.com/"
-title = "Mini Blog"
-defaultContentLanguage = "en"
+title   = "Mini Blog"
+theme   = "hugo-mini"
+
+defaultContentLanguage              = "en"
 defaultContentLanguageInSubdirectory = false
-theme = "hugo-mini"
 
 enableRobotsTXT = true
-disableKinds = ["taxonomy"]
-ignoreErrors = ["error-disable-taxonomy"]
+disableKinds    = ["taxonomy"]
+ignoreErrors    = ["error-disable-taxonomy"]
 
 [permalinks]
   blog = "/:slug/"
 
 [params]
-  favicon = "images/favicon.png"
+  favicon    = "images/favicon.png"
   authorName = "Jane Doe"
-  authorURL = "https://example.com/"
-  newPostDays = 30
+  authorURL  = "https://example.com/"
 
-  [params.social]
-    telegram = "https://t.me/janedoe"
-    github = "https://github.com/janedoe"
-    email = "jane@example.com"
+  # Appearance
+  # avatar      = "images/avatar.webp"
+  # avatarHover = "images/avatar-hover.webp"
+
+  # Footer
+  copyrightYear = 2024   # start year: renders as "© 2024–CURRENT"
+
+  # Content
+  newPostDays = 30   # days before "New" badge disappears
+
+  # Telegram (remove to disable CTA and comments)
+  # telegramChannel        = "your_channel"
+  # telegramCTATitle       = "My Channel"
+  # telegramCTADescription = "Follow for more content"
+
+  # Features
+  # socialSharing = false   # uncomment to disable Likely sharing buttons
+
+  # Analytics
+  # yandexMetrikaId = 123456789
 
   [params.author]
     jobTitle = "Product Manager"
 
+  [params.social]
+    telegram = "https://t.me/janedoe"
+    github   = "https://github.com/janedoe"
+    email    = "jane@example.com"
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
-      unsafe = true
+      unsafe = true   # required for shortcodes and HTML in content
 
 [menu]
   [[menu.main]]
     identifier = "blog"
-    name = "Articles"
-    url = "/blog/"
-    weight = 1
+    name       = "Articles"
+    url        = "/blog/"
+    weight     = 1

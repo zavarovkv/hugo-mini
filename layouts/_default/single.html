@@ -10,7 +10,8 @@
       <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-date">{{ partial "format-date.html" . }}</time>
     </p>
 
-    {{/* Social sharing buttons */}}
+    {{/* Social sharing buttons (disable with socialSharing = false in params) */}}
+    {{ if ne site.Params.socialSharing false }}
     <div class="likely likely-big" data-url="{{ .Permalink | absURL }}" data-title="{{ .Title }}">
       <div class="telegram"></div>
       <div class="twitter"></div>
@@ -18,15 +19,18 @@
       <div class="vkontakte"></div>
       <div class="linkedin"></div>
     </div>
+    {{ end }}
 
-    {{/* Telegram channel CTA */}}
+    {{/* Telegram channel CTA (only shown when telegramChannel is set) */}}
+    {{ if site.Params.telegramChannel }}
     <div class="tg-cta">
       <div class="tg-cta-text">
-        <div class="tg-cta-title">{{ i18n "tg_cta_title" }}</div>
-        <div class="tg-cta-description">{{ i18n "tg_cta_description" }}</div>
+        <div class="tg-cta-title">{{ site.Params.telegramCTATitle | default (i18n "tg_cta_title") }}</div>
+        <div class="tg-cta-description">{{ site.Params.telegramCTADescription | default (i18n "tg_cta_description") }}</div>
       </div>
       <a href="https://t.me/{{ site.Params.telegramChannel }}" target="_blank" rel="noopener noreferrer" class="tg-cta-button">{{ i18n "subscribe" }}</a>
     </div>
+    {{ end }}
 
     {{/* Telegram Discussion comments (rendered dynamically by JS to sync dark/light theme) */}}
     {{ with .Params.telegram_post }}

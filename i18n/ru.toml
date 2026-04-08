@@ -11,10 +11,10 @@ other = "Главная"
 other = "Подписаться"
 
 [tg_cta_title]
-other = "Канал о продуктовом менеджменте"
+other = "Мой канал в Telegram"
 
 [tg_cta_description]
-other = "Пишу про создание digital-продуктов и управление командами — без воды"
+other = "Подписывайтесь на новые материалы"
 
 [theme_light]
 other = "Включить светлую тему"
@@ -82,3 +82,6 @@ other = "Продуктивность"
 
 [cat_collections]
 other = "Подборки"
+
+[cat_getting-started]
+other = "Начало работы"

@@ -38,4 +38,4 @@
   </div>
 </div>
 
-<div class="footer-copy">© 2023–{{ now.Format "2006" }}</div>
+<div class="footer-copy">© {{ with site.Params.copyrightYear }}{{ . }}–{{ end }}{{ now.Format "2006" }}</div>

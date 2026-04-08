@@ -6,15 +6,26 @@
 
 <style>
   /* Color scheme — driven by [data-theme] on <html>, set by inline script in <head> */
-  :root { color-scheme: light; }
-  [data-theme="dark"] { color-scheme: dark; }
+  :root {
+    color-scheme: light;
+    /* Brand colors — override in your site's extra_head.html to customize */
+    --color-primary: #0060a0;
+    --color-accent: #d04000;
+    --color-primary-border: var(--color-primary-border);
+    --color-accent-border: var(--color-accent-border);
+  }
 
   /* Dark theme palette (light palette lives in style.html :root) */
   [data-theme="dark"] {
+    color-scheme: dark;
+    --color-primary: #6ab0e6;
+    --color-accent: #ff7a40;
+    --color-primary-border: var(--color-primary-border);
+    --color-accent-border: var(--color-accent-border);
     --background-color: #1a1a1a;
     --heading-color: #e8e8e8;
     --text-color: #c7ccd1;
-    --link-color: #6ab0e6;
+    --link-color: var(--color-primary);
     --visited-color: #b09ce0;
     --blockquote-color: #e8e8e8;
   }
@@ -81,32 +92,32 @@
   a:link,
   a:active {
     text-decoration: none;
-    color: #0060a0;
+    color: var(--color-primary);
     border-bottom: 1px solid;
-    border-bottom-color: rgba(0, 96, 160, 0.2);
+    border-bottom-color: var(--color-primary-border);
   }
 
   a:visited {
-    color: #0060a0;
-    border-bottom-color: rgba(0, 96, 160, 0.2);
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary-border);
   }
 
   a:hover {
-    color: #d04000;
-    border-bottom-color: rgba(208, 64, 0, 0.2);
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent-border);
   }
 
   /* Dark theme link colors */
   [data-theme="dark"] a:link,
   [data-theme="dark"] a:active,
   [data-theme="dark"] a:visited {
-    color: #6ab0e6;
-    border-bottom-color: rgba(106, 176, 230, 0.25);
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary-border);
   }
 
   [data-theme="dark"] a:hover {
-    color: #ff7a40;
-    border-bottom-color: rgba(255, 122, 64, 0.25);
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent-border);
   }
 
   /* Ensure bold text inside links inherits link colors */
@@ -161,37 +172,37 @@
   .title .title-text {
     font-size: 0.9rem;
     font-weight: bold;
-    color: #0060a0;
+    color: var(--color-primary);
     border-bottom: 1px solid;
-    border-bottom-color: rgba(0, 96, 160, 0.2);
+    border-bottom-color: var(--color-primary-border);
   }
 
   .title:link .title-text,
   .title:active .title-text {
-    color: #0060a0;
-    border-bottom-color: rgba(0, 96, 160, 0.2);
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary-border);
   }
 
   .title:visited .title-text {
-    color: #0060a0;
-    border-bottom-color: rgba(0, 96, 160, 0.2);
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary-border);
   }
 
   .title:hover .title-text {
-    color: #d04000;
-    border-bottom-color: rgba(208, 64, 0, 0.2);
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent-border);
   }
 
   [data-theme="dark"] .title .title-text,
   [data-theme="dark"] .title:link .title-text,
   [data-theme="dark"] .title:visited .title-text {
-    color: #6ab0e6;
-    border-bottom-color: rgba(106, 176, 230, 0.25);
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary-border);
   }
 
   [data-theme="dark"] .title:hover .title-text {
-    color: #ff7a40;
-    border-bottom-color: rgba(255, 122, 64, 0.25);
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent-border);
   }
 
   /* Selected title (on home page) */
@@ -201,17 +212,17 @@
 
   .title-selected .title-text {
     border-bottom: none;
-    color: #0060a0;
+    color: var(--color-primary);
   }
 
   .title-selected:hover .title-text {
-    color: #0060a0;
+    color: var(--color-primary);
     border-bottom: none;
   }
 
   [data-theme="dark"] .title-selected .title-text,
   [data-theme="dark"] .title-selected:hover .title-text {
-    color: #6ab0e6;
+    color: var(--color-primary);
   }
 
   .title-avatar-container {
@@ -303,7 +314,7 @@
   }
 
   .post-tags a:hover {
-    color: #d04000;
+    color: var(--color-accent);
   }
 
   [data-theme="dark"] .post-tags,
@@ -313,7 +324,7 @@
   }
 
   [data-theme="dark"] .post-tags a:hover {
-    color: #ff7a40;
+    color: var(--color-accent);
   }
 
   /* Extra space after list items in article content */
@@ -475,11 +486,11 @@
     }
 
     .main-nav a:hover {
-      color: #d04000;
+      color: var(--color-accent);
     }
 
     [data-theme="dark"] .main-nav a:hover {
-      color: #ff7a40;
+      color: var(--color-accent);
     }
 
     .main-nav .link-selected,
@@ -510,7 +521,7 @@
   .link-selected,
   .link-selected:link,
   .link-selected:visited {
-    color: #d04000;
+    color: var(--color-accent);
     font-weight: bold;
     border-bottom: none;
     cursor: default;
@@ -519,7 +530,7 @@
   [data-theme="dark"] .link-selected,
   [data-theme="dark"] .link-selected:link,
   [data-theme="dark"] .link-selected:visited {
-    color: #ff7a40;
+    color: var(--color-accent);
   }
 
   /* Tags list on blog page */
@@ -551,19 +562,19 @@
   }
 
   .tag-filter:hover {
-    color: #d04000;
-    border-color: #d04000;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 
   .tag-filter.active {
-    color: #d04000;
-    border-color: #d04000;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 
   [data-theme="dark"] .tag-filter:hover,
   [data-theme="dark"] .tag-filter.active {
-    color: #ff7a40;
-    border-color: #ff7a40;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 
   /* Posts grouped by tags in 2 columns */
@@ -590,7 +601,7 @@
     font-size: 0.55em;
     font-weight: 600;
     color: #fff;
-    background-color: #d04000;
+    background-color: var(--color-accent);
     border-radius: 3px;
     padding: 1px 4px;
     vertical-align: super;
@@ -878,6 +889,7 @@
   .theme-toggle {
     display: grid;
     place-items: center;
+    box-sizing: border-box;
     width: 28px;
     height: 28px;
     padding: 0;
@@ -1007,7 +1019,7 @@
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    outline: 2px solid #0060a0;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -1017,7 +1029,7 @@
   [data-theme="dark"] input:focus-visible,
   [data-theme="dark"] textarea:focus-visible,
   [data-theme="dark"] select:focus-visible {
-    outline-color: #6ab0e6;
+    outline-color: var(--color-primary);
   }
 
   /* Respect users who prefer reduced motion */
