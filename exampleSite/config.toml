@@ -9,23 +9,21 @@ enableRobotsTXT = true
 disableKinds    = ["taxonomy"]
 ignoreErrors    = ["error-disable-taxonomy"]
 
-[permalinks]
-  blog = "/:slug/"
-
 [params]
   favicon    = "images/favicon.png"
   authorName = "Jane Doe"
   authorURL  = "https://example.com/"
 
   # Appearance
-  # avatar      = "images/avatar.webp"
-  # avatarHover = "images/avatar-hover.webp"
+  avatar      = "images/avatar.svg"
+  avatarHover = "images/avatar-hover.svg"
 
   # Footer
   copyrightYear = 2024   # start year: renders as "© 2024–CURRENT"
 
   # Content
   newPostDays = 30   # days before "New" badge disappears
+  aiTranslatedLang = "ru"   # show AI sparkle icon on this language in the switcher
 
   # Telegram (remove to disable CTA and comments)
   # telegramChannel        = "your_channel"
@@ -51,9 +49,39 @@ ignoreErrors    = ["error-disable-taxonomy"]
     [markup.goldmark.renderer]
       unsafe = true   # required for shortcodes and HTML in content
 
-[menu]
-  [[menu.main]]
-    identifier = "blog"
-    name       = "Articles"
-    url        = "/blog/"
-    weight     = 1
+[languages]
+  [languages.en]
+    weight = 1
+    languageName = "EN"
+    contentDir = "content/en"
+    [languages.en.permalinks]
+      blog = "/:slug/"
+    [languages.en.menu]
+      [[languages.en.menu.main]]
+        identifier = "blog"
+        name       = "Articles"
+        url        = "/blog/"
+        weight     = 1
+      [[languages.en.menu.main]]
+        identifier = "about"
+        name       = "About"
+        url        = "/about/"
+        weight     = 2
+
+  [languages.ru]
+    weight = 2
+    languageName = "RU"
+    contentDir = "content/ru"
+    [languages.ru.permalinks]
+      blog = "/:slug/"
+    [languages.ru.menu]
+      [[languages.ru.menu.main]]
+        identifier = "blog"
+        name       = "Статьи"
+        url        = "/ru/blog/"
+        weight     = 1
+      [[languages.ru.menu.main]]
+        identifier = "about"
+        name       = "О проекте"
+        url        = "/ru/about/"
+        weight     = 2

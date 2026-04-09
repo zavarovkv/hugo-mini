@@ -850,8 +850,7 @@
     transition: color 1.5s ease;
   }
 
-  .lang-toggle:hover .lang-sparkle,
-  .lang-toggle[data-lang="en"]:hover .lang-sparkle {
+  .lang-toggle:hover .lang-sparkle {
     color: #F5B700;
     transition: color 0.2s ease;
   }
@@ -1006,10 +1005,9 @@
   }
 
   /* Code blocks: invert background in dark theme for readability */
-  [data-theme="dark"] .highlight,
   [data-theme="dark"] .highlight pre,
   [data-theme="dark"] .highlight table {
-    background-color: #0d1117;
+    background-color: #0d1117 !important;
   }
 
   [data-theme="dark"] code {
