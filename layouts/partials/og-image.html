@@ -55,10 +55,12 @@
     <meta name="twitter:image" content="{{ $img.Permalink }}" />
   {{- end -}}
 {{- else -}}
-  {{/* Fallback: use static default image */}}
+  {{/* Fallback: use static default image if it exists */}}
+  {{- if fileExists "static/images/og-default.png" -}}
   <meta property="og:image" content="{{ "images/og-default.png" | absURL }}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="{{ "images/og-default.png" | absURL }}" />
+  {{- end -}}
 {{- end -}}

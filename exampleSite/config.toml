@@ -42,6 +42,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
   [params.social]
     telegram = "https://t.me/janedoe"
+    linkedin = "https://linkedin.com/in/janedoe"
     github   = "https://github.com/janedoe"
     email    = "jane@example.com"
 

@@ -54,7 +54,7 @@
   // Theme toggle (bi-state: light ↔ dark; follows system until first explicit click)
   (function() {
     var STORAGE_KEY = 'theme';
-    var LABELS = { light: {{ i18n "theme_dark" }}, dark: {{ i18n "theme_light" }} };
+    var LABELS = { light: {{ i18n "theme_dark" | default "Switch to dark theme" }}, dark: {{ i18n "theme_light" | default "Switch to light theme" }} };
     var root = document.documentElement;
     var mql = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -165,7 +165,7 @@
       btn.title = 'Copy';
       btn.addEventListener('click', function() {
         var code = block.querySelector('code');
-        if (!code) return;
+        if (!code || !navigator.clipboard) return;
         navigator.clipboard.writeText(code.textContent).then(function() {
           btn.innerHTML = svgCheck;
           btn.classList.add('copied');

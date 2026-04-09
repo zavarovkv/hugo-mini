@@ -10,8 +10,8 @@
       <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-date">{{ partial "format-date.html" . }}</time>
     </p>
 
-    {{/* Social sharing buttons (disable with socialSharing = false in params) */}}
-    {{ if ne site.Params.socialSharing false }}
+    {{/* Social sharing buttons (enabled by default, disable with socialSharing = false) */}}
+    {{ if site.Params.socialSharing | default true }}
     <div class="likely likely-big" data-url="{{ .Permalink | absURL }}" data-title="{{ .Title }}">
       <div class="telegram"></div>
       <div class="twitter"></div>
