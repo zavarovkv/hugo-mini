@@ -11,8 +11,8 @@
     /* Brand colors — override in your site's extra_head.html to customize */
     --color-primary: #0060a0;
     --color-accent: #d04000;
-    --color-primary-border: var(--color-primary-border);
-    --color-accent-border: var(--color-accent-border);
+    --color-primary-border: rgba(0, 96, 160, 0.35);
+    --color-accent-border: rgba(208, 64, 0, 0.35);
   }
 
   /* Dark theme palette (light palette lives in style.html :root) */
@@ -20,8 +20,8 @@
     color-scheme: dark;
     --color-primary: #6ab0e6;
     --color-accent: #ff7a40;
-    --color-primary-border: var(--color-primary-border);
-    --color-accent-border: var(--color-accent-border);
+    --color-primary-border: rgba(106, 176, 230, 0.35);
+    --color-accent-border: rgba(255, 122, 64, 0.35);
     --background-color: #1a1a1a;
     --heading-color: #e8e8e8;
     --text-color: #c7ccd1;
@@ -93,7 +93,7 @@
   a:active {
     text-decoration: none;
     color: var(--color-primary);
-    border-bottom: 1px solid;
+    border-bottom: 0.25px solid;
     border-bottom-color: var(--color-primary-border);
   }
 
@@ -173,7 +173,7 @@
     font-size: 0.9rem;
     font-weight: bold;
     color: var(--color-primary);
-    border-bottom: 1px solid;
+    border-bottom: 0.25px solid;
     border-bottom-color: var(--color-primary-border);
   }
 
