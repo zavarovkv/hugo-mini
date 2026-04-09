@@ -35,6 +35,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
   # Analytics
   # yandexMetrikaId = 123456789
+  # googleAnalyticsId = "G-XXXXXXXXXX"
 
   [params.author]
     jobTitle = "Product Manager"
