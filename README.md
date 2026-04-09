@@ -1,4 +1,4 @@
-# Mini
+# Hugo Mini
 
 A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integration, and dynamic OG images.
 
@@ -17,8 +17,10 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn)
 - **SEO** — JSON-LD structured data, hreflang, Open Graph, Twitter Cards
 - **Feeds** — JSON Feed, RSS, llms.txt for AI crawlers
+- **Code copy button** — appears on hover, with check animation
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
+- **Analytics** — Yandex.Metrika and Google Analytics support
 
 ## Requirements
 
@@ -132,7 +134,11 @@ ignoreErrors    = ["error-disable-taxonomy"]
   socialSharing = true   # set false to disable Likely sharing buttons
 
   # Analytics
-  yandexMetrikaId = 123456789   # Yandex.Metrika ID (omit to disable)
+  yandexMetrikaId    = 123456789      # Yandex.Metrika ID (omit to disable)
+  googleAnalyticsId  = "G-XXXXXXXXXX" # Google Analytics ID (omit to disable)
+
+  # AI translation sparkle icon
+  aiTranslatedLang = "en"   # show sparkle on this lang in switcher (omit to hide)
 
   # Schema.org Person
   [params.author]
@@ -213,7 +219,7 @@ Built-in: `marketing`, `strategy`, `metrics`, `leadership`, `self-development`, 
 
 | Shortcode | Description | Usage |
 |---|---|---|
-| `caption` | Image caption | `{{</* caption "Text" */>}}` |
+| `caption` | Image caption | `{{</* caption */>}}Text{{</* /caption */>}}` |
 | `mermaid` | Diagram block | `{{</* mermaid */>}} ... {{</* /mermaid */>}}` |
 | `plug` | Section divider `* * *` | `{{</* plug */>}}` |
 
