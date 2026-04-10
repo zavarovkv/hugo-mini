@@ -10,8 +10,7 @@
 */ -}}
 {{- $groups := .groups -}}
 {{- $allPosts := .allPosts -}}
-{{- $newDays := int (site.Params.newPostDays | default 30) -}}
-{{- $newCutoff := now.AddDate 0 0 (sub 0 $newDays) -}}
+{{- $newCutoff := now.AddDate 0 0 (int (mul -1 (site.Params.newPostDays | default 30))) -}}
 <div class="posts-column">
   {{- range $groups }}
     {{- $tag := . -}}
