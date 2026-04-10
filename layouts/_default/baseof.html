@@ -95,11 +95,24 @@
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
   {{ end -}}
 
-  {{- partial "style.html" . -}}
+  {{- /* Bundled theme stylesheet. ExecuteAsTemplate so that
+         {{ "..." | relURL }} substitutions inside the CSS resolve at build
+         time (font urls, underline svg). Minified and fingerprinted so the
+         URL changes when the content changes — safe to send long-cache headers. */ -}}
+  {{- $css := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/main.css" . | resources.Minify | resources.Fingerprint "sha256" -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 
-  <!-- A partial to be overwritten by the user.
-  Simply place a custom_head.html into
-  your local /layouts/partials-directory -->
+  {{- /* Likely social sharing — assets only loaded on blog posts. The
+         small block of CSS that styles .likely is part of the bundled
+         main.css above (always loaded, ~200 bytes minified). */ -}}
+  {{- if eq .Type "blog" }}
+  <link rel="stylesheet" href="{{ "likely/likely.css" | relURL }}">
+  <script defer src="{{ "likely/likely.js" | relURL }}"></script>
+  {{- end }}
+
+  <!-- Override hooks: place a custom_head.html / extra_head.html in your
+       site's layouts/partials/ to inject extra <head> content (meta tags,
+       additional CSS that should override the theme, etc.). -->
   {{- partial "custom_head.html" . -}}
   {{- partial "extra_head.html" . -}}
 </head>
@@ -119,9 +132,17 @@
     {{- partial "footer.html" . -}}
   </footer>
 
-  <!-- A partial to be overwritten by the user.
-  Simply place a custom_body.html into
-  your local /layouts/partials-directory -->
+  {{- /* Bundled theme JS. ExecuteAsTemplate so i18n strings (theme-toggle
+         button title) resolve at build time. The output name includes the
+         language code so RU and EN get distinct compiled bundles —
+         otherwise Hugo's resource cache would dedupe them by input name
+         and serve the first-rendered language to both. */ -}}
+  {{- $jsName := printf "js/main.%s.js" .Language.Lang -}}
+  {{- $js := resources.Get "js/main.js" | resources.ExecuteAsTemplate $jsName . | resources.Minify | resources.Fingerprint "sha256" -}}
+  <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+
+  <!-- Override hook: place a custom_body.html in your site's layouts/partials/
+       to inject extra scripts (e.g., the conditional console-art). -->
   {{- partial "custom_body.html" . -}}
 
   {{ if .Params.mermaid }}

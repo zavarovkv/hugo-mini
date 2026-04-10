@@ -1,211 +1,16 @@
-<script>
-  // Initialize Likely social sharing buttons
-  if (typeof likely !== 'undefined') {
-    likely.initiate();
-  }
+{{- /*
+  Override hook for site-level <script> additions that should come AFTER
+  the bundled theme JS. Place a custom_body.html in your site's
+  layouts/partials/ to add extra scripts.
 
-  // Mobile menu toggle
-  (function() {
-    function initMobileMenu() {
-      var toggle = document.querySelector('.mobile-menu-toggle');
-      var nav = document.querySelector('.main-nav');
+  The bundled theme JS lives in themes/hugo-mini/assets/js/main.js and is
+  loaded by baseof.html via Hugo Pipes (minified + fingerprinted).
 
-      if (!toggle || !nav) {
-        return;
-      }
-
-      function closeMenu() {
-        nav.classList.remove('active');
-        toggle.classList.remove('active');
-        document.body.classList.remove('menu-open');
-        document.documentElement.classList.remove('menu-open');
-      }
-
-      function openMenu() {
-        window.scrollTo(0, 0);
-        nav.classList.add('active');
-        toggle.classList.add('active');
-        document.body.classList.add('menu-open');
-        document.documentElement.classList.add('menu-open');
-      }
-
-      toggle.addEventListener('click', function() {
-        if (nav.classList.contains('active')) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
-
-      // Close menu when clicking on a link
-      var navLinks = nav.querySelectorAll('a');
-      navLinks.forEach(function(link) {
-        link.addEventListener('click', closeMenu);
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMobileMenu);
-    } else {
-      initMobileMenu();
-    }
-  })();
-
-  // Theme toggle (bi-state: light ↔ dark; follows system until first explicit click)
-  (function() {
-    var STORAGE_KEY = 'theme';
-    var LABELS = { light: {{ i18n "theme_dark" | default "Switch to dark theme" }}, dark: {{ i18n "theme_light" | default "Switch to light theme" }} };
-    var root = document.documentElement;
-    var mql = window.matchMedia('(prefers-color-scheme: dark)');
-
-    function currentTheme() {
-      return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    }
-
-    function storedChoice() {
-      try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
-    }
-
-    // Sync Likely social sharing widget with current theme
-    function syncLikelyTheme() {
-      var dark = currentTheme() === 'dark';
-      var widgets = document.querySelectorAll('.likely');
-      for (var i = 0; i < widgets.length; i++) {
-        widgets[i].classList.toggle('likely-dark-theme', dark);
-      }
-    }
-
-    // Rebuild Telegram Discussion widget with correct dark/light theme
-    var tgWidgetLoaded = false;
-    var tgRebuildTimer = null;
-    function syncTelegramWidget() {
-      var container = document.getElementById('tg-comments');
-      if (!container) return;
-      var discussion = container.getAttribute('data-tg-discussion');
-      if (!discussion) return;
-      if (tgRebuildTimer) clearTimeout(tgRebuildTimer);
-      tgRebuildTimer = setTimeout(function() {
-        container.innerHTML = '';
-        var s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://telegram.org/js/telegram-widget.js?22';
-        s.setAttribute('data-telegram-discussion', discussion);
-        s.setAttribute('data-comments-limit', container.getAttribute('data-tg-limit') || '20');
-        if (currentTheme() === 'dark') s.setAttribute('data-dark', '1');
-        container.appendChild(s);
-        tgWidgetLoaded = true;
-        tgRebuildTimer = null;
-      }, tgWidgetLoaded ? 500 : 0);
-    }
-
-    // Lazy-load: only load Telegram widget when scrolled into view
-    function observeTelegramWidget() {
-      var container = document.getElementById('tg-comments');
-      if (!container || typeof IntersectionObserver === 'undefined') {
-        syncTelegramWidget();
-        return;
-      }
-      var observer = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !tgWidgetLoaded) {
-          syncTelegramWidget();
-          observer.disconnect();
-        }
-      }, { rootMargin: '200px' });
-      observer.observe(container);
-    }
-
-    // Follow system changes until user has made an explicit choice
-    function onSystemChange() {
-      if (storedChoice() === null) {
-        root.setAttribute('data-theme', mql.matches ? 'dark' : 'light');
-        var btn = document.querySelector('.theme-toggle');
-        if (btn) btn.title = LABELS[currentTheme()];
-        syncLikelyTheme();
-        syncTelegramWidget();
-      }
-    }
-    if (mql.addEventListener) {
-      mql.addEventListener('change', onSystemChange);
-    } else if (mql.addListener) {
-      mql.addListener(onSystemChange); // Safari < 14
-    }
-
-    function initThemeToggle() {
-      syncLikelyTheme();
-      observeTelegramWidget();
-      var btn = document.querySelector('.theme-toggle');
-      if (!btn) return;
-      btn.title = LABELS[currentTheme()];
-      btn.addEventListener('click', function() {
-        var next = currentTheme() === 'dark' ? 'light' : 'dark';
-        try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
-        root.setAttribute('data-theme', next);
-        btn.title = LABELS[next];
-        syncLikelyTheme();
-        syncTelegramWidget();
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initThemeToggle);
-    } else {
-      initThemeToggle();
-    }
-  })();
-
-  // Copy button for code blocks
-  (function() {
-    if (!navigator.clipboard) return;
-    var svgCopy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-    var svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-    var FEEDBACK_MS = 1500;
-
-    document.querySelectorAll('.highlight').forEach(function(block) {
-      var code = block.querySelector('code');
-      if (!code) return;
-      var btn = document.createElement('button');
-      btn.className = 'copy-btn';
-      btn.innerHTML = svgCopy;
-      btn.title = 'Copy';
-      var timer = null;
-      btn.addEventListener('click', function() {
-        navigator.clipboard.writeText(code.textContent).then(function() {
-          btn.innerHTML = svgCheck;
-          btn.classList.add('copied');
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(function() {
-            btn.innerHTML = svgCopy;
-            btn.classList.remove('copied');
-            timer = null;
-          }, FEEDBACK_MS);
-        }).catch(function() { /* permission denied or insecure context */ });
-      });
-      block.appendChild(btn);
-    });
-  })();
-
-  // Heading anchor links: copy section URL to clipboard on click
-  (function() {
-    if (!navigator.clipboard) return;
-    var FEEDBACK_MS = 1200;
-
-    document.querySelectorAll('.heading-anchor').forEach(function(anchor) {
-      var timer = null;
-      anchor.addEventListener('click', function() {
-        var url = window.location.origin + window.location.pathname + anchor.getAttribute('href');
-        navigator.clipboard.writeText(url).then(function() {
-          anchor.classList.add('copied');
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(function() {
-            anchor.classList.remove('copied');
-            timer = null;
-          }, FEEDBACK_MS);
-        }).catch(function() { /* permission denied or insecure context */ });
-      });
-    });
-  })();
-
-  {{- if .IsHome }}
+  Below is the only piece of theme JS that cannot be moved to the bundled
+  asset, because it depends on per-page context (.IsHome) and reads a
+  resource at template-evaluation time (the bundled Yoda ASCII art).
+*/ -}}
+{{- if .IsHome }}
   {{- /* Console art on the home page. Custom art via `params.consoleArt`
          takes priority; otherwise, `params.consoleYoda = true` enables the
          built-in Yoda shipped with the theme (assets/console-yoda.txt). */ -}}
@@ -216,9 +21,10 @@
     {{- end -}}
   {{- end -}}
   {{- with $art }}
+<script>
   (function() {
     console.log('%c' + {{ . | jsonify | safeJS }}, 'color: #0060a0; font-family: monospace; font-size: 13px;');
   })();
-  {{- end }}
-  {{- end }}
 </script>
+  {{- end }}
+{{- end }}

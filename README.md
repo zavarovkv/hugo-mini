@@ -261,10 +261,29 @@ Place files in your site's `layouts/partials/` to override theme partials:
 
 | File | Purpose |
 |---|---|
-| `extra_head.html` | Additional `<head>` content — meta tags, custom CSS |
+| `extra_head.html` | Additional `<head>` content — meta tags, third-party widgets |
 | `header.html` | Site header |
-| `custom_head.html` | Replaces all theme CSS |
-| `custom_body.html` | Replaces all theme JavaScript |
+| `custom_head.html` | Extra `<head>` content rendered **after** the bundled theme CSS, so overrides win the cascade |
+| `custom_body.html` | Extra `<script>`/markup at the end of `<body>`, rendered **after** the bundled theme JS |
+
+### Asset bundling
+
+Theme CSS and JS live as source files in `themes/hugo-mini/assets/`:
+
+- `assets/css/main.css` — bundled theme stylesheet (typography, palette, components, dark mode, fonts)
+- `assets/js/main.js` — bundled theme JS (theme toggle, code-copy button, heading anchor copy, mobile menu)
+
+`baseof.html` runs them through Hugo Pipes:
+
+```go-template
+{{ $css := resources.Get "css/main.css"
+   | resources.ExecuteAsTemplate "css/main.css" .
+   | resources.Minify
+   | resources.Fingerprint "sha256" }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+```
+
+The result is a minified, content-hashed file at `/css/main.min.<sha>.css` — safe to send long-cache headers, since the URL changes whenever the content changes. Same pattern for JS, with the bundle name including `.Language.Lang` so multilingual sites get one bundle per language (`main.en.min.<sha>.js`, `main.ru.min.<sha>.js`) — necessary because i18n strings are baked in at build time.
 
 ## Deployment
 
