@@ -18,6 +18,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **SEO** — JSON-LD structured data, hreflang, Open Graph, Twitter Cards
 - **Feeds** — JSON Feed, RSS, llms.txt for AI crawlers
 - **Code copy button** — appears on hover, with check animation
+- **Heading anchor links** — clickable `#` next to `h2`/`h3` markdown headings, click copies the section URL to clipboard
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
 - **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)

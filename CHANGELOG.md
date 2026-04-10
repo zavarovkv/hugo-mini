@@ -14,6 +14,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Footer social icons: `params.social.x`, `params.social.youtube`, `params.social.facebook`, `params.social.instagram` — each rendered with brand-colored hover state in light and dark themes
 - Plausible Analytics support: `params.plausibleDomain` (+ optional `params.plausibleSrc` for self-hosted) — privacy-friendly, cookieless
 - Umami Analytics support: `params.umamiWebsiteId` (+ optional `params.umamiSrc` for self-hosted) — privacy-friendly, cookieless
+- Heading anchor links — markdown `##` and `###` headings now get a clickable `#` next to them. Click copies the absolute section URL to clipboard with brief feedback. Visible on heading hover (desktop) and always at low opacity on touch devices. Implemented via `_markup/render-heading.html` render hook + minimal JS (no extra dependencies).
 - `archetypes/blog.md` for content scaffolding (`hugo new blog/my-post.md`)
 - Hugo Modules support (`go.mod`)
 - `CONTRIBUTING.md`

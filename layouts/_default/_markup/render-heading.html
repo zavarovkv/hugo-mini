@@ -1,0 +1,5 @@
+{{- if or (eq .Level 2) (eq .Level 3) -}}
+<h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}<a class="heading-anchor" href="#{{ .Anchor | safeURL }}" aria-label="Copy link to this section">#</a></h{{ .Level }}>
+{{- else -}}
+<h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</h{{ .Level }}>
+{{- end -}}

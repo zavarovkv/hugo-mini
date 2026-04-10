@@ -55,6 +55,46 @@
     transform: scaleY(1.05);
   }
 
+  /* Anchor link next to h2/h3 — click to copy section URL */
+  .heading-anchor,
+  .heading-anchor:link,
+  .heading-anchor:visited {
+    display: inline-block;
+    margin-left: 0.35em;
+    font-weight: 400;
+    color: var(--link-color);
+    opacity: 0;
+    border-bottom: none;
+    text-decoration: none;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    vertical-align: baseline;
+  }
+
+  h2:hover > .heading-anchor,
+  h3:hover > .heading-anchor,
+  .heading-anchor:focus {
+    opacity: 0.55;
+  }
+
+  .heading-anchor:hover {
+    opacity: 1;
+    text-decoration: none;
+  }
+
+  .heading-anchor.copied {
+    opacity: 1;
+    color: #4ade80;
+  }
+
+  /* Touch devices: always visible at low opacity */
+  @media (hover: none) {
+    .heading-anchor,
+    .heading-anchor:link,
+    .heading-anchor:visited {
+      opacity: 0.35;
+    }
+  }
+
   /* Title text in header - not a heading */
   .title .title-text {
     color: inherit;

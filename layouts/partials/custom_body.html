@@ -179,6 +179,20 @@
     });
   })();
 
+  // Heading anchor links: copy section URL to clipboard on click
+  (function() {
+    document.querySelectorAll('.heading-anchor').forEach(function(anchor) {
+      anchor.addEventListener('click', function() {
+        if (!navigator.clipboard) return;
+        var url = window.location.origin + window.location.pathname + anchor.getAttribute('href');
+        navigator.clipboard.writeText(url).then(function() {
+          anchor.classList.add('copied');
+          setTimeout(function() { anchor.classList.remove('copied'); }, 1200);
+        });
+      });
+    });
+  })();
+
   {{- if .IsHome }}
   {{- with .Site.Params.consoleArt }}
   (function() {
