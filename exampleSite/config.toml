@@ -41,10 +41,14 @@ ignoreErrors    = ["error-disable-taxonomy"]
     jobTitle = "Product Manager"
 
   [params.social]
-    telegram = "https://t.me/janedoe"
-    linkedin = "https://linkedin.com/in/janedoe"
-    github   = "https://github.com/janedoe"
-    email    = "jane@example.com"
+    telegram  = "https://t.me/janedoe"
+    linkedin  = "https://linkedin.com/in/janedoe"
+    github    = "https://github.com/janedoe"
+    x         = "https://x.com/janedoe"
+    youtube   = "https://youtube.com/@janedoe"
+    facebook  = "https://facebook.com/janedoe"
+    instagram = "https://instagram.com/janedoe"
+    email     = "jane@example.com"
 
 [markup]
   [markup.goldmark]

@@ -11,6 +11,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `copyrightYear` param — footer start year shown as "© YEAR–NOW"
 - `telegramCTATitle` and `telegramCTADescription` params to customize Telegram CTA text without editing i18n files
 - `socialSharing` param — set to `false` to disable Likely social sharing buttons
+- Footer social icons: `params.social.x`, `params.social.youtube`, `params.social.facebook`, `params.social.instagram` — each rendered with brand-colored hover state in light and dark themes
 - `archetypes/blog.md` for content scaffolding (`hugo new blog/my-post.md`)
 - Hugo Modules support (`go.mod`)
 - `CONTRIBUTING.md`

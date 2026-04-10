@@ -144,12 +144,16 @@ ignoreErrors    = ["error-disable-taxonomy"]
   [params.author]
     jobTitle = "Product Manager"
 
-  # Social icons in footer
+  # Social icons in footer (all optional — only set ones are rendered)
   [params.social]
-    telegram = "https://t.me/your_handle"
-    linkedin = "https://linkedin.com/in/you"
-    github   = "https://github.com/you"
-    email    = "you@example.com"
+    telegram  = "https://t.me/your_handle"
+    linkedin  = "https://linkedin.com/in/you"
+    github    = "https://github.com/you"
+    x         = "https://x.com/you"
+    youtube   = "https://youtube.com/@you"
+    facebook  = "https://facebook.com/you"
+    instagram = "https://instagram.com/you"
+    email     = "you@example.com"
 ```
 
 ### Multilingual
