@@ -45,6 +45,16 @@
   </script>
   {{- end }}
 
+  {{- with .Site.Params.plausibleDomain }}
+  <!-- Plausible Analytics (privacy-friendly, cookieless) -->
+  <script defer data-domain="{{ . }}" src="{{ default "https://plausible.io/js/script.js" $.Site.Params.plausibleSrc }}"></script>
+  {{- end }}
+
+  {{- with .Site.Params.umamiWebsiteId }}
+  <!-- Umami Analytics (privacy-friendly, cookieless) -->
+  <script defer data-website-id="{{ . }}" src="{{ default "https://cloud.umami.is/script.js" $.Site.Params.umamiSrc }}"></script>
+  {{- end }}
+
   {{ if .Params.math }}
   <!-- KaTeX for math formulas (local files) -->
   <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">

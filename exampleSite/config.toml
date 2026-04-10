@@ -33,9 +33,13 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # Features
   # socialSharing = false   # uncomment to disable Likely sharing buttons
 
-  # Analytics
-  # yandexMetrikaId = 123456789
+  # Analytics (all optional — set only the ones you use)
+  # yandexMetrikaId   = 123456789
   # googleAnalyticsId = "G-XXXXXXXXXX"
+  # plausibleDomain   = "example.com"
+  # plausibleSrc      = "https://plausible.io/js/script.js"   # override for self-hosted
+  # umamiWebsiteId    = "00000000-0000-0000-0000-000000000000"
+  # umamiSrc          = "https://cloud.umami.is/script.js"    # override for self-hosted
 
   [params.author]
     jobTitle = "Product Manager"

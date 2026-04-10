@@ -12,6 +12,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `telegramCTATitle` and `telegramCTADescription` params to customize Telegram CTA text without editing i18n files
 - `socialSharing` param — set to `false` to disable Likely social sharing buttons
 - Footer social icons: `params.social.x`, `params.social.youtube`, `params.social.facebook`, `params.social.instagram` — each rendered with brand-colored hover state in light and dark themes
+- Plausible Analytics support: `params.plausibleDomain` (+ optional `params.plausibleSrc` for self-hosted) — privacy-friendly, cookieless
+- Umami Analytics support: `params.umamiWebsiteId` (+ optional `params.umamiSrc` for self-hosted) — privacy-friendly, cookieless
 - `archetypes/blog.md` for content scaffolding (`hugo new blog/my-post.md`)
 - Hugo Modules support (`go.mod`)
 - `CONTRIBUTING.md`

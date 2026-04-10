@@ -20,7 +20,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Code copy button** — appears on hover, with check animation
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
-- **Analytics** — Yandex.Metrika and Google Analytics support
+- **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)
 
 ## Requirements
 
@@ -133,9 +133,13 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # Features
   socialSharing = true   # set false to disable Likely sharing buttons
 
-  # Analytics
-  yandexMetrikaId    = 123456789      # Yandex.Metrika ID (omit to disable)
-  googleAnalyticsId  = "G-XXXXXXXXXX" # Google Analytics ID (omit to disable)
+  # Analytics (all optional — omit to disable, multiple can run side by side)
+  yandexMetrikaId    = 123456789      # Yandex.Metrika ID
+  googleAnalyticsId  = "G-XXXXXXXXXX" # Google Analytics 4 measurement ID
+  plausibleDomain    = "example.com"  # Plausible: site domain (cookieless, GDPR-friendly)
+  plausibleSrc       = "https://plausible.io/js/script.js"  # optional, override for self-hosted
+  umamiWebsiteId     = "00000000-0000-0000-0000-000000000000"  # Umami website ID (cookieless)
+  umamiSrc           = "https://cloud.umami.is/script.js"   # optional, override for self-hosted
 
   # AI translation sparkle icon
   aiTranslatedLang = "en"   # show sparkle on this lang in switcher (omit to hide)
