@@ -4,6 +4,7 @@ slug = "theme-features"
 date = "2026-03-01T12:00:00+00:00"
 description = "Dark mode, categories, new-post badges, social sharing, and other built-in features"
 categories = ["getting-started"]
+pinned = true
 +++
 
 Beyond Markdown and shortcodes, Mini includes several features that work through configuration — no code changes needed.
@@ -92,6 +93,48 @@ title = "Secret Post"
 hidden = true
 +++
 ```
+
+## Pinned Posts
+
+Set `pinned = true` in front matter to float a post to the top of its category group on the blog listing. Multiple pinned posts within a category preserve reverse-chronological order between themselves; unpinned posts follow in reverse-chronological order. This very post uses it — it sits at the top of `getting-started` regardless of date.
+
+```toml
++++
+title = "Read this first"
+pinned = true
++++
+```
+
+No visual marker — order is the only signal, keeping the listing clean.
+
+## Heading Anchor Links
+
+Markdown `##` and `###` headings get a clickable `#` next to them on hover. Clicking copies the section URL to the clipboard with brief feedback. The marker is sized down to ~body text and uses the same neutral grey as the social/theme/lang toggle icons in their rest state.
+
+Implemented via `_markup/render-heading.html` render hook + minimal JS — no extra dependencies. Note: only fires for markdown-parsed headings, not raw HTML `<h2>...</h2>`.
+
+## Privacy-friendly Analytics
+
+In addition to Yandex.Metrika and Google Analytics, Mini supports two privacy-friendly cookieless options out of the box:
+
+```toml
+[params]
+  plausibleDomain = "example.com"                       # Plausible
+  umamiWebsiteId  = "00000000-0000-0000-0000-000000000000"  # Umami
+```
+
+Both load via deferred `<script>` tags so they don't block first paint. For self-hosted instances, override the script src with `plausibleSrc` / `umamiSrc`. All four analytics integrations can run side by side; each is rendered only when its required param is set.
+
+## Console Easter Egg
+
+Set `consoleYoda = true` in `[params]` to print a built-in Yoda ASCII art in the browser console on the home page:
+
+```toml
+[params]
+  consoleYoda = true
+```
+
+For custom art, use `consoleArt` with a TOML triple-string instead — it takes priority over `consoleYoda` when both are set.
 
 ## Mobile Navigation
 

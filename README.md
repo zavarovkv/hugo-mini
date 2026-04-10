@@ -134,6 +134,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
   # Features
   socialSharing = true   # set false to disable Likely sharing buttons
+  consoleYoda   = true   # enables a built-in Yoda ASCII art in the home-page console
+  consoleArt    = "..."  # optional custom ASCII art (TOML triple-string); takes priority over consoleYoda
 
   # Analytics (all optional — omit to disable, multiple can run side by side)
   yandexMetrikaId    = 123456789      # Yandex.Metrika ID

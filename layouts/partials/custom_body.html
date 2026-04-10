@@ -206,9 +206,18 @@
   })();
 
   {{- if .IsHome }}
-  {{- with .Site.Params.consoleArt }}
+  {{- /* Console art on the home page. Custom art via `params.consoleArt`
+         takes priority; otherwise, `params.consoleYoda = true` enables the
+         built-in Yoda shipped with the theme (assets/console-yoda.txt). */ -}}
+  {{- $art := .Site.Params.consoleArt -}}
+  {{- if and (not $art) .Site.Params.consoleYoda -}}
+    {{- with resources.Get "console-yoda.txt" -}}
+      {{- $art = .Content -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $art }}
   (function() {
-    console.log('%c' + {{ . | jsonify }}, 'color: #0060a0; font-family: monospace; font-size: 13px;');
+    console.log('%c' + {{ . | jsonify | safeJS }}, 'color: #0060a0; font-family: monospace; font-size: 13px;');
   })();
   {{- end }}
   {{- end }}

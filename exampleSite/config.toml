@@ -32,6 +32,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
   # Features
   # socialSharing = false   # uncomment to disable Likely sharing buttons
+  # consoleYoda   = true    # uncomment to print a built-in Yoda in the browser console
 
   # Analytics (all optional — set only the ones you use)
   # yandexMetrikaId   = 123456789
