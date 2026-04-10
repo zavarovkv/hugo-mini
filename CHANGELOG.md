@@ -15,6 +15,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Plausible Analytics support: `params.plausibleDomain` (+ optional `params.plausibleSrc` for self-hosted) — privacy-friendly, cookieless
 - Umami Analytics support: `params.umamiWebsiteId` (+ optional `params.umamiSrc` for self-hosted) — privacy-friendly, cookieless
 - Heading anchor links — markdown `##` and `###` headings now get a clickable `#` next to them. Click copies the absolute section URL to clipboard with brief feedback. Sized down to ~body text (`0.65em`) so it reads as a delicate marker, not a competing element; uses the same neutral grey (`#9da2a6`) as the social/theme/lang toggle icons in their rest state, then fades to `var(--heading-color)` on direct hover and copied state. Visible on heading hover (desktop) and faintly visible on touch devices via `@media (hover: none)`. Implemented via `_markup/render-heading.html` render hook + minimal JS (no extra dependencies).
+- Pinned posts — `pinned = true` in a post's front matter floats it to the top of its category group on the blog listing. Multiple pinned posts within a category preserve reverse-chronological order between themselves; unpinned posts follow in reverse-chronological order. No visual marker — order is the only signal.
+- Inter 500 (Medium) `@font-face` declared in `fonts.html`. Used by content links so they sit between body 300 and bold 600 in weight (previously 600 was the only available link weight). 300/600 stay preloaded; 500 loads on demand.
 - `archetypes/blog.md` for content scaffolding (`hugo new blog/my-post.md`)
 - Hugo Modules support (`go.mod`)
 - `CONTRIBUTING.md`
@@ -25,6 +27,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Homepage OG image subtitle now uses `params.description` instead of hardcoded author-specific text
 - Telegram CTA block is now only rendered when `params.telegramChannel` is set
 - i18n: `tg_cta_title` / `tg_cta_description` default values are now generic
+- Content links use Inter Medium 500 instead of Semi-Bold 600 — softer weight contrast against the 300 body text
+- Refactor pass for code quality — no behavioural changes:
+  - `posts-column.html`: pinned and unpinned posts now share a single `<li>` template via `$pinned | append $unpinned`, eliminating duplication
+  - `_markup/render-heading.html`: collapsed if/else into a single `<h{N}>` template with conditional `<a>` insertion
+  - `footer.html`: brand social icons rendered from a data-driven `$brands` slice instead of eight near-identical `{{ with }}` blocks
+  - `custom_body.html`: copy-button and heading-anchor JS now track per-element timers (no race on rapid double-click) and `.catch()` clipboard rejections; early-exit added when `navigator.clipboard` is unavailable
 
 ### Fixed
 - `cat_getting-started` key missing from `i18n/ru.toml`

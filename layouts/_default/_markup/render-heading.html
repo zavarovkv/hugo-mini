@@ -1,5 +1,8 @@
-{{- if or (eq .Level 2) (eq .Level 3) -}}
-<h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}<a class="heading-anchor" href="#{{ .Anchor | safeURL }}" aria-label="Copy link to this section">#</a></h{{ .Level }}>
-{{- else -}}
-<h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</h{{ .Level }}>
-{{- end -}}
+{{- /*
+  Heading render hook. Adds a stable slug-based id to every heading and,
+  for h2/h3 only, appends a clickable `#` link that copies the section
+  URL to the clipboard (see custom_body.html for the JS handler).
+*/ -}}
+{{- $anchor := .Anchor | safeURL -}}
+{{- $linkable := or (eq .Level 2) (eq .Level 3) -}}
+<h{{ .Level }} id="{{ $anchor }}">{{ .Text | safeHTML }}{{- if $linkable -}}<a class="heading-anchor" href="#{{ $anchor }}" aria-label="Copy link to this section">#</a>{{- end -}}</h{{ .Level }}>
