@@ -55,43 +55,50 @@
     transform: scaleY(1.05);
   }
 
-  /* Anchor link next to h2/h3 — click to copy section URL */
+  /* Anchor link next to h2/h3 — click to copy section URL.
+     Sized down to ~body text, neutral grey by default, reveals on
+     heading hover, picks up brand colour on direct hover/copied. */
   .heading-anchor,
   .heading-anchor:link,
   .heading-anchor:visited {
     display: inline-block;
     margin-left: 0.35em;
+    font-size: 0.65em;
     font-weight: 400;
-    color: var(--link-color);
+    letter-spacing: 0;
+    color: #9da2a6;
     opacity: 0;
-    border-bottom: none;
     text-decoration: none;
-    transition: opacity 0.2s ease, color 0.2s ease;
-    vertical-align: baseline;
+    border-bottom: none;
+    vertical-align: 0.12em;
+    transition: opacity 0.18s ease-out, color 0.18s ease-out;
   }
 
   h2:hover > .heading-anchor,
   h3:hover > .heading-anchor,
   .heading-anchor:focus {
-    opacity: 0.55;
+    opacity: 1;
+    outline: none;
   }
 
-  .heading-anchor:hover {
-    opacity: 1;
+  .heading-anchor:hover,
+  .heading-anchor:focus-visible {
+    color: var(--heading-color);
     text-decoration: none;
+    border-bottom: none;
   }
 
   .heading-anchor.copied {
     opacity: 1;
-    color: #4ade80;
+    color: var(--heading-color);
   }
 
-  /* Touch devices: always visible at low opacity */
+  /* Touch devices: keep faintly visible since there is no hover */
   @media (hover: none) {
     .heading-anchor,
     .heading-anchor:link,
     .heading-anchor:visited {
-      opacity: 0.35;
+      opacity: 0.5;
     }
   }
 
