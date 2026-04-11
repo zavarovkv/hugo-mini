@@ -34,6 +34,17 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # socialSharing = false   # uncomment to disable Likely sharing buttons
   # consoleYoda   = true    # uncomment to print a built-in Yoda in the browser console
 
+  # Curated "popular posts" block shown at the bottom of single posts.
+  # Slugs are relative to `blog/` section; missing slugs are silently skipped.
+  popularPosts = [
+    "theme-features",
+    "hello-world",
+    "under-the-hood",
+    "math-demo",
+    "mermaid-demo",
+    "shortcodes-demo",
+  ]
+
   # Analytics (all optional — set only the ones you use)
   # yandexMetrikaId   = 123456789
   # googleAnalyticsId = "G-XXXXXXXXXX"

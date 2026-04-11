@@ -107,6 +107,26 @@ pinned = true
 
 No visual marker — order is the only signal, keeping the listing clean.
 
+## Popular Posts
+
+Curated "popular posts" block rendered at the bottom of every single post. The list is author-picked, not algorithmic — set it in `config.toml`:
+
+```toml
+[params]
+  popularPosts = [
+    "theme-features",
+    "under-the-hood",
+    "hello-world",
+    "math-demo",
+  ]
+```
+
+Slugs are relative to the `blog/` section and resolved per current language via Hugo's `site.GetPage`, so RU pages show RU popular, EN pages show EN popular. Missing or renamed slugs are silently skipped, so temporarily broken entries don't break the build.
+
+Visual style borrowed from Ilya Birman's Эгея engine and adapted to the theme: the heading uses the same `.posts-group-title` styling as category group titles on the blog listing, the list reuses `.blog-posts`, CSS `column-count: 2` splits it into two visual columns on desktop (one on mobile), and publication dates hide in the `title` attribute as a hover tooltip — keeping the block compact without losing the metadata.
+
+You're looking at it right now — scroll to the bottom of this post.
+
 ## Heading Anchor Links
 
 Markdown `##` and `###` headings get a clickable `#` next to them on hover. Clicking copies the section URL to the clipboard with brief feedback. The marker is sized down to ~body text and uses the same neutral grey as the social/theme/lang toggle icons in their rest state.

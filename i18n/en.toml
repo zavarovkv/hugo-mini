@@ -4,6 +4,9 @@ other = "Articles"
 [misc]
 other = "Miscellaneous"
 
+[popular]
+other = "Popular"
+
 [home]
 other = "Home"
 

@@ -940,10 +940,31 @@
     letter-spacing: 0.5px;
   }
 
+  /* Curated "popular posts" block at the bottom of single post pages.
+     Reuses .posts-group-title + .blog-posts styles from the listing page;
+     the list itself is split into two visual columns via CSS multi-column
+     on desktop, collapses to one column on mobile. */
+  .popular-posts {
+    margin-top: 50px;
+  }
+
+  .popular-posts-list {
+    column-count: 2;
+    column-gap: 2em;
+  }
+
+  .popular-posts-list li {
+    break-inside: avoid;
+  }
+
   @media (max-width: 768px) {
     .posts-columns {
       flex-direction: column;
       gap: 0;
+    }
+
+    .popular-posts-list {
+      column-count: 1;
     }
   }
 

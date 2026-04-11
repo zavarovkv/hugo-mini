@@ -20,6 +20,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Code copy button** — appears on hover, with check animation
 - **Heading anchor links** — clickable `#` next to `h2`/`h3` markdown headings, click copies the section URL to clipboard
 - **Pinned posts** — `pinned = true` in front matter floats a post to the top of its category group on the blog listing
+- **Popular posts** — curated `params.popularPosts` list rendered at the bottom of single posts in a 2-column layout (style borrowed from Ilya Birman's Эгея)
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
 - **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)
@@ -136,6 +137,12 @@ ignoreErrors    = ["error-disable-taxonomy"]
   socialSharing = true   # set false to disable Likely sharing buttons
   consoleYoda   = true   # enables a built-in Yoda ASCII art in the home-page console
   consoleArt    = "..."  # optional custom ASCII art (TOML triple-string); takes priority over consoleYoda
+
+  # Curated "popular posts" block shown at the bottom of single posts.
+  # Slugs are relative to the `blog/` section; missing ones are silently
+  # skipped. Per-language: RU pages resolve against content/ru/blog/, EN
+  # against content/en/blog/.
+  popularPosts = ["retention", "10-evils", "brandage"]
 
   # Analytics (all optional — omit to disable, multiple can run side by side)
   yandexMetrikaId    = 123456789      # Yandex.Metrika ID

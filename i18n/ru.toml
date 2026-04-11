@@ -4,6 +4,9 @@ other = "Статьи"
 [misc]
 other = "Разное"
 
+[popular]
+other = "Популярное"
+
 [home]
 other = "Главная"
 

@@ -37,6 +37,9 @@
     <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ . }}" data-tg-limit="20"></div>
     {{ end }}
 
+    {{/* Curated "popular posts" block — list from params.popularPosts */}}
+    {{- partial "popular-posts.html" . -}}
+
   {{ else }}
     <h1>{{ .Title }}</h1>
     <article>
