@@ -796,14 +796,17 @@
       visibility: visible;
     }
 
+    /* Mobile overlay nav: link colour, weight and :hover are inherited
+       from the default `a:link` rules (same treatment as desktop). The
+       only mobile-specific overrides are layout (full-width blocks with
+       big tap padding) and the 1px grey dividers between items — those
+       replace the thin 0.25px link underline for a cleaner list look. */
     .main-nav a {
       width: 100%;
       box-sizing: border-box;
       padding: 18px 20px;
       display: block;
       font-size: 1.1rem;
-      font-weight: 400;
-      color: var(--heading-color);
       border-bottom: 1px solid #e5e5e5;
     }
 
@@ -819,14 +822,8 @@
       border-top-color: #2a2a2a;
     }
 
-    .main-nav a:hover {
-      color: var(--color-accent);
-    }
-
-    [data-theme="dark"] .main-nav a:hover {
-      color: var(--color-accent);
-    }
-
+    /* Current-page link has `border-bottom: none` globally — put the
+       divider back so it keeps the rhythm of the overlay list. */
     .main-nav .link-selected,
     .main-nav .link-selected:link,
     .main-nav .link-selected:visited {
