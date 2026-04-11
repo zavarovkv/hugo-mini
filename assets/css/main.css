@@ -623,9 +623,23 @@
     margin-bottom: 35px;
   }
 
+  /* Post meta row: a flex line containing [views + date] on the left
+     and [reactions] on the right. All three pieces come from the
+     telegram-* partials, so any or all of them may be absent. */
   .post-meta-inline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px 15px;
+    flex-wrap: wrap;
     margin-top: 8px;
-    font-size: 0.75em; /* меньше, чем футер */
+    font-size: 0.75em;
+  }
+
+  .post-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .post-meta-inline .post-date {
@@ -633,6 +647,50 @@
     font-family: inherit;
     font-size: inherit;
     letter-spacing: normal;
+  }
+
+  /* Views indicator: filled eye glyph (Birman-style) + number.
+     Inherits font-size from .post-meta-inline and uses the same
+     color as .post-date for visual symmetry with the date. */
+  .tg-views {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-color);
+  }
+
+  .tg-views-icon {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    color: currentColor;
+  }
+
+  /* Reactions list — inline on desktop, right-aligned via parent flex. */
+  .tg-reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--text-color);
+  }
+
+  .tg-reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .tg-reaction-emoji {
+    line-height: 1;
+  }
+
+  /* Mobile: stack the two groups vertically instead of left/right */
+  @media (max-width: 768px) {
+    .post-meta-inline {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
   }
 
   .post-tags {

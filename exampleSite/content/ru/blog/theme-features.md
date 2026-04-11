@@ -55,19 +55,7 @@ Mini включает библиотеку [Likely](https://github.com/nicothin/
 
 ## Интеграция с Telegram
 
-Mini имеет встроенную поддержку Telegram. Добавьте канал в `config.toml`:
-
-```toml
-[params]
-  telegramChannel = "your_channel"
-  telegramCTATitle = "Мой канал"
-  telegramCTADescription = "Подписывайтесь"
-```
-
-Это включает:
-
-- CTA-блок под каждым постом с приглашением подписаться
-- Комментарии через виджет Telegram (для каждого поста, через `telegram_post` в front matter)
+В Mini три Telegram-фичи, которые работают поверх одной связки `telegramChannel` + `telegram_post`: CTA-блок подписки, виджет комментариев Discussion и живые счётчики реакций/просмотров рядом с датой поста. Полный разбор — в отдельном посте [«Интеграция с Telegram»](/telegram-integration/).
 
 ## Мультиязычность
 

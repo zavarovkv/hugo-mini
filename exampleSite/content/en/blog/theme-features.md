@@ -55,19 +55,7 @@ All external links in post content automatically open in a new tab with `rel="no
 
 ## Telegram Integration
 
-Mini has built-in Telegram support. Add your channel to `config.toml`:
-
-```toml
-[params]
-  telegramChannel = "your_channel"
-  telegramCTATitle = "My Channel"
-  telegramCTADescription = "Follow for more content"
-```
-
-This enables:
-
-- A CTA block below each post inviting readers to subscribe
-- Discussion comments via Telegram's widget (per-post, using `telegram_post` front matter)
+Mini has three Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a subscribe CTA block, Discussion comments widget, and live reaction/view counts surfaced next to the post date. See the dedicated [Telegram Integration](/telegram-integration/) post for the full walkthrough.
 
 ## Multilingual
 

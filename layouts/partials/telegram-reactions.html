@@ -1,0 +1,29 @@
+{{- /*
+  Surfaces emoji reactions from the post's linked Telegram channel post,
+  fetched at build time by scripts/fetch-telegram-reactions.mjs and stored
+  in data/telegram_reactions.json.
+
+  Renders a compact inline list of <emoji><count> spans. The caller is
+  responsible for positioning the container — this partial does NOT wrap
+  in its own spacing block. View counts are a sibling partial
+  (telegram-views.html) so the two can be placed independently in the
+  layout (views next to date on the left, reactions right-aligned).
+
+  Graceful fallback: if data/telegram_reactions.json is missing (local
+  dev build without running the fetch script), the partial renders
+  nothing and the page still builds.
+*/ -}}
+{{- with .Params.telegram_post -}}
+  {{- $key := printf "%v" . -}}
+  {{- with site.Data.telegram_reactions -}}
+    {{- with index . $key -}}
+      {{- with .reactions -}}
+<div class="tg-reactions" aria-label="Reactions on Telegram">
+        {{- range . }}
+        <span class="tg-reaction"><span class="tg-reaction-emoji">{{ .emoji }}</span>{{ .count }}</span>
+        {{- end }}
+</div>
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

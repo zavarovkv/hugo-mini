@@ -6,9 +6,17 @@
       {{ .Content }}
     </article>
 
-    <p class="post-meta-inline">
-      <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-date">{{ partial "format-date.html" . }}</time>
-    </p>
+    {{/* Post meta row: views + date on the left, Telegram reactions on
+         the right. All three pieces come from the telegram-* partials
+         and data/telegram_reactions.json — each renders nothing if its
+         source data is missing, so the row gracefully degrades. */}}
+    <div class="post-meta-inline">
+      <div class="post-meta-left">
+        {{- partial "telegram-views.html" . -}}
+        <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-date">{{ partial "format-date.html" . }}</time>
+      </div>
+      {{- partial "telegram-reactions.html" . -}}
+    </div>
 
     {{/* Social sharing buttons (enabled by default, disable with socialSharing = false) */}}
     {{ if site.Params.socialSharing | default true }}

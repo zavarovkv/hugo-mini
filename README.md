@@ -21,6 +21,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Heading anchor links** — clickable `#` next to `h2`/`h3` markdown headings, click copies the section URL to clipboard
 - **Pinned posts** — `pinned = true` in front matter floats a post to the top of its category group on the blog listing
 - **Popular posts** — curated `params.popularPosts` list rendered at the bottom of single posts in a 2-column layout (style borrowed from Ilya Birman's Эгея)
+- **Telegram reactions** — surfaces view counts and emoji reactions from the post's linked Telegram channel post into the post meta row, via a bundled fetch script + two render partials
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
 - **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)
@@ -272,6 +273,58 @@ Place files in your site's `layouts/partials/` to override theme partials:
 | `header.html` | Site header |
 | `custom_head.html` | Extra `<head>` content rendered **after** the bundled theme CSS, so overrides win the cascade |
 | `custom_body.html` | Extra `<script>`/markup at the end of `<body>`, rendered **after** the bundled theme JS |
+
+### Telegram reactions
+
+The theme can surface view counts and emoji reactions from your Telegram channel into each post's meta row (next to the date). Enable it in three steps:
+
+1. **Set `params.telegramChannel`** in your `config.toml` if you haven't already:
+   ```toml
+   [params]
+     telegramChannel = "your_channel"   # without @
+   ```
+
+2. **Tag each post** that has a corresponding Telegram channel post with `telegram_post = NNN` in front matter (`NNN` = the message ID in the channel):
+   ```toml
+   +++
+   title = "My Post"
+   telegram_post = 42
+   +++
+   ```
+
+3. **Wire the fetch script** into your site's `package.json` and run it before every Hugo build:
+   ```json
+   "scripts": {
+     "fetch-telegram-reactions": "node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs"
+   }
+   ```
+
+   Add the generated data file to `.gitignore`:
+   ```
+   /data/telegram_reactions.json
+   ```
+
+   And call it in CI before `hugo --minify`:
+   ```yaml
+   - name: Fetch Telegram reactions
+     continue-on-error: true
+     run: npm run fetch-telegram-reactions
+   - name: Build
+     run: hugo --minify
+   ```
+
+The script auto-resolves the channel and content directory via `hugo config --format json`, so no CLI flags are needed in the common case. It scrapes each post's public Telegram embed (`https://t.me/<channel>/<id>?embed=1`), parses reaction + view counts, and writes `data/telegram_reactions.json` which the theme partials `telegram-views.html` and `telegram-reactions.html` consume at build time. Missing data is handled gracefully — local dev builds without running the script still work.
+
+Overrides for the common case:
+
+```bash
+node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs \
+  --channel my_channel \
+  --content-dir content/en/posts \
+  --output data/tg.json
+```
+
+Also respects the `TELEGRAM_CHANNEL` env var. Requires Hugo Extended on PATH (for the config dump) and Node 18+ (for native `fetch` / `parseArgs`).
 
 ### Asset bundling
 
