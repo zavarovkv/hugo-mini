@@ -141,16 +141,7 @@
     color: var(--heading-color);
   }
 
-  /* Touch devices: keep faintly visible since there is no hover */
-  @media (hover: none) {
-    .heading-anchor,
-    .heading-anchor:link,
-    .heading-anchor:visited {
-      opacity: 0.4;
-    }
-  }
-
-  /* Mobile: inline after heading text */
+  /* Mobile: inline after heading text, hidden until heading is tapped */
   @media (max-width: 768px) {
     .heading-anchor,
     .heading-anchor:link,
@@ -160,6 +151,12 @@
       margin-left: 0.25em;
       vertical-align: baseline;
       padding: 0;
+      opacity: 0;
+    }
+
+    h2.anchor-visible > .heading-anchor,
+    h3.anchor-visible > .heading-anchor {
+      opacity: 1;
     }
   }
 

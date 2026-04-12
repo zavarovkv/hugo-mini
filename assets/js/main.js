@@ -184,14 +184,27 @@
     });
   })();
 
-  // Heading anchor links: copy section URL to clipboard on click
+  // Heading anchor links: copy section URL to clipboard on click.
+  // Mobile: tap heading to reveal icon, tap icon to copy.
   (function() {
     if (!navigator.clipboard) return;
     var FEEDBACK_MS = 1200;
+    var isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     document.querySelectorAll('.heading-anchor').forEach(function(anchor) {
+      var heading = anchor.parentElement;
       var timer = null;
-      anchor.addEventListener('click', function() {
+
+      // Mobile: tap heading to toggle anchor visibility
+      if (isMobile && heading) {
+        heading.addEventListener('click', function(e) {
+          if (e.target === anchor || anchor.contains(e.target)) return;
+          heading.classList.toggle('anchor-visible');
+        });
+      }
+
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
         var url = window.location.origin + window.location.pathname + anchor.getAttribute('href');
         navigator.clipboard.writeText(url).then(function() {
           anchor.classList.add('copied');
