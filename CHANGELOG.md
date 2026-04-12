@@ -26,6 +26,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `single.html` wraps the post meta row as a flexbox: `[views + date]` on the left, `[reactions]` on the right, stacking vertically on mobile (`max-width: 768px`).
   - Both partials read from `site.Data.telegram_reactions[<id>]` and render nothing if the data file or entry is missing — safe to build locally without ever running the fetch script.
 - **Nav menu icon support** — set `params.icon = "telegram"` on a menu item to show an inline SVG paper plane. Desktop: icon before label with elastic hover animation (`cubic-bezier(0.34, 1.56, 0.64, 1)` + drop-shadow trail). Mobile: icon after label, larger size (20px). Extend the `$paths` dict in `nav.html` to add more icons.
+- **Back to top** — Telegram-blog-style left gutter click area. A fixed overlay spans the left margin on wide screens (gutter > 130px); appears when scrolled > 400px with a 0.2s fade. The visible label ("↑ Go up" / "↑ Наверх") occupies a 120px-wide strip with a subtle hover highlight. Clicking anywhere in the gutter scrolls to top. Hidden on narrow viewports where no gutter exists. Created dynamically by JS — no extra markup needed. i18n key: `go_up`.
 - `archetypes/blog.md` for content scaffolding (`hugo new blog/my-post.md`)
 - Hugo Modules support (`go.mod`)
 - `CONTRIBUTING.md`

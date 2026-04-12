@@ -10,6 +10,9 @@ other = "Популярное"
 [home]
 other = "Главная"
 
+[go_up]
+other = "Наверх"
+
 [theme_light]
 other = "Включить светлую тему"
 

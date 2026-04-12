@@ -204,3 +204,54 @@
       });
     });
   })();
+
+  // Back to top — left gutter click area (Telegram blog style).
+  // Creates a fixed overlay covering the left margin; visible only when
+  // scrolled > 400px and the gutter is wide enough (> 130px).
+  (function() {
+    var SCROLL_THRESHOLD = 400;
+    var MIN_GUTTER = 130;
+    var label = {{ i18n "go_up" | default "Go up" | jsonify | safeJS }};
+
+    var wrap = document.createElement('a');
+    wrap.className = 'back-to-top-wrap';
+    wrap.setAttribute('role', 'button');
+    wrap.setAttribute('aria-label', label);
+
+    var inner = document.createElement('div');
+    inner.className = 'back-to-top';
+    inner.innerHTML = '<svg class="back-to-top-icon" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5l4-4 4 4"/></svg>' + label;
+
+    wrap.appendChild(inner);
+    document.body.appendChild(wrap);
+
+    var gutterOk = false;
+
+    function measure() {
+      var body = document.body;
+      var rect = body.getBoundingClientRect();
+      var gutter = rect.left;
+      gutterOk = gutter > MIN_GUTTER;
+      wrap.style.width = gutter + 'px';
+      wrap.style.display = gutterOk ? 'block' : 'none';
+      onScroll();
+    }
+
+    function onScroll() {
+      if (gutterOk && window.pageYOffset > SCROLL_THRESHOLD) {
+        wrap.classList.add('shown');
+      } else {
+        wrap.classList.remove('shown');
+      }
+    }
+
+    wrap.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scroll(0, 0);
+      onScroll();
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    measure();
+  })();

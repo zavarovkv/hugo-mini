@@ -10,6 +10,9 @@ other = "Popular"
 [home]
 other = "Home"
 
+[go_up]
+other = "Go up"
+
 [theme_light]
 other = "Switch to light theme"
 

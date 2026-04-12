@@ -25,6 +25,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
 - **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in: `telegram` paper plane with elastic hover animation)
+- **Back to top** — Telegram-blog-style left gutter click area: hover the left margin on wide screens to reveal "↑ Go up", click to scroll to top
 - **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)
 
 ## Requirements

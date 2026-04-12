@@ -158,6 +158,10 @@ Any menu item can display an inline SVG icon via `params.icon`. Built-in icon: `
     icon = "telegram"
 ```
 
+## Back to Top
+
+On wide screens, hovering the left margin reveals a "Go up" label. Clicking anywhere in the left gutter scrolls back to the top — Telegram blog style. The button appears only after scrolling past 400px and only when the viewport is wide enough to have a meaningful gutter (> 130px). No configuration needed — works automatically on all pages.
+
 ## Mobile Navigation
 
 On narrow screens, the navigation collapses into a full-screen overlay menu with a hamburger toggle. No external libraries — pure CSS and minimal JavaScript.

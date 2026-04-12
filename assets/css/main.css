@@ -1377,6 +1377,62 @@
     outline-color: var(--color-primary);
   }
 
+  /* Back to top — left gutter click area (Telegram blog style) */
+  .back-to-top-wrap {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    cursor: default;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 50;
+  }
+
+  .back-to-top-wrap,
+  .back-to-top-wrap:link,
+  .back-to-top-wrap:visited,
+  .back-to-top-wrap:hover {
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  .back-to-top-wrap.shown {
+    cursor: pointer;
+    pointer-events: all;
+    opacity: 1;
+  }
+
+  .back-to-top {
+    width: 120px;
+    height: 100%;
+    padding: 18px 15px 18px 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: none;
+    transition: background 0.2s ease-in-out;
+    white-space: nowrap;
+  }
+
+  .back-to-top-wrap:hover .back-to-top {
+    background: rgba(174, 198, 215, 0.15);
+  }
+
+  [data-theme="dark"] .back-to-top-wrap:hover .back-to-top {
+    background: rgba(174, 198, 215, 0.08);
+  }
+
+  .back-to-top-icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
   /* Respect users who prefer reduced motion */
   @media (prefers-reduced-motion: reduce) {
     *,
