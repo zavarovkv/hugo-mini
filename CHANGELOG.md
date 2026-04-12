@@ -54,6 +54,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deprecated `word-wrap: break-word` (redundant with `overflow-wrap: break-word`)
 
 ### Fixed
+- Copy button invisible in light theme — was using white `rgba(255,255,255)` colors meant for dark backgrounds. Now uses dark colors for light theme with `[data-theme="dark"]` overrides for dark theme
+- Mobile code blocks: iOS Safari auto-enlarged text in `<pre>` blocks causing inconsistent font sizes. Added `-webkit-text-size-adjust: 100%` to `body` and `.highlight pre`
 - `cat_getting-started` key missing from `i18n/ru.toml`
 - `theme-toggle` height inconsistency with `lang-toggle` (added `box-sizing: border-box`)
 - `consoleArt` was double-escaped — Hugo applies JS context auto-escape inside `<script>` blocks on top of `jsonify`, so the rendered `console.log` printed the literal JSON string (with `\n` and `\"` as visible characters) instead of the formatted ASCII. Added `safeJS` after `jsonify` to mark the output as already-safe-for-JS.
