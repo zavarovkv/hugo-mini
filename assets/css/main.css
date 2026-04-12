@@ -96,22 +96,31 @@
   }
 
   /* Anchor link next to h2/h3 — click to copy section URL.
-     Sized down to ~body text, neutral grey by default, reveals on
-     heading hover, picks up brand colour on direct hover/copied. */
+     SVG link icon in left margin on desktop, hidden on mobile. */
+  h2, h3 {
+    position: relative;
+  }
+
   .heading-anchor,
   .heading-anchor:link,
   .heading-anchor:visited {
-    display: inline-block;
-    margin-left: 0.35em;
-    font-size: 0.65em;
-    font-weight: 400;
-    letter-spacing: 0;
+    position: absolute;
+    right: 100%;
+    top: 0.1em;
+    width: 0.6em;
+    height: 0.6em;
+    padding: 0.15em 0.35em 0.15em 0.15em;
     color: var(--color-muted);
     opacity: 0;
     text-decoration: none;
     border-bottom: none;
-    vertical-align: 0.12em;
     transition: opacity 0.18s ease-out, color 0.18s ease-out;
+  }
+
+  .heading-anchor svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   h2:hover > .heading-anchor,
@@ -137,7 +146,20 @@
     .heading-anchor,
     .heading-anchor:link,
     .heading-anchor:visited {
-      opacity: 0.5;
+      opacity: 0.4;
+    }
+  }
+
+  /* Mobile: inline after heading text */
+  @media (max-width: 768px) {
+    .heading-anchor,
+    .heading-anchor:link,
+    .heading-anchor:visited {
+      position: static;
+      display: inline-block;
+      margin-left: 0.25em;
+      vertical-align: baseline;
+      padding: 0;
     }
   }
 

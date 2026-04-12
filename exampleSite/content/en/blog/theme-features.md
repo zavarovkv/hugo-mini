@@ -117,7 +117,7 @@ You're looking at it right now — scroll to the bottom of this post.
 
 ## Heading Anchor Links
 
-Markdown `##` and `###` headings get a clickable `#` next to them on hover. Clicking copies the section URL to the clipboard with brief feedback. The marker is sized down to ~body text and uses the same neutral grey as the social/theme/lang toggle icons in their rest state.
+Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, it shows inline after the heading text. Clicking copies the section URL to the clipboard with brief feedback.
 
 Implemented via `_markup/render-heading.html` render hook + minimal JS — no extra dependencies. Note: only fires for markdown-parsed headings, not raw HTML `<h2>...</h2>`.
 

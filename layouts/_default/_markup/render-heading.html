@@ -1,8 +1,8 @@
 {{- /*
   Heading render hook. Adds a stable slug-based id to every heading and,
-  for h2/h3 only, appends a clickable `#` link that copies the section
-  URL to the clipboard (see custom_body.html for the JS handler).
+  for h2/h3 only, prepends a clickable link icon that copies the section
+  URL to the clipboard (see main.js for the JS handler).
 */ -}}
 {{- $anchor := .Anchor | safeURL -}}
 {{- $linkable := or (eq .Level 2) (eq .Level 3) -}}
-<h{{ .Level }} id="{{ $anchor }}">{{ .Text | safeHTML }}{{- if $linkable -}}<a class="heading-anchor" href="#{{ $anchor }}" aria-label="Copy link to this section">#</a>{{- end -}}</h{{ .Level }}>
+<h{{ .Level }} id="{{ $anchor }}">{{ .Text | safeHTML }}{{- if $linkable -}}<a class="heading-anchor" href="#{{ $anchor }}" aria-label="Copy link to this section"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1"/></svg></a>{{- end -}}</h{{ .Level }}>
