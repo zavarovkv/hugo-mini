@@ -55,7 +55,7 @@ Mini включает библиотеку [Likely](https://github.com/nicothin/
 
 ## Интеграция с Telegram
 
-В Mini три Telegram-фичи, которые работают поверх одной связки `telegramChannel` + `telegram_post`: CTA-блок подписки, виджет комментариев Discussion и живые счётчики реакций/просмотров рядом с датой поста. Полный разбор — в отдельном посте [«Интеграция с Telegram»](/telegram-integration/).
+В Mini две Telegram-фичи, которые работают поверх связки `telegramChannel` + `telegram_post`: виджет комментариев Discussion и живые счетчики реакций/просмотров рядом с датой поста. Полный разбор — в отдельном посте [«Интеграция с Telegram»](/telegram-integration/).
 
 ## Мультиязычность
 
@@ -143,6 +143,20 @@ Markdown-заголовки `##` и `###` получают кликабельн�
 ```
 
 Для своего арта используй `consoleArt` с TOML triple-строкой — он имеет приоритет над `consoleYoda`, если заданы оба.
+
+## Иконки в навигации
+
+К любому пункту меню можно добавить инлайн-SVG иконку через `params.icon`. Встроенная иконка: `telegram` (бумажный самолетик). На десктопе иконка появляется перед текстом с упругой анимацией при наведении; на мобильном — после текста, чуть крупнее.
+
+```toml
+[[languages.ru.menu.main]]
+  identifier = "telegram"
+  name       = "Подписаться"
+  url        = "https://t.me/your_channel"
+  weight     = 3
+  [languages.ru.menu.main.params]
+    icon = "telegram"
+```
 
 ## Мобильная навигация
 

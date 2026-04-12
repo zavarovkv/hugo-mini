@@ -10,15 +10,6 @@ other = "Popular"
 [home]
 other = "Home"
 
-[subscribe]
-other = "Subscribe"
-
-[tg_cta_title]
-other = "My Telegram Channel"
-
-[tg_cta_description]
-other = "Follow for more content"
-
 [theme_light]
 other = "Switch to light theme"
 

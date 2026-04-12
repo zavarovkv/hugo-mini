@@ -2,32 +2,25 @@
 title = "Telegram Integration"
 slug = "telegram-integration"
 date = "2026-04-05T12:00:00+00:00"
-description = "Channel CTA, Discussion comments, and live reaction counts — the theme's three Telegram features"
+description = "Discussion comments and live reaction counts — the theme's two Telegram features"
 categories = ["getting-started"]
 +++
 
-Mini treats Telegram as a first-class engagement surface for blogs whose audience lives partly on the messenger. Three independent features plug into the same `telegramChannel` + `telegram_post` configuration:
+Mini treats Telegram as a first-class engagement surface for blogs whose audience lives partly on the messenger. Two independent features plug into the same `telegramChannel` + `telegram_post` configuration:
 
-1. A subscribe CTA block below every post
-2. Discussion comments via Telegram's official widget
-3. Live reaction counts and view counts surfaced next to the post date
+1. Discussion comments via Telegram's official widget
+2. Live reaction counts and view counts surfaced next to the post date
 
 Each feature renders only when its config is present, so you can enable them one at a time.
 
-## Channel CTA
+## Discussion Comments
 
 Set your channel username (without `@`) in `config.toml`:
 
 ```toml
 [params]
-  telegramChannel        = "your_channel"
-  telegramCTATitle       = "My Channel"
-  telegramCTADescription = "Follow for more content"
+  telegramChannel = "your_channel"
 ```
-
-Mini adds a compact CTA block below every single post with a "Subscribe" button. Hides itself if `telegramChannel` is unset.
-
-## Discussion Comments
 
 Tag each post with the message ID of the corresponding channel post:
 
@@ -45,7 +38,7 @@ Mini embeds Telegram's official Discussion Comments widget on the page, lazy-loa
 The theme ships a zero-dependency Node script that scrapes public Telegram embeds for each of your posts and writes reaction + view counts to `data/telegram_reactions.json`. Two partials (`telegram-views.html` and `telegram-reactions.html`) read that data and render an inline row next to the post date:
 
 ```
-👁 857   Aug 28, 2024                              ⭐ 11   ❤ 7
+eye 857   Aug 28, 2024                              star 11   heart 7
 ```
 
 Eye icon + view count on the left, reactions aligned right via flexbox. On mobile, the two groups stack vertically. The eye glyph is a filled monochrome two-path SVG with a circular pupil — borrowed from Ilya Birman's blog — rendered in `currentColor` so it matches the surrounding text.
@@ -57,7 +50,7 @@ Eye icon + view count on the left, reactions aligned right via flexbox. On mobil
 3. Writes a single JSON file that Hugo loads via `site.Data.telegram_reactions`
 4. The theme partials look up the current post's ID in that map and render the row — or render nothing if the data is missing
 
-Paid star reactions (`⭐`) are preserved. Custom premium emoji with no text fallback are skipped. View counts preserve Telegram's formatting (`1.2K`, `857`).
+Paid star reactions are preserved. Custom premium emoji with no text fallback are skipped. View counts preserve Telegram's formatting (`1.2K`, `857`).
 
 ### Setup
 
@@ -112,13 +105,11 @@ This means you can `hugo server` locally without ever running the fetch script �
 
 ## Complete Setup
 
-To enable all three features at once, add to `config.toml`:
+To enable both features, add to `config.toml`:
 
 ```toml
 [params]
-  telegramChannel        = "your_channel"
-  telegramCTATitle       = "My Channel"
-  telegramCTADescription = "Follow for more content"
+  telegramChannel = "your_channel"
 ```
 
 Then in each post that has a corresponding Telegram message:
@@ -132,4 +123,4 @@ telegram_post = 42
 
 And wire the fetch script into `package.json` + CI as shown above.
 
-That's it — CTA block, comments widget, and live reaction counts all kick in on every post that has `telegram_post` set. Remove the `telegram_post` field from a post's front matter and the comments widget + reactions row disappear for that post specifically.
+That's it — comments widget and live reaction counts kick in on every post that has `telegram_post` set. Remove the `telegram_post` field from a post's front matter and the comments widget + reactions row disappear for that post specifically.

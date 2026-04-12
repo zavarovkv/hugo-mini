@@ -25,10 +25,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   newPostDays = 30   # days before "New" badge disappears
   aiTranslatedLang = "ru"   # show AI sparkle icon on this language in the switcher
 
-  # Telegram (remove to disable CTA and comments)
-  # telegramChannel        = "your_channel"
-  # telegramCTATitle       = "My Channel"
-  # telegramCTADescription = "Follow for more content"
+  # Telegram (remove to disable comments widget)
+  # telegramChannel = "your_channel"
 
   # Features
   # socialSharing = false   # uncomment to disable Likely sharing buttons
@@ -89,6 +87,13 @@ ignoreErrors    = ["error-disable-taxonomy"]
         name       = "About"
         url        = "/about/"
         weight     = 2
+      [[languages.en.menu.main]]
+        identifier = "telegram"
+        name       = "Subscribe"
+        url        = "https://t.me/pmgen"
+        weight     = 3
+        [languages.en.menu.main.params]
+          icon = "telegram"
 
   [languages.ru]
     weight = 2
@@ -107,3 +112,10 @@ ignoreErrors    = ["error-disable-taxonomy"]
         name       = "О проекте"
         url        = "/ru/about/"
         weight     = 2
+      [[languages.ru.menu.main]]
+        identifier = "telegram"
+        name       = "Подписаться"
+        url        = "https://t.me/pmgen"
+        weight     = 3
+        [languages.ru.menu.main.params]
+          icon = "telegram"

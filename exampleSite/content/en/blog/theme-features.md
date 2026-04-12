@@ -55,7 +55,7 @@ All external links in post content automatically open in a new tab with `rel="no
 
 ## Telegram Integration
 
-Mini has three Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a subscribe CTA block, Discussion comments widget, and live reaction/view counts surfaced next to the post date. See the dedicated [Telegram Integration](/telegram-integration/) post for the full walkthrough.
+Mini has two Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a Discussion comments widget, and live reaction/view counts surfaced next to the post date. See the dedicated [Telegram Integration](/telegram-integration/) post for the full walkthrough.
 
 ## Multilingual
 
@@ -143,6 +143,20 @@ Set `consoleYoda = true` in `[params]` to print a built-in Yoda ASCII art in the
 ```
 
 For custom art, use `consoleArt` with a TOML triple-string instead — it takes priority over `consoleYoda` when both are set.
+
+## Nav Menu Icons
+
+Any menu item can display an inline SVG icon via `params.icon`. Built-in icon: `telegram` (paper plane). On desktop the icon appears before the label with an elastic hover animation; on mobile it appears after the label, slightly larger.
+
+```toml
+[[languages.en.menu.main]]
+  identifier = "telegram"
+  name       = "Subscribe"
+  url        = "https://t.me/your_channel"
+  weight     = 3
+  [languages.en.menu.main.params]
+    icon = "telegram"
+```
 
 ## Mobile Navigation
 

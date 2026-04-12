@@ -29,16 +29,6 @@
     </div>
     {{ end }}
 
-    {{/* Telegram channel CTA (only shown when telegramChannel is set) */}}
-    {{ if site.Params.telegramChannel }}
-    <div class="tg-cta">
-      <div class="tg-cta-text">
-        <div class="tg-cta-title">{{ site.Params.telegramCTATitle | default (i18n "tg_cta_title") }}</div>
-        <div class="tg-cta-description">{{ site.Params.telegramCTADescription | default (i18n "tg_cta_description") }}</div>
-      </div>
-      <a href="https://t.me/{{ site.Params.telegramChannel }}" target="_blank" rel="noopener noreferrer" class="tg-cta-button">{{ i18n "subscribe" }}</a>
-    </div>
-    {{ end }}
 
     {{/* Telegram Discussion comments (rendered dynamically by JS to sync dark/light theme) */}}
     {{ with .Params.telegram_post }}

@@ -11,7 +11,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Dark / light mode** — follows system preference, toggleable in footer
 - **Multilingual** — built-in i18n (ru, en), easy to extend
 - **Dynamic OG images** — unique 1200×630 images generated per page at build time
-- **Telegram integration** — optional channel CTA on posts + Discussion comments
+- **Telegram integration** — Discussion comments widget, reactions/views in post meta
 - **KaTeX math** — per-page opt-in with `math = true`
 - **Mermaid diagrams** — per-page opt-in with `mermaid = true`
 - **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn)
@@ -24,6 +24,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **Telegram reactions** — surfaces view counts and emoji reactions from the post's linked Telegram channel post into the post meta row, via a bundled fetch script + two render partials
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
+- **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in: `telegram` paper plane with elastic hover animation)
 - **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)
 
 ## Requirements
@@ -130,9 +131,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
   newPostDays = 30   # days a post shows the "New" badge (default: 30)
 
   # Telegram (all optional)
-  telegramChannel        = "your_channel"          # enables CTA block + comments
-  telegramCTATitle       = "My Channel"            # CTA heading text
-  telegramCTADescription = "Follow for more"       # CTA description text
+  telegramChannel = "your_channel"   # enables Discussion comments widget + reactions
 
   # Features
   socialSharing = true   # set false to disable Likely sharing buttons
@@ -253,14 +252,30 @@ The theme uses CSS custom properties. Override them in your site's `layouts/part
 ```html
 <style>
   :root {
-    --color-primary: #0060a0;   /* links, title, focus ring */
-    --color-accent:  #d04000;   /* hover states, active elements, badges */
+    --color-primary: #0060a0;     /* links, title, focus ring */
+    --color-accent:  #d04000;     /* hover states, active elements, badges */
+    --color-muted:   #9da2a6;     /* secondary text, icons at rest */
+    --color-secondary: #556677;   /* mid-weight labels */
   }
   [data-theme="dark"] {
     --color-primary: #6ab0e6;
     --color-accent:  #ff7a40;
   }
 </style>
+```
+
+### Nav menu icons
+
+Add an inline SVG icon to any menu item via `params.icon`. Built-in icons: `telegram` (paper plane). On desktop the icon appears before the label with an elastic hover animation; on mobile it appears after the label.
+
+```toml
+[[languages.en.menu.main]]
+  identifier = "telegram"
+  name       = "Subscribe"
+  url        = "https://t.me/your_channel"
+  weight     = 3
+  [languages.en.menu.main.params]
+    icon = "telegram"
 ```
 
 ### Extending templates

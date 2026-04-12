@@ -10,15 +10,6 @@ other = "Популярное"
 [home]
 other = "Главная"
 
-[subscribe]
-other = "Подписаться"
-
-[tg_cta_title]
-other = "Мой канал в Telegram"
-
-[tg_cta_description]
-other = "Подписывайтесь на новые материалы"
-
 [theme_light]
 other = "Включить светлую тему"
 

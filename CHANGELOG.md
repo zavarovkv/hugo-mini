@@ -25,6 +25,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `layouts/partials/telegram-reactions.html` — renders an inline `<div class="tg-reactions">` with one `<span class="tg-reaction">` per emoji + count. Right-aligned via the parent flex container.
   - `single.html` wraps the post meta row as a flexbox: `[views + date]` on the left, `[reactions]` on the right, stacking vertically on mobile (`max-width: 768px`).
   - Both partials read from `site.Data.telegram_reactions[<id>]` and render nothing if the data file or entry is missing — safe to build locally without ever running the fetch script.
+- **Nav menu icon support** — set `params.icon = "telegram"` on a menu item to show an inline SVG paper plane. Desktop: icon before label with elastic hover animation (`cubic-bezier(0.34, 1.56, 0.64, 1)` + drop-shadow trail). Mobile: icon after label, larger size (20px). Extend the `$paths` dict in `nav.html` to add more icons.
 - `archetypes/blog.md` for content scaffolding (`hugo new blog/my-post.md`)
 - Hugo Modules support (`go.mod`)
 - `CONTRIBUTING.md`
@@ -33,8 +34,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Homepage OG image subtitle now uses `params.description` instead of hardcoded author-specific text
-- Telegram CTA block is now only rendered when `params.telegramChannel` is set
-- i18n: `tg_cta_title` / `tg_cta_description` default values are now generic
 - Content links use Inter Medium 500 instead of Semi-Bold 600 — softer weight contrast against the 300 body text
 - **Theme CSS/JS now bundled, minified, and fingerprinted via Hugo Pipes** instead of inlined per page. Source moved from `partials/style.html`/`fonts.html`/`custom_head.html` (CSS) and `partials/custom_body.html` (JS) to `assets/css/main.css` and `assets/js/main.js`. `baseof.html` runs them through `resources.ExecuteAsTemplate | resources.Minify | resources.Fingerprint "sha256"`, emitting one `<link>` and one `<script defer>` with content-hashed URLs (`/css/main.min.<sha>.css`, `/js/main.<lang>.min.<sha>.js`). Cuts ~33 KB off every HTML page (≈ 68% smaller home, 35% smaller posts), and the assets are cached by the browser across page navigations. JS bundle is per-language because i18n strings are baked in at build time. **BREAKING for theme users:** `custom_head.html` and `custom_body.html` partials no longer "replace all theme CSS/JS" — they now append after the bundled theme assets, so anything in them wins the cascade rather than completely overriding.
 - Refactor pass for code quality — no behavioural changes:
@@ -42,6 +41,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `_markup/render-heading.html`: collapsed if/else into a single `<h{N}>` template with conditional `<a>` insertion
   - `footer.html`: brand social icons rendered from a data-driven `$brands` slice instead of eight near-identical `{{ with }}` blocks
   - `custom_body.html`: copy-button and heading-anchor JS now track per-element timers (no race on rapid double-click) and `.catch()` clipboard rejections; early-exit added when `navigator.clipboard` is unavailable
+- Hardcoded grey colors (`#9da2a6`, `#556677`) replaced with CSS custom properties `--color-muted` and `--color-secondary`
+- `prefers-reduced-motion` durations changed from `0.01ms` to `0s` for cleaner reduced-motion behavior
+- `heading-anchor:focus` no longer removes `outline` — browser default focus indicator preserved for keyboard a11y
+- `structured_data.html` JSON conditionals rewritten from `{{ if }}` to `{{ with }}` for robustness — eliminates whitespace-sensitive comma placement
+
+### Removed
+- Telegram CTA block (`tg-cta`) — removed from `single.html` and all associated CSS (~70 lines)
+- Dead CSS: `.blog-tags`, `.tag-filter`/`.tags-list` (~50 lines of unused styles)
+- Dead i18n keys: `tg_cta_title`, `tg_cta_description`, `subscribe`
+- Deprecated `word-wrap: break-word` (redundant with `overflow-wrap: break-word`)
 
 ### Fixed
 - `cat_getting-started` key missing from `i18n/ru.toml`
