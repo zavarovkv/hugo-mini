@@ -53,6 +53,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Dead i18n keys: `tg_cta_title`, `tg_cta_description`, `subscribe`
 - Deprecated `word-wrap: break-word` (redundant with `overflow-wrap: break-word`)
 
+### Added (recent)
+- **Recent posts sidebar** — `partial "recent-posts.html"` returns a slice of the N most-recent blog posts (excluding the current page and `hidden = true` posts). In `single.html` it renders as `<aside class="recent-sidebar" id="recent-sidebar">`. On desktop with a right gutter ≥ 180px, JS positions the aside absolutely in the gutter (scrolls with page, `position: absolute`). On narrow viewports the block is a static section at the bottom of the article, styled with `ul.blog-posts` for visual consistency with the blog listing. Count controlled by `params.recentSidebarCount` (default: 8, set in `hugo.toml`). Replaces the curated popular-posts block.
+- `params.recentSidebarCount` — theme default param (in `hugo.toml`) controlling how many posts appear in the recent sidebar block.
+- i18n keys `recent_posts` added to `i18n/ru.toml` ("Новые статьи") and `i18n/en.toml` ("More articles").
+- `scroll-margin-top: 0.75rem` on `h2` and `h3` — gives breathing room between the top of the viewport and a heading after anchor navigation.
+- Mobile heading anchors: icon is now `display: none` by default (takes no space), revealed via `.anchor-visible` on the parent heading when the user taps it. Tap on the icon itself copies the URL and scrolls natively (no `preventDefault`); `e.stopPropagation()` prevents the heading-level toggle from interfering.
+
+### Changed (recent)
+- `single.html`: popular-posts partial call removed; replaced with recent-posts sidebar block.
+- Mobile menu: links no longer close the menu on Ctrl/Cmd/Shift+click (allows opening in new tab).
+- Back-to-top resize handler: debounced at 150ms (was immediate).
+- `a:link, a:active, a:visited` consolidated into a single selector block; redundant dark-theme link color overrides removed (values are already inherited from CSS custom properties).
+
 ### Fixed
 - Copy button invisible in light theme — was using white `rgba(255,255,255)` colors meant for dark backgrounds. Now uses dark colors for light theme with `[data-theme="dark"]` overrides for dark theme
 - Mobile code blocks: iOS Safari auto-enlarged text in `<pre>` blocks causing inconsistent font sizes. Added `-webkit-text-size-adjust: 100%` to `body` and `.highlight pre`

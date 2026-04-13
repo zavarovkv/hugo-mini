@@ -95,31 +95,24 @@ pinned = true
 
 No visual marker — order is the only signal, keeping the listing clean.
 
-## Popular Posts
+## Recent Posts Sidebar
 
-Curated "popular posts" block rendered at the bottom of every single post. The list is author-picked, not algorithmic — set it in `config.toml`:
+Every single post shows a block of the most recent articles — automatically updated, no curation needed. On desktop with enough right-gutter space it appears as an absolute sidebar next to the article (scrolls with the page, Telegram blog style). On mobile it appears as a static block at the bottom of the post.
+
+Configure the number of posts in `config.toml`:
 
 ```toml
 [params]
-  popularPosts = [
-    "theme-features",
-    "under-the-hood",
-    "hello-world",
-    "math-demo",
-  ]
+  recentSidebarCount = 8   # default: 8
 ```
 
-Slugs are relative to the `blog/` section and resolved per current language via Hugo's `site.GetPage`, so RU pages show RU popular, EN pages show EN popular. Missing or renamed slugs are silently skipped, so temporarily broken entries don't break the build.
-
-Visual style borrowed from Ilya Birman's Эгея engine and adapted to the theme: the heading uses the same `.posts-group-title` styling as category group titles on the blog listing, the list reuses `.blog-posts`, CSS `column-count: 2` splits it into two visual columns on desktop (one on mobile), and publication dates hide in the `title` attribute as a hover tooltip — keeping the block compact without losing the metadata.
-
-You're looking at it right now — scroll to the bottom of this post.
+The list excludes the current post and any posts with `hidden = true`. Scroll to the bottom of this post to see the mobile version, or widen your browser window to see the sidebar.
 
 ## Heading Anchor Links
 
-Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, it shows inline after the heading text. Clicking copies the section URL to the clipboard with brief feedback.
+Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, the icon is hidden by default — tap a heading to reveal it, then tap the icon to copy the section URL and scroll smoothly to the heading.
 
-Implemented via `_markup/render-heading.html` render hook + minimal JS — no extra dependencies. Note: only fires for markdown-parsed headings, not raw HTML `<h2>...</h2>`.
+Implemented via `_markup/render-heading.html` render hook + minimal JS — no extra dependencies. Note: only fires for markdown-parsed headings, not raw HTML `<h2>...</h2>`. Headings also have a small `scroll-margin-top` so navigating to an anchor leaves a gap at the top of the viewport instead of pushing the heading flush against the edge.
 
 ## Privacy-friendly Analytics
 

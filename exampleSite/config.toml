@@ -22,7 +22,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   copyrightYear = 2024   # start year: renders as "© 2024–CURRENT"
 
   # Content
-  newPostDays = 30   # days before "New" badge disappears
+  newPostDays          = 30   # days before "New" badge disappears
+  recentSidebarCount   = 8    # posts in the recent sidebar / mobile bottom block
   aiTranslatedLang = "ru"   # show AI sparkle icon on this language in the switcher
 
   # Telegram (remove to disable comments widget)
@@ -32,16 +33,9 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # socialSharing = false   # uncomment to disable Likely sharing buttons
   # consoleYoda   = true    # uncomment to print a built-in Yoda in the browser console
 
-  # Curated "popular posts" block shown at the bottom of single posts.
-  # Slugs are relative to `blog/` section; missing slugs are silently skipped.
-  popularPosts = [
-    "theme-features",
-    "hello-world",
-    "under-the-hood",
-    "math-demo",
-    "mermaid-demo",
-    "shortcodes-demo",
-  ]
+  # Recent posts sidebar — last N posts shown on single posts (right gutter on
+  # desktop, static block at bottom on mobile). Count set via recentSidebarCount above.
+  # The old curated popularPosts block has been replaced by this automatic sidebar.
 
   # Analytics (all optional — set only the ones you use)
   # yandexMetrikaId   = 123456789

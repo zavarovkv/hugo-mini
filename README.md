@@ -18,9 +18,9 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - **SEO** — JSON-LD structured data, hreflang, Open Graph, Twitter Cards
 - **Feeds** — JSON Feed, RSS, llms.txt for AI crawlers
 - **Code copy button** — appears on hover, with check animation
-- **Heading anchor links** — clickable `#` next to `h2`/`h3` markdown headings, click copies the section URL to clipboard
+- **Heading anchor links** — clickable `#` next to `h2`/`h3` markdown headings; click copies the section URL to clipboard. Mobile: hidden by default, tap heading to reveal, tap icon to copy + scroll natively
 - **Pinned posts** — `pinned = true` in front matter floats a post to the top of its category group on the blog listing
-- **Popular posts** — curated `params.popularPosts` list rendered at the bottom of single posts in a 2-column layout (style borrowed from Ilya Birman's Эгея)
+- **Recent posts sidebar** — last N posts (default 8, set via `params.recentSidebarCount`) shown on every single post: absolute right-gutter sidebar on desktop (scrolls with page), static block at the bottom on mobile
 - **Telegram reactions** — surfaces view counts and emoji reactions from the post's linked Telegram channel post into the post meta row, via a bundled fetch script + two render partials
 - **Responsive** — mobile menu, touch-friendly footer controls
 - **Self-hosted** — Inter font, no external CDN dependencies
@@ -129,7 +129,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   copyrightYear = 2024   # start year shown as "© 2024–CURRENT_YEAR"
 
   # Content
-  newPostDays = 30   # days a post shows the "New" badge (default: 30)
+  newPostDays          = 30   # days a post shows the "New" badge (default: 30)
+  recentSidebarCount   = 8    # posts shown in the recent sidebar / mobile bottom block (default: 8)
 
   # Telegram (all optional)
   telegramChannel = "your_channel"   # enables Discussion comments widget + reactions
@@ -139,11 +140,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   consoleYoda   = true   # enables a built-in Yoda ASCII art in the home-page console
   consoleArt    = "..."  # optional custom ASCII art (TOML triple-string); takes priority over consoleYoda
 
-  # Curated "popular posts" block shown at the bottom of single posts.
-  # Slugs are relative to the `blog/` section; missing ones are silently
-  # skipped. Per-language: RU pages resolve against content/ru/blog/, EN
-  # against content/en/blog/.
-  popularPosts = ["retention", "10-evils", "brandage"]
+  # (Removed) Curated "popular posts" — replaced by the recent posts sidebar.
+  # popularPosts = ["retention", "10-evils", "brandage"]
 
   # Analytics (all optional — omit to disable, multiple can run side by side)
   yandexMetrikaId    = 123456789      # Yandex.Metrika ID
@@ -347,7 +345,7 @@ Also respects the `TELEGRAM_CHANNEL` env var. Requires Hugo Extended on PATH (fo
 Theme CSS and JS live as source files in `themes/hugo-mini/assets/`:
 
 - `assets/css/main.css` — bundled theme stylesheet (typography, palette, components, dark mode, fonts)
-- `assets/js/main.js` — bundled theme JS (theme toggle, code-copy button, heading anchor copy, mobile menu)
+- `assets/js/main.js` — bundled theme JS (theme toggle, code-copy button, heading anchor copy, mobile menu, recent-posts sidebar positioning, back-to-top)
 
 `baseof.html` runs them through Hugo Pipes:
 
