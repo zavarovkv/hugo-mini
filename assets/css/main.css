@@ -1466,6 +1466,74 @@
     flex-shrink: 0;
   }
 
+  /* Recent posts sidebar — desktop: absolute in right gutter (JS); mobile: static block at bottom */
+  .recent-sidebar {
+    display: none; /* JS shows on desktop; mobile media query overrides below */
+  }
+
+  @media (max-width: 768px) {
+    .recent-sidebar {
+      display: block;
+      margin-top: 50px;
+    }
+
+    .recent-sidebar .recent-sidebar-label {
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--heading-color);
+      margin-bottom: 0.4em;
+    }
+
+    .recent-sidebar .recent-sidebar-link,
+    .recent-sidebar .recent-sidebar-link:link,
+    .recent-sidebar .recent-sidebar-link:visited {
+      display: block;
+      width: fit-content;
+      font-size: 1em;
+      font-weight: 300;
+      margin-bottom: 0.5em;
+      border-bottom: 0.25px solid var(--color-primary-border);
+    }
+
+    .recent-sidebar .recent-sidebar-link:hover {
+      border-bottom-color: var(--color-accent-border);
+    }
+  }
+
+  /* Desktop sidebar styles (applied via JS inline) */
+  .recent-sidebar.is-sidebar {
+    position: absolute;
+    max-width: 160px;
+    font-size: 0.775rem;
+    line-height: 1.45;
+    border-left: 3px solid var(--color-primary);
+    padding-left: 16px;
+  }
+
+  .recent-sidebar-label {
+    margin: 0 0 0.75em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+
+  .recent-sidebar-link,
+  .recent-sidebar-link:link,
+  .recent-sidebar-link:visited {
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: none;
+    display: block;
+    font-weight: 300;
+    margin-bottom: 0.9em;
+    transition: color 0.15s ease-out;
+  }
+
+  .recent-sidebar-link:hover {
+    color: var(--color-accent);
+    border-bottom: none;
+  }
+
   /* Respect users who prefer reduced motion */
   @media (prefers-reduced-motion: reduce) {
     *,

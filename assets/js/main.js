@@ -217,6 +217,36 @@
     });
   })();
 
+  // Recent posts sidebar — absolute in right gutter, desktop only.
+  (function() {
+    var MIN_GUTTER = 180;
+    var GAP = 24;
+    var sidebar = document.getElementById('recent-sidebar');
+    if (!sidebar) return;
+
+    function measure() {
+      var rect = document.body.getBoundingClientRect();
+      var gutter = window.innerWidth - rect.right;
+      if (gutter < MIN_GUTTER) {
+        sidebar.classList.remove('is-sidebar');
+        sidebar.style.cssText = '';
+        return;
+      }
+      var h1 = document.querySelector('h1');
+      var topPos = h1
+        ? Math.round(h1.getBoundingClientRect().top + window.pageYOffset)
+        : Math.round(rect.top + window.pageYOffset);
+      sidebar.classList.add('is-sidebar');
+      sidebar.style.display = 'block';
+      sidebar.style.top = topPos + 'px';
+      sidebar.style.left = Math.round(rect.left + window.pageXOffset + rect.width + GAP - 16) + 'px';
+      sidebar.style.width = Math.round(gutter - GAP - 16) + 'px';
+    }
+
+    window.addEventListener('resize', measure);
+    measure();
+  })();
+
   // Back to top — left gutter click area (Telegram blog style).
   // Creates a fixed overlay covering the left margin; visible only when
   // scrolled > 400px and the gutter is wide enough (> 130px).

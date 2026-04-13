@@ -2,6 +2,14 @@
   {{ if eq .Type "blog" }}
     <h1>{{ .Title }}</h1>
 
+    {{- $cur := . -}}
+    {{- $recent := slice -}}
+    {{- range (where site.RegularPages "Type" "blog").ByDate.Reverse -}}
+      {{- if and (ne .Permalink $cur.Permalink) (ne .Params.hidden true) (lt (len $recent) (site.Params.recentSidebarCount | default 6)) -}}
+        {{- $recent = $recent | append . -}}
+      {{- end -}}
+    {{- end -}}
+
     <article>
       {{ .Content }}
     </article>
@@ -29,14 +37,20 @@
     </div>
     {{ end }}
 
-
     {{/* Telegram Discussion comments (rendered dynamically by JS to sync dark/light theme) */}}
     {{ with .Params.telegram_post }}
     <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ . }}" data-tg-limit="20"></div>
     {{ end }}
 
-    {{/* Curated "popular posts" block — list from params.popularPosts */}}
-    {{- partial "popular-posts.html" . -}}
+    {{/* Recent posts — desktop: absolute sidebar in right gutter (JS); mobile: block at bottom */}}
+    {{ with $recent }}
+    <aside class="recent-sidebar" id="recent-sidebar">
+      <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>
+      {{ range . }}
+      <a href="{{ .RelPermalink }}" class="recent-sidebar-link">{{ .Title }}</a>
+      {{ end }}
+    </aside>
+    {{ end }}
 
   {{ else }}
     <h1>{{ .Title }}</h1>

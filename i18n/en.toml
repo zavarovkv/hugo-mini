@@ -7,6 +7,9 @@ other = "Miscellaneous"
 [popular]
 other = "Popular"
 
+[recent_posts]
+other = "More articles"
+
 [home]
 other = "Home"
 

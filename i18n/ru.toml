@@ -7,6 +7,9 @@ other = "Разное"
 [popular]
 other = "Популярное"
 
+[recent_posts]
+other = "Новые статьи"
+
 [home]
 other = "Главная"
 
