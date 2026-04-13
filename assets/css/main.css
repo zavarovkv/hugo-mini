@@ -1469,21 +1469,6 @@
       color: var(--heading-color);
       margin-bottom: 0.4em;
     }
-
-    .recent-sidebar .recent-sidebar-link,
-    .recent-sidebar .recent-sidebar-link:link,
-    .recent-sidebar .recent-sidebar-link:visited {
-      display: block;
-      width: fit-content;
-      font-size: 1em;
-      font-weight: 300;
-      margin-bottom: 0.5em;
-      border-bottom: 0.25px solid var(--color-primary-border);
-    }
-
-    .recent-sidebar .recent-sidebar-link:hover {
-      border-bottom-color: var(--color-accent-border);
-    }
   }
 
   /* Desktop sidebar styles (applied via JS inline) */
@@ -1503,20 +1488,24 @@
     color: var(--heading-color);
   }
 
-  .recent-sidebar-link,
-  .recent-sidebar-link:link,
-  .recent-sidebar-link:visited {
-    color: var(--color-primary);
-    text-decoration: none;
-    border-bottom: none;
-    display: block;
-    font-weight: 300;
-    margin-bottom: 0.9em;
-    transition: color 0.15s ease-out;
+  /* Desktop: override list styles inside sidebar */
+  .recent-sidebar.is-sidebar .recent-sidebar-list {
+    padding: 0;
+    margin: 0;
   }
 
-  .recent-sidebar-link:hover {
-    color: var(--color-accent);
+  .recent-sidebar.is-sidebar .recent-sidebar-list li {
+    margin-bottom: 0.9em;
+  }
+
+  .recent-sidebar.is-sidebar .recent-sidebar-list a,
+  .recent-sidebar.is-sidebar .recent-sidebar-list a:link,
+  .recent-sidebar.is-sidebar .recent-sidebar-list a:visited {
+    font-weight: 300;
+    border-bottom: none;
+  }
+
+  .recent-sidebar.is-sidebar .recent-sidebar-list a:hover {
     border-bottom: none;
   }
 

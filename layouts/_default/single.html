@@ -39,9 +39,11 @@
     {{ with $recent }}
     <aside class="recent-sidebar" id="recent-sidebar">
       <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>
-      {{ range . }}
-      <a href="{{ .RelPermalink }}" class="recent-sidebar-link">{{ .Title }}</a>
-      {{ end }}
+      <ul class="blog-posts recent-sidebar-list">
+        {{- range . }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{- end }}
+      </ul>
     </aside>
     {{ end }}
 
