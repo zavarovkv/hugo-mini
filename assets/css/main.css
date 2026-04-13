@@ -99,6 +99,7 @@
      SVG link icon in left margin on desktop, hidden on mobile. */
   h2, h3 {
     position: relative;
+    scroll-margin-top: 0.75rem;
   }
 
   .heading-anchor,
@@ -147,16 +148,16 @@
     .heading-anchor:link,
     .heading-anchor:visited {
       position: static;
-      display: inline-block;
+      display: none;
       margin-left: 0.25em;
       vertical-align: baseline;
       padding: 0;
-      opacity: 0;
+      opacity: 1;
     }
 
     h2.anchor-visible > .heading-anchor,
     h3.anchor-visible > .heading-anchor {
-      opacity: 1;
+      display: inline-block;
     }
   }
 

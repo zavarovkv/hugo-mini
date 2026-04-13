@@ -203,8 +203,7 @@
         });
       }
 
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
+      anchor.addEventListener('click', function() {
         var url = window.location.origin + window.location.pathname + anchor.getAttribute('href');
         navigator.clipboard.writeText(url).then(function() {
           anchor.classList.add('copied');
