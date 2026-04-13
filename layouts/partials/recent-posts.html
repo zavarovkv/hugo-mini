@@ -1,0 +1,17 @@
+{{- /*
+  Returns a slice of recent blog posts for the sidebar/bottom block.
+
+  Excludes the current page and posts with hidden = true.
+  Count is controlled by site.Params.recentSidebarCount (default: 8).
+
+  Usage: {{- $recent := partial "recent-posts.html" . -}}
+*/ -}}
+{{- $count := site.Params.recentSidebarCount | default 8 -}}
+{{- $current := .Permalink -}}
+{{- $recent := slice -}}
+{{- range (where site.RegularPages "Type" "blog").ByDate.Reverse -}}
+  {{- if and (ne .Permalink $current) (ne .Params.hidden true) (lt (len $recent) $count) -}}
+    {{- $recent = $recent | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $recent -}}

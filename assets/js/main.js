@@ -37,10 +37,14 @@
         }
       });
 
-      // Close menu when clicking on a link
+      // Close menu on link click, but not when opening in a new tab (modifier keys)
       var navLinks = nav.querySelectorAll('a');
       navLinks.forEach(function(link) {
-        link.addEventListener('click', closeMenu);
+        link.addEventListener('click', function(e) {
+          if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+            closeMenu();
+          }
+        });
       });
     }
 
@@ -185,7 +189,7 @@
   })();
 
   // Heading anchor links: copy section URL to clipboard on click.
-  // Mobile: tap heading to reveal icon, tap icon to copy.
+  // Mobile: tap heading to reveal icon, tap icon to copy + scroll.
   (function() {
     if (!navigator.clipboard) return;
     var FEEDBACK_MS = 1200;
@@ -198,7 +202,10 @@
       // Mobile: tap heading to toggle anchor visibility
       if (isMobile && heading) {
         heading.addEventListener('click', function(e) {
-          if (e.target === anchor || anchor.contains(e.target)) return;
+          if (e.target === anchor || anchor.contains(e.target)) {
+            e.stopPropagation();
+            return;
+          }
           heading.classList.toggle('anchor-visible');
         });
       }
@@ -217,12 +224,14 @@
     });
   })();
 
-  // Recent posts sidebar — absolute in right gutter, desktop only.
+  // Recent posts sidebar — absolute in right gutter on desktop; static block on mobile (CSS).
   (function() {
     var MIN_GUTTER = 180;
     var GAP = 24;
     var sidebar = document.getElementById('recent-sidebar');
     if (!sidebar) return;
+
+    var resizeTimer = null;
 
     function measure() {
       var rect = document.body.getBoundingClientRect();
@@ -243,7 +252,12 @@
       sidebar.style.width = Math.round(gutter - GAP - 16) + 'px';
     }
 
-    window.addEventListener('resize', measure);
+    function onResize() {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(measure, 150);
+    }
+
+    window.addEventListener('resize', onResize);
     measure();
   })();
 
@@ -268,10 +282,10 @@
     document.body.appendChild(wrap);
 
     var gutterOk = false;
+    var resizeTimer = null;
 
     function measure() {
-      var body = document.body;
-      var rect = body.getBoundingClientRect();
+      var rect = document.body.getBoundingClientRect();
       var gutter = rect.left;
       gutterOk = gutter > MIN_GUTTER;
       wrap.style.width = gutter + 'px';
@@ -287,6 +301,11 @@
       }
     }
 
+    function onResize() {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(measure, 150);
+    }
+
     wrap.addEventListener('click', function(e) {
       e.preventDefault();
       window.scroll(0, 0);
@@ -294,6 +313,6 @@
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', measure);
+    window.addEventListener('resize', onResize);
     measure();
   })();

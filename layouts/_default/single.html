@@ -2,14 +2,6 @@
   {{ if eq .Type "blog" }}
     <h1>{{ .Title }}</h1>
 
-    {{- $cur := . -}}
-    {{- $recent := slice -}}
-    {{- range (where site.RegularPages "Type" "blog").ByDate.Reverse -}}
-      {{- if and (ne .Permalink $cur.Permalink) (ne .Params.hidden true) (lt (len $recent) (site.Params.recentSidebarCount | default 6)) -}}
-        {{- $recent = $recent | append . -}}
-      {{- end -}}
-    {{- end -}}
-
     <article>
       {{ .Content }}
     </article>
@@ -42,7 +34,8 @@
     <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ . }}" data-tg-limit="20"></div>
     {{ end }}
 
-    {{/* Recent posts — desktop: absolute sidebar in right gutter (JS); mobile: block at bottom */}}
+    {{/* Recent posts — desktop: absolute sidebar in right gutter (JS); mobile: static block at bottom */}}
+    {{- $recent := partial "recent-posts.html" . -}}
     {{ with $recent }}
     <aside class="recent-sidebar" id="recent-sidebar">
       <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>

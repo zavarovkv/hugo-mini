@@ -144,6 +144,10 @@
 
   /* Mobile: inline after heading text, hidden until heading is tapped */
   @media (max-width: 768px) {
+    h2, h3 {
+      cursor: pointer;
+    }
+
     .heading-anchor,
     .heading-anchor:link,
     .heading-anchor:visited {
@@ -450,32 +454,14 @@
   }
 
   a:link,
-  a:active {
+  a:active,
+  a:visited {
     text-decoration: none;
     color: var(--color-primary);
-    border-bottom: 0.25px solid;
-    border-bottom-color: var(--color-primary-border);
-  }
-
-  a:visited {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary-border);
+    border-bottom: 0.25px solid var(--color-primary-border);
   }
 
   a:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent-border);
-  }
-
-  /* Dark theme link colors */
-  [data-theme="dark"] a:link,
-  [data-theme="dark"] a:active,
-  [data-theme="dark"] a:visited {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary-border);
-  }
-
-  [data-theme="dark"] a:hover {
     color: var(--color-accent);
     border-bottom-color: var(--color-accent-border);
   }
