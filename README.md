@@ -2,31 +2,74 @@
 
 A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integration, and dynamic OG images.
 
-**[Live Demo](https://zavarov.com/)**
+**[Live Demo](https://zavarov.com/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 ![screenshot](images/screenshot.png)
 
+## Why Mini?
+
+- **Writer-first.** Focus on typography and reading rhythm — no cards, no carousels, no hero sections. Everything serves the text.
+- **Zero runtime dependencies.** No JavaScript framework, no CDN. One minified CSS file, one minified JS file — both fingerprinted and served from your domain.
+- **Fast out of the box.** Self-hosted Inter font with preloaded weights, lazy-loaded Telegram widget, static OG images built at compile time. Lighthouse 100 is the baseline, not a goal.
+- **Batteries included, opt-in.** Dark mode, i18n, math, diagrams, analytics, Telegram comments, RSS/JSON/llms.txt feeds — all shipped, all disable-able.
+
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+  - [Minimal](#minimal)
+  - [All params](#all-params)
+  - [Multilingual](#multilingual)
+- [Content](#content)
+  - [Creating posts](#creating-posts)
+  - [Front matter](#front-matter)
+  - [Categories](#categories)
+- [Shortcodes](#shortcodes)
+- [Customization](#customization)
+  - [Colors](#colors)
+  - [Nav menu icons](#nav-menu-icons)
+  - [Extending templates](#extending-templates)
+  - [Telegram reactions](#telegram-reactions)
+  - [Asset bundling](#asset-bundling)
+- [Deployment](#deployment)
+- [License](#license)
+
 ## Features
 
-- **Dark / light mode** — follows system preference, toggleable in footer
-- **Multilingual** — built-in i18n (ru, en), easy to extend
-- **Dynamic OG images** — unique 1200×630 images generated per page at build time
-- **Telegram integration** — Discussion comments widget, reactions/views in post meta
+### Content authoring
+- **Markdown-first** — standard Goldmark with `unsafe: true` for inline HTML; three shortcodes (`caption`, `mermaid`, `plug`)
 - **KaTeX math** — per-page opt-in with `math = true`
 - **Mermaid diagrams** — per-page opt-in with `mermaid = true`
-- **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn)
-- **SEO** — JSON-LD structured data, hreflang, Open Graph, Twitter Cards
-- **Feeds** — JSON Feed, RSS, llms.txt for AI crawlers
+- **Categories** — group posts on the blog listing with `categories = ["slug"]`; display names come from i18n
+- **Pinned posts** — `pinned = true` floats a post to the top of its category group
+- **Hidden posts** — `hidden = true` removes from listings but keeps the URL accessible (useful for drafts shared for review)
 - **Code copy button** — appears on hover, with check animation
-- **Heading anchor links** — clickable `#` next to `h2`/`h3` markdown headings; click copies the section URL to clipboard. Mobile: hidden by default, tap heading to reveal, tap icon to copy + scroll natively
-- **Pinned posts** — `pinned = true` in front matter floats a post to the top of its category group on the blog listing
-- **Recent posts sidebar** — last N posts (default 8, set via `params.recentSidebarCount`) shown on every single post: absolute right-gutter sidebar on desktop (scrolls with page), static block at the bottom on mobile
-- **Telegram reactions** — surfaces view counts and emoji reactions from the post's linked Telegram channel post into the post meta row, via a bundled fetch script + two render partials
-- **Responsive** — mobile menu, touch-friendly footer controls
-- **Self-hosted** — Inter font, no external CDN dependencies
-- **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in: `telegram` paper plane with elastic hover animation)
-- **Back to top** — Telegram-blog-style left gutter click area: hover the left margin on wide screens to reveal "↑ Go up", click to scroll to top
-- **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (all optional, cookieless options included)
+- **Heading anchor links** — clickable `#` next to `h2`/`h3` headings copies the section URL; mobile tap-to-reveal behavior included
+
+### Reading experience
+- **Dark / light mode** — follows system preference, toggleable in footer, persisted in `localStorage`
+- **Recent posts sidebar** — last N posts (default 8, `params.recentSidebarCount`) shown on every single post: right-gutter sidebar on desktop, bottom block on mobile
+- **Back to top** — Telegram-blog-style click area in the left gutter on wide screens; appears after scrolling past 400px
+- **Responsive** — mobile overlay menu, touch-friendly footer controls, iOS-safe code block sizing
+- **Accessibility** — visible focus ring, `prefers-reduced-motion` support, semantic landmarks
+
+### Performance & SEO
+- **Self-hosted assets** — Inter font (WOFF2), CSS, and JS all served from your domain; no external CDN
+- **Asset bundling** — CSS and JS are minified and fingerprinted via Hugo Pipes (`/css/main.min.<sha>.css`), safe for long-cache headers
+- **Dynamic OG images** — unique 1200×630 images generated per page at build time
+- **SEO** — JSON-LD structured data, `hreflang`, Open Graph, Twitter Cards
+- **Feeds** — JSON Feed, RSS, `llms.txt` for AI crawlers
+
+### Integrations
+- **Multilingual** — built-in i18n (ru, en) with per-language menus and footer switcher; easy to extend
+- **Telegram comments** — Discussion widget, lazy-loaded, re-synced when the theme toggles
+- **Telegram reactions** — view counts and emoji reactions surfaced in the post meta row; bundled fetch script reads from the public Telegram embed
+- **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn), disable with `socialSharing = false`
+- **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (cookieless options); any combination, all optional
+- **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in `telegram`)
 
 ## Requirements
 
