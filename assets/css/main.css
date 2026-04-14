@@ -44,7 +44,6 @@
     --heading-color: #222;
     --text-color: #444;
     --link-color: #0060a0;
-    --visited-color: #8b6fcb;
     --blockquote-color: #222;
     --color-muted: #9da2a6;
     --color-secondary: #556677;
@@ -341,10 +340,6 @@
     margin-bottom: 0.5em;
   }
 
-  ul.blog-posts li a:visited {
-    color: var(--visited-color);
-  }
-
   /* KaTeX math formulas */
   .katex {
     font-size: 1.1em;
@@ -389,7 +384,6 @@
     --heading-color: #e8e8e8;
     --text-color: #c7ccd1;
     --link-color: var(--color-primary);
-    --visited-color: #b09ce0;
     --blockquote-color: #e8e8e8;
   }
 
