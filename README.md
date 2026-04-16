@@ -1,5 +1,8 @@
 # Hugo Mini
 
+![GitHub Release](https://img.shields.io/github/v/release/zavarovkv/hugo-mini)
+![GitHub License](https://img.shields.io/github/license/zavarovkv/hugo-mini)
+
 A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integration, and dynamic OG images.
 
 **[Live Demo](https://zavarov.com/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
