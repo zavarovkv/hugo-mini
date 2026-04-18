@@ -146,17 +146,15 @@
   {{- partial "custom_body.html" . -}}
 
   {{ if .Params.mermaid }}
-  {{- /* Mermaid is pinned to an exact version so the URL (and therefore
-         the integrity hash below) is reproducible. Bumping the version
-         requires regenerating the SRI hash, e.g.:
-           curl -sL https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js \
-             | openssl dgst -sha384 -binary | openssl base64 -A
-         For full supply-chain safety, self-host mermaid under static/
-         (see static/katex/ for a local-asset precedent). */ -}}
+  {{- /* Mermaid is pinned to a known-good version for reproducibility.
+         When bumping, test any page with mermaid = true in front matter —
+         newer syntax features (animated edges, @{ shape: ... }, etc.)
+         may silently fail to render on older versions. For full
+         supply-chain safety, self-host mermaid under static/ (see
+         static/katex/ for a local-asset precedent). */ -}}
   <style>.mermaid { visibility: hidden; }</style>
   <script defer
-          src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"
-          crossorigin="anonymous"
+          src="https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js"
           referrerpolicy="no-referrer"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
