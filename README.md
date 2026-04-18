@@ -12,7 +12,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 ## Why Mini?
 
 - **Writer-first.** Focus on typography and reading rhythm — no cards, no carousels, no hero sections. Everything serves the text.
-- **Zero runtime dependencies.** No JavaScript framework, no CDN. One minified CSS file, one minified JS file — both fingerprinted and served from your domain.
+- **Zero runtime dependencies.** No JavaScript framework, no CDN in the core path. One minified CSS file, one minified JS file — both fingerprinted and served from your domain. (Mermaid is the sole opt-in CDN dep, loaded only when a page sets `mermaid = true`.)
 - **Fast out of the box.** Self-hosted Inter font with preloaded weights, lazy-loaded Telegram widget, static OG images built at compile time. Lighthouse 100 is the baseline, not a goal.
 - **Batteries included, opt-in.** Dark mode, i18n, math, diagrams, analytics, Telegram comments, RSS/JSON/llms.txt feeds — all shipped, all disable-able.
 
@@ -186,9 +186,6 @@ ignoreErrors    = ["error-disable-taxonomy"]
   consoleYoda   = true   # enables a built-in Yoda ASCII art in the home-page console
   consoleArt    = "..."  # optional custom ASCII art (TOML triple-string); takes priority over consoleYoda
 
-  # (Removed) Curated "popular posts" — replaced by the recent posts sidebar.
-  # popularPosts = ["retention", "10-evils", "brandage"]
-
   # Analytics (all optional — omit to disable, multiple can run side by side)
   yandexMetrikaId    = 123456789      # Yandex.Metrika ID
   googleAnalyticsId  = "G-XXXXXXXXXX" # Google Analytics 4 measurement ID
@@ -292,7 +289,7 @@ Built-in: `marketing`, `strategy`, `metrics`, `leadership`, `self-development`, 
 
 ### Colors
 
-The theme uses CSS custom properties. Override them in your site's `layouts/partials/extra_head.html`:
+The theme uses CSS custom properties. Override them in your site's `layouts/partials/custom_head.html` (the style-override hook — see [Extending templates](#extending-templates)):
 
 ```html
 <style>
@@ -325,14 +322,15 @@ Add an inline SVG icon to any menu item via `params.icon`. Built-in icons: `tele
 
 ### Extending templates
 
-Place files in your site's `layouts/partials/` to override theme partials:
+The theme exposes three extension hooks — add a file with the same name to your site's `layouts/partials/` and it gets included at that point (no whole-partial override needed):
 
-| File | Purpose |
-|---|---|
-| `extra_head.html` | Additional `<head>` content — meta tags, third-party widgets |
-| `header.html` | Site header |
-| `custom_head.html` | Extra `<head>` content rendered **after** the bundled theme CSS, so overrides win the cascade |
-| `custom_body.html` | Extra `<script>`/markup at the end of `<body>`, rendered **after** the bundled theme JS |
+| Hook | Rendered at | Use for |
+|---|---|---|
+| `custom_head.html` | end of `<head>`, after theme CSS | style overrides, small inline CSS, anything that needs to win the cascade |
+| `extra_head.html` | end of `<head>`, after `custom_head` | meta tags, SEO/verification snippets, third-party `<head>` widgets |
+| `custom_body.html` | end of `<body>`, after theme JS | extra scripts, chat widgets, any late-loaded markup |
+
+To replace an entire theme partial instead of adding to it, place a file with the same path under your site's `layouts/` (e.g. `layouts/partials/header.html`) — standard Hugo lookup order applies.
 
 ### Telegram reactions
 
