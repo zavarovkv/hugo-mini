@@ -146,10 +146,21 @@
   {{- partial "custom_body.html" . -}}
 
   {{ if .Params.mermaid }}
+  {{- /* Mermaid is pinned to an exact version so the URL (and therefore
+         the integrity hash below) is reproducible. Bumping the version
+         requires regenerating the SRI hash, e.g.:
+           curl -sL https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js \
+             | openssl dgst -sha384 -binary | openssl base64 -A
+         For full supply-chain safety, self-host mermaid under static/
+         (see static/katex/ for a local-asset precedent). */ -}}
   <style>.mermaid { visibility: hidden; }</style>
-  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid === 'undefined') return;
       var mermaidTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'neutral';
       mermaid.initialize({ startOnLoad: false, theme: mermaidTheme });
       mermaid.run().then(function() {
