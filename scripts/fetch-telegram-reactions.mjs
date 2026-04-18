@@ -58,6 +58,8 @@ import { parseArgs } from "node:util";
 const USER_AGENT = "Mozilla/5.0 (compatible; hugo-mini-telegram-reactions/1.0)";
 const DEFAULT_OUTPUT = "data/telegram_reactions.json";
 const DEFAULT_POSTS_SUBDIR = "blog";
+const FETCH_TIMEOUT_MS = 15000;
+const MAX_RETRIES = 3;
 
 function parseCliArgs() {
   const { values } = parseArgs({
@@ -195,13 +197,52 @@ function parseViews(html) {
 
 async function fetchOne(channel, id) {
   const url = `https://t.me/${channel}/${id}?embed=1&mode=tme`;
-  const res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const html = await res.text();
-  return {
-    views: parseViews(html),
-    reactions: parseReactions(html),
-  };
+
+  let lastErr;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    try {
+      const res = await fetch(url, {
+        headers: { "User-Agent": USER_AGENT },
+        signal: controller.signal,
+      });
+
+      // Telegram returns 429 with a Retry-After header on rate limit.
+      // 5xx are transient — also worth retrying.
+      if (res.status === 429 || res.status >= 500) {
+        const retryAfter = parseInt(res.headers.get("retry-after") || "", 10);
+        const delay = Number.isFinite(retryAfter) && retryAfter > 0
+          ? retryAfter * 1000
+          : Math.min(1000 * 2 ** (attempt - 1), 8000);
+        lastErr = new Error(`HTTP ${res.status}`);
+        if (attempt < MAX_RETRIES) {
+          await new Promise((r) => setTimeout(r, delay));
+          continue;
+        }
+        throw lastErr;
+      }
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const html = await res.text();
+      return {
+        views: parseViews(html),
+        reactions: parseReactions(html),
+      };
+    } catch (err) {
+      lastErr = err;
+      // Network errors, aborts, etc. — retry with backoff.
+      if (attempt < MAX_RETRIES) {
+        const delay = Math.min(1000 * 2 ** (attempt - 1), 8000);
+        await new Promise((r) => setTimeout(r, delay));
+        continue;
+      }
+      throw lastErr;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  throw lastErr;
 }
 
 async function main() {
