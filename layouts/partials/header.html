@@ -8,7 +8,16 @@
       {{- end }}
     </div>
     {{- end }}
+    {{- /* Split the title on the first space into first/last name spans
+           so sites can style them independently (e.g. hide the first
+           name on narrow screens). Titles without a space render as a
+           single text node, unchanged. */ -}}
+    {{- $parts := split .Site.Title " " -}}
+    {{- if gt (len $parts) 1 -}}
+    <span class="title-text"><span class="title-first-name">{{ index $parts 0 }} </span><span class="title-last-name">{{ delimit (after 1 $parts) " " }}</span></span>
+    {{- else -}}
     <span class="title-text">{{ .Site.Title }}</span>
+    {{- end }}
   </a>
   <button class="mobile-menu-toggle" aria-label="Toggle menu">
     <span></span>
