@@ -2,7 +2,7 @@
   {{ if eq .Type "blog" }}
     <h1>{{ .Title }}</h1>
 
-    <article>
+    <article lang="{{ .Language.Lang }}">
       {{ .Content }}
     </article>
 
@@ -49,7 +49,7 @@
 
   {{ else }}
     <h1>{{ .Title }}</h1>
-    <article>
+    <article lang="{{ .Language.Lang }}">
       {{ .Content }}
     </article>
   {{ end }}
