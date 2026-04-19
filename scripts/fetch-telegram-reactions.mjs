@@ -223,14 +223,22 @@ async function fetchOne(channel, id) {
         throw lastErr;
       }
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        // Other 4xx (403, 404, …) are permanent — no point retrying.
+        throw Object.assign(new Error(`HTTP ${res.status}`), { permanent: true });
+      }
       const html = await res.text();
-      return {
-        views: parseViews(html),
-        reactions: parseReactions(html),
-      };
+      const views = parseViews(html);
+      const reactions = parseReactions(html);
+      // If the page clearly is a Telegram widget but parsers came back empty,
+      // the embed HTML probably changed shape and the regex needs updating.
+      if (views === null && reactions.length === 0 && /tgme_widget_message/.test(html)) {
+        console.warn(`  ! ${channel}/${id}: widget found but parse returned empty — Telegram HTML may have changed`);
+      }
+      return { views, reactions };
     } catch (err) {
       lastErr = err;
+      if (err && err.permanent) throw err;
       // Network errors, aborts, etc. — retry with backoff.
       if (attempt < MAX_RETRIES) {
         const delay = Math.min(1000 * 2 ** (attempt - 1), 8000);
@@ -242,7 +250,7 @@ async function fetchOne(channel, id) {
       clearTimeout(timer);
     }
   }
-  throw lastErr;
+  throw lastErr ?? new Error(`fetchOne(${channel}/${id}) exited without result`);
 }
 
 async function main() {
