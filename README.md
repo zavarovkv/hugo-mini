@@ -1,7 +1,10 @@
 # Hugo Mini
 
-![GitHub Release](https://img.shields.io/github/v/release/zavarovkv/hugo-mini)
-![GitHub License](https://img.shields.io/github/license/zavarovkv/hugo-mini)
+[![Hugo](https://img.shields.io/badge/Hugo-%E2%89%A50.145-ff4088?logo=hugo&logoColor=white)](https://gohugo.io/)
+[![GitHub Release](https://img.shields.io/github/v/release/zavarovkv/hugo-mini)](https://github.com/zavarovkv/hugo-mini/releases)
+[![GitHub License](https://img.shields.io/github/license/zavarovkv/hugo-mini)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/zavarovkv/hugo-mini?style=flat)](https://github.com/zavarovkv/hugo-mini/stargazers)
+[![Test example site](https://github.com/zavarovkv/hugo-mini/actions/workflows/test-example-site.yml/badge.svg)](https://github.com/zavarovkv/hugo-mini/actions/workflows/test-example-site.yml)
 
 A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integration, and dynamic OG images.
 
@@ -43,36 +46,36 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 ## Features
 
 ### Content authoring
-- **Markdown-first** — standard Goldmark with `unsafe: true` for inline HTML; three shortcodes (`caption`, `mermaid`, `plug`)
-- **KaTeX math** — per-page opt-in with `math = true`
-- **Mermaid diagrams** — per-page opt-in with `mermaid = true`
-- **Categories** — group posts on the blog listing with `categories = ["slug"]`; display names come from i18n
-- **Pinned posts** — `pinned = true` floats a post to the top of its category group
-- **Hidden posts** — `hidden = true` removes from listings but keeps the URL accessible (useful for drafts shared for review)
-- **Code copy button** — appears on hover, with check animation
-- **Heading anchor links** — clickable `#` next to `h2`/`h3` headings copies the section URL; mobile tap-to-reveal behavior included
+- ✍️ **Markdown-first** — standard Goldmark with `unsafe: true` for inline HTML; three shortcodes (`caption`, `mermaid`, `plug`)
+- 🧮 **KaTeX math** — per-page opt-in with `math = true`
+- 📊 **Mermaid diagrams** — per-page opt-in with `mermaid = true`
+- 🏷️ **Categories** — group posts on the blog listing with `categories = ["slug"]`; display names come from i18n
+- 📌 **Pinned posts** — `pinned = true` floats a post to the top of its category group
+- 🔒 **Hidden posts** — `hidden = true` removes from listings but keeps the URL accessible (useful for drafts shared for review)
+- 📋 **Code copy button** — appears on hover, with check animation
+- 🔗 **Heading anchor links** — clickable `#` next to `h2`/`h3` headings copies the section URL; mobile tap-to-reveal behavior included
 
 ### Reading experience
-- **Dark / light mode** — follows system preference, toggleable in footer, persisted in `localStorage`
-- **Recent posts sidebar** — last N posts (default 8, `params.recentSidebarCount`) shown on every single post: right-gutter sidebar on desktop, bottom block on mobile
-- **Back to top** — Telegram-blog-style click area in the left gutter on wide screens; appears after scrolling past 400px
-- **Responsive** — mobile overlay menu, touch-friendly footer controls, iOS-safe code block sizing
-- **Accessibility** — visible focus ring, `prefers-reduced-motion` support, semantic landmarks
+- 🌓 **Dark / light mode** — follows system preference, toggleable in footer, persisted in `localStorage`
+- 🗞️ **Recent posts sidebar** — last N posts (default 8, `params.recentSidebarCount`) shown on every single post: right-gutter sidebar on desktop, bottom block on mobile
+- ⬆️ **Back to top** — Telegram-blog-style click area in the left gutter on wide screens; appears after scrolling past 400px
+- 📱 **Responsive** — mobile overlay menu, touch-friendly footer controls, iOS-safe code block sizing
+- ♿ **Accessibility** — visible focus ring, `prefers-reduced-motion` support, semantic landmarks
 
 ### Performance & SEO
-- **Self-hosted assets** — Inter font (WOFF2), CSS, and JS all served from your domain; no external CDN
-- **Asset bundling** — CSS and JS are minified and fingerprinted via Hugo Pipes (`/css/main.min.<sha>.css`), safe for long-cache headers
-- **Dynamic OG images** — unique 1200×630 images generated per page at build time
-- **SEO** — JSON-LD structured data, `hreflang`, Open Graph, Twitter Cards
-- **Feeds** — JSON Feed, RSS, `llms.txt` for AI crawlers
+- 🏎️ **Self-hosted assets** — Inter font (WOFF2), CSS, and JS all served from your domain; no external CDN
+- 📦 **Asset bundling** — CSS and JS are minified and fingerprinted via Hugo Pipes (`/css/main.min.<sha>.css`), safe for long-cache headers
+- 🖼️ **Dynamic OG images** — unique 1200×630 images generated per page at build time
+- 🔍 **SEO** — JSON-LD structured data, `hreflang`, Open Graph, Twitter Cards
+- 📡 **Feeds** — JSON Feed, RSS, `llms.txt` for AI crawlers
 
 ### Integrations
-- **Multilingual** — built-in i18n (ru, en) with per-language menus and footer switcher; easy to extend
-- **Telegram comments** — Discussion widget, lazy-loaded, re-synced when the theme toggles
-- **Telegram reactions** — view counts and emoji reactions surfaced in the post meta row; bundled fetch script reads from the public Telegram embed
-- **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn), disable with `socialSharing = false`
-- **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (cookieless options); any combination, all optional
-- **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in `telegram`)
+- 🌍 **Multilingual** — built-in i18n (ru, en) with per-language menus and footer switcher; easy to extend
+- 💬 **Telegram comments** — Discussion widget, lazy-loaded, re-synced when the theme toggles
+- ❤️ **Telegram reactions** — view counts and emoji reactions surfaced in the post meta row; bundled fetch script reads from the public Telegram embed
+- 📤 **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn), disable with `socialSharing = false`
+- 📈 **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (cookieless options); any combination, all optional
+- 🎨 **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in `telegram`)
 
 ## Requirements
 

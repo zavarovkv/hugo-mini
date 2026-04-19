@@ -1,7 +1,7 @@
 name = "Mini"
 license = "MIT"
 licenselink = "https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE"
-description = "A fast, writer-first multilingual Hugo blog theme. Lighthouse 100 out of the box, zero runtime dependencies, self-hosted Inter font, dark mode with system preference, KaTeX math and Mermaid diagrams, dynamic 1200×630 OG images, Telegram comments and reactions, JSON Feed and llms.txt for AI crawlers."
+description = "Fast, writer-first Hugo blog theme. Lighthouse 100, zero runtime deps, dark mode, Telegram comments + reactions, KaTeX + Mermaid, dynamic OG images, i18n, JSON Feed + llms.txt."
 homepage = "https://github.com/zavarovkv/hugo-mini"
 demosite = "https://zavarov.com/"
 tags = [
