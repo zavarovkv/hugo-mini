@@ -20,4 +20,7 @@ jobs:
           extended: true
 
       - name: Build exampleSite
-        run: hugo -s exampleSite --minify
+        # --themesDir ../.. tells Hugo to look for the theme one level above
+        # the theme repo itself, so `theme = "hugo-mini"` in exampleSite/config.toml
+        # resolves to the checked-out repo root.
+        run: hugo -s exampleSite --themesDir ../.. --minify
