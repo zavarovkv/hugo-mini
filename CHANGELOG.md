@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-04-19
+
 ### Added
 - exampleSite build CI (`.github/workflows/test-example-site.yml`) — builds exampleSite on every push and PR via `hugo -s exampleSite --themesDir ../.. --minify`; surfaces as a status badge in the README.
 - README badges: Hugo version, GitHub stars, and CI status alongside existing Release and License.
@@ -105,6 +107,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/zavarovkv/hugo-mini/releases/tag/v0.1.0
