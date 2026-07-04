@@ -2,6 +2,11 @@
 <html lang="{{ .Language.Lang }}">
 
 <head>
+  {{- /* charset must sit within the first 1024 bytes of the document, so it
+         (and viewport) come before any inline scripts. */}}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <!-- Theme init (must run before paint to prevent FOUC).
        Default: follow prefers-color-scheme until user picks explicitly. -->
   <script>
@@ -76,8 +81,6 @@
   {{ end }}
   
   <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preload" href="{{ "fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-300.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ "fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-600.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   {{- partial "favicon.html" . -}}
@@ -88,6 +91,11 @@
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
   {{- range .Translations }}
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+  {{- end }}
+  {{- /* x-default points to the default-language version (AllTranslations is
+         sorted by language weight, so index 0 is the default language). */}}
+  {{- if .IsTranslated }}
+  <link rel="alternate" hreflang="x-default" href="{{ (index .AllTranslations 0).Permalink }}">
   {{- end }}
   <meta name="referrer" content="no-referrer-when-downgrade" />
 
@@ -153,19 +161,45 @@
          supply-chain safety, self-host mermaid under static/ (see
          static/katex/ for a local-asset precedent). */ -}}
   <style>.mermaid { visibility: hidden; }</style>
+  {{- /* SRI hash computed from the mermaid@11.14.0 npm tarball
+         (dist/mermaid.min.js) — jsDelivr serves npm package files verbatim.
+         Recompute when bumping the version:
+         curl -s https://registry.npmjs.org/mermaid/-/mermaid-<ver>.tgz | tar -xzO package/dist/mermaid.min.js | openssl dgst -sha384 -binary | openssl base64 -A */}}
   <script defer
           src="https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js"
+          integrity="sha384-1CMXl090wj8Dd6YfnzSQUOgWbE6suWCaenYG7pox5AX7apTpY3PmJMeS2oPql4Gk"
+          crossorigin="anonymous"
           referrerpolicy="no-referrer"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      if (typeof mermaid === 'undefined') return;
-      var mermaidTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'neutral';
-      mermaid.initialize({ startOnLoad: false, theme: mermaidTheme });
-      mermaid.run().then(function() {
-        document.querySelectorAll('.mermaid').forEach(function(el) {
-          el.style.visibility = 'visible';
+      var diagrams = document.querySelectorAll('.mermaid');
+      function show() {
+        diagrams.forEach(function(el) { el.style.visibility = 'visible'; });
+      }
+      // CDN script failed (offline, SRI mismatch) — unhide the raw diagram
+      // source instead of leaving a blank hole in the article.
+      if (typeof mermaid === 'undefined') { show(); return; }
+
+      // Keep the original sources so diagrams can be re-rendered when the
+      // color scheme changes (mermaid bakes the theme into the SVG).
+      var sources = [];
+      diagrams.forEach(function(el) { sources.push([el, el.textContent]); });
+
+      function render() {
+        var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral' });
+        mermaid.run().then(show);
+      }
+
+      new MutationObserver(function() {
+        sources.forEach(function(pair) {
+          pair[0].textContent = pair[1];
+          pair[0].removeAttribute('data-processed');
         });
-      });
+        render();
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+      render();
     });
   </script>
   {{ end }}

@@ -102,6 +102,14 @@
       }, tgWidgetLoaded ? 500 : 0);
     }
 
+    // Theme-change hook: rebuild the widget only if it is already on the
+    // page. Before that, the IntersectionObserver below will lazy-load it
+    // with whatever theme is current at that moment — calling
+    // syncTelegramWidget() directly here would defeat the lazy-load.
+    function refreshTelegramWidget() {
+      if (tgWidgetLoaded) syncTelegramWidget();
+    }
+
     // Lazy-load: only load Telegram widget when scrolled into view
     function observeTelegramWidget() {
       var container = document.getElementById('tg-comments');
@@ -125,7 +133,7 @@
         var btn = document.querySelector('.theme-toggle');
         if (btn) btn.title = LABELS[currentTheme()];
         syncLikelyTheme();
-        syncTelegramWidget();
+        refreshTelegramWidget();
       }
     }
     if (mql.addEventListener) {
@@ -146,7 +154,7 @@
         root.setAttribute('data-theme', next);
         btn.title = LABELS[next];
         syncLikelyTheme();
-        syncTelegramWidget();
+        refreshTelegramWidget();
       });
     }
 
@@ -271,6 +279,9 @@
 
     var wrap = document.createElement('a');
     wrap.className = 'back-to-top-wrap';
+    // href makes the link keyboard-focusable (Enter triggers the click
+    // handler, which preventDefaults the hash navigation).
+    wrap.setAttribute('href', '#');
     wrap.setAttribute('role', 'button');
     wrap.setAttribute('aria-label', label);
 

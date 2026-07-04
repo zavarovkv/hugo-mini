@@ -8,6 +8,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Fixed
 - `images/screenshot.png` and `images/tn.png` retaken at the exact dimensions required by the Hugo themes gallery (1500×1000 and 900×600); previous images were 2850×980 and 900×309.
+- `seo_tags.html`: `<meta name="author">` rendered the `[params.author]` TOML table as a Go map string (`map[jobtitle:…]`); now uses `params.authorName` with a `site.Title` fallback. Same fallback fixed in all five JSON-LD author/publisher fields in `structured_data.html`.
+- `baseof.html`: `<meta charset>` moved to the very top of `<head>` — inline scripts (theme-init, analytics, KaTeX) could push it past the 1024-byte limit the HTML spec allows for the encoding declaration.
+- Duplicate `<meta name="twitter:card">` removed from `og-image.html` (already emitted unconditionally by `seo_tags.html`).
+- `structured_data.html`: non-blog pages are no longer typed `BlogPosting` (now `WebPage`), and the JSON-LD `image` field is only asserted when the OG image generator actually runs (base image + fonts present).
+- Telegram comments lazy-load: toggling the theme (or a system theme change) before the widget scrolled into view force-loaded it immediately, defeating the IntersectionObserver; theme changes now only rebuild an already-loaded widget.
+- `exampleSite`: `disableKinds` now includes `"term"` — category term pages were still being built, each duplicating the full blog listing (the theme's `list.html` always renders the whole `/blog` section).
+- `fetch-telegram-reactions.mjs`: when every fetch fails (Telegram outage/blocking), the script now exits non-zero without overwriting the output file instead of silently writing `{}` and wiping all reactions; stale header comments ("no retries", "requires Hugo Extended") corrected.
+
+### Changed
+- `home.llms.txt` is now fully data-driven (site params, `menu.main`, `/blog` section) instead of containing a hardcoded author bio; the bio comes from the new per-language `params.llms.about`. Section labels use new i18n keys (`about_author`, `contacts`, `sections`, `website`, `telegram_channel`).
+- 404 page is a real themed page (header/footer, localized text via `not_found` / `back_home` i18n keys) instead of an instant meta-refresh/JS redirect to the homepage.
+- Language toggle in the footer is only rendered on multilingual sites (previously a single-language site got a dead RU/EN toggle with an empty `href`); its `aria-label` moved to the `switch_language` i18n key.
+- Mermaid CDN `<script>` now carries an SRI `integrity` hash (computed from the npm tarball) + `crossorigin`; diagrams re-render on theme toggle instead of keeping the palette they were first drawn with; if the CDN script fails to load, raw diagram source is shown instead of an invisible block.
+- `list.html`, `index.json`, `home.llms.txt` no longer crash the build on sites without a `/blog` section (`site.GetPage` result is nil-checked); `list.html` dev comments translated to English.
+- "New" listing badge and OG `article:*` meta: badge text moved to the `new_badge` i18n key; `article:published_time`/`modified_time`/`tag`/`section` now use `property=` instead of the nonstandard `name=`.
+- `baseof.html` emits an `hreflang="x-default"` alternate link pointing at the default-language version of translated pages.
+- Back-to-top gutter link got `href="#"` so it is keyboard-focusable (click handler already prevents the hash navigation).
+
+### Removed
+- Committed Hugo resource cache `exampleSite/resources/_gen/` (generated OG images) untracked — it is already gitignored.
 
 ## [1.0.1] — 2026-04-19
 

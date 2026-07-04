@@ -85,3 +85,30 @@ other = "Collections"
 
 [cat_getting-started]
 other = "Getting Started"
+
+[new_badge]
+other = "New"
+
+[not_found]
+other = "Page not found. It may have been moved or deleted."
+
+[back_home]
+other = "Go to the homepage"
+
+[switch_language]
+other = "Switch language"
+
+[about_author]
+other = "About the author"
+
+[contacts]
+other = "Contacts"
+
+[sections]
+other = "Sections"
+
+[website]
+other = "Website"
+
+[telegram_channel]
+other = "Telegram channel"

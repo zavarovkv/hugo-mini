@@ -30,7 +30,7 @@
  *                          (relative to cwd = site root when invoked
  *                          via npm script).
  *
- * Requires Hugo Extended on PATH (the default resolution calls
+ * Requires Hugo on PATH (the default resolution calls
  * `hugo config --format json`). If Hugo is unavailable, pass all three
  * options explicitly.
  *
@@ -45,9 +45,12 @@
  *     }
  *   }
  *
- * No caching, no retries. Always overwrites the output file. Failed
- * fetches are logged but do not abort the run — the Hugo partials
- * handle missing data gracefully.
+ * Transient errors (429, 5xx, network) are retried per post with
+ * exponential backoff and Retry-After support. Individual failures are
+ * logged but do not abort the run — the Hugo partials handle missing
+ * data gracefully. If EVERY post fails (Telegram down or blocking the
+ * runner), the script exits non-zero WITHOUT touching the output file,
+ * so a previously fetched dataset survives a full outage.
  */
 
 import fs from "node:fs/promises";
@@ -300,6 +303,13 @@ async function main() {
       console.warn(`  ✗ ${p.file} (msg ${p.id}): ${e.message}`);
       failed++;
     }
+  }
+
+  if (ok === 0) {
+    console.error(
+      `\nAll ${failed} fetches failed — leaving ${output} untouched and exiting with error.`
+    );
+    process.exit(1);
   }
 
   await fs.mkdir(path.dirname(output), { recursive: true });

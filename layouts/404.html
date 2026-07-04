@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url={{ "/" | relURL }}">
-  <script>
-    window.location.replace("{{ "/" | relURL }}");
-  </script>
-  <title>404 - Redirecting...</title>
-</head>
-<body>
-  <p>Redirecting to <a href="{{ "/" | relURL }}">home page</a>...</p>
-</body>
-</html>
+{{ define "title" }}404 | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<h1>404</h1>
+<p>{{ i18n "not_found" | default "Page not found. It may have been moved or deleted." }}</p>
+<p><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "back_home" | default "Go to the homepage" }}</a></p>
+{{ end }}

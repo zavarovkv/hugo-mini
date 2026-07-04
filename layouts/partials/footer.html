@@ -40,6 +40,10 @@
   {{ end }}
 
   <div class="footer-controls">
+    {{- /* Language toggle — only rendered on multilingual sites. The
+           two-label RU/EN design matches the theme's target setup; sites
+           with a different language pair should override this partial. */ -}}
+    {{- if gt (len .Sites) 1 -}}
     {{- $targetURL := "" -}}
     {{- if .Translations -}}
       {{- range .Translations -}}
@@ -52,12 +56,13 @@
         {{- end -}}
       {{- end -}}
     {{- end -}}
-    <a href="{{ $targetURL }}" class="lang-toggle" data-lang="{{ cond (eq .Language.Lang "ru") "en" "ru" }}" aria-label="{{ cond (eq .Language.Lang "ru") "Switch to English" "Переключить на русский" }}">
+    <a href="{{ $targetURL }}" class="lang-toggle" data-lang="{{ cond (eq .Language.Lang "ru") "en" "ru" }}" aria-label="{{ i18n "switch_language" | default "Switch language" }}">
       {{- $sparkle := `<svg class="lang-sparkle" viewBox="0 0 16 16" width="9" height="9" fill="currentColor" aria-hidden="true"><path d="M8 0l1.5 4.5L14 6l-4.5 1.5L8 12l-1.5-4.5L2 6l4.5-1.5z"/><path d="M12.5 9l.75 2.25L15.5 12l-2.25.75L12.5 15l-.75-2.25L9.5 12l2.25-.75z" opacity=".6"/></svg>` -}}
       {{- $aiLang := site.Params.aiTranslatedLang -}}
       <span class="lang-label lang-label-ru">{{ if eq $aiLang "ru" }}{{ $sparkle | safeHTML }}{{ end }}RU</span>
       <span class="lang-label lang-label-en">{{ if eq $aiLang "en" }}{{ $sparkle | safeHTML }}{{ end }}EN</span>
     </a>
+    {{- end }}
     <button type="button" class="theme-toggle" aria-label="{{ i18n "toggle_theme" }}" title="{{ i18n "toggle_theme" }}">
     <svg class="theme-icon-light" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
     <svg class="theme-icon-dark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>

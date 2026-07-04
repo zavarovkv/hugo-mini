@@ -1,26 +1,42 @@
+{{- /*
+  llms.txt — plain-text site summary for AI crawlers.
+
+  Everything is data-driven from site config:
+    - site title / baseURL / params.description — header
+    - params.llms.about — free-text author/site bio (per-language)
+    - params.telegramChannel + params.social — contacts
+    - menu.main (internal entries) — sections
+    - /blog section pages (hidden = true excluded) — article list
+*/ -}}
 # {{ site.Title }} — {{ site.BaseURL }}
+{{ with site.Params.description }}
+> {{ . }}
+{{ end }}
+{{- with site.Params.llms.about }}
+## {{ i18n "about_author" }}
 
-> {{ site.Params.description }}. Автор — {{ site.Params.authorName }}, Head of Product в Ozon. Контент на русском языке.
+{{ . }}
+{{ end }}
+## {{ i18n "contacts" }}
 
-## Об авторе
-
-{{ site.Params.authorName }} — Head of Product в Ozon с 12+ годами опыта в IT. Ранее работал в Яндексе, Мегамаркете и Лаборатории Касперского. С 2021 по 2025 год вел курсы в Яндекс Практикуме. Ведет Telegram-канал «Код Продакта» (https://t.me/{{ site.Params.telegramChannel }}).
-
-## Контакты
-
-- Сайт: {{ site.BaseURL }}
-- Telegram: https://t.me/zavarov
-- Telegram-канал: https://t.me/{{ site.Params.telegramChannel }}
-- LinkedIn: https://linkedin.com/in/zavarovkv
-- GitHub: https://github.com/zavarovkv
-
-## Разделы
-
-- Блог: {{ site.BaseURL }}blog/
-- Консультация: {{ site.BaseURL }}consultation/
-
-## Статьи
-{{- $blogSection := site.GetPage "/blog" }}
-{{- range where $blogSection.Pages ".Params.hidden" "ne" true }}
-- [{{ .Title }}]({{ .Permalink }}): {{ .Description }}
+- {{ i18n "website" }}: {{ site.BaseURL }}
+{{- with site.Params.telegramChannel }}
+- {{ i18n "telegram_channel" }}: https://t.me/{{ . }}
 {{- end }}
+{{- $labels := dict "telegram" "Telegram" "linkedin" "LinkedIn" "github" "GitHub" "x" "X" "youtube" "YouTube" "facebook" "Facebook" "instagram" "Instagram" "email" "Email" }}
+{{- range $key, $url := site.Params.social }}
+- {{ index $labels $key | default (title $key) }}: {{ $url }}
+{{- end }}
+
+## {{ i18n "sections" }}
+{{ range site.Menus.main }}
+{{- if not (or (hasPrefix .URL "http://") (hasPrefix .URL "https://")) }}
+- {{ .Name }}: {{ .URL | absURL }}
+{{- end }}
+{{- end }}
+{{ with site.GetPage "/blog" }}
+## {{ i18n "articles" }}
+{{ range where .Pages ".Params.hidden" "ne" true }}
+- [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . }}{{ end }}
+{{- end }}
+{{ end -}}

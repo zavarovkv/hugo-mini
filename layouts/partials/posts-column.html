@@ -37,7 +37,7 @@
       <h3 class="posts-group-title">{{ $title }}</h3>
       <ul class="blog-posts">
         {{- range $ordered }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ if ge .Date $newCutoff }} <span class="badge-new">New</span>{{ end }}</li>
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ if ge .Date $newCutoff }} <span class="badge-new">{{ i18n "new_badge" | default "New" }}</span>{{ end }}</li>
         {{- end }}
       </ul>
     </div>

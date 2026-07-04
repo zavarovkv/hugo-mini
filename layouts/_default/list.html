@@ -1,10 +1,12 @@
 {{ define "main" }}
 <article>
-  {{/* Получаем все посты блога (без скрытых) */}}
-  {{ $blogSection := site.GetPage "/blog" }}
-  {{ $allPosts := where $blogSection.Pages ".Params.hidden" "ne" true }}
+  {{/* All blog posts, hidden ones excluded */}}
+  {{ $allPosts := slice }}
+  {{ with site.GetPage "/blog" }}
+    {{ $allPosts = where .Pages ".Params.hidden" "ne" true }}
+  {{ end }}
 
-  {{/* Собираем все уникальные теги */}}
+  {{/* Collect unique categories */}}
   {{ $allTags := slice }}
   {{ range $allPosts }}
     {{ range .Params.categories }}
@@ -16,7 +18,7 @@
 
   <h1>{{ i18n "articles" }}</h1>
 
-  {{/* Собираем все группы: теги + разное (если есть) */}}
+  {{/* Groups to render: categories plus "misc" for uncategorized posts */}}
   {{ $groups := slice }}
   {{ range $allTags }}
     {{ $groups = $groups | append . }}
@@ -33,7 +35,7 @@
 
   {{ $half := math.Ceil (div (len $groups) 2.0) }}
 
-  {{/* Все статьи — группируем по тегам в 2 колонки */}}
+  {{/* Category groups split across two columns */}}
   <div class="posts-columns">
     {{ partial "posts-column.html" (dict "groups" (first (int $half) $groups) "allPosts" $allPosts) }}
     {{ partial "posts-column.html" (dict "groups" (after (int $half) $groups) "allPosts" $allPosts) }}

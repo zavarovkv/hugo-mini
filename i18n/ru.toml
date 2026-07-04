@@ -85,3 +85,30 @@ other = "Подборки"
 
 [cat_getting-started]
 other = "Начало работы"
+
+[new_badge]
+other = "New"
+
+[not_found]
+other = "Страница не найдена. Возможно, она была перемещена или удалена."
+
+[back_home]
+other = "На главную"
+
+[switch_language]
+other = "Переключить язык"
+
+[about_author]
+other = "Об авторе"
+
+[contacts]
+other = "Контакты"
+
+[sections]
+other = "Разделы"
+
+[website]
+other = "Сайт"
+
+[telegram_channel]
+other = "Telegram-канал"
