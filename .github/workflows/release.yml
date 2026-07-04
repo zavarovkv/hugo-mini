@@ -1,0 +1,29 @@
+# Manually triggered: creates a git tag + GitHub release at the current
+# tip of the chosen branch. Exists because some CI/agent environments can
+# push branches but not tags — this delegates tag creation to a runner
+# with the repo-scoped GITHUB_TOKEN.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to create (e.g. v1.0.2)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --target "${{ github.sha }}" \
+            --title "${{ inputs.tag }}" \
+            --generate-notes
