@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-07-04
+
 ### Fixed
 - `images/screenshot.png` and `images/tn.png` retaken at the exact dimensions required by the Hugo themes gallery (1500×1000 and 900×600); previous images were 2850×980 and 900×309.
 - `seo_tags.html`: `<meta name="author">` rendered the `[params.author]` TOML table as a Go map string (`map[jobtitle:…]`); now uses `params.authorName` with a `site.Title` fallback. Same fallback fixed in all five JSON-LD author/publisher fields in `structured_data.html`.
@@ -130,7 +132,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/zavarovkv/hugo-mini/releases/tag/v0.1.0

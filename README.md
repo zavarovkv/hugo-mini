@@ -2,15 +2,15 @@
 
 [![Hugo](https://img.shields.io/badge/Hugo-%E2%89%A50.145-ff4088?logo=hugo&logoColor=white)](https://gohugo.io/)
 [![GitHub Release](https://img.shields.io/github/v/release/zavarovkv/hugo-mini)](https://github.com/zavarovkv/hugo-mini/releases)
-[![GitHub License](https://img.shields.io/github/license/zavarovkv/hugo-mini)](LICENSE)
+[![GitHub License](https://img.shields.io/github/license/zavarovkv/hugo-mini)](https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/zavarovkv/hugo-mini?style=flat)](https://github.com/zavarovkv/hugo-mini/stargazers)
 [![Test example site](https://github.com/zavarovkv/hugo-mini/actions/workflows/test-example-site.yml/badge.svg)](https://github.com/zavarovkv/hugo-mini/actions/workflows/test-example-site.yml)
 
 A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integration, and dynamic OG images.
 
-**[Live Demo](https://zavarov.com/)** · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+**[Live Demo](https://zavarov.com/)** · [Changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md) · [Contributing](https://github.com/zavarovkv/hugo-mini/blob/main/CONTRIBUTING.md)
 
-![screenshot](images/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/screenshot.png)
 
 ## Why Mini?
 
