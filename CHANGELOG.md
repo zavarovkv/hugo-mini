@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Fixed
+- `images/screenshot.png` and `images/tn.png` retaken at the exact dimensions required by the Hugo themes gallery (1500×1000 and 900×600); previous images were 2850×980 and 900×309.
+
 ## [1.0.1] — 2026-04-19
 
 ### Added
