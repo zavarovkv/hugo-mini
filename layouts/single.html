@@ -1,15 +1,25 @@
 {{ define "main" }}
-  {{ if eq .Type "blog" }}
-    <h1>{{ .Title }}</h1>
+  {{- /* Post extras (meta row, sharing, comments, recent sidebar) apply to
+         pages in the site's main section(s); standalone pages like /about get
+         just the title and body.
 
-    <article lang="{{ .Language.Lang }}">
-      {{ .Content }}
-    </article>
+         Deliberately one template rather than layouts/<section>/single.html:
+         the section name is configurable via site.Params.mainSections, so a
+         path-based split would only work for sites that happen to call it
+         "blog". */ -}}
+  {{- $isPost := in (site.Params.mainSections | default (slice "blog")) .Type -}}
 
-    {{/* Post meta row: views + date on the left, Telegram reactions on
-         the right. All three pieces come from the telegram-* partials
-         and data/telegram_reactions.json — each renders nothing if its
-         source data is missing, so the row gracefully degrades. */}}
+  <h1>{{ .Title }}</h1>
+
+  <article lang="{{ .Language.Lang }}">
+    {{ .Content }}
+  </article>
+
+  {{- if $isPost }}
+
+    {{- /* Post meta row: views + date on the left, Telegram reactions on the
+           right. Each piece renders nothing when its source data is missing,
+           so the row degrades to just the date. */}}
     <div class="post-meta-inline">
       <div class="post-meta-left">
         {{- partial "telegram-views.html" . -}}
@@ -18,9 +28,9 @@
       {{- partial "telegram-reactions.html" . -}}
     </div>
 
-    {{/* Social sharing buttons (enabled by default, disable with socialSharing = false) */}}
+    {{- /* Social sharing buttons (on by default; socialSharing = false hides) */}}
     {{ if site.Params.socialSharing | default true }}
-    <div class="likely likely-big" data-url="{{ .Permalink | absURL }}" data-title="{{ .Title }}">
+    <div class="likely likely-big" data-url="{{ .Permalink }}" data-title="{{ .Title }}">
       <div class="telegram"></div>
       <div class="twitter"></div>
       <div class="facebook"></div>
@@ -29,14 +39,14 @@
     </div>
     {{ end }}
 
-    {{/* Telegram Discussion comments (rendered dynamically by JS to sync dark/light theme) */}}
+    {{- /* Telegram Discussion comments (built by JS so it can follow the theme) */}}
     {{ with .Params.telegram_post }}
     <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ . }}" data-tg-limit="20"></div>
     {{ end }}
 
-    {{/* Recent posts — desktop: absolute sidebar in right gutter (JS); mobile: static block at bottom */}}
-    {{- $recent := partial "recent-posts.html" . -}}
-    {{ with $recent }}
+    {{- /* Recent posts — desktop: absolute sidebar in the right gutter (JS);
+           mobile: static block at the bottom (CSS). */}}
+    {{ with partial "recent-posts.html" . }}
     <aside class="recent-sidebar" id="recent-sidebar">
       <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>
       <ul class="blog-posts recent-sidebar-list">
@@ -46,11 +56,5 @@
       </ul>
     </aside>
     {{ end }}
-
-  {{ else }}
-    <h1>{{ .Title }}</h1>
-    <article lang="{{ .Language.Lang }}">
-      {{ .Content }}
-    </article>
-  {{ end }}
+  {{- end }}
 {{ end }}

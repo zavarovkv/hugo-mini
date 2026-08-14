@@ -129,7 +129,16 @@
   {{- partial "custom_head.html" . -}}
 </head>
 
-<body>
+{{- /* UI strings main.js needs, passed through the DOM. This is what lets
+       assets/js/main.js stay a plain .js file — lintable and formattable —
+       rather than a Go template that breaks on any `{{` in JS syntax. */ -}}
+{{- $i18n := dict
+  "goUp" (i18n "go_up" | default "Go up")
+  "toDark" (i18n "theme_dark" | default "Switch to dark theme")
+  "toLight" (i18n "theme_light" | default "Switch to light theme")
+  "copy" (i18n "copy" | default "Copy")
+-}}
+<body data-i18n="{{ $i18n | jsonify }}">
   {{- with .Site.Params.yandexMetrikaId }}
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   {{- end }}
@@ -147,14 +156,12 @@
     {{- block "footer" . }}{{ partial "footer.html" . }}{{ end -}}
   </footer>
 
-  {{- /* Bundled theme JS. ExecuteAsTemplate so i18n strings (theme-toggle
-         button title) resolve at build time. The output name includes the
-         language code so RU and EN get distinct compiled bundles —
-         otherwise Hugo's resource cache would dedupe them by input name
-         and serve the first-rendered language to both. */ -}}
-  {{- $jsName := printf "js/main.%s.js" .Language.Lang -}}
-  {{- $js := resources.Get "js/main.js" | resources.ExecuteAsTemplate $jsName . | resources.Minify | resources.Fingerprint "sha256" -}}
-  <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+  {{- /* Bundled theme JS. No ExecuteAsTemplate: the script reads its localized
+         strings from body[data-i18n], so one compiled bundle serves every
+         language instead of one per language. */ -}}
+  {{- with resources.Get "js/main.js" | resources.Minify | resources.Fingerprint "sha256" }}
+  <script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{- end }}
 
   {{- /* Theme-owned: console ASCII art on the home page. */ -}}
   {{- partial "console-art.html" . -}}

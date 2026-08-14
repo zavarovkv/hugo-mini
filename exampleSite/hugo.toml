@@ -26,6 +26,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
 [params]
   favicon    = "images/favicon.png"
+  # favicon192     = "images/favicon-192.png"
+  # appleTouchIcon = "images/apple-touch-icon.png"
   authorName = "Jane Doe"
   authorURL  = "https://example.com/"
 

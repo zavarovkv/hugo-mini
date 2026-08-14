@@ -1,0 +1,22 @@
+{{- /*
+  Returns an Open Graph locale ("de_DE") for a language, or "" if it cannot be
+  determined. Takes a language object, e.g. `partial "og-locale.html" site.Language`
+  or the same for an entry of .Translations.
+
+  Open Graph expects language_TERRITORY, so a bare `languageCode = "de"` is not
+  enough. Configure `languageCode = "de-DE"` per language, or set
+  `params.ogLocale = "de_DE"` to state it outright. With neither, this returns
+  "" and the caller omits the tag — consumers then apply their own default,
+  which beats emitting a value they reject.
+*/ -}}
+{{- $locale := "" -}}
+{{- with .Params.ogLocale -}}
+  {{- $locale = . -}}
+{{- else -}}
+  {{- with .LanguageCode -}}
+    {{- if strings.Contains . "-" -}}
+      {{- $locale = replace . "-" "_" -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $locale -}}

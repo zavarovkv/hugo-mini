@@ -63,6 +63,7 @@
     --color-blockquote-border: #999;
     --color-control-border: #ccc;
     --color-control-border-hover: #999;
+    --color-code-bg: transparent;   /* light: inline code has no fill */
   }
 
   body {
@@ -231,6 +232,7 @@
   }
 
   code {
+    background-color: var(--color-code-bg);
     font-family: monospace;
     padding: 2px 5px;
     border-radius: 3px;
@@ -404,6 +406,7 @@
     --color-blockquote-border: #555;
     --color-control-border: #333;
     --color-control-border-hover: #666;
+    --color-code-bg: #2a2a2a;
   }
 
   [data-theme="dark"] body {
@@ -635,24 +638,25 @@
     filter: drop-shadow(-2px 2px 2px rgba(0, 96, 160, 0.15));
   }
 
-  .nav-icon-before {
-    display: inline-block;
-    vertical-align: -0.15em;
-    margin-right: 5px;
+  /* One icon element, positioned with flex `order`: before the label on
+     desktop, after it on mobile. */
+  nav a:has(.nav-icon) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
 
-  .nav-icon-after {
-    display: none;
+  .nav-icon {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    order: -1;
   }
 
   @media (max-width: 768px) {
-    .nav-icon-before {
-      display: none;
-    }
-    .nav-icon-after {
-      display: inline-block;
-      vertical-align: -0.25em;
-      margin-left: 6px;
+    .nav-icon {
+      order: 1;
+      margin-left: 1px;
       width: 20px;
       height: 20px;
     }
@@ -762,32 +766,6 @@
 
   .tg-reaction-emoji {
     line-height: 1;
-  }
-
-  .post-tags {
-    color: var(--color-secondary);
-  }
-
-  .post-tags a {
-    color: var(--color-secondary);
-  }
-
-  .post-tags a:visited {
-    color: var(--color-secondary);
-  }
-
-  .post-tags a:hover {
-    color: var(--color-accent);
-  }
-
-  [data-theme="dark"] .post-tags,
-  [data-theme="dark"] .post-tags a,
-  [data-theme="dark"] .post-tags a:visited {
-    color: #8a98a6;
-  }
-
-  [data-theme="dark"] .post-tags a:hover {
-    color: var(--color-accent);
   }
 
   /* Extra space after list items in article content */
@@ -1024,28 +1002,12 @@
      Reuses .posts-group-title + .blog-posts styles from the listing page;
      the list itself is split into two visual columns via CSS multi-column
      on desktop, collapses to one column on mobile. */
-  .popular-posts {
-    margin-top: 50px;
-  }
-
-  .popular-posts-list {
-    column-count: 2;
-    column-gap: 2em;
-  }
-
-  .popular-posts-list li {
-    break-inside: avoid;
-  }
-
   @media (max-width: 768px) {
     .posts-columns {
       flex-direction: column;
       gap: 0;
     }
 
-    .popular-posts-list {
-      column-count: 1;
-    }
   }
 
   /* Plug divider */
@@ -1218,10 +1180,6 @@
   .lang-toggle[data-lang="en"]:hover .lang-label-ru { color: var(--color-muted); }
   .lang-toggle[data-lang="en"]:hover .lang-label-en { color: var(--heading-color); }
 
-  [data-theme="dark"] .lang-toggle:hover .lang-label-ru { color: #e8e8e8; }
-  [data-theme="dark"] .lang-toggle[data-lang="en"]:hover .lang-label-ru { color: var(--color-muted); }
-  [data-theme="dark"] .lang-toggle[data-lang="en"]:hover .lang-label-en { color: #e8e8e8; }
-
   /* Theme toggle button — circle with border */
   .theme-toggle {
     display: grid;
@@ -1320,16 +1278,8 @@
     color: var(--color-muted);
     border-bottom: none;
   }
-
-  [data-theme="dark"] .social-telegram:hover  { color: #26A5E4; }
-  [data-theme="dark"] .social-linkedin:hover  { color: #0A66C2; }
   [data-theme="dark"] .social-github:hover    { color: #f0f6fc; }
   [data-theme="dark"] .social-x:hover         { color: #f0f6fc; }
-  [data-theme="dark"] .social-youtube:hover   { color: #FF0000; }
-  [data-theme="dark"] .social-facebook:hover  { color: #1877F2; }
-  [data-theme="dark"] .social-instagram:hover { color: #E4405F; }
-  [data-theme="dark"] .social-email:hover     { color: #EA4335; }
-  [data-theme="dark"] .social-rss:hover       { color: #FF6600; }
 
   /* Larger touch targets for mobile footer */
   @media (max-width: 768px) {
@@ -1351,9 +1301,7 @@
     background-color: #0d1117 !important;
   }
 
-  [data-theme="dark"] code {
-    background-color: #2a2a2a;
-  }
+
 
   /* Keyboard focus styles */
   a:focus-visible,

@@ -1,41 +1,33 @@
 {{ define "main" }}
 <article>
-  {{/* All blog posts, hidden ones excluded */}}
-  {{ $allPosts := slice }}
-  {{ with site.GetPage "/blog" }}
-    {{ $allPosts = where .Pages ".Params.hidden" "ne" true }}
-  {{ end }}
+  {{- /* Posts of the section being listed. Uses .RegularPages — the pages of
+         *this* page — rather than a hardcoded section, so /blog, /posts and
+         /notes each list their own content. Falls back to the site's main
+         section for a listing page that has no pages of its own (e.g. a
+         hand-written /archive page reusing this template). */ -}}
+  {{- $allPosts := where .RegularPages ".Params.hidden" "ne" true -}}
+  {{- if not $allPosts -}}
+    {{- $allPosts = partial "main-pages.html" . -}}
+  {{- end -}}
+  {{- $allPosts = $allPosts.ByDate.Reverse -}}
 
-  {{/* Collect unique categories */}}
-  {{ $allTags := slice }}
-  {{ range $allPosts }}
-    {{ range .Params.categories }}
-      {{ if and . (not (in $allTags .)) }}
-        {{ $allTags = $allTags | append . }}
-      {{ end }}
-    {{ end }}
-  {{ end }}
+  {{- /* Category groups, in first-seen order, plus a trailing group for
+         uncategorised posts. `uniq` keeps that order, so groups follow the
+         reverse-chronological order of the posts that introduced them. */ -}}
+  {{- $categories := slice -}}
+  {{- range $allPosts -}}
+    {{- range .Params.categories -}}
+      {{- with . -}}{{- $categories = $categories | append . -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $groups := $categories | uniq -}}
+  {{- if where $allPosts ".Params.categories" nil -}}
+    {{- $groups = $groups | append "_untagged" -}}
+  {{- end -}}
 
-  <h1>{{ i18n "articles" }}</h1>
+  <h1>{{ .Title | default (i18n "articles") }}</h1>
 
-  {{/* Groups to render: categories plus "misc" for uncategorized posts */}}
-  {{ $groups := slice }}
-  {{ range $allTags }}
-    {{ $groups = $groups | append . }}
-  {{ end }}
-  {{ $hasUntagged := false }}
-  {{ range $allPosts }}
-    {{ if or (not .Params.categories) (eq (len .Params.categories) 0) }}
-      {{ $hasUntagged = true }}
-    {{ end }}
-  {{ end }}
-  {{ if $hasUntagged }}
-    {{ $groups = $groups | append "_untagged" }}
-  {{ end }}
-
-  {{ $half := math.Ceil (div (len $groups) 2.0) }}
-
-  {{/* Category groups split across two columns */}}
+  {{- $half := math.Ceil (div (len $groups) 2.0) -}}
   <div class="posts-columns">
     {{ partial "posts-column.html" (dict "groups" (first (int $half) $groups) "allPosts" $allPosts) }}
     {{ partial "posts-column.html" (dict "groups" (after (int $half) $groups) "allPosts" $allPosts) }}

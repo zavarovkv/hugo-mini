@@ -1,38 +1,41 @@
+{{- /*
+  Main menu.
+
+  Menu icons: set `[menu.main.params] icon = "telegram"` and the theme inlines
+  assets/icons/telegram.svg. Icons are resolved as resources, so a site can add
+  its own by dropping assets/icons/<name>.svg into its own project — the
+  previous version kept a hardcoded dict of SVG paths here, which meant new
+  icons required editing the theme.
+
+  Desktop shows the icon before the label, mobile after; that is CSS `order`
+  on a single element rather than two copies of the same SVG in the markup.
+*/ -}}
 {{- $currentPath := strings.TrimSuffix "/" .RelPermalink -}}
 {{ range .Site.Menus.main }}
   {{- $isExternal := or (hasPrefix .URL "http://") (hasPrefix .URL "https://") -}}
   {{- $isActive := false -}}
   {{- if not $isExternal -}}
     {{- $linkPath := strings.TrimSuffix "/" .URL -}}
-    {{- if $linkPath -}}
-      {{- if or (eq $currentPath $linkPath) (hasPrefix $currentPath (printf "%s/" $linkPath)) -}}
+    {{- with $linkPath -}}
+      {{- if or (eq $currentPath .) (hasPrefix $currentPath (printf "%s/" .)) -}}
         {{- $isActive = true -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
 
-  {{- /* Menu icon support. Set `[menu.main.params] icon = "telegram"` in
-         config to show an inline SVG. On desktop it appears BEFORE the
-         label, on mobile AFTER (via CSS show/hide on .nav-icon-before /
-         .nav-icon-after). Extend the $paths dict to add more icons. */ -}}
-  {{- $iconBefore := "" -}}
-  {{- $iconAfter := "" -}}
+  {{- $icon := "" -}}
   {{- with .Params.icon -}}
-    {{- $paths := dict
-      "telegram" `<path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/>`
-    -}}
-    {{- $p := index $paths . | default "" -}}
-    {{- if $p -}}
-      {{- $iconBefore = printf `<svg class="nav-icon nav-icon-before" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">%s</svg>` $p -}}
-      {{- $iconAfter = printf `<svg class="nav-icon nav-icon-after" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">%s</svg>` $p -}}
+    {{- with resources.Get (printf "icons/%s.svg" .) -}}
+      {{- /* Inject the class the stylesheet targets, without requiring every
+             icon file to remember it. */ -}}
+      {{- $icon = .Content | replaceRE `^<svg` `<svg class="nav-icon"` | safeHTML -}}
+    {{- else -}}
+      {{- warnf "hugo-mini: menu icon %q not found — expected assets/icons/%s.svg" . . -}}
     {{- end -}}
   {{- end -}}
 
-  {{- if $isExternal -}}
-    <a href="{{ .URL }}" target="_blank" rel="noopener noreferrer">{{ $iconBefore | safeHTML }}{{ .Name }}{{ $iconAfter | safeHTML }}</a>
-  {{- else if $isActive -}}
-    <a href="{{ .URL }}" class="link-selected" aria-current="page">{{ $iconBefore | safeHTML }}{{ .Name }}{{ $iconAfter | safeHTML }}</a>
-  {{- else -}}
-    <a href="{{ .URL }}">{{ $iconBefore | safeHTML }}{{ .Name }}{{ $iconAfter | safeHTML }}</a>
-  {{- end -}}
+  {{- $class := "" -}}
+  {{- if $isActive -}}{{- $class = ` class="link-selected" aria-current="page"` -}}{{- end -}}
+  {{- if $isExternal -}}{{- $class = ` target="_blank" rel="noopener noreferrer"` -}}{{- end -}}
+  <a href="{{ .URL }}"{{ $class | safeHTMLAttr }}>{{ $icon }}<span class="nav-label">{{ .Name }}</span></a>
 {{- end }}

@@ -1,0 +1,20 @@
+{{- /*
+  Returns the site's posts — every regular page in the main content
+  section(s), excluding `hidden = true`, newest first.
+
+  Single source of truth for "what counts as a post": the listing page, the
+  JSON Feed, llms.txt and the recent-posts sidebar all call this, so they can
+  never disagree about which pages are included.
+
+  Sections come from `site.Params.mainSections`, Hugo's standard mechanism.
+  It does not need to be configured: when it is absent, Hugo sets it to the
+  top-level section holding the most pages. That is why this theme works on a
+  site whose posts live in /posts, /writing or /notes rather than /blog —
+  earlier versions hardcoded "blog" and silently produced an empty listing
+  for everyone else.
+
+  Usage: {{ $posts := partial "main-pages.html" . }}
+*/ -}}
+{{- $sections := site.Params.mainSections | default (slice "blog") -}}
+{{- $pages := where site.RegularPages "Type" "in" $sections -}}
+{{- return (where $pages ".Params.hidden" "ne" true).ByDate.Reverse -}}

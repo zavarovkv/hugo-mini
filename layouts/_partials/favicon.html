@@ -1,4 +1,20 @@
-{{ with .Site.Params.favicon }}
-<link rel="icon" type="image/png" sizes="32x32" href="{{ . | absURL }}" />{{ end }}
-<link rel="icon" type="image/png" sizes="192x192" href="{{ "images/favicon-192.png" | absURL }}" />
-<link rel="apple-touch-icon" sizes="180x180" href="{{ "images/apple-touch-icon.png" | absURL }}" />
+{{- /*
+  Favicons. Every size is opt-in via params, and nothing is emitted for a param
+  that is not set — the previous version hardcoded images/favicon-192.png and
+  images/apple-touch-icon.png, so any site without those exact files served two
+  404s on every page.
+
+    [params]
+      favicon        = "images/favicon.png"        # 32x32
+      favicon192     = "images/favicon-192.png"    # 192x192, Android home screen
+      appleTouchIcon = "images/apple-touch-icon.png" # 180x180, iOS home screen
+*/ -}}
+{{- with site.Params.favicon }}
+<link rel="icon" type="image/png" sizes="32x32" href="{{ . | absURL }}" />
+{{- end }}
+{{- with site.Params.favicon192 }}
+<link rel="icon" type="image/png" sizes="192x192" href="{{ . | absURL }}" />
+{{- end }}
+{{- with site.Params.appleTouchIcon }}
+<link rel="apple-touch-icon" sizes="180x180" href="{{ . | absURL }}" />
+{{- end }}

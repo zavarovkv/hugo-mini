@@ -166,7 +166,9 @@ ignoreErrors    = ["error-disable-taxonomy"]
 ```toml
 [params]
   # Required
-  favicon    = "images/favicon.png"   # relative to /static/
+  favicon        = "images/favicon.png"       # 32x32, relative to /static/
+  favicon192     = "images/favicon-192.png"   # optional, 192x192 (Android)
+  appleTouchIcon = "images/apple-touch-icon.png" # optional, 180x180 (iOS)
   authorName = "Your Name"
   authorURL  = "https://example.com/"
 
@@ -193,6 +195,12 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # SRI hash. Point this at a local copy for a build with no third-party
   # requests at all — e.g. drop mermaid.min.js into static/js/ and set:
   mermaidSrc    = "js/mermaid.min.js"
+
+  # Which section(s) hold your posts. Optional: Hugo sets it to the top-level
+  # section with the most pages, so a site whose posts live in /posts or
+  # /writing works without configuring anything. Set it explicitly on a site
+  # with several large sections.
+  mainSections = ["blog"]
 
   # Analytics (all optional — omit to disable, multiple can run side by side)
   yandexMetrikaId    = 123456789      # Yandex.Metrika ID
@@ -336,7 +344,7 @@ Every colour, the content width and the type stack are declared as CSS custom pr
 
 ### Nav menu icons
 
-Add an inline SVG icon to any menu item via `params.icon`. Built-in icons: `telegram` (paper plane). On desktop the icon appears before the label with an elastic hover animation; on mobile it appears after the label.
+Add an inline SVG icon to any menu item via `params.icon`. The theme resolves it as `assets/icons/<name>.svg`, so alongside the bundled `telegram` you can add your own by dropping an SVG into your site's `assets/icons/` — no theme changes needed. On desktop the icon sits before the label with an elastic hover animation; on mobile it moves after it (CSS `order`).
 
 ```toml
 [[languages.en.menu.main]]

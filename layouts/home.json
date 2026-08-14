@@ -1,21 +1,19 @@
+{{- /* JSON Feed 1.1 — https://jsonfeed.org/version/1.1 */ -}}
 {{- $items := slice -}}
-{{- with site.GetPage "/blog" -}}
-  {{- $posts := where .Pages ".Params.hidden" "ne" true -}}
-  {{- range $posts.ByDate.Reverse -}}
-    {{- $item := dict
-      "id" .Permalink
-      "url" .Permalink
-      "title" .Title
-      "content_text" (.Plain | truncate 500)
-      "summary" .Description
-      "date_published" (.Date.Format "2006-01-02T15:04:05Z07:00")
-      "date_modified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
-    -}}
-    {{- if .Params.categories -}}
-      {{- $item = merge $item (dict "tags" .Params.categories) -}}
-    {{- end -}}
-    {{- $items = $items | append $item -}}
+{{- range partial "main-pages.html" . -}}
+  {{- $item := dict
+    "id" .Permalink
+    "url" .Permalink
+    "title" .Title
+    "content_text" (.Plain | truncate 500)
+    "summary" .Description
+    "date_published" (.Date.Format "2006-01-02T15:04:05Z07:00")
+    "date_modified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  -}}
+  {{- with .Params.categories -}}
+    {{- $item = merge $item (dict "tags" .) -}}
   {{- end -}}
+  {{- $items = $items | append $item -}}
 {{- end -}}
 {{- dict
   "version" "https://jsonfeed.org/version/1.1"
@@ -24,6 +22,6 @@
   "feed_url" (printf "%sindex.json" site.BaseURL)
   "description" site.Params.description
   "language" site.LanguageCode
-  "authors" (slice (dict "name" site.Params.authorName "url" site.Params.authorURL))
+  "authors" (slice (dict "name" (site.Params.authorName | default site.Title) "url" site.Params.authorURL))
   "items" $items
 | jsonify (dict "indent" "  ") -}}

@@ -8,7 +8,10 @@
   {{- $subtitle := "" -}}
   {{- $path := "" -}}
 
-  {{- $authorName := .Site.Params.authorName | default .Site.Params.author -}}
+  {{- /* params.author is a table (it carries jobTitle), so it must not be used
+         as a display-name fallback: that renders the map itself into the image
+         as "map[jobtitle:…]". Site title is the fallback instead. */ -}}
+  {{- $authorName := .Site.Params.authorName | default .Site.Title -}}
   {{- $attribution := printf "%s · %s" (.Site.BaseURL | replaceRE "^https?://" "" | replaceRE "/$" "") $authorName -}}
 
   {{- if .IsPage -}}

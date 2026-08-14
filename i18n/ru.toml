@@ -112,3 +112,6 @@ other = "Сайт"
 
 [telegram_channel]
 other = "Telegram-канал"
+
+[copy]
+other = "Копировать"

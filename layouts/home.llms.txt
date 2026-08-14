@@ -6,7 +6,7 @@
     - params.llms.about — free-text author/site bio (per-language)
     - params.telegramChannel + params.social — contacts
     - menu.main (internal entries) — sections
-    - /blog section pages (hidden = true excluded) — article list
+    - posts from the site's main section(s) — article list
 */ -}}
 # {{ site.Title }} — {{ site.BaseURL }}
 {{ with site.Params.description }}
@@ -34,9 +34,9 @@
 - {{ .Name }}: {{ .URL | absURL }}
 {{- end }}
 {{- end }}
-{{ with site.GetPage "/blog" }}
+{{ with partial "main-pages.html" . }}
 ## {{ i18n "articles" }}
-{{ range where .Pages ".Params.hidden" "ne" true }}
+{{ range . }}
 - [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . }}{{ end }}
 {{- end }}
 {{ end -}}

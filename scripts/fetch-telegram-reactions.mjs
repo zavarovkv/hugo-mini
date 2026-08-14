@@ -233,10 +233,25 @@ async function fetchOne(channel, id) {
       const html = await res.text();
       const views = parseViews(html);
       const reactions = parseReactions(html);
-      // If the page clearly is a Telegram widget but parsers came back empty,
-      // the embed HTML probably changed shape and the regex needs updating.
-      if (views === null && reactions.length === 0 && /tgme_widget_message/.test(html)) {
-        console.warn(`  ! ${channel}/${id}: widget found but parse returned empty — Telegram HTML may have changed`);
+
+      // Nothing extracted at all. Telegram answers 200 with a widget-less page
+      // for a channel that does not exist or was renamed, and it would also
+      // land here if the embed markup changed shape. Treating that as success
+      // would overwrite every post with {views: null, reactions: []} — so fail
+      // instead, which keeps the previous values (see the seeding in main) and,
+      // if it happens for every post, leaves the file untouched entirely.
+      //
+      // A post with views but no reactions is legitimate and not affected.
+      if (views === null && reactions.length === 0) {
+        const widgetSeen = /tgme_widget_message/.test(html);
+        throw Object.assign(
+          new Error(
+            widgetSeen
+              ? "widget found but parse returned empty — Telegram embed markup may have changed"
+              : "no Telegram widget in response — check the channel name and that the post is public"
+          ),
+          { permanent: true }
+        );
       }
       return { views, reactions };
     } catch (err) {
@@ -254,6 +269,26 @@ async function fetchOne(channel, id) {
     }
   }
   throw lastErr ?? new Error(`fetchOne(${channel}/${id}) exited without result`);
+}
+
+/**
+ * Previously fetched dataset, or {} if there is none / it is unreadable.
+ * A corrupt file must not abort the run: the whole point is to degrade to
+ * "fetch everything fresh" rather than fail the build.
+ */
+async function readPrevious(output) {
+  try {
+    const parsed = JSON.parse(await fs.readFile(output, "utf8"));
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed;
+    }
+    console.warn(`  ! ${output} is not an object — ignoring it`);
+  } catch (e) {
+    if (e.code !== "ENOENT") {
+      console.warn(`  ! could not read ${output} (${e.message}) — ignoring it`);
+    }
+  }
+  return {};
 }
 
 async function main() {
@@ -282,9 +317,25 @@ async function main() {
 
   console.log(`Fetching reactions for ${posts.length} posts…`);
 
+  // Seed with the previous run's values for the posts we are about to fetch, so
+  // a post that fails now keeps the counts it had before. Without this, a
+  // partial outage (some posts 429, some succeed) would rewrite the file with
+  // only the successful ones and silently drop the rest — worse than the
+  // full-outage case, which is already guarded below.
+  //
+  // Seeding is scoped to current posts on purpose: copying the whole previous
+  // file would also resurrect entries for posts that have since been deleted or
+  // had their telegram_post removed, and they would never be cleaned up.
+  const previous = await readPrevious(output);
   const results = {};
+  for (const p of posts) {
+    if (Object.prototype.hasOwnProperty.call(previous, p.id)) {
+      results[p.id] = previous[p.id];
+    }
+  }
   let ok = 0;
   let failed = 0;
+  let stale = 0;
   for (const p of posts) {
     try {
       const data = await fetchOne(channel, p.id);
@@ -300,7 +351,11 @@ async function main() {
       );
       ok++;
     } catch (e) {
-      console.warn(`  ✗ ${p.file} (msg ${p.id}): ${e.message}`);
+      const kept = Object.prototype.hasOwnProperty.call(previous, p.id);
+      if (kept) stale++;
+      console.warn(
+        `  ✗ ${p.file} (msg ${p.id}): ${e.message}${kept ? " — keeping previous counts" : ""}`
+      );
       failed++;
     }
   }
@@ -315,7 +370,9 @@ async function main() {
   await fs.mkdir(path.dirname(output), { recursive: true });
   await fs.writeFile(output, JSON.stringify(results, null, 2) + "\n", "utf8");
   console.log(
-    `\nWrote ${output} (${ok} ok, ${failed} failed, ${Object.keys(results).length} entries)`
+    `\nWrote ${output} (${ok} ok, ${failed} failed${
+      stale > 0 ? `, ${stale} kept from previous run` : ""
+    }, ${Object.keys(results).length} entries)`
   );
 }
 

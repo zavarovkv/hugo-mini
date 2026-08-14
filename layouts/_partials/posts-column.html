@@ -2,7 +2,7 @@
   Renders one column of category groups for the blog listing.
   Inputs (from posts-column dict):
     .groups   — slice of category slugs (or "_untagged" for posts with no category)
-    .allPosts — slice of all blog pages, already filtered for `hidden`
+    .allPosts — posts, already filtered for `hidden` and sorted newest first
 
   Within each category, posts with `pinned = true` are floated to the
   top (preserving reverse-chronological order between themselves), the
@@ -19,14 +19,10 @@
 
     {{- if eq $tag "_untagged" -}}
       {{- $title = i18n "misc" -}}
-      {{- range $allPosts.ByDate.Reverse -}}
-        {{- if or (not .Params.categories) (eq (len .Params.categories) 0) -}}
-          {{- $catPosts = $catPosts | append . -}}
-        {{- end -}}
-      {{- end -}}
+      {{- $catPosts = where $allPosts ".Params.categories" nil -}}
     {{- else -}}
       {{- $title = i18n (printf "cat_%s" $tag) | default $tag -}}
-      {{- $catPosts = where $allPosts.ByDate.Reverse ".Params.categories" "intersect" (slice $tag) -}}
+      {{- $catPosts = where $allPosts ".Params.categories" "intersect" (slice $tag) -}}
     {{- end -}}
 
     {{- $pinned := where $catPosts ".Params.pinned" true -}}

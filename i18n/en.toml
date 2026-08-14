@@ -112,3 +112,6 @@ other = "Website"
 
 [telegram_channel]
 other = "Telegram channel"
+
+[copy]
+other = "Copy"

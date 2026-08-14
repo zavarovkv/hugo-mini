@@ -6,6 +6,44 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.0.0] — 2026-08-14
+
+A code review pass: five bugs that could lose or corrupt data, plus the removal
+of the last places where the theme assumed a specific site layout.
+
+### Upgrading from 2.x
+
+1. **Extra favicon sizes are now opt-in.** The 192×192 and apple-touch icons were emitted with hardcoded filenames; if you relied on that, add `favicon192` and `appleTouchIcon` to `[params]`. Sites that never had those files were serving two 404s per page and need nothing.
+2. **`og:locale` needs a territory.** Set `languageCode = "en-US"` (not `"en"`) per language, or `params.ogLocale = "en_US"`. Without a territory the tag is omitted rather than guessed — previously every non-English language was labelled `ru_RU`.
+3. **Check `mainSections` if you have several large sections.** Post lists now follow Hugo's `site.Params.mainSections` instead of a hardcoded `blog`. Hugo defaults it to the top-level section with the most pages, which is what you want on a single-section blog; set it explicitly (`mainSections = ["blog"]`) if another section is larger.
+
+Nothing else changes: front matter, shortcodes, hooks, blocks and i18n keys are untouched.
+
+### Fixed
+- `fetch-telegram-reactions.mjs` no longer drops reaction counts on a partial failure. Results were rebuilt from scratch, so if some posts hit 429 and others succeeded, the file was rewritten with only the successful ones and the rest silently lost their counters. Values from the previous run are now carried over for posts that fail — scoped to posts that still exist, so deleted ones do not accumulate forever.
+- Same script: a channel that does not exist (or was renamed) made Telegram answer `200` with a widget-less page, which parsed to `{views: null, reactions: []}` and counted as **success** — quietly overwriting every post with empty values. An empty parse is now a failure, so previous values survive and a wholesale outage still leaves the file untouched.
+- `og-image.html` used `params.author` as a display-name fallback, but that key is a table (it holds `jobTitle`), so a site without `authorName` rendered `map[jobtitle:…]` into its OG images. This is the same defect fixed for `meta author` in 1.0.2, in the one place it was missed.
+- `og:description` and `twitter:description` fell back to nothing while `meta description` fell back to `.Summary`, so any page without an explicit `description` published an empty OG description. All three now resolve from one value.
+- `translate.mjs` validates that the model preserved `slug`, `date`, `categories` and the other pass-through front-matter keys. A translated `slug` would silently change the English page's URL; the prompt asked for it, but nothing verified it. The script also has a top-level `.catch` now, so a failure prints a message instead of an unhandled rejection.
+- Heading anchors on mobile: `isMobile` was evaluated once at load, so rotating a tablet left the tap-to-reveal behaviour stuck in the previous orientation. It now reads the media query per interaction.
+- The recent-posts sidebar is re-measured after web fonts load. Its position derives from `h1`'s offset, which shifts when Inter replaces the fallback font, leaving the sidebar slightly misaligned.
+- Removed Hugo's `_internal/schema.html`: it emits `itemprop` attributes that need an enclosing `itemscope`/`itemtype`, which this theme's markup never provided — inert microdata duplicating what JSON-LD already states.
+
+### Changed — BREAKING
+- Post lists (listing page, JSON Feed, `llms.txt`, recent-posts sidebar, JSON-LD, and the post-only parts of `single.html`) resolve the content section via `site.Params.mainSections` instead of a hardcoded `"blog"`. A site whose posts lived in `/posts` or `/writing` previously got an empty listing with no error. The new `main-pages.html` partial is the single source of truth for "what counts as a post", so those five consumers cannot disagree.
+- `list.html` lists `.RegularPages` — the pages of the section being rendered — instead of always reaching for one specific section, so `/blog`, `/notes` and `/archive` each list their own content.
+- Favicon sizes beyond 32×32 are opt-in params (`favicon192`, `appleTouchIcon`); unset params emit nothing.
+- `og:locale` is derived from each language's `languageCode`/`params.ogLocale` and omitted when no territory is available, replacing a hardcoded en/ru pair.
+
+### Changed
+- `assets/js/main.js` is plain JavaScript again: localized strings arrive through `body[data-i18n]` instead of `{{ i18n }}` calls inside the file. The bundle is no longer run through `ExecuteAsTemplate`, which means it can be linted and formatted, no `{{` in JS syntax can break the build, and **one** bundle serves every language instead of one per language.
+- Menu icons resolve as `assets/icons/<name>.svg` resources, so a site can add its own icon without editing the theme; previously the SVG paths were a dict inside `nav.html`. The markup also carries one icon element positioned with CSS `order`, rather than two copies of the same SVG with one hidden.
+- `structured_data.html` builds JSON-LD with `dict` + `jsonify` instead of hand-written JSON with conditional commas — one missing comma away from invalid output that no build step would have caught. Breadcrumbs derive from `.CurrentSection` rather than a section-name comparison.
+- `recent-posts.html` filters with `where`/`first` instead of walking every regular page on every post.
+- Removed dead CSS (`.post-tags`, `.popular-posts*` — the partial went away in 1.0.0) and 10 redundant dark-theme rules that restated their light-theme values verbatim (7 social hover colours, 3 language-toggle colours). Inline `code` background is a token now. 244 → 222 rules; dark-mode overrides 57 → 46.
+- `list.html` lost a loop that copied a slice element-by-element into an identical slice, and a second pass over all posts that `where` answers directly.
+- `CONTRIBUTING.md` and README document the new params, the icon mechanism and the full token list.
+
 ## [2.0.0] — 2026-08-14
 
 ### Upgrading from 1.x
@@ -162,7 +200,8 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.0...v1.0.1

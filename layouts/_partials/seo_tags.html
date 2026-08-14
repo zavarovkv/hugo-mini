@@ -1,28 +1,61 @@
+{{- /*
+  Meta tags: primary, Open Graph, Twitter Card.
+
+  Title and description are resolved once at the top and reused, so the plain
+  meta, og: and twitter: variants can never drift apart — they previously
+  repeated the expression, and only the plain one fell back to .Summary, which
+  left og:description empty on any page without an explicit description.
+
+  Schema.org lives in structured_data.html (JSON-LD). Hugo's internal
+  _internal/schema.html is deliberately not used: it emits itemprop attributes
+  that require an enclosing itemscope/itemtype, which this theme's markup does
+  not provide, so the microdata was inert while still duplicating everything
+  JSON-LD already states.
+*/ -}}
+{{- $title := .Title | default site.Title -}}
+{{- $description := "" -}}
+{{- if .Description -}}
+  {{- $description = .Description -}}
+{{- else if .IsPage -}}
+  {{- $description = .Summary -}}
+{{- else -}}
+  {{- $description = site.Params.description -}}
+{{- end -}}
+{{- $description = $description | plainify | truncate 300 -}}
+
+{{- /* OG locale comes from each language's own configuration (see
+       og-locale.html) instead of a hardcoded en/ru pair, so a third language is
+       not mislabelled as Russian. */ -}}
+{{- $ogLocale := partial "og-locale.html" site.Language -}}
+
 <!-- Primary Meta Tags -->
-<meta name="title" content="{{ with .Title }}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}" />
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
-{{ if .IsPage }}
-<meta name="author" content="{{ with .Params.author }}{{ . }}{{ else }}{{ .Site.Params.authorName | default .Site.Title }}{{ end }}" />
+<meta name="description" content="{{ $description }}" />
+{{- if .IsPage }}
+<meta name="author" content="{{ .Params.author | default (site.Params.authorName | default site.Title) }}" />
 <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}" />
 <meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}" />
-{{ if .Params.categories }}
-<meta property="article:tag" content="{{ delimit .Params.categories ", " }}" />
-<meta property="article:section" content="{{ index .Params.categories 0 }}" />
-{{ end }}
-{{ end }}
+{{- with .Params.categories }}
+<meta property="article:tag" content="{{ delimit . ", " }}" />
+<meta property="article:section" content="{{ index . 0 }}" />
+{{- end }}
+{{- end }}
 
 <!-- Canonical URL -->
 <link rel="canonical" href="{{ .Permalink }}" />
 
 <!-- Open Graph -->
-<meta property="og:title" content="{{ with .Title }}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}" />
-<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}" />
+<meta property="og:title" content="{{ $title }}" />
+<meta property="og:description" content="{{ $description }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
-<meta property="og:site_name" content="{{ .Site.Title }}" />
+<meta property="og:site_name" content="{{ site.Title }}" />
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
-<meta property="og:locale" content="{{ if eq .Site.Language.Lang "en" }}en_US{{ else }}ru_RU{{ end }}" />
+{{- with $ogLocale }}
+<meta property="og:locale" content="{{ . }}" />
+{{- end }}
 {{- range .Translations }}
-<meta property="og:locale:alternate" content="{{ if eq .Language.Lang "en" }}en_US{{ else }}ru_RU{{ end }}" />
+{{- with partial "og-locale.html" .Language }}
+<meta property="og:locale:alternate" content="{{ . }}" />
+{{- end }}
 {{- end }}
 
 <!-- OG Image -->
@@ -30,13 +63,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="{{ with .Title }}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}" />
-<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}" />
+<meta name="twitter:title" content="{{ $title }}" />
+<meta name="twitter:description" content="{{ $description }}" />
 
-<!-- Schema.org structured data -->
-{{ template "_internal/schema.html" . }}
-
-<!-- Additional SEO -->
+<!-- Crawling -->
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta name="googlebot" content="index, follow" />
-<meta name="bingbot" content="index, follow" />

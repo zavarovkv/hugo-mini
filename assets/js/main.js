@@ -1,64 +1,94 @@
+/*
+ * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
+ * code-copy buttons, heading anchors, recent-posts sidebar, back-to-top.
+ *
+ * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
+ * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
+ * in JS syntax can break the build. Localized strings arrive via
+ * body[data-i18n] (see layouts/baseof.html).
+ */
+(function () {
+  'use strict';
 
-  // Initialize Likely social sharing buttons
+  // Breakpoint shared with CSS (@media max-width: 768px). Keep in sync.
+  var MOBILE_QUERY = '(max-width: 768px)';
+
+  var i18n = {};
+  try {
+    i18n = JSON.parse(document.body.getAttribute('data-i18n') || '{}');
+  } catch (e) {
+    /* malformed attribute — fall back to the English defaults below */
+  }
+  function t(key, fallback) {
+    return i18n[key] || fallback;
+  }
+
+  /** Debounced window listener; returns the wrapped handler. */
+  function onResize(fn, delay) {
+    var timer = null;
+    function handler() {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(fn, delay || 150);
+    }
+    window.addEventListener('resize', handler);
+    return handler;
+  }
+
+  /** Run now if the DOM is parsed, otherwise on DOMContentLoaded. */
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ── Likely social sharing ──────────────────────────────────────────────
   if (typeof likely !== 'undefined') {
     likely.initiate();
   }
 
-  // Mobile menu toggle
-  (function() {
-    function initMobileMenu() {
-      var toggle = document.querySelector('.mobile-menu-toggle');
-      var nav = document.querySelector('.main-nav');
+  // ── Mobile menu ────────────────────────────────────────────────────────
+  ready(function initMobileMenu() {
+    var toggle = document.querySelector('.mobile-menu-toggle');
+    var nav = document.querySelector('.main-nav');
+    if (!toggle || !nav) return;
 
-      if (!toggle || !nav) {
-        return;
-      }
-
-      function closeMenu() {
-        nav.classList.remove('active');
-        toggle.classList.remove('active');
-        document.body.classList.remove('menu-open');
-        document.documentElement.classList.remove('menu-open');
-      }
-
-      function openMenu() {
-        window.scrollTo(0, 0);
-        nav.classList.add('active');
-        toggle.classList.add('active');
-        document.body.classList.add('menu-open');
-        document.documentElement.classList.add('menu-open');
-      }
-
-      toggle.addEventListener('click', function() {
-        if (nav.classList.contains('active')) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
-
-      // Close menu on link click, but not when opening in a new tab (modifier keys)
-      var navLinks = nav.querySelectorAll('a');
-      navLinks.forEach(function(link) {
-        link.addEventListener('click', function(e) {
-          if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-            closeMenu();
-          }
-        });
-      });
+    function closeMenu() {
+      nav.classList.remove('active');
+      toggle.classList.remove('active');
+      document.body.classList.remove('menu-open');
+      document.documentElement.classList.remove('menu-open');
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMobileMenu);
-    } else {
-      initMobileMenu();
+    function openMenu() {
+      window.scrollTo(0, 0);
+      nav.classList.add('active');
+      toggle.classList.add('active');
+      document.body.classList.add('menu-open');
+      document.documentElement.classList.add('menu-open');
     }
-  })();
 
-  // Theme toggle (bi-state: light ↔ dark; follows system until first explicit click)
-  (function() {
+    toggle.addEventListener('click', function () {
+      if (nav.classList.contains('active')) closeMenu();
+      else openMenu();
+    });
+
+    // Close on link click, but not when opening in a new tab.
+    nav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        if (!e.ctrlKey && !e.metaKey && !e.shiftKey) closeMenu();
+      });
+    });
+  });
+
+  // ── Theme toggle + widgets that follow it ──────────────────────────────
+  (function () {
     var STORAGE_KEY = 'theme';
-    var LABELS = { light: {{ i18n "theme_dark" | default "Switch to dark theme" | jsonify | safeJS }}, dark: {{ i18n "theme_light" | default "Switch to light theme" | jsonify | safeJS }} };
+    var LABELS = {
+      light: t('toDark', 'Switch to dark theme'),
+      dark: t('toLight', 'Switch to light theme'),
+    };
     var root = document.documentElement;
     var mql = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -67,19 +97,22 @@
     }
 
     function storedChoice() {
-      try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
-    }
-
-    // Sync Likely social sharing widget with current theme
-    function syncLikelyTheme() {
-      var dark = currentTheme() === 'dark';
-      var widgets = document.querySelectorAll('.likely');
-      for (var i = 0; i < widgets.length; i++) {
-        widgets[i].classList.toggle('likely-dark-theme', dark);
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        return null;
       }
     }
 
-    // Rebuild Telegram Discussion widget with correct dark/light theme
+    function syncLikelyTheme() {
+      var dark = currentTheme() === 'dark';
+      document.querySelectorAll('.likely').forEach(function (w) {
+        w.classList.toggle('likely-dark-theme', dark);
+      });
+    }
+
+    // Telegram Discussion widget. It bakes the colour scheme in at load time,
+    // so a theme change means rebuilding it.
     var tgWidgetLoaded = false;
     var tgRebuildTimer = null;
     function syncTelegramWidget() {
@@ -88,128 +121,136 @@
       var discussion = container.getAttribute('data-tg-discussion');
       if (!discussion) return;
       if (tgRebuildTimer) clearTimeout(tgRebuildTimer);
-      tgRebuildTimer = setTimeout(function() {
-        container.innerHTML = '';
-        var s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://telegram.org/js/telegram-widget.js?22';
-        s.setAttribute('data-telegram-discussion', discussion);
-        s.setAttribute('data-comments-limit', container.getAttribute('data-tg-limit') || '20');
-        if (currentTheme() === 'dark') s.setAttribute('data-dark', '1');
-        container.appendChild(s);
-        tgWidgetLoaded = true;
-        tgRebuildTimer = null;
-      }, tgWidgetLoaded ? 500 : 0);
+      tgRebuildTimer = setTimeout(
+        function () {
+          container.innerHTML = '';
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://telegram.org/js/telegram-widget.js?22';
+          s.setAttribute('data-telegram-discussion', discussion);
+          s.setAttribute('data-comments-limit', container.getAttribute('data-tg-limit') || '20');
+          if (currentTheme() === 'dark') s.setAttribute('data-dark', '1');
+          container.appendChild(s);
+          tgWidgetLoaded = true;
+          tgRebuildTimer = null;
+        },
+        tgWidgetLoaded ? 500 : 0
+      );
     }
 
-    // Theme-change hook: rebuild the widget only if it is already on the
-    // page. Before that, the IntersectionObserver below will lazy-load it
-    // with whatever theme is current at that moment — calling
-    // syncTelegramWidget() directly here would defeat the lazy-load.
+    // Only rebuild if it is already on the page: before that the observer
+    // below will load it with whatever theme is current at that moment, and
+    // rebuilding here would defeat the lazy-load.
     function refreshTelegramWidget() {
       if (tgWidgetLoaded) syncTelegramWidget();
     }
 
-    // Lazy-load: only load Telegram widget when scrolled into view
     function observeTelegramWidget() {
       var container = document.getElementById('tg-comments');
       if (!container || typeof IntersectionObserver === 'undefined') {
         syncTelegramWidget();
         return;
       }
-      var observer = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !tgWidgetLoaded) {
-          syncTelegramWidget();
-          observer.disconnect();
-        }
-      }, { rootMargin: '200px' });
+      var observer = new IntersectionObserver(
+        function (entries) {
+          if (entries[0].isIntersecting && !tgWidgetLoaded) {
+            syncTelegramWidget();
+            observer.disconnect();
+          }
+        },
+        { rootMargin: '200px' }
+      );
       observer.observe(container);
     }
 
-    // Follow system changes until user has made an explicit choice
+    // Follow the system until the user makes an explicit choice.
     function onSystemChange() {
-      if (storedChoice() === null) {
-        root.setAttribute('data-theme', mql.matches ? 'dark' : 'light');
-        var btn = document.querySelector('.theme-toggle');
-        if (btn) btn.title = LABELS[currentTheme()];
-        syncLikelyTheme();
-        refreshTelegramWidget();
-      }
+      if (storedChoice() !== null) return;
+      root.setAttribute('data-theme', mql.matches ? 'dark' : 'light');
+      var btn = document.querySelector('.theme-toggle');
+      if (btn) btn.title = LABELS[currentTheme()];
+      syncLikelyTheme();
+      refreshTelegramWidget();
     }
-    if (mql.addEventListener) {
-      mql.addEventListener('change', onSystemChange);
-    } else if (mql.addListener) {
-      mql.addListener(onSystemChange); // Safari < 14
-    }
+    if (mql.addEventListener) mql.addEventListener('change', onSystemChange);
+    else if (mql.addListener) mql.addListener(onSystemChange); // Safari < 14
 
-    function initThemeToggle() {
+    ready(function initThemeToggle() {
       syncLikelyTheme();
       observeTelegramWidget();
       var btn = document.querySelector('.theme-toggle');
       if (!btn) return;
       btn.title = LABELS[currentTheme()];
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         var next = currentTheme() === 'dark' ? 'light' : 'dark';
-        try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch (e) {
+          /* private mode — the choice just won't persist */
+        }
         root.setAttribute('data-theme', next);
         btn.title = LABELS[next];
         syncLikelyTheme();
         refreshTelegramWidget();
       });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initThemeToggle);
-    } else {
-      initThemeToggle();
-    }
+    });
   })();
 
-  // Copy button for code blocks
-  (function() {
+  // ── Copy button on code blocks ─────────────────────────────────────────
+  (function () {
     if (!navigator.clipboard) return;
-    var svgCopy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-    var svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    var svgCopy =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    var svgCheck =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
     var FEEDBACK_MS = 1500;
 
-    document.querySelectorAll('.highlight').forEach(function(block) {
+    document.querySelectorAll('.highlight').forEach(function (block) {
       var code = block.querySelector('code');
       if (!code) return;
       var btn = document.createElement('button');
       btn.className = 'copy-btn';
+      btn.type = 'button';
       btn.innerHTML = svgCopy;
-      btn.title = 'Copy';
+      btn.title = t('copy', 'Copy');
       var timer = null;
-      btn.addEventListener('click', function() {
-        navigator.clipboard.writeText(code.textContent).then(function() {
-          btn.innerHTML = svgCheck;
-          btn.classList.add('copied');
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(function() {
-            btn.innerHTML = svgCopy;
-            btn.classList.remove('copied');
-            timer = null;
-          }, FEEDBACK_MS);
-        }).catch(function() { /* permission denied or insecure context */ });
+      btn.addEventListener('click', function () {
+        navigator.clipboard
+          .writeText(code.textContent)
+          .then(function () {
+            btn.innerHTML = svgCheck;
+            btn.classList.add('copied');
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(function () {
+              btn.innerHTML = svgCopy;
+              btn.classList.remove('copied');
+              timer = null;
+            }, FEEDBACK_MS);
+          })
+          .catch(function () {
+            /* permission denied or insecure context */
+          });
       });
       block.appendChild(btn);
     });
   })();
 
-  // Heading anchor links: copy section URL to clipboard on click.
-  // Mobile: tap heading to reveal icon, tap icon to copy + scroll.
-  (function() {
+  // ── Heading anchors: click copies the section URL ───────────────────────
+  (function () {
     if (!navigator.clipboard) return;
     var FEEDBACK_MS = 1200;
-    var isMobile = window.matchMedia('(max-width: 768px)').matches;
+    // Live query: re-evaluated on each interaction so rotating a tablet
+    // switches behaviour instead of keeping whatever was true at load.
+    var mobileMql = window.matchMedia(MOBILE_QUERY);
 
-    document.querySelectorAll('.heading-anchor').forEach(function(anchor) {
+    document.querySelectorAll('.heading-anchor').forEach(function (anchor) {
       var heading = anchor.parentElement;
       var timer = null;
 
-      // Mobile: tap heading to toggle anchor visibility
-      if (isMobile && heading) {
-        heading.addEventListener('click', function(e) {
+      // Mobile: tap the heading to reveal the icon, tap the icon to copy.
+      if (heading) {
+        heading.addEventListener('click', function (e) {
+          if (!mobileMql.matches) return;
           if (e.target === anchor || anchor.contains(e.target)) {
             e.stopPropagation();
             return;
@@ -218,28 +259,30 @@
         });
       }
 
-      anchor.addEventListener('click', function() {
-        var url = window.location.origin + window.location.pathname + anchor.getAttribute('href');
-        navigator.clipboard.writeText(url).then(function() {
-          anchor.classList.add('copied');
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(function() {
-            anchor.classList.remove('copied');
-            timer = null;
-          }, FEEDBACK_MS);
-        }).catch(function() { /* permission denied or insecure context */ });
+      anchor.addEventListener('click', function () {
+        navigator.clipboard
+          .writeText(anchor.href)
+          .then(function () {
+            anchor.classList.add('copied');
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(function () {
+              anchor.classList.remove('copied');
+              timer = null;
+            }, FEEDBACK_MS);
+          })
+          .catch(function () {
+            /* permission denied or insecure context */
+          });
       });
     });
   })();
 
-  // Recent posts sidebar — absolute in right gutter on desktop; static block on mobile (CSS).
-  (function() {
+  // ── Recent-posts sidebar: absolute in the right gutter on desktop ───────
+  (function () {
     var MIN_GUTTER = 180;
     var GAP = 24;
     var sidebar = document.getElementById('recent-sidebar');
     if (!sidebar) return;
-
-    var resizeTimer = null;
 
     function measure() {
       var rect = document.body.getBoundingClientRect();
@@ -260,49 +303,38 @@
       sidebar.style.width = Math.round(gutter - GAP - 16) + 'px';
     }
 
-    function onResize() {
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(measure, 150);
-    }
-
-    window.addEventListener('resize', onResize);
+    onResize(measure);
     measure();
+    // The first measure runs against fallback-font metrics; once the web font
+    // swaps in, h1 moves and the sidebar would sit at a stale offset.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measure);
+    }
   })();
 
-  // Back to top — left gutter click area (Telegram blog style).
-  // Creates a fixed overlay covering the left margin; visible only when
-  // scrolled > 400px and the gutter is wide enough (> 130px).
-  (function() {
+  // ── Back to top: click area in the left gutter ──────────────────────────
+  (function () {
     var SCROLL_THRESHOLD = 400;
     var MIN_GUTTER = 130;
-    var label = {{ i18n "go_up" | default "Go up" | jsonify | safeJS }};
+    var label = t('goUp', 'Go up');
 
     var wrap = document.createElement('a');
     wrap.className = 'back-to-top-wrap';
-    // href makes the link keyboard-focusable (Enter triggers the click
-    // handler, which preventDefaults the hash navigation).
+    // href keeps it keyboard-focusable; the handler preventDefaults the jump.
     wrap.setAttribute('href', '#');
     wrap.setAttribute('role', 'button');
     wrap.setAttribute('aria-label', label);
 
     var inner = document.createElement('div');
     inner.className = 'back-to-top';
-    inner.innerHTML = '<svg class="back-to-top-icon" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5l4-4 4 4"/></svg>' + label;
+    inner.innerHTML =
+      '<svg class="back-to-top-icon" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5l4-4 4 4"/></svg>';
+    inner.appendChild(document.createTextNode(label));
 
     wrap.appendChild(inner);
     document.body.appendChild(wrap);
 
     var gutterOk = false;
-    var resizeTimer = null;
-
-    function measure() {
-      var rect = document.body.getBoundingClientRect();
-      var gutter = rect.left;
-      gutterOk = gutter > MIN_GUTTER;
-      wrap.style.width = gutter + 'px';
-      wrap.style.display = gutterOk ? 'block' : 'none';
-      onScroll();
-    }
 
     function onScroll() {
       if (gutterOk && window.pageYOffset > SCROLL_THRESHOLD) {
@@ -312,18 +344,22 @@
       }
     }
 
-    function onResize() {
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(measure, 150);
+    function measure() {
+      var gutter = document.body.getBoundingClientRect().left;
+      gutterOk = gutter > MIN_GUTTER;
+      wrap.style.width = gutter + 'px';
+      wrap.style.display = gutterOk ? 'block' : 'none';
+      onScroll();
     }
 
-    wrap.addEventListener('click', function(e) {
+    wrap.addEventListener('click', function (e) {
       e.preventDefault();
       window.scroll(0, 0);
       onScroll();
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
+    onResize(measure);
     measure();
   })();
+})();
