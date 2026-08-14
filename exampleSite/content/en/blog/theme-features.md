@@ -51,7 +51,7 @@ Mini includes the [Likely](https://github.com/nicothin/likely) social sharing li
 
 ## External Link Behavior
 
-All external links in post content automatically open in a new tab with `rel="noopener noreferrer"`. This is handled by the render hook in `layouts/_default/_markup/render-link.html` — no JavaScript needed.
+All external links in post content automatically open in a new tab with `rel="noopener noreferrer"`. This is handled by the render hook in `layouts/_markup/render-link.html` — no JavaScript needed.
 
 ## Telegram Integration
 

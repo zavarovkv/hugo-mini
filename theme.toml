@@ -4,45 +4,29 @@ licenselink = "https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE"
 description = "Fast, writer-first Hugo blog theme. Lighthouse 100, zero runtime deps, dark mode, Telegram comments + reactions, KaTeX + Mermaid, dynamic OG images, i18n, JSON Feed + llms.txt."
 homepage = "https://github.com/zavarovkv/hugo-mini"
 demosite = "https://zavarov.com/"
+# tags describe style and design direction; features list concrete capabilities.
+# Kept deliberately short and reusing vocabulary already common in the gallery —
+# see gohugoio/hugoThemesSiteBuilder#699 on tag/feature normalisation.
 tags = [
     "blog",
     "minimal",
     "clean",
     "personal",
-    "writer",
-    "typography",
     "dark",
-    "light",
-    "responsive",
-    "multilingual",
-    "markdown",
-    "seo",
-    "accessible",
-    "telegram",
-    "math",
-    "katex",
-    "mermaid",
 ]
 features = [
-    "dark-light-mode",
-    "i18n",
-    "telegram-comments",
-    "telegram-reactions",
-    "katex-math",
-    "mermaid-diagrams",
+    "responsive",
+    "multilingual",
+    "seo",
+    "dark-mode",
+    "comments",
+    "math",
+    "diagrams",
     "og-images",
-    "social-sharing",
-    "json-feed",
-    "llms-txt",
     "rss",
-    "code-copy-button",
-    "heading-anchors",
-    "recent-posts-sidebar",
-    "pinned-posts",
-    "analytics",
-    "seo-jsonld",
+    "json-feed",
+    "social-sharing",
 ]
-min_version = "0.145.0"
 
 [author]
 name = "Konstantin Zavarov"

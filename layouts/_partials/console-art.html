@@ -1,0 +1,27 @@
+{{- /*
+  Theme-owned partial (not an extension hook): prints ASCII art to the
+  browser console on the home page.
+
+  This lives outside custom_body.html on purpose — custom_body.html is an
+  extension hook meant to be replaced by the site, and a site that replaced
+  it used to silently lose this feature.
+
+  Custom art via `params.consoleArt` takes priority; otherwise
+  `params.consoleYoda = true` enables the built-in Yoda shipped with the
+  theme (assets/console-yoda.txt).
+*/ -}}
+{{- if .IsHome }}
+  {{- $art := .Site.Params.consoleArt -}}
+  {{- if and (not $art) .Site.Params.consoleYoda -}}
+    {{- with resources.Get "console-yoda.txt" -}}
+      {{- $art = .Content -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $art }}
+<script>
+  (function() {
+    console.log('%c' + {{ . | jsonify | safeJS }}, 'color: #0060a0; font-family: monospace; font-size: 13px;');
+  })();
+</script>
+  {{- end }}
+{{- end }}

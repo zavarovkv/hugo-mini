@@ -9,6 +9,21 @@ enableRobotsTXT = true
 disableKinds    = ["taxonomy", "term"]
 ignoreErrors    = ["error-disable-taxonomy"]
 
+# JSON Feed (/index.json) and llms.txt for AI crawlers. Both are rendered by
+# the theme (layouts/home.json, layouts/home.llms.txt) but only emitted if the
+# home page declares the output formats, so they are opted into here.
+[mediaTypes."text/plain"]
+  suffixes = ["txt"]
+
+[outputFormats.LLMS]
+  mediaType      = "text/plain"
+  baseName       = "llms"
+  isPlainText    = true
+  notAlternative = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON", "LLMS"]
+
 [params]
   favicon    = "images/favicon.png"
   authorName = "Jane Doe"

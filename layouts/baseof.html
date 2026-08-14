@@ -118,11 +118,15 @@
   <script defer src="{{ "likely/likely.js" | relURL }}"></script>
   {{- end }}
 
-  <!-- Override hooks: place a custom_head.html / extra_head.html in your
-       site's layouts/partials/ to inject extra <head> content (meta tags,
+  {{- /* Per-template extension point: any template extending this baseof
+         (home.html, list.html, single.html, or one of your own) can define a
+         "head" block to add <head> content for that template only. */ -}}
+  {{- block "head" . }}{{ end }}
+
+  <!-- Site-wide extension hook: place a custom_head.html in your site's
+       layouts/_partials/ to inject extra <head> content (meta tags,
        additional CSS that should override the theme, etc.). -->
   {{- partial "custom_head.html" . -}}
-  {{- partial "extra_head.html" . -}}
 </head>
 
 <body>
@@ -130,14 +134,17 @@
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   {{- end }}
   
+  {{- /* header / main / footer are blocks so a template can replace just one
+         region without copying this whole file. Defaults keep the theme's
+         own partials, so templates that define nothing behave as before. */ -}}
   <header>
-    {{- partial "header.html" . -}}
+    {{- block "header" . }}{{ partial "header.html" . }}{{ end -}}
   </header>
   <main>
     {{- block "main" . }}{{- end }}
   </main>
   <footer>
-    {{- partial "footer.html" . -}}
+    {{- block "footer" . }}{{ partial "footer.html" . }}{{ end -}}
   </footer>
 
   {{- /* Bundled theme JS. ExecuteAsTemplate so i18n strings (theme-toggle
@@ -149,27 +156,41 @@
   {{- $js := resources.Get "js/main.js" | resources.ExecuteAsTemplate $jsName . | resources.Minify | resources.Fingerprint "sha256" -}}
   <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
 
-  <!-- Override hook: place a custom_body.html in your site's layouts/partials/
-       to inject extra scripts (e.g., the conditional console-art). -->
+  {{- /* Theme-owned: console ASCII art on the home page. */ -}}
+  {{- partial "console-art.html" . -}}
+
+  <!-- Site-wide extension hook: place a custom_body.html in your site's
+       layouts/_partials/ to inject extra scripts. -->
   {{- partial "custom_body.html" . -}}
 
+  {{- /* Per-template extension point, same idea as the "head" block above. */ -}}
+  {{- block "scripts" . }}{{ end }}
+
   {{ if .Params.mermaid }}
-  {{- /* Mermaid is pinned to a known-good version for reproducibility.
-         When bumping, test any page with mermaid = true in front matter —
-         newer syntax features (animated edges, @{ shape: ... }, etc.)
-         may silently fail to render on older versions. For full
-         supply-chain safety, self-host mermaid under static/ (see
-         static/katex/ for a local-asset precedent). */ -}}
+  {{- /* Mermaid is the theme's only third-party runtime dependency, and it is
+         loaded only on pages with `mermaid = true` in front matter.
+
+         By default it comes from jsDelivr, pinned to a known-good version and
+         guarded with an SRI hash. Set `params.mermaidSrc` to serve it from
+         somewhere else — e.g. drop mermaid.min.js into your site's static/js/
+         and point the param at "js/mermaid.min.js" for a CDN-free build.
+         A custom src is emitted without integrity/crossorigin, since the
+         pinned hash only matches the pinned file.
+
+         When bumping the pinned version, test a page that uses modern syntax
+         (animated edges, @{ shape: ... }) — older 11.x releases fail silently.
+         Recompute the hash with:
+         curl -s https://registry.npmjs.org/mermaid/-/mermaid-<ver>.tgz | tar -xzO package/dist/mermaid.min.js | openssl dgst -sha384 -binary | openssl base64 -A */ -}}
   <style>.mermaid { visibility: hidden; }</style>
-  {{- /* SRI hash computed from the mermaid@11.14.0 npm tarball
-         (dist/mermaid.min.js) — jsDelivr serves npm package files verbatim.
-         Recompute when bumping the version:
-         curl -s https://registry.npmjs.org/mermaid/-/mermaid-<ver>.tgz | tar -xzO package/dist/mermaid.min.js | openssl dgst -sha384 -binary | openssl base64 -A */}}
+  {{- with .Site.Params.mermaidSrc }}
+  <script defer src="{{ . | relURL }}"></script>
+  {{- else }}
   <script defer
           src="https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js"
           integrity="sha384-1CMXl090wj8Dd6YfnzSQUOgWbE6suWCaenYG7pox5AX7apTpY3PmJMeS2oPql4Gk"
           crossorigin="anonymous"
           referrerpolicy="no-referrer"></script>
+  {{- end }}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var diagrams = document.querySelectorAll('.mermaid');

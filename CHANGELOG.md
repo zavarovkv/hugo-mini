@@ -6,6 +6,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Changed — BREAKING
+- **Minimum Hugo is now 0.146.0** (was 0.145.0). The layout was migrated to Hugo's current template system, introduced in 0.146.0: templates moved out of `layouts/_default/` to the root of `layouts/` (`baseof.html`, `home.html`, `list.html`, `single.html`, `sitemap.xml`), `layouts/index.html` → `layouts/home.html`, `layouts/_default/index.json` → `layouts/home.json`, and `partials/` / `shortcodes/` / `_default/_markup/` gained the underscore prefix (`_partials/`, `_shortcodes/`, `_markup/`). **Sites that override theme partials must move their overrides from `layouts/partials/` to `layouts/_partials/`.**
+- **`extra_head.html` hook removed.** It duplicated `custom_head.html` with no distinct purpose. Sites using it should rename their override to `custom_head.html` — same insertion point, same behaviour.
+- `theme.toml`: legacy `min_version` key dropped; `[module.hugoVersion]` in `hugo.toml` is the single source of truth, as the themes gallery documents.
+
+### Added
+- `baseof.html` now exposes named blocks for every region — `head`, `header`, `footer`, `scripts` alongside the existing `title` and `main` — so a template can replace one region without copying the whole file. Defaults render the theme's own partials, so existing templates are unaffected.
+- `params.mermaidSrc` overrides where Mermaid is loaded from. Default remains the pinned, SRI-guarded jsDelivr URL; pointing it at a local copy gives a build with no third-party requests at all. A custom src is emitted without `integrity`/`crossorigin`, since the pinned hash only matches the pinned file.
+- Design tokens for lines and borders — `--color-divider`, `--color-blockquote-border`, `--color-control-border`, `--color-control-border-hover` — with dark-mode counterparts. All colour tokens are now declared in one documented block at the top of `assets/css/main.css` and listed in the README.
+- `exampleSite` declares the `JSON` and `LLMS` output formats, so the JSON Feed and `llms.txt` the theme ships templates for are actually exercised by the demo build (and by CI).
+
+### Changed
+- `console-art.html` split out of `custom_body.html`. The home-page console art was living inside an extension hook, so any site that replaced `custom_body.html` silently lost it; the hook is now genuinely empty and the art is a theme-owned partial.
+- Seven redundant `[data-theme="dark"]` rules removed — they only restated a border colour that is now a token, so the dark palette resolves it directly. Computed styles are unchanged; the minified stylesheet is 261 bytes smaller.
+- `theme.toml` metadata trimmed and split along the lines the gallery asks for (`tags` = style, `features` = capabilities), reusing existing vocabulary instead of inventing near-duplicates — see gohugoio/hugoThemesSiteBuilder#699.
+- `exampleSite/config.toml` renamed to `exampleSite/hugo.toml`.
+- `CONTRIBUTING.md` project-structure section rewritten; it still described `layouts/_partials/style.html` and CSS living inside `custom_head.html`, neither of which has existed since CSS moved to `assets/`.
+- README documents the three extension levels (site-wide hooks, template blocks, full partial override), the full design-token table, and states explicitly that the Telegram counter script is the only part of the theme requiring Node.
+
 ## [1.0.2] — 2026-07-04
 
 ### Fixed

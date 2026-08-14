@@ -19,15 +19,34 @@ hugo server --themesDir ../..
 
 ## Project Structure
 
+Layouts follow Hugo's current template system (0.146+): templates live at the
+root of `layouts/`, and `_partials` / `_shortcodes` / `_markup` carry the
+underscore prefix.
+
 ```
-layouts/partials/style.html       base CSS variables (light theme)
-layouts/partials/custom_head.html main CSS (dark mode, components, responsive)
-layouts/partials/custom_body.html JavaScript (theme toggle, mobile menu)
-layouts/partials/footer.html      footer with social icons and controls
-i18n/                             translations (ru, en)
-exampleSite/                      demonstration site
-archetypes/                       content scaffolding templates
+layouts/baseof.html            shell; defines the title/head/header/main/footer/scripts blocks
+layouts/home.html              home page
+layouts/list.html              section listings (blog index, grouped by category)
+layouts/single.html            single post
+layouts/home.json              JSON Feed output
+layouts/home.llms.txt          llms.txt output for AI crawlers
+layouts/_partials/             header, footer, nav, SEO tags, OG image, Telegram bits
+layouts/_partials/custom_head.html  empty site-wide <head> hook
+layouts/_partials/custom_body.html  empty site-wide <body>-end hook
+layouts/_markup/               render hooks (headings, images, links)
+layouts/_shortcodes/           caption, mermaid, plug
+assets/css/main.css            all styles; design tokens declared at the top
+assets/js/main.js              theme toggle, mobile menu, code-copy, sidebar
+i18n/                          UI strings (en, ru)
+exampleSite/                   demonstration site (bilingual)
+archetypes/                    content scaffolding templates
+scripts/                       optional Node helper for Telegram counters
 ```
+
+CSS and JS are bundled through Hugo Pipes from `assets/` — minified and
+fingerprinted. Do not add a second stylesheet or inline `<style>` blocks to
+templates; put styles in `assets/css/main.css`, and colours in the token block
+at the top of that file so they stay overridable.
 
 ## Submitting Changes
 

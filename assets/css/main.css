@@ -34,12 +34,22 @@
   src: url('{{ "fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-600.woff2" | relURL }}') format('woff2');
 }
 
-/* === Base typography & body (was style.html) === */
+/* === Design tokens ===
+   Every colour, the content width and the type stack are declared here as
+   custom properties. This block is the light palette; the dark palette
+   overrides the same names under [data-theme="dark"] further down.
+
+   To restyle the theme, redeclare any of these in your site's
+   layouts/_partials/custom_head.html — no need to fork this file.
+   The full list is documented under "Customization" in the README. */
 :root {
+    /* Layout & type */
     --width: 720px;
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-scale: 1em;
+
+    /* Surfaces & text */
     --background-color: #fff;
     --heading-color: #222;
     --text-color: #444;
@@ -47,9 +57,13 @@
     --blockquote-color: #222;
     --color-muted: #9da2a6;
     --color-secondary: #556677;
-  }
 
-  /* Light theme defaults — dark overrides are in custom_head.html */
+    /* Lines & borders */
+    --color-divider: #e5e5e5;
+    --color-blockquote-border: #999;
+    --color-control-border: #ccc;
+    --color-control-border-hover: #999;
+  }
 
   body {
     font-family: var(--font-secondary);
@@ -301,7 +315,7 @@
   }
 
   blockquote {
-    border-left: 1px solid #999;
+    border-left: 1px solid var(--color-blockquote-border);
     color: var(--blockquote-color);
     padding-left: 20px;
     font-style: italic;
@@ -362,18 +376,19 @@
     }
   }
 
-/* === Theme palette, components, dark mode (was custom_head.html) === */
-/* Color scheme — driven by [data-theme] on <html>, set by inline script in <head> */
+/* === Components & dark mode ===
+   Colour scheme is driven by [data-theme] on <html>, set by the inline
+   script in <head> before first paint. */
   :root {
     color-scheme: light;
-    /* Brand colors — override in your site's extra_head.html to customize */
+    /* Brand colours — see the token block at the top of this file */
     --color-primary: #0060a0;
     --color-accent: #d04000;
     --color-primary-border: rgba(0, 96, 160, 0.35);
     --color-accent-border: rgba(208, 64, 0, 0.35);
   }
 
-  /* Dark theme palette (light palette lives in style.html :root) */
+  /* Dark palette — overrides the same token names declared at the top. */
   [data-theme="dark"] {
     color-scheme: dark;
     --color-primary: #6ab0e6;
@@ -385,6 +400,10 @@
     --text-color: #c7ccd1;
     --link-color: var(--color-primary);
     --blockquote-color: #e8e8e8;
+    --color-divider: #2a2a2a;
+    --color-blockquote-border: #555;
+    --color-control-border: #333;
+    --color-control-border-hover: #666;
   }
 
   [data-theme="dark"] body {
@@ -417,10 +436,6 @@
   [data-theme="dark"] q {
     background-color: #252018;
     border-left-color: #e8e8e8;
-  }
-
-  [data-theme="dark"] blockquote {
-    border-left-color: #555;
   }
 
   [data-theme="dark"] hr {
@@ -921,7 +936,7 @@
       padding: 18px 20px;
       display: block;
       font-size: 1.1rem;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid var(--color-divider);
     }
 
     /* Override the desktop text-decoration underline for icon links —
@@ -930,20 +945,11 @@
     .main-nav a:has(.nav-icon):link,
     .main-nav a:has(.nav-icon):visited {
       text-decoration: none;
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    [data-theme="dark"] .main-nav a,
-    [data-theme="dark"] .main-nav a:has(.nav-icon) {
-      border-bottom-color: #2a2a2a;
+      border-bottom: 1px solid var(--color-divider);
     }
 
     .main-nav a:first-child {
-      border-top: 1px solid #e5e5e5;
-    }
-
-    [data-theme="dark"] .main-nav a:first-child {
-      border-top-color: #2a2a2a;
+      border-top: 1px solid var(--color-divider);
     }
 
     /* Current-page link has `border-bottom: none` globally — put the
@@ -951,13 +957,7 @@
     .main-nav .link-selected,
     .main-nav .link-selected:link,
     .main-nav .link-selected:visited {
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    [data-theme="dark"] .main-nav .link-selected,
-    [data-theme="dark"] .main-nav .link-selected:link,
-    [data-theme="dark"] .main-nav .link-selected:visited {
-      border-bottom-color: #2a2a2a;
+      border-bottom: 1px solid var(--color-divider);
     }
 
     /* Lock scroll when menu is open */
@@ -1149,26 +1149,15 @@
     height: 28px;
     padding: 0;
     background: transparent;
-    border: 0.5px solid #ccc;
+    border: 0.5px solid var(--color-control-border);
     border-radius: 9999px;
     cursor: pointer;
     overflow: hidden;
     transition: border-color 0.2s ease, transform 0.15s ease;
   }
 
-  [data-theme="dark"] .lang-toggle,
-  [data-theme="dark"] .lang-toggle:link,
-  [data-theme="dark"] .lang-toggle:visited,
-  [data-theme="dark"] .lang-toggle:active {
-    border-color: #333;
-  }
-
   .lang-toggle:hover {
-    border-color: #999;
-  }
-
-  [data-theme="dark"] .lang-toggle:hover {
-    border-color: #666;
+    border-color: var(--color-control-border-hover);
   }
 
   .lang-toggle:active {
@@ -1242,7 +1231,7 @@
     height: 28px;
     padding: 0;
     background: transparent;
-    border: 0.5px solid #ccc;
+    border: 0.5px solid var(--color-control-border);
     border-radius: 50%;
     color: var(--color-muted);
     cursor: pointer;
@@ -1250,18 +1239,13 @@
     transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   }
 
-  [data-theme="dark"] .theme-toggle {
-    border-color: #333;
-  }
-
   .theme-toggle:hover {
     color: #F5B700;
-    border-color: #999;
+    border-color: var(--color-control-border-hover);
   }
 
   [data-theme="dark"] .theme-toggle:hover {
     color: #7EB6FF;
-    border-color: #666;
   }
 
   .theme-toggle:active {

@@ -8,6 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 0.146.0 is the minimum declared in hugo.toml ([module.hugoVersion]);
+        # building against it keeps that claim honest. `latest` catches
+        # deprecations early.
+        hugo-version: ['0.146.0', 'latest']
+    name: hugo ${{ matrix.hugo-version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,11 +24,25 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.145.0'
+          hugo-version: ${{ matrix.hugo-version }}
           extended: true
 
       - name: Build exampleSite
         # --themesDir ../.. tells Hugo to look for the theme one level above
-        # the theme repo itself, so `theme = "hugo-mini"` in exampleSite/config.toml
+        # the theme repo itself, so `theme = "hugo-mini"` in exampleSite/hugo.toml
         # resolves to the checked-out repo root.
         run: hugo -s exampleSite --themesDir ../.. --minify
+
+      - name: Check the advertised outputs were produced
+        # The theme ships templates for a JSON Feed and llms.txt; exampleSite
+        # declares both output formats, so a missing file here means a broken
+        # template rather than a missing config.
+        run: |
+          set -e
+          for f in index.html index.json llms.txt sitemap.xml ru/index.json ru/llms.txt; do
+            if [ ! -s "exampleSite/public/$f" ]; then
+              echo "missing or empty: exampleSite/public/$f"
+              exit 1
+            fi
+            echo "ok: $f"
+          done

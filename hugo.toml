@@ -1,6 +1,9 @@
 [module.hugoVersion]
 extended = true
-min = "0.145.0"
+# 0.146.0 is the first release with the current template system, which this
+# theme's layout relies on (layouts/_partials, _shortcodes, _markup, and
+# baseof/home/list/single at the layouts root).
+min = "0.146.0"
 
 [params]
   recentSidebarCount = 8

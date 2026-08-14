@@ -51,7 +51,7 @@ Mini включает библиотеку [Likely](https://github.com/nicothin/
 
 ## Поведение внешних ссылок
 
-Все внешние ссылки в контенте постов автоматически открываются в новой вкладке с `rel="noopener noreferrer"`. Это обрабатывается render hook в `layouts/_default/_markup/render-link.html` — без JavaScript.
+Все внешние ссылки в контенте постов автоматически открываются в новой вкладке с `rel="noopener noreferrer"`. Это обрабатывается render hook в `layouts/_markup/render-link.html` — без JavaScript.
 
 ## Интеграция с Telegram
 

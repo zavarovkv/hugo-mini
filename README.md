@@ -1,6 +1,6 @@
 # Hugo Mini
 
-[![Hugo](https://img.shields.io/badge/Hugo-%E2%89%A50.145-ff4088?logo=hugo&logoColor=white)](https://gohugo.io/)
+[![Hugo](https://img.shields.io/badge/Hugo-%E2%89%A50.146-ff4088?logo=hugo&logoColor=white)](https://gohugo.io/)
 [![GitHub Release](https://img.shields.io/github/v/release/zavarovkv/hugo-mini)](https://github.com/zavarovkv/hugo-mini/releases)
 [![GitHub License](https://img.shields.io/github/license/zavarovkv/hugo-mini)](https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/zavarovkv/hugo-mini?style=flat)](https://github.com/zavarovkv/hugo-mini/stargazers)
@@ -15,7 +15,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 ## Why Mini?
 
 - **Writer-first.** Focus on typography and reading rhythm — no cards, no carousels, no hero sections. Everything serves the text.
-- **Zero runtime dependencies.** No JavaScript framework, no CDN in the core path. One minified CSS file, one minified JS file — both fingerprinted and served from your domain. (Mermaid is the sole opt-in CDN dep, loaded only when a page sets `mermaid = true`.)
+- **Zero runtime dependencies.** No JavaScript framework, no CDN in the core path. One minified CSS file, one minified JS file — both fingerprinted and served from your domain. (Mermaid is the sole opt-in third-party dep, loaded only when a page sets `mermaid = true`, pinned and SRI-guarded — and fully avoidable via `params.mermaidSrc`.)
 - **Fast out of the box.** Self-hosted Inter font with preloaded weights, lazy-loaded Telegram widget, static OG images built at compile time. Lighthouse 100 is the baseline, not a goal.
 - **Batteries included, opt-in.** Dark mode, i18n, math, diagrams, analytics, Telegram comments, RSS/JSON/llms.txt feeds — all shipped, all disable-able.
 
@@ -79,7 +79,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 
 ## Requirements
 
-Hugo Extended ≥ 0.145.0
+Hugo Extended ≥ 0.146.0
 
 ## Installation
 
@@ -89,12 +89,12 @@ Hugo Extended ≥ 0.145.0
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 ```
 
-Set `theme = "hugo-mini"` in your `config.toml`.
+Set `theme = "hugo-mini"` in your `hugo.toml`.
 
 ### Option B — Hugo Modules
 
 ```toml
-# config.toml
+# hugo.toml
 [module]
   [[module.imports]]
     path = "github.com/zavarovkv/hugo-mini"
@@ -115,7 +115,7 @@ cd myblog
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 
 # Copy example config
-cp themes/hugo-mini/exampleSite/config.toml .
+cp themes/hugo-mini/exampleSite/hugo.toml .
 
 # Create first post
 hugo new blog/hello-world.md
@@ -188,6 +188,11 @@ ignoreErrors    = ["error-disable-taxonomy"]
   socialSharing = true   # set false to disable Likely sharing buttons
   consoleYoda   = true   # enables a built-in Yoda ASCII art in the home-page console
   consoleArt    = "..."  # optional custom ASCII art (TOML triple-string); takes priority over consoleYoda
+
+  # Mermaid source (optional). Default is a pinned jsDelivr URL guarded by an
+  # SRI hash. Point this at a local copy for a build with no third-party
+  # requests at all — e.g. drop mermaid.min.js into static/js/ and set:
+  mermaidSrc    = "js/mermaid.min.js"
 
   # Analytics (all optional — omit to disable, multiple can run side by side)
   yandexMetrikaId    = 123456789      # Yandex.Metrika ID
@@ -292,19 +297,39 @@ Built-in: `marketing`, `strategy`, `metrics`, `leadership`, `self-development`, 
 
 ### Colors
 
-The theme uses CSS custom properties. Override them in your site's `layouts/partials/custom_head.html` (the style-override hook — see [Extending templates](#extending-templates)):
+Every colour, the content width and the type stack are declared as CSS custom properties in one block at the top of `assets/css/main.css`. Redeclare any of them in your site's `layouts/_partials/custom_head.html` (the style-override hook — see [Extending templates](#extending-templates)) — no need to fork the stylesheet.
+
+| Token | Light | Dark | Used for |
+|---|---|---|---|
+| `--width` | `720px` | — | content column width |
+| `--font-main` / `--font-secondary` | Inter stack | — | type stack |
+| `--font-scale` | `1em` | — | global type scale |
+| `--background-color` | `#fff` | `#1a1a1a` | page background |
+| `--heading-color` | `#222` | `#e8e8e8` | headings |
+| `--text-color` | `#444` | `#c7ccd1` | body text |
+| `--link-color` | `#0060a0` | `var(--color-primary)` | links |
+| `--color-primary` | `#0060a0` | `#6ab0e6` | links, title, focus ring |
+| `--color-accent` | `#d04000` | `#ff7a40` | hover states, active elements, badges |
+| `--color-muted` | `#9da2a6` | — | secondary text, icons at rest |
+| `--color-secondary` | `#556677` | — | mid-weight labels |
+| `--blockquote-color` | `#222` | `#e8e8e8` | blockquote text |
+| `--color-blockquote-border` | `#999` | `#555` | blockquote left rule |
+| `--color-divider` | `#e5e5e5` | `#2a2a2a` | list and mobile-nav dividers |
+| `--color-control-border` | `#ccc` | `#333` | theme/language toggle borders |
+| `--color-control-border-hover` | `#999` | `#666` | same, on hover |
+| `--color-primary-border` / `--color-accent-border` | `rgba(...)` | `rgba(...)` | translucent variants for focus/badges |
 
 ```html
 <style>
   :root {
-    --color-primary: #0060a0;     /* links, title, focus ring */
-    --color-accent:  #d04000;     /* hover states, active elements, badges */
-    --color-muted:   #9da2a6;     /* secondary text, icons at rest */
-    --color-secondary: #556677;   /* mid-weight labels */
+    --color-primary: #7c3aed;
+    --color-accent:  #db2777;
+    --color-divider: #ececec;
   }
   [data-theme="dark"] {
-    --color-primary: #6ab0e6;
-    --color-accent:  #ff7a40;
+    --color-primary: #a78bfa;
+    --color-accent:  #f472b6;
+    --color-divider: #262626;
   }
 </style>
 ```
@@ -325,21 +350,48 @@ Add an inline SVG icon to any menu item via `params.icon`. Built-in icons: `tele
 
 ### Extending templates
 
-The theme exposes three extension hooks — add a file with the same name to your site's `layouts/partials/` and it gets included at that point (no whole-partial override needed):
+There are three levels of extension, from least to most invasive.
+
+**1. Site-wide hooks.** Add a file with one of these names to your site's `layouts/_partials/` and it is included at that point — nothing else is replaced:
 
 | Hook | Rendered at | Use for |
 |---|---|---|
-| `custom_head.html` | end of `<head>`, after theme CSS | style overrides, small inline CSS, anything that needs to win the cascade |
-| `extra_head.html` | end of `<head>`, after `custom_head` | meta tags, SEO/verification snippets, third-party `<head>` widgets |
+| `custom_head.html` | end of `<head>`, after theme CSS | style overrides, meta tags, SEO/verification snippets, third-party `<head>` widgets |
 | `custom_body.html` | end of `<body>`, after theme JS | extra scripts, chat widgets, any late-loaded markup |
 
-To replace an entire theme partial instead of adding to it, place a file with the same path under your site's `layouts/` (e.g. `layouts/partials/header.html`) — standard Hugo lookup order applies.
+Both are empty in the theme and exist purely to be replaced.
+
+**2. Template blocks.** `layouts/baseof.html` wraps each region in a named block, so a template can replace one region without copying the whole file. Define any of them in `home.html`, `list.html`, `single.html`, or a template of your own:
+
+| Block | Default | Use for |
+|---|---|---|
+| `title` | `Page Title \| Site Title` | custom `<title>` per template |
+| `head` | empty | `<head>` additions for one template only |
+| `header` | `partial "header.html"` | replace the site header |
+| `main` | empty (required) | page content |
+| `footer` | `partial "footer.html"` | replace the site footer |
+| `scripts` | empty | `<script>` additions for one template only |
+
+```go-html-template
+{{ define "head" }}
+  <link rel="preload" href="/hero.avif" as="image">
+{{ end }}
+{{ define "main" }}
+  ...
+{{ end }}
+```
+
+Use a hook when the addition applies to the whole site, and a block when it applies to one template.
+
+**3. Full partial override.** To replace a theme partial outright, put a file with the same name in your site's `layouts/_partials/` (e.g. `layouts/_partials/header.html`) — standard Hugo lookup order applies. Note that `console-art.html` is theme-owned rather than a hook, so overriding `custom_body.html` no longer disables it.
 
 ### Telegram reactions
 
+> **Optional, and the only part of the theme that needs Node.** Everything else — layouts, CSS, JS, fonts, math, diagrams, feeds — is pure Hugo and needs no toolchain beyond Hugo Extended. Skip this section entirely and the theme works fully; the meta row simply renders without counters.
+
 The theme can surface view counts and emoji reactions from your Telegram channel into each post's meta row (next to the date). Enable it in three steps:
 
-1. **Set `params.telegramChannel`** in your `config.toml` if you haven't already:
+1. **Set `params.telegramChannel`** in your `hugo.toml` if you haven't already:
    ```toml
    [params]
      telegramChannel = "your_channel"   # without @
