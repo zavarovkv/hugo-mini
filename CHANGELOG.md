@@ -6,6 +6,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [2.0.0] — 2026-08-14
+
+### Upgrading from 1.x
+
+Two things to check, both mechanical:
+
+1. **Hugo Extended ≥ 0.146.0 is now required.** Bump the version in your CI (a pin below the minimum fails on the first shortcode with `template for shortcode "…" not found`, not with a version error).
+2. **Move any theme overrides from `layouts/partials/` to `layouts/_partials/`**, and if you override `extra_head.html`, rename it to `custom_head.html` — same insertion point, same behaviour. Overrides left in the old location are silently ignored.
+
+Nothing else changes: config params, front matter, shortcodes and i18n keys are all unchanged, and `git mv` preserves history for the moved files.
+
 ### Changed — BREAKING
 - **Minimum Hugo is now 0.146.0** (was 0.145.0). The layout was migrated to Hugo's current template system, introduced in 0.146.0: templates moved out of `layouts/_default/` to the root of `layouts/` (`baseof.html`, `home.html`, `list.html`, `single.html`, `sitemap.xml`), `layouts/index.html` → `layouts/home.html`, `layouts/_default/index.json` → `layouts/home.json`, and `partials/` / `shortcodes/` / `_default/_markup/` gained the underscore prefix (`_partials/`, `_shortcodes/`, `_markup/`). **Sites that override theme partials must move their overrides from `layouts/partials/` to `layouts/_partials/`.**
 - **`extra_head.html` hook removed.** It duplicated `custom_head.html` with no distinct purpose. Sites using it should rename their override to `custom_head.html` — same insertion point, same behaviour.
@@ -151,7 +162,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v0.1.0...v1.0.0
