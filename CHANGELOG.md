@@ -11,6 +11,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 
 ### Changed
+- Corrected the Go module path to `github.com/zavarovkv/hugo-mini/v3`, as required for v3 releases and Hugo theme-catalog builds. Hugo Module users must add the `/v3` suffix; Git submodule installations are unchanged.
 - Reworded the theme catalog description around concrete, verifiable capabilities.
 - Reworked the README into a concise product overview and quick start; detailed configuration, content, customization, Telegram, and deployment guidance now lives in focused documents under `docs/`.
 - Language examples and templates use `label`, `.Language.Locale`, and `hugo.Sites` on current Hugo releases, with version-gated fallbacks that preserve the documented Hugo 0.146 minimum.

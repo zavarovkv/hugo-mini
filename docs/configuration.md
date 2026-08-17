@@ -15,8 +15,10 @@ Then set `theme = "hugo-mini"` in `hugo.toml`. Alternatively, use a Hugo Module:
 ```toml
 [module]
   [[module.imports]]
-    path = "github.com/zavarovkv/hugo-mini"
+    path = "github.com/zavarovkv/hugo-mini/v3"
 ```
+
+The `/v3` suffix is required by Go Modules for every 3.x release. It is not used when installing the theme as a Git submodule.
 
 ## Parameters
 
