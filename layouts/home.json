@@ -1,5 +1,11 @@
 {{- /* JSON Feed 1.1 — https://jsonfeed.org/version/1.1 */ -}}
 {{- $items := slice -}}
+{{- $languageCode := "" -}}
+{{- if ge hugo.Version "0.158.0" -}}
+  {{- $languageCode = site.Language.Locale -}}
+{{- else -}}
+  {{- $languageCode = site.Language.LanguageCode -}}
+{{- end -}}
 {{- range partial "main-pages.html" . -}}
   {{- $item := dict
     "id" .Permalink
@@ -21,7 +27,7 @@
   "home_page_url" site.BaseURL
   "feed_url" (printf "%sindex.json" site.BaseURL)
   "description" site.Params.description
-  "language" site.LanguageCode
+  "language" $languageCode
   "authors" (slice (dict "name" (site.Params.authorName | default site.Title) "url" site.Params.authorURL))
   "items" $items
 | jsonify (dict "indent" "  ") -}}

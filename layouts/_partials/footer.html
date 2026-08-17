@@ -43,14 +43,20 @@
     {{- /* Language toggle — only rendered on multilingual sites. The
            two-label RU/EN design matches the theme's target setup; sites
            with a different language pair should override this partial. */ -}}
-    {{- if gt (len .Sites) 1 -}}
+    {{- $sites := slice -}}
+    {{- if ge hugo.Version "0.156.0" -}}
+      {{- $sites = hugo.Sites -}}
+    {{- else -}}
+      {{- $sites = .Sites -}}
+    {{- end -}}
+    {{- if gt (len $sites) 1 -}}
     {{- $targetURL := "" -}}
     {{- if .Translations -}}
       {{- range .Translations -}}
         {{- $targetURL = .Permalink -}}
       {{- end -}}
     {{- else -}}
-      {{- range .Sites -}}
+      {{- range $sites -}}
         {{- if ne .Language.Lang $.Language.Lang -}}
           {{- $targetURL = .Home.Permalink -}}
         {{- end -}}

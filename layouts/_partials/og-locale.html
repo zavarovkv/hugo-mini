@@ -13,7 +13,13 @@
 {{- with .Params.ogLocale -}}
   {{- $locale = . -}}
 {{- else -}}
-  {{- with .LanguageCode -}}
+  {{- $languageCode := "" -}}
+  {{- if ge hugo.Version "0.158.0" -}}
+    {{- $languageCode = .Locale -}}
+  {{- else -}}
+    {{- $languageCode = .LanguageCode -}}
+  {{- end -}}
+  {{- with $languageCode -}}
     {{- if strings.Contains . "-" -}}
       {{- $locale = replace . "-" "_" -}}
     {{- end -}}
