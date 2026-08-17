@@ -43,11 +43,6 @@
     }
   }
 
-  // ── Likely social sharing ──────────────────────────────────────────────
-  if (typeof likely !== 'undefined') {
-    likely.initiate();
-  }
-
   // ── Mobile menu ────────────────────────────────────────────────────────
   ready(function initMobileMenu() {
     var toggle = document.querySelector('.mobile-menu-toggle');
@@ -57,6 +52,7 @@
     function closeMenu() {
       nav.classList.remove('active');
       toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('menu-open');
       document.documentElement.classList.remove('menu-open');
     }
@@ -65,6 +61,7 @@
       window.scrollTo(0, 0);
       nav.classList.add('active');
       toggle.classList.add('active');
+      toggle.setAttribute('aria-expanded', 'true');
       document.body.classList.add('menu-open');
       document.documentElement.classList.add('menu-open');
     }
@@ -79,6 +76,12 @@
       link.addEventListener('click', function (e) {
         if (!e.ctrlKey && !e.metaKey && !e.shiftKey) closeMenu();
       });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || !nav.classList.contains('active')) return;
+      closeMenu();
+      toggle.focus();
     });
   });
 
@@ -168,7 +171,10 @@
       if (storedChoice() !== null) return;
       root.setAttribute('data-theme', mql.matches ? 'dark' : 'light');
       var btn = document.querySelector('.theme-toggle');
-      if (btn) btn.title = LABELS[currentTheme()];
+      if (btn) {
+        btn.title = LABELS[currentTheme()];
+        btn.setAttribute('aria-label', LABELS[currentTheme()]);
+      }
       syncLikelyTheme();
       refreshTelegramWidget();
     }
@@ -181,6 +187,7 @@
       var btn = document.querySelector('.theme-toggle');
       if (!btn) return;
       btn.title = LABELS[currentTheme()];
+      btn.setAttribute('aria-label', LABELS[currentTheme()]);
       btn.addEventListener('click', function () {
         var next = currentTheme() === 'dark' ? 'light' : 'dark';
         try {
@@ -190,6 +197,7 @@
         }
         root.setAttribute('data-theme', next);
         btn.title = LABELS[next];
+        btn.setAttribute('aria-label', LABELS[next]);
         syncLikelyTheme();
         refreshTelegramWidget();
       });
@@ -213,16 +221,23 @@
       btn.type = 'button';
       btn.innerHTML = svgCopy;
       btn.title = t('copy', 'Copy');
+      btn.setAttribute('aria-label', t('copy', 'Copy'));
+      btn.setAttribute('aria-live', 'polite');
+      btn.querySelector('svg').setAttribute('aria-hidden', 'true');
       var timer = null;
       btn.addEventListener('click', function () {
         navigator.clipboard
           .writeText(code.textContent)
           .then(function () {
             btn.innerHTML = svgCheck;
+            btn.querySelector('svg').setAttribute('aria-hidden', 'true');
+            btn.setAttribute('aria-label', t('copied', 'Copied'));
             btn.classList.add('copied');
             if (timer) clearTimeout(timer);
             timer = setTimeout(function () {
               btn.innerHTML = svgCopy;
+              btn.querySelector('svg').setAttribute('aria-hidden', 'true');
+              btn.setAttribute('aria-label', t('copy', 'Copy'));
               btn.classList.remove('copied');
               timer = null;
             }, FEEDBACK_MS);
@@ -246,6 +261,8 @@
     document.querySelectorAll('.heading-anchor').forEach(function (anchor) {
       var heading = anchor.parentElement;
       var timer = null;
+      var originalLabel = anchor.getAttribute('aria-label');
+      anchor.setAttribute('aria-live', 'polite');
 
       // Mobile: tap the heading to reveal the icon, tap the icon to copy.
       if (heading) {
@@ -264,9 +281,11 @@
           .writeText(anchor.href)
           .then(function () {
             anchor.classList.add('copied');
+            anchor.setAttribute('aria-label', t('copied', 'Copied'));
             if (timer) clearTimeout(timer);
             timer = setTimeout(function () {
               anchor.classList.remove('copied');
+              anchor.setAttribute('aria-label', originalLabel);
               timer = null;
             }, FEEDBACK_MS);
           })

@@ -6,6 +6,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Security
+- Updated the pinned Mermaid fallback from 11.14.0 to 11.16.1 and refreshed its SRI hash.
+- Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
+
+### Changed
+- Mobile-menu state is exposed through `aria-expanded`, Escape closes the menu and returns focus to its toggle, and the toggle is connected to the navigation with `aria-controls`.
+- Menu, heading-anchor, and Telegram-reaction accessibility labels are localized.
+- Theme-toggle and code-copy buttons keep their accessible labels synchronized with their current action.
+- Caption, Mermaid visibility, and analytics fallback styles moved from inline attributes into the bundled stylesheet.
+- Post-only Likely assets now follow `site.Params.mainSections`, matching `single.html` on sites whose post section is not named `blog`.
+
 ## [3.0.0] — 2026-08-14
 
 A code review pass: five bugs that could lose or corrupt data, plus the removal

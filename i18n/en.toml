@@ -115,3 +115,15 @@ other = "Telegram channel"
 
 [copy]
 other = "Copy"
+
+[copied]
+other = "Copied"
+
+[toggle_menu]
+other = "Toggle menu"
+
+[copy_section_link]
+other = "Copy link to this section"
+
+[telegram_reactions]
+other = "Reactions on Telegram"

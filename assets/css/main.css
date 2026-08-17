@@ -231,6 +231,23 @@
     max-width: 100%;
   }
 
+  .analytics-noscript {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .mermaid {
+    visibility: hidden;
+  }
+
+  .caption {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: small;
+    font-style: italic;
+    text-align: right;
+  }
+
   code {
     background-color: var(--color-code-bg);
     font-family: monospace;

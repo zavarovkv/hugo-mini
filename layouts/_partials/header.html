@@ -19,10 +19,10 @@
     <span class="title-text">{{ .Site.Title }}</span>
     {{- end }}
   </a>
-  <button class="mobile-menu-toggle" aria-label="Toggle menu">
+  <button class="mobile-menu-toggle" type="button" aria-label="{{ i18n "toggle_menu" | default "Toggle menu" }}" aria-expanded="false" aria-controls="main-navigation">
     <span></span>
     <span></span>
     <span></span>
   </button>
-  <nav class="main-nav">{{- partial "nav.html" . -}}</nav>
+  <nav class="main-nav" id="main-navigation">{{- partial "nav.html" . -}}</nav>
 </div>

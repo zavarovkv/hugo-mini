@@ -73,7 +73,7 @@ A fast, minimal, multilingual Hugo blog theme with dark mode, Telegram integrati
 - 🌍 **Multilingual** — built-in i18n (ru, en) with per-language menus and footer switcher; easy to extend
 - 💬 **Telegram comments** — Discussion widget, lazy-loaded, re-synced when the theme toggles
 - ❤️ **Telegram reactions** — view counts and emoji reactions surfaced in the post meta row; bundled fetch script reads from the public Telegram embed
-- 📤 **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn), disable with `socialSharing = false`
+- 📤 **Social sharing** — Likely buttons (Telegram, Twitter, Facebook, VK, LinkedIn) without automatic third-party counter requests; disable with `socialSharing = false`
 - 📈 **Analytics** — Yandex.Metrika, Google Analytics, Plausible, Umami (cookieless options); any combination, all optional
 - 🎨 **Nav menu icons** — inline SVG icons on menu items via `params.icon` (built-in `telegram`)
 
@@ -464,7 +464,7 @@ Theme CSS and JS live as source files in `themes/hugo-mini/assets/`:
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 ```
 
-The result is a minified, content-hashed file at `/css/main.min.<sha>.css` — safe to send long-cache headers, since the URL changes whenever the content changes. Same pattern for JS, with the bundle name including `.Language.Lang` so multilingual sites get one bundle per language (`main.en.min.<sha>.js`, `main.ru.min.<sha>.js`) — necessary because i18n strings are baked in at build time.
+The result is a minified, content-hashed file at `/css/main.min.<sha>.css` — safe to send long-cache headers, since the URL changes whenever the content changes. JavaScript uses the same pattern. Localized strings are passed through `body[data-i18n]`, so one compiled JS bundle serves every language.
 
 ## Deployment
 

@@ -18,7 +18,7 @@
   {{- with site.Data.telegram_reactions -}}
     {{- with index . $key -}}
       {{- with .reactions -}}
-<div class="tg-reactions" aria-label="Reactions on Telegram">
+<div class="tg-reactions" aria-label="{{ i18n "telegram_reactions" | default "Reactions on Telegram" }}">
         {{- range . }}
         <span class="tg-reaction"><span class="tg-reaction-emoji">{{ .emoji }}</span>{{ .count }}</span>
         {{- end }}

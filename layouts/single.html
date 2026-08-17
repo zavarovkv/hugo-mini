@@ -30,7 +30,7 @@
 
     {{- /* Social sharing buttons (on by default; socialSharing = false hides) */}}
     {{ if site.Params.socialSharing | default true }}
-    <div class="likely likely-big" data-url="{{ .Permalink }}" data-title="{{ .Title }}">
+    <div class="likely likely-big" data-counters="no" data-url="{{ .Permalink }}" data-title="{{ .Title }}">
       <div class="telegram"></div>
       <div class="twitter"></div>
       <div class="facebook"></div>

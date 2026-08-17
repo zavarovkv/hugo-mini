@@ -17,12 +17,12 @@ jobs:
         hugo-version: ['0.146.0', 'latest']
     name: hugo ${{ matrix.hugo-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           submodules: recursive
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3
         with:
           hugo-version: ${{ matrix.hugo-version }}
           extended: true
@@ -31,7 +31,10 @@ jobs:
         # --themesDir ../.. tells Hugo to look for the theme one level above
         # the theme repo itself, so `theme = "hugo-mini"` in exampleSite/hugo.toml
         # resolves to the checked-out repo root.
-        run: hugo -s exampleSite --themesDir ../.. --minify
+        run: hugo -s exampleSite --themesDir ../.. --minify --panicOnWarning
+
+      - name: Check JavaScript syntax
+        run: node --check assets/js/main.js && node --check scripts/fetch-telegram-reactions.mjs
 
       - name: Check the advertised outputs were produced
         # The theme ships templates for a JSON Feed and llms.txt; exampleSite

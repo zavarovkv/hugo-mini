@@ -115,3 +115,15 @@ other = "Telegram-канал"
 
 [copy]
 other = "Копировать"
+
+[copied]
+other = "Скопировано"
+
+[toggle_menu]
+other = "Открыть или закрыть меню"
+
+[copy_section_link]
+other = "Скопировать ссылку на раздел"
+
+[telegram_reactions]
+other = "Реакции в Telegram"
