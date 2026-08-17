@@ -239,7 +239,7 @@ defaultContentLanguageInSubdirectory = false
   [languages.ru]
     weight       = 1
     languageCode = "ru"
-    languageName = "RU"
+    label = "RU"
     contentDir   = "content/ru"
     [languages.ru.params]
       description = "Мой блог"
@@ -247,7 +247,7 @@ defaultContentLanguageInSubdirectory = false
   [languages.en]
     weight       = 2
     languageCode = "en"
-    languageName = "EN"
+    label = "EN"
     contentDir   = "content/en"
     [languages.en.params]
       description = "My blog"

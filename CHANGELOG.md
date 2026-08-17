@@ -11,6 +11,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 
 ### Changed
+- Language examples use `languages.<lang>.label`, replacing `languageName`, which is deprecated in Hugo 0.158.0.
 - Mobile-menu state is exposed through `aria-expanded`, Escape closes the menu and returns focus to its toggle, and the toggle is connected to the navigation with `aria-controls`.
 - Menu, heading-anchor, and Telegram-reaction accessibility labels are localized.
 - Theme-toggle and code-copy buttons keep their accessible labels synchronized with their current action.

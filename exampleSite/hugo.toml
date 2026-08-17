@@ -83,7 +83,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
 [languages]
   [languages.en]
     weight = 1
-    languageName = "EN"
+    label = "EN"
     contentDir = "content/en"
     [languages.en.permalinks]
       blog = "/:slug/"
@@ -108,7 +108,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
   [languages.ru]
     weight = 2
-    languageName = "RU"
+    label = "RU"
     contentDir = "content/ru"
     [languages.ru.permalinks]
       blog = "/:slug/"
