@@ -1001,6 +1001,8 @@
   .posts-group-title {
     font-size: 1em;
     font-weight: 600;
+    line-height: inherit;
+    transform: none;
     margin-bottom: 0.4em;
   }
 

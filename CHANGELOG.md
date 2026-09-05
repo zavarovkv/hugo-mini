@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Markdown headings preserve their CSS class attributes, allowing the compact section-heading style to be reused at any heading level.
 - Copying fenced code preserves its source without Chroma line numbers; copy buttons are visible on keyboard focus.
 - Empty category arrays appear in Miscellaneous, empty sections stay empty, and nested section posts are included in listings.
 - Internal Markdown page links resolve to an available translation in the current language; `localizeLinks = false` preserves original destinations.
