@@ -552,7 +552,8 @@
     font-weight: 500;
   }
 
-  main .blog-posts a {
+  main .blog-posts a,
+  main .posts-group-title + p a {
     font-weight: 300;
   }
 

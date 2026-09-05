@@ -43,6 +43,8 @@ Enable KaTeX with `math = true` and Mermaid with `mermaid = true` only on pages 
 
 Heading classes are preserved: `## Projects {.posts-group-title}` uses the same compact typography as category headings on the blog listing while retaining its heading level and anchor link.
 
+Links in the paragraph immediately after a compact section heading use the same light weight as article-list links.
+
 Add `.no-anchor` to omit the copy link on an individual heading, for example `## Projects {.posts-group-title .no-anchor}`. The heading keeps its ID for direct links.
 
 ## Latest articles
