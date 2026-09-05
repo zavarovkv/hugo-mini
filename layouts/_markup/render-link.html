@@ -1,4 +1,4 @@
-{{- $url := .Destination -}}
+{{- $url := partial "localized-link.html" . -}}
 {{- $isExternal := or (hasPrefix $url "http://") (hasPrefix $url "https://") -}}
 {{- if $isExternal -}}
 <a href="{{ $url | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }} target="_blank" rel="noopener noreferrer">{{ .Text | safeHTML }}</a>

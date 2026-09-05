@@ -115,9 +115,11 @@ mermaid = false
 
 Set `hidden = true` to keep a page out of listings and feeds while leaving its URL public. Use Hugo's `draft = true` when a page must not be published.
 
+An empty or omitted `categories` list places a post in Miscellaneous. Set `recentSidebarCount = 0` to hide recent posts. A single `avatar` works without `avatarHover` in both color schemes.
+
 ## Optional integrations
 
-- **Multilingual sites:** per-language menus, translated interface strings, `hreflang`, and a footer language switcher.
+- **Multilingual sites:** per-language menus, translated interface strings, `hreflang`, a footer language switcher, and internal Markdown links to available translations. Set `localizeLinks = false` to keep their original destinations.
 - **Telegram:** lazy-loaded comments plus build-time view and reaction counts.
 - **Math and diagrams:** per-page KaTeX and Mermaid switches.
 - **Analytics:** Yandex Metrika, Google Analytics, Plausible, and Umami; each is disabled unless configured.

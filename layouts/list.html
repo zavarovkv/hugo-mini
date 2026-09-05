@@ -4,9 +4,10 @@
          *this* page — rather than a hardcoded section, so /blog, /posts and
          /notes each list their own content. Falls back to the site's main
          section for a listing page that has no pages of its own (e.g. a
-         hand-written /archive page reusing this template). */ -}}
-  {{- $allPosts := where .RegularPages ".Params.hidden" "ne" true -}}
-  {{- if not $allPosts -}}
+         hand-written /archive page reusing this template). Empty sections stay
+         empty, and nested sections contribute their regular pages. */ -}}
+  {{- $allPosts := where .RegularPagesRecursive ".Params.hidden" "ne" true -}}
+  {{- if and .IsPage (not $allPosts) -}}
     {{- $allPosts = partial "main-pages.html" . -}}
   {{- end -}}
   {{- $allPosts = $allPosts.ByDate.Reverse -}}
@@ -15,13 +16,15 @@
          uncategorised posts. `uniq` keeps that order, so groups follow the
          reverse-chronological order of the posts that introduced them. */ -}}
   {{- $categories := slice -}}
+  {{- $uncategorized := slice -}}
   {{- range $allPosts -}}
+    {{- if not .Params.categories -}}{{- $uncategorized = $uncategorized | append . -}}{{- end -}}
     {{- range .Params.categories -}}
       {{- with . -}}{{- $categories = $categories | append . -}}{{- end -}}
     {{- end -}}
   {{- end -}}
   {{- $groups := $categories | uniq -}}
-  {{- if where $allPosts ".Params.categories" nil -}}
+  {{- if $uncategorized -}}
     {{- $groups = $groups | append "_untagged" -}}
   {{- end -}}
 
@@ -29,8 +32,8 @@
 
   {{- $half := math.Ceil (div (len $groups) 2.0) -}}
   <div class="posts-columns">
-    {{ partial "posts-column.html" (dict "groups" (first (int $half) $groups) "allPosts" $allPosts) }}
-    {{ partial "posts-column.html" (dict "groups" (after (int $half) $groups) "allPosts" $allPosts) }}
+    {{ partial "posts-column.html" (dict "groups" (first (int $half) $groups) "allPosts" $allPosts "uncategorized" $uncategorized) }}
+    {{ partial "posts-column.html" (dict "groups" (after (int $half) $groups) "allPosts" $allPosts "uncategorized" $uncategorized) }}
   </div>
 </article>
 {{ end }}

@@ -19,7 +19,7 @@
 
     {{- if eq $tag "_untagged" -}}
       {{- $title = i18n "misc" -}}
-      {{- $catPosts = where $allPosts ".Params.categories" nil -}}
+      {{- $catPosts = $.uncategorized -}}
     {{- else -}}
       {{- $title = i18n (printf "cat_%s" $tag) | default $tag -}}
       {{- $catPosts = where $allPosts ".Params.categories" "intersect" (slice $tag) -}}

@@ -24,8 +24,8 @@
 {{- dict
   "version" "https://jsonfeed.org/version/1.1"
   "title" site.Title
-  "home_page_url" site.BaseURL
-  "feed_url" (printf "%sindex.json" site.BaseURL)
+  "home_page_url" site.Home.Permalink
+  "feed_url" (.OutputFormats.Get "JSON").Permalink
   "description" site.Params.description
   "language" $languageCode
   "authors" (slice (dict "name" (site.Params.authorName | default site.Title) "url" site.Params.authorURL))

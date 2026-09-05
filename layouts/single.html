@@ -40,8 +40,8 @@
     {{ end }}
 
     {{- /* Telegram Discussion comments (built by JS so it can follow the theme) */}}
-    {{ with .Params.telegram_post }}
-    <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ . }}" data-tg-limit="20"></div>
+    {{ if and .Params.telegram_post site.Params.telegramChannel }}
+    <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ .Params.telegram_post }}" data-tg-limit="20"></div>
     {{ end }}
 
     {{- /* Recent posts — desktop: absolute sidebar in the right gutter (JS);

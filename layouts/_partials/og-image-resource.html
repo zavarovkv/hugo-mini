@@ -1,0 +1,21 @@
+{{- /* Return the same resource to both OG meta and JSON-LD. Paths passed to
+       resources.Copy are relative to publishDir, not to the domain root. */ -}}
+{{- $image := false -}}
+{{- $base := resources.Get "og/og-base.png" -}}
+{{- $bold := resources.Get "fonts/Inter-Bold.ttf" -}}
+{{- $regular := resources.Get "fonts/Inter-Regular.ttf" -}}
+{{- if and $base $bold $regular (or .IsPage .IsHome .IsSection) -}}
+  {{- $author := .Site.Params.authorName | default .Site.Title -}}
+  {{- $title := .Title | default .Site.Title -}}
+  {{- $subtitle := printf "%s · %s" (.Site.BaseURL | replaceRE "^https?://" "" | strings.TrimSuffix "/") $author -}}
+  {{- if .IsHome -}}
+    {{- $title = $author -}}
+    {{- $subtitle = .Site.Params.description | default .Site.Title -}}
+  {{- end -}}
+  {{- $image = $base.Filter (images.Text $title (dict "color" "#ffffff" "size" 52 "linespacing" 8 "x" 80 "y" 80 "font" $bold)) -}}
+  {{- $image = $image.Filter (images.Text $subtitle (dict "color" "#888888" "size" 24 "x" 80 "y" 540 "font" $regular)) -}}
+  {{- $basePath := (urls.Parse .Site.BaseURL).Path -}}
+  {{- $pagePath := strings.TrimPrefix $basePath .RelPermalink | strings.TrimPrefix "/" | strings.TrimSuffix ".html" -}}
+  {{- $image = resources.Copy (path.Join $pagePath "og.png") $image -}}
+{{- end -}}
+{{- return $image -}}

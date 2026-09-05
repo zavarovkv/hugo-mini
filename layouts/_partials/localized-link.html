@@ -1,0 +1,39 @@
+{{- /* Resolve internal page links before selecting an available translation.
+       Page lookup leaves static assets and external destinations alone. */ -}}
+{{- $destination := .Destination -}}
+{{- $url := urls.Parse $destination -}}
+{{- $page := .Page -}}
+{{- $base := urls.Parse $page.Site.BaseURL -}}
+{{- $internal := and (or (not $url.Scheme) (in (slice "http" "https") $url.Scheme)) (or (not $url.Host) (eq $url.Host $base.Host)) -}}
+{{- if and $internal $url.Path ($page.Site.Params.localizeLinks | default true) -}}
+  {{- $target := $page.GetPage $url.Path -}}
+  {{- if not $target -}}
+    {{- $wanted := $url.Path -}}
+    {{- if not (hasPrefix $wanted "/") -}}
+      {{- $directory := $page.RelPermalink -}}
+      {{- if not (hasSuffix $directory "/") -}}{{- $directory = path.Dir $directory -}}{{- end -}}
+      {{- $wanted = path.Join $directory $wanted -}}
+    {{- end -}}
+    {{- $sites := slice -}}
+    {{- if ge hugo.Version "0.156.0" -}}{{- $sites = hugo.Sites -}}{{- else -}}{{- $sites = $page.Sites -}}{{- end -}}
+    {{- range $sites -}}
+      {{- range .Pages -}}
+        {{- if eq (strings.TrimSuffix "/" .RelPermalink) (strings.TrimSuffix "/" $wanted) -}}
+          {{- $target = . -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $target -}}
+    {{- range .AllTranslations -}}
+      {{- if eq .Language.Lang $page.Language.Lang -}}{{- $target = . -}}{{- end -}}
+    {{- end -}}
+    {{- $destination = $target.RelPermalink -}}
+    {{- with $url.RawQuery -}}{{- $destination = printf "%s?%s" $destination . -}}{{- end -}}
+    {{- /* Keep the original escaped fragment, including Unicode anchors. */ -}}
+    {{- if strings.Contains $.Destination "#" -}}
+      {{- $destination = printf "%s#%s" $destination (index (split $.Destination "#") 1) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $destination -}}

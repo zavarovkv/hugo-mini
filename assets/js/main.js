@@ -216,6 +216,8 @@
     document.querySelectorAll('.highlight').forEach(function (block) {
       var code = block.querySelector('code');
       if (!code) return;
+      var wrapper = block.closest('.code-block[data-code]');
+      var source = wrapper ? wrapper.getAttribute('data-code') : code.textContent;
       var btn = document.createElement('button');
       btn.className = 'copy-btn';
       btn.type = 'button';
@@ -227,7 +229,7 @@
       var timer = null;
       btn.addEventListener('click', function () {
         navigator.clipboard
-          .writeText(code.textContent)
+          .writeText(source)
           .then(function () {
             btn.innerHTML = svgCheck;
             btn.querySelector('svg').setAttribute('aria-hidden', 'true');

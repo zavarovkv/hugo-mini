@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Fixed
+- Copying fenced code preserves its source without Chroma line numbers; copy buttons are visible on keyboard focus.
+- Empty category arrays appear in Miscellaneous, empty sections stay empty, and nested section posts are included in listings.
+- Internal Markdown page links resolve to an available translation in the current language; `localizeLinks = false` preserves original destinations.
+- Localized JSON feeds use their own home/feed URLs; hidden posts are also excluded from RSS.
+- Open Graph and JSON-LD share the generated image URL, including sites hosted under a base path.
+- A single avatar remains visible in dark mode and on hover; `recentSidebarCount = 0` disables recent posts.
+- Telegram IDs are discovered recursively in page bundles and only inside front matter. Comments require both a channel and message ID.
+- Corrected the documented category translation key and shortcode descriptions.
+
+### Added
+- Regression tests cover root/subdirectory deployments, multilingual links and feeds, categories, code sources, and Telegram page bundles across the supported Hugo matrix.
+
 ### Security
 - Updated the pinned Mermaid fallback from 11.14.0 to 11.16.1 and refreshed its SRI hash.
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.

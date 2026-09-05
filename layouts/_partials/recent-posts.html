@@ -6,6 +6,9 @@
 
   Usage: {{- $recent := partial "recent-posts.html" . -}}
 */ -}}
-{{- $count := site.Params.recentSidebarCount | default 8 -}}
+{{- $count := 8 -}}
+{{- if isset site.Params "recentsidebarcount" -}}
+  {{- $count = math.Max 0 (int site.Params.recentSidebarCount) | int -}}
+{{- end -}}
 {{- $posts := where (partial "main-pages.html" .) ".Permalink" "ne" .Permalink -}}
 {{- return first $count $posts -}}

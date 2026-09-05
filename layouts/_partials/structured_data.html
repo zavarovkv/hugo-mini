@@ -26,10 +26,8 @@
 {{- if .IsPage -}}
   {{- $description := .Description | default .Summary -}}
 
-  {{- /* og.png is produced by og-image.html only when the base image and both
-         fonts resolve as resources — assert the image under the same condition
-         so JSON-LD never points at a file that was not generated. */ -}}
-  {{- $hasOgImage := and (resources.Get "og/og-base.png") (resources.Get "fonts/Inter-Bold.ttf") (resources.Get "fonts/Inter-Regular.ttf") -}}
+  {{- /* Reuse the generated resource and its URL, including any base path. */ -}}
+  {{- $ogImage := partialCached "og-image-resource.html" . .Permalink -}}
 
   {{- $isPost := in (site.Params.mainSections | default (slice "blog")) .Type -}}
   {{- if $isPost -}}
@@ -47,12 +45,12 @@
     {{- with .Params.categories -}}
       {{- $post = merge $post (dict "keywords" (delimit . ", ")) -}}
     {{- end -}}
-    {{- if $hasOgImage -}}
+    {{- with $ogImage -}}
       {{- $post = merge $post (dict "image" (dict
         "@type" "ImageObject"
-        "url" (printf "%sog.png" .Permalink)
-        "width" 1200
-        "height" 630
+        "url" .Permalink
+        "width" .Width
+        "height" .Height
       )) -}}
     {{- end -}}
     {{- $blocks = $blocks | append $post -}}

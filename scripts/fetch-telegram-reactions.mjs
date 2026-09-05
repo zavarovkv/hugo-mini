@@ -57,6 +57,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { execSync } from "node:child_process";
 import { parseArgs } from "node:util";
+import { pathToFileURL } from "node:url";
 
 const USER_AGENT = "Mozilla/5.0 (compatible; hugo-mini-telegram-reactions/1.0)";
 const DEFAULT_OUTPUT = "data/telegram_reactions.json";
@@ -117,19 +118,25 @@ function resolveConfig(cli, hugoConfig) {
   return { channel, contentDir, output };
 }
 
-async function collectPostIds(contentDir) {
+export async function collectPostIds(contentDir, prefix = "") {
   let files;
   try {
-    files = await fs.readdir(contentDir);
+    files = await fs.readdir(contentDir, { withFileTypes: true });
   } catch (e) {
     throw new Error(`cannot read ${contentDir}: ${e.message}`);
   }
   const ids = [];
-  for (const f of files) {
-    if (!f.endsWith(".md") || f.startsWith("_")) continue;
-    const text = await fs.readFile(path.join(contentDir, f), "utf8");
-    const m = text.match(/^telegram_post\s*=\s*(\d+)/m);
-    if (m) ids.push({ file: f, id: parseInt(m[1], 10) });
+  for (const entry of files) {
+    const name = path.join(prefix, entry.name);
+    const fullPath = path.join(contentDir, entry.name);
+    if (entry.isDirectory()) {
+      ids.push(...await collectPostIds(fullPath, name));
+    } else if (entry.isFile() && entry.name.endsWith(".md") && !entry.name.startsWith("_")) {
+      const text = await fs.readFile(fullPath, "utf8");
+      const frontMatter = text.match(/^\+\+\+\r?\n([\s\S]*?)\r?\n\+\+\+/)?.[1] || "";
+      const match = frontMatter.match(/^telegram_post\s*=\s*([1-9]\d*)\s*(?:#.*)?$/m);
+      if (match && Number.isSafeInteger(Number(match[1]))) ids.push({ file: name, id: Number(match[1]) });
+    }
   }
   return ids;
 }
@@ -376,7 +383,6 @@ async function main() {
   );
 }
 
-main().catch((e) => {
-  console.error("Fatal:", e);
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  main().catch((e) => { console.error("Fatal:", e); process.exitCode = 1; });
+}

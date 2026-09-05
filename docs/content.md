@@ -18,7 +18,7 @@ mermaid = false
 +++
 ```
 
-`pinned` moves a post to the top of its category group. `hidden` removes it from listings, recent posts, JSON Feed, and `llms.txt`, but the URL remains public and crawlable. Use `draft` for unpublished work. `telegram_post` can associate a post with a specific Telegram message.
+`pinned` moves a post to the top of its category group. `hidden` removes it from listings, recent posts, RSS, JSON Feed, and `llms.txt`, but the URL remains public and crawlable. Use `draft` for unpublished work. `telegram_post` is the positive numeric ID of a Telegram message, not its URL.
 
 ## Categories
 
@@ -26,7 +26,7 @@ Categories are grouped on the section page. Add display names through i18n so sl
 
 ```toml
 # i18n/en.toml
-[category_product]
+[cat_product]
 other = "Product"
 ```
 
@@ -34,8 +34,8 @@ other = "Product"
 
 | Shortcode | Use |
 | --- | --- |
-| `caption` | Image with a visible caption |
+| `caption` | Caption text below an image |
 | `mermaid` | Diagram source rendered by Mermaid |
-| `plug` | Compact callout or promotional block |
+| `plug` | Centered three-asterisk divider |
 
 Enable KaTeX with `math = true` and Mermaid with `mermaid = true` only on pages that use them. Native Markdown `##` and `###` headings receive copyable anchor links automatically.

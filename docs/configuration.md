@@ -31,7 +31,8 @@ All parameters are optional unless your site content depends on them.
 | `avatar`, `avatarHover` | Header avatar and hover frame | unset |
 | `copyrightYear` | Starting year of the footer range | current year |
 | `newPostDays` | Age window for the New badge | `30` |
-| `recentSidebarCount` | Recent articles beside or below a post | `8` |
+| `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
+| `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
 | `mainSections` | Sections treated as posts | Hugo default |
 | `socialSharing` | Likely sharing buttons on posts | `true` |
 | `telegramChannel` | Telegram comments and reaction source | unset |

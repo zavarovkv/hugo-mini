@@ -36,6 +36,9 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check assets/js/main.js && node --check scripts/fetch-telegram-reactions.mjs
 
+      - name: Regression tests
+        run: node --test tests/*.test.mjs
+
       - name: Check the advertised outputs were produced
         # The theme ships templates for a JSON Feed and llms.txt; exampleSite
         # declares both output formats, so a missing file here means a broken

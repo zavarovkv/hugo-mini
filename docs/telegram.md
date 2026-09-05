@@ -19,7 +19,7 @@ The included fetcher reads public Telegram embeds during the build and stores co
 node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs
 ```
 
-Set `telegram_post` in a post's front matter when its Telegram message cannot be resolved from the post URL. The script retries rate limits and preserves previous values when individual requests fail.
+Set a positive numeric `telegram_post` in each linked post's front matter, for example `telegram_post = 123` for `https://t.me/your_channel/123`. Both the channel and message ID are required for comments. The script scans Markdown recursively, including `post/index.md` page bundles, retries rate limits, and preserves previous values when individual requests fail.
 
 A typical `package.json` alias is:
 
@@ -32,3 +32,5 @@ A typical `package.json` alias is:
 ```
 
 Run it before `hugo --minify` in deployment. Treat the fetch as optional if publishing should continue during a Telegram outage; the templates handle missing data.
+
+Keeping previous values requires restoring the data file before the fetch. A fresh CI runner without a cache or artifact has no previous counts; during an outage the site then builds without them.
