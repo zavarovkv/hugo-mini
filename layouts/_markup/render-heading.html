@@ -4,5 +4,5 @@
   URL to the clipboard (see main.js for the JS handler).
 */ -}}
 {{- $anchor := .Anchor | safeURL -}}
-{{- $linkable := or (eq .Level 2) (eq .Level 3) -}}
+{{- $linkable := and (or (eq .Level 2) (eq .Level 3)) (not (in (split (.Attributes.class | default "") " ") "no-anchor")) -}}
 <h{{ .Level }} id="{{ $anchor }}"{{ with .Attributes.class }} class="{{ . }}"{{ end }}>{{ .Text | safeHTML }}{{- if $linkable -}}<a class="heading-anchor" href="#{{ $anchor }}" aria-label="{{ i18n "copy_section_link" | default "Copy link to this section" }}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1"/></svg></a>{{- end -}}</h{{ .Level }}>

@@ -67,7 +67,7 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 
 | Area | Built in |
 | --- | --- |
-| Writing | Markdown, heading links and CSS classes, code copy, captions, KaTeX, Mermaid |
+| Writing | Markdown, optional heading links and CSS classes, code copy, captions, KaTeX, Mermaid |
 | Reading | Responsive layout, system-aware dark mode, recent posts, pinned posts |
 | Discovery | Open Graph images, JSON-LD, `hreflang`, RSS, JSON Feed, `llms.txt` |
 | Integrations | Telegram comments and reactions, social sharing, optional analytics |

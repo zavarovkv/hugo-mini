@@ -158,7 +158,7 @@
 
   /* Mobile: inline after heading text, hidden until heading is tapped */
   @media (max-width: 768px) {
-    h2, h3 {
+    h2:has(> .heading-anchor), h3:has(> .heading-anchor) {
       cursor: pointer;
     }
 
