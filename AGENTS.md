@@ -24,7 +24,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/home.html`, `list.html`, `single.html`, and `404.html` provide page layouts.
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, and links.
-- `layouts/_shortcodes/` contains `caption`, `mermaid`, and `plug`.
+- `layouts/_shortcodes/` contains `caption`, `mermaid`, `plug`, and `latest-posts`.
 - `assets/css/main.css` is the single stylesheet; design tokens live at its top.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
 - `static/` contains self-hosted fonts, KaTeX, Likely, and shared images.

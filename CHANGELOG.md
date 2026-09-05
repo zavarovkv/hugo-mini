@@ -7,6 +7,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Code blocks use a readable 15px font, light/dark syntax colors, and visible copy controls on touch devices.
+- Recent articles remain below the post whenever the viewport cannot fit a sidebar, including with JavaScript disabled.
+- The mobile menu moves focus inside, keeps Tab navigation within the open menu, restores focus on closing, and cleans up when switching to desktop.
 - Markdown headings preserve their CSS class attributes, allowing the compact section-heading style to be reused at any heading level.
 - Copying fenced code preserves its source without Chroma line numbers; copy buttons are visible on keyboard focus.
 - Empty category arrays appear in Miscellaneous, empty sections stay empty, and nested section posts are included in listings.
@@ -18,6 +21,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- Automatic, collapsible contents for long articles, with a `toc` front-matter override.
+- A localized `latest-posts` shortcode for an automatically updated list of recent articles.
 - Individual headings can omit their copy link with the `.no-anchor` class while retaining their ID.
 - Regression tests cover root/subdirectory deployments, multilingual links and feeds, categories, code sources, and Telegram page bundles across the supported Hugo matrix.
 

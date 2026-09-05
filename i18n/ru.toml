@@ -10,6 +10,12 @@ other = "Популярное"
 [recent_posts]
 other = "Новые статьи"
 
+[latest_posts]
+other = "Последние статьи"
+
+[table_of_contents]
+other = "В этой статье"
+
 [home]
 other = "Главная"
 

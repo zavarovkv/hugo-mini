@@ -11,6 +11,8 @@
 
   <h1>{{ .Title }}</h1>
 
+  {{ if $isPost }}{{ partial "table-of-contents.html" . }}{{ end }}
+
   <article lang="{{ .Language.Lang }}">
     {{ .Content }}
   </article>
@@ -45,7 +47,7 @@
     {{ end }}
 
     {{- /* Recent posts — desktop: absolute sidebar in the right gutter (JS);
-           mobile: static block at the bottom (CSS). */}}
+           other widths: static block at the bottom (CSS). */}}
     {{ with partial "recent-posts.html" . }}
     <aside class="recent-sidebar" id="recent-sidebar">
       <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>

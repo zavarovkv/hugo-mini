@@ -95,6 +95,72 @@ weight = 2
   });
 }
 
+test("latest posts and contents respect language, visibility, dates, and page overrides", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "hugo-mini-reading-test-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  await mkdir(join(root, "themes"));
+  await symlink(themeRoot, join(root, "themes/hugo-mini"), "dir");
+  await writeFile(join(root, "hugo.toml"), `baseURL = "https://example.org/sub/"
+title = "Reading fixture"
+theme = "hugo-mini"
+defaultContentLanguage = "en"
+disableKinds = ["taxonomy", "term"]
+[markup.highlight]
+noClasses = false
+[params]
+mainSections = ["writing"]
+[languages.en]
+contentDir = "content/en"
+weight = 1
+[languages.ru]
+contentDir = "content/ru"
+weight = 2
+`);
+  const longBody = "## First section\n\n" + "Useful words. ".repeat(360) +
+    "\n\n## Second section\n\nText.\n\n## Third section\n\nText.\n\n```python\nprint(42)\n```\n";
+  const fixtures = [
+    ["latest", "2004-01-01", "", longBody],
+    ["next", "2003-01-01", "toc=false", longBody],
+    ["third", "2002-01-01", "", "Short essay."],
+    ["old", "2001-01-01", "pinned=true\ntoc=true", "## A section\n\nBrief text."],
+    ["headless", "2000-01-01", "toc=true", "No headings."],
+    ["hidden", "2006-01-01", "hidden=true", "Hidden."],
+    ["draft", "2007-01-01", "draft=true", "Draft."],
+    ["future", "2999-01-01", "", "Future."],
+  ];
+  for (const lang of ["en", "ru"]) {
+    await mkdir(join(root, `content/${lang}/writing`), { recursive: true });
+    await writeFile(join(root, `content/${lang}/_index.md`), '+++\n+++\n\n{{< latest-posts count="3" >}}');
+    for (const [slug, date, options, body] of fixtures) {
+      await writeFile(join(root, `content/${lang}/writing/${slug}.md`),
+        `+++\ntitle="${lang} ${slug}"\ndate=${date}\n${options}\n+++\n${body}`);
+    }
+  }
+  execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
+  for (const lang of ["en", "ru"]) {
+    const prefix = lang === "en" ? "" : "ru/";
+    const output = join(root, "public", prefix);
+    const home = await readFile(join(output, "index.html"), "utf8");
+    const list = home.match(/<section class=(?:"latest-posts"|latest-posts)>([\s\S]*?)<\/section>/)?.[1];
+    assert.ok(list, "shortcode renders a list");
+    const links = [...list.matchAll(/<a\b[^>]*>/g)].map((m) => attribute(m[0], "href"));
+    assert.deepEqual(links, ["latest", "next", "third"].map((slug) => `/sub/${prefix}writing/${slug}/`));
+    assert.ok(list.includes(lang === "en" ? "Latest articles" : "Последние статьи"));
+    for (const slug of ["latest", "next", "third", "old", "headless"]) {
+      const post = await readFile(join(output, `writing/${slug}/index.html`), "utf8");
+      assert.equal(/<details class=(?:"table-of-contents"|table-of-contents)>/.test(post), ["latest", "old"].includes(slug), slug);
+      if (slug === "latest") {
+        const toc = post.match(/<details[\s\S]*?<\/details>/)[0];
+        for (const anchor of [...toc.matchAll(/<a\b[^>]*>/g)]) {
+          const id = attribute(anchor[0], "href").slice(1);
+          assert.ok(post.includes(`id=${id}`) || post.includes(`id="${id}"`), "contents link resolves to a heading");
+        }
+        assert.ok(/<pre\b[^>]*class=(?:"chroma"|chroma)/.test(post), "class-based highlighting uses the theme's colors");
+      }
+    }
+  }
+});
+
 test("Telegram IDs are discovered in page bundles, only inside front matter", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "telegram-test-"));
   t.after(() => rm(root, { recursive: true, force: true }));

@@ -48,22 +48,39 @@
     var toggle = document.querySelector('.mobile-menu-toggle');
     var nav = document.querySelector('.main-nav');
     if (!toggle || !nav) return;
+    var mobile = window.matchMedia(MOBILE_QUERY);
+    var inerted = [];
 
-    function closeMenu() {
+    function closeMenu(restoreFocus) {
+      if (!nav.classList.contains('active')) return;
       nav.classList.remove('active');
       toggle.classList.remove('active');
       toggle.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('menu-open');
       document.documentElement.classList.remove('menu-open');
+      inerted.forEach(function (element) { element.inert = false; });
+      inerted = [];
+      if (restoreFocus !== false) toggle.focus();
     }
 
     function openMenu() {
+      if (!mobile.matches) return;
       window.scrollTo(0, 0);
       nav.classList.add('active');
       toggle.classList.add('active');
       toggle.setAttribute('aria-expanded', 'true');
       document.body.classList.add('menu-open');
       document.documentElement.classList.add('menu-open');
+      // Leave only the navigation and its close button interactive. Preserve
+      // elements that were already inert before the menu opened.
+      document.querySelectorAll('main, footer, header .title, .back-to-top-wrap').forEach(function (element) {
+        if (!element.inert) {
+          element.inert = true;
+          inerted.push(element);
+        }
+      });
+      var firstLink = nav.querySelector('a[href]');
+      (firstLink || toggle).focus();
     }
 
     toggle.addEventListener('click', function () {
@@ -79,10 +96,34 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape' || !nav.classList.contains('active')) return;
-      closeMenu();
-      toggle.focus();
+      if (!nav.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMenu();
+      } else if (e.key === 'Tab') {
+        var controls = [toggle].concat(Array.from(nav.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')))
+          .filter(function (element) { return element.getClientRects().length && !element.closest('[inert]'); });
+        var index = controls.indexOf(document.activeElement);
+        var next = e.shiftKey ? index - 1 : index + 1;
+        if (index < 0 || next < 0 || next >= controls.length) {
+          e.preventDefault();
+          controls[e.shiftKey ? controls.length - 1 : 0].focus();
+        }
+      }
     });
+
+    function onLayoutChange() {
+      if (!mobile.matches) {
+        var toggleHadFocus = document.activeElement === toggle;
+        closeMenu(false);
+        if (toggleHadFocus) {
+          var firstLink = nav.querySelector('a[href]');
+          if (firstLink) firstLink.focus();
+        }
+      }
+    }
+    if (mobile.addEventListener) mobile.addEventListener('change', onLayoutChange);
+    else if (mobile.addListener) mobile.addListener(onLayoutChange);
   });
 
   // ── Theme toggle + widgets that follow it ──────────────────────────────
@@ -318,7 +359,6 @@
         ? Math.round(h1.getBoundingClientRect().top + window.pageYOffset)
         : Math.round(rect.top + window.pageYOffset);
       sidebar.classList.add('is-sidebar');
-      sidebar.style.display = 'block';
       sidebar.style.top = topPos + 'px';
       sidebar.style.left = Math.round(rect.left + window.pageXOffset + rect.width + GAP - 16) + 'px';
       sidebar.style.width = Math.round(gutter - GAP - 16) + 'px';

@@ -14,10 +14,12 @@ Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram inte
 
 ## Why Mini
 
-- **Made for reading.** The interface stays out of the way and gives articles room to breathe.
+- **Made for reading.** Collapsible contents for long articles, readable code in both color schemes, and recent articles beside or below each post.
 - **Fast by default.** CSS, JavaScript, and fonts are bundled, fingerprinted, and served from your domain.
 - **Useful without a plugin stack.** Dark mode, multilingual navigation, feeds, search metadata, math, diagrams, and sharing are included.
 - **Easy to grow.** Design tokens, template hooks, named blocks, and custom menu icons cover common extensions.
+
+Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. See [content options](docs/content.md) for the table of contents and syntax-highlighting settings.
 
 ## Quick start
 

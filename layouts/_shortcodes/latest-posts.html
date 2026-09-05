@@ -1,0 +1,11 @@
+{{- $count := math.Max 0 (int (.Get "count" | default 3)) | int -}}
+{{- with first $count (partial "main-pages.html" .Page) -}}
+<section class="latest-posts">
+  <h2 class="posts-group-title">{{ i18n "latest_posts" }}</h2>
+  <ul class="blog-posts">
+    {{- range . }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end -}}
