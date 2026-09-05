@@ -1081,21 +1081,6 @@
     margin-bottom: 0.4em;
   }
 
-  .table-of-contents {
-    margin: 24px 0;
-    border-block: 1px solid var(--color-divider);
-  }
-  .table-of-contents summary {
-    padding: 12px 0;
-    color: var(--heading-color);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .table-of-contents ul { padding-left: 1.25em; }
-  .table-of-contents nav > ul { margin: 0 0 16px; }
-  .table-of-contents li { margin: 6px 0; }
-  .table-of-contents a { font-weight: 300; margin-right: 0; }
-
   .badge-new {
     font-size: 0.55em;
     font-weight: 600;
@@ -1410,8 +1395,7 @@
   button:focus-visible,
   input:focus-visible,
   textarea:focus-visible,
-  select:focus-visible,
-  summary:focus-visible {
+  select:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 2px;

@@ -13,9 +13,6 @@ other = "More articles"
 [latest_posts]
 other = "Latest articles"
 
-[table_of_contents]
-other = "In this article"
-
 [home]
 other = "Home"
 

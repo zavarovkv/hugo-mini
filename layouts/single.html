@@ -11,8 +11,6 @@
 
   <h1>{{ .Title }}</h1>
 
-  {{ if $isPost }}{{ partial "table-of-contents.html" . }}{{ end }}
-
   <article lang="{{ .Language.Lang }}">
     {{ .Content }}
   </article>

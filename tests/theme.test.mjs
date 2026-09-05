@@ -95,7 +95,7 @@ weight = 2
   });
 }
 
-test("latest posts and contents respect language, visibility, dates, and page overrides", async (t) => {
+test("latest posts respect language, visibility, and dates", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "hugo-mini-reading-test-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, "themes"));
@@ -116,14 +116,11 @@ weight = 1
 contentDir = "content/ru"
 weight = 2
 `);
-  const longBody = "## First section\n\n" + "Useful words. ".repeat(360) +
-    "\n\n## Second section\n\nText.\n\n## Third section\n\nText.\n\n```python\nprint(42)\n```\n";
   const fixtures = [
-    ["latest", "2004-01-01", "", longBody],
-    ["next", "2003-01-01", "toc=false", longBody],
+    ["latest", "2004-01-01", "", "```python\nprint(42)\n```\n"],
+    ["next", "2003-01-01", "", "Text."],
     ["third", "2002-01-01", "", "Short essay."],
-    ["old", "2001-01-01", "pinned=true\ntoc=true", "## A section\n\nBrief text."],
-    ["headless", "2000-01-01", "toc=true", "No headings."],
+    ["old", "2001-01-01", "pinned=true", "Brief text."],
     ["hidden", "2006-01-01", "hidden=true", "Hidden."],
     ["draft", "2007-01-01", "draft=true", "Draft."],
     ["future", "2999-01-01", "", "Future."],
@@ -146,18 +143,8 @@ weight = 2
     const links = [...list.matchAll(/<a\b[^>]*>/g)].map((m) => attribute(m[0], "href"));
     assert.deepEqual(links, ["latest", "next", "third"].map((slug) => `/sub/${prefix}writing/${slug}/`));
     assert.ok(list.includes(lang === "en" ? "Latest articles" : "Последние статьи"));
-    for (const slug of ["latest", "next", "third", "old", "headless"]) {
-      const post = await readFile(join(output, `writing/${slug}/index.html`), "utf8");
-      assert.equal(/<details class=(?:"table-of-contents"|table-of-contents)>/.test(post), ["latest", "old"].includes(slug), slug);
-      if (slug === "latest") {
-        const toc = post.match(/<details[\s\S]*?<\/details>/)[0];
-        for (const anchor of [...toc.matchAll(/<a\b[^>]*>/g)]) {
-          const id = attribute(anchor[0], "href").slice(1);
-          assert.ok(post.includes(`id=${id}`) || post.includes(`id="${id}"`), "contents link resolves to a heading");
-        }
-        assert.ok(/<pre\b[^>]*class=(?:"chroma"|chroma)/.test(post), "class-based highlighting uses the theme's colors");
-      }
-    }
+    const post = await readFile(join(output, "writing/latest/index.html"), "utf8");
+    assert.ok(/<pre\b[^>]*class=(?:"chroma"|chroma)/.test(post), "class-based highlighting uses the theme's colors");
   }
 });
 
