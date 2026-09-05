@@ -20,6 +20,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Regression tests cover root/subdirectory deployments, multilingual links and feeds, categories, code sources, and Telegram page bundles across the supported Hugo matrix.
 
 ### Security
+- Updated self-hosted KaTeX from 0.16.9 to 0.16.47, including CSS, auto-render, fonts, and its license. A pinned manifest and regression check verify the complete asset set.
 - Updated the pinned Mermaid fallback from 11.14.0 to 11.16.1 and refreshed its SRI hash.
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 

@@ -132,6 +132,7 @@ An empty or omitted `categories` list places a post in Miscellaneous. Set `recen
 - [Customizing the theme](https://github.com/zavarovkv/hugo-mini/blob/main/docs/customization.md)
 - [Telegram comments and reactions](https://github.com/zavarovkv/hugo-mini/blob/main/docs/telegram.md)
 - [Deployment](https://github.com/zavarovkv/hugo-mini/blob/main/docs/deployment.md)
+- [Maintaining vendored assets](https://github.com/zavarovkv/hugo-mini/blob/main/docs/vendor-assets.md)
 - [Changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md) · [Contributing](https://github.com/zavarovkv/hugo-mini/blob/main/CONTRIBUTING.md)
 
 ## License
