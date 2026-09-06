@@ -21,6 +21,8 @@ Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram inte
 
 Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. See [content options](docs/content.md) for details.
 
+The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style.
+
 ## Quick start
 
 Hugo Extended 0.146 or newer is required.

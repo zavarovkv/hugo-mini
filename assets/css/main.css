@@ -480,7 +480,8 @@
   }
 
   main .blog-posts a,
-  main .posts-group-title + p a {
+  main .posts-group-title + p a,
+  main .project-entry a {
     font-weight: 300;
   }
 
@@ -1006,6 +1007,26 @@
     transform: none;
     margin-bottom: 0.4em;
   }
+
+  .project-entry { margin: 1em 0; }
+  .project-title {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 300;
+    line-height: inherit;
+    transform: none;
+  }
+  .project-title .project-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35em;
+    border-bottom: none;
+  }
+  .project-name { border-bottom: 0.25px solid var(--color-primary-border); }
+  .project-link:hover .project-name { border-bottom-color: var(--color-accent-border); }
+  .project-arrow { color: var(--text-color); }
+  .project-description > :first-child { margin-top: 0.25em; }
+  .project-description > :last-child { margin-bottom: 0; }
 
   .badge-new {
     font-size: 0.55em;

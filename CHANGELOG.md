@@ -18,6 +18,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- A `project` shortcode for a linked title with an external-link arrow and a description below it.
 - A localized `latest-posts` shortcode for an automatically updated list of recent articles.
 - Individual headings can omit their copy link with the `.no-anchor` class while retaining their ID.
 - Regression tests cover root/subdirectory deployments, multilingual links and feeds, categories, code sources, and Telegram page bundles across the supported Hugo matrix.
