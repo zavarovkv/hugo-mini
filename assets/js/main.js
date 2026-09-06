@@ -114,50 +114,43 @@
       });
     }
 
-    // Telegram Discussion widget. It bakes the colour scheme in at load time,
-    // so a theme change means rebuilding it.
-    var tgWidgetLoaded = false;
-    var tgRebuildTimer = null;
-    function syncTelegramWidget() {
-      var container = document.getElementById('tg-comments');
-      if (!container) return;
-      var discussion = container.getAttribute('data-tg-discussion');
-      if (!discussion) return;
-      if (tgRebuildTimer) clearTimeout(tgRebuildTimer);
-      tgRebuildTimer = setTimeout(
-        function () {
-          container.innerHTML = '';
-          var s = document.createElement('script');
-          s.async = true;
-          s.src = 'https://telegram.org/js/telegram-widget.js?22';
-          s.setAttribute('data-telegram-discussion', discussion);
-          s.setAttribute('data-comments-limit', container.getAttribute('data-tg-limit') || '20');
-          if (currentTheme() === 'dark') s.setAttribute('data-dark', '1');
-          container.appendChild(s);
-          tgWidgetLoaded = true;
-          tgRebuildTimer = null;
-        },
-        tgWidgetLoaded ? 500 : 0
-      );
+    var tgWidget = null;
+    function syncTelegramTheme() {
+      if (!tgWidget) return;
+      var dark = currentTheme() === 'dark';
+      tgWidget.setAttribute('data-dark', dark ? '1' : '0');
+      // Telegram queues options until the iframe is ready. Keep the same
+      // iframe so switching themes cannot reload comments or lose a draft.
+      if (window.Telegram && typeof window.Telegram.setWidgetOptions === 'function') {
+        window.Telegram.setWidgetOptions({ dark: dark }, tgWidget);
+      }
     }
 
-    // Only rebuild if it is already on the page: before that the observer
-    // below will load it with whatever theme is current at that moment, and
-    // rebuilding here would defeat the lazy-load.
-    function refreshTelegramWidget() {
-      if (tgWidgetLoaded) syncTelegramWidget();
+    function loadTelegramWidget() {
+      var container = document.getElementById('tg-comments');
+      if (!container || tgWidget) return;
+      var discussion = container.getAttribute('data-tg-discussion');
+      if (!discussion) return;
+      tgWidget = document.createElement('script');
+      tgWidget.async = true;
+      tgWidget.src = 'https://telegram.org/js/telegram-widget.js?22';
+      tgWidget.setAttribute('data-telegram-discussion', discussion);
+      tgWidget.setAttribute('data-comments-limit', container.getAttribute('data-tg-limit') || '20');
+      tgWidget.onload = syncTelegramTheme;
+      syncTelegramTheme();
+      container.appendChild(tgWidget);
     }
 
     function observeTelegramWidget() {
       var container = document.getElementById('tg-comments');
       if (!container || typeof IntersectionObserver === 'undefined') {
-        syncTelegramWidget();
+        loadTelegramWidget();
         return;
       }
       var observer = new IntersectionObserver(
         function (entries) {
-          if (entries[0].isIntersecting && !tgWidgetLoaded) {
-            syncTelegramWidget();
+          if (entries[0].isIntersecting) {
+            loadTelegramWidget();
             observer.disconnect();
           }
         },
@@ -176,10 +169,13 @@
         btn.setAttribute('aria-label', LABELS[currentTheme()]);
       }
       syncLikelyTheme();
-      refreshTelegramWidget();
+      syncTelegramTheme();
     }
     if (mql.addEventListener) mql.addEventListener('change', onSystemChange);
     else if (mql.addListener) mql.addListener(onSystemChange); // Safari < 14
+
+    // A mobile browser can restore an article together with its old iframe.
+    window.addEventListener('pageshow', syncTelegramTheme);
 
     ready(function initThemeToggle() {
       syncLikelyTheme();
@@ -199,7 +195,7 @@
         btn.title = LABELS[next];
         btn.setAttribute('aria-label', LABELS[next]);
         syncLikelyTheme();
-        refreshTelegramWidget();
+        syncTelegramTheme();
       });
     });
   })();

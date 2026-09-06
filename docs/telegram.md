@@ -9,7 +9,7 @@ Set the public channel slug to enable Telegram features:
 
 ## Comments
 
-Single posts load Telegram's Discussion widget lazily. The widget is absent when `telegramChannel` is unset and synchronizes its appearance with the site's light or dark theme.
+Single posts load Telegram's Discussion widget lazily. The widget is absent when `telegramChannel` is unset and synchronizes its appearance with the site's light or dark theme, including after page restoration. Theme changes update the existing widget without reloading comments.
 
 ## Views and reactions
 

@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Telegram comments synchronize their theme after loading and page restoration, and switch in place without reloading the iframe.
 - Sharing assets are omitted from section listings and when `socialSharing` is disabled.
 - Local Markdown images reserve their intrinsic dimensions while remaining responsive.
 - Markdown headings preserve their CSS class attributes, allowing the compact section-heading style to be reused at any heading level.
