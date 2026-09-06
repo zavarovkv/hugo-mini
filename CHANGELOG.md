@@ -18,6 +18,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- `columns` and `column` shortcodes for two equal desktop columns that stack on mobile, with spacing matching article-listing groups.
 - Optional archive link below the `latest-posts` list, with a neutral, unlined arrow matching project links.
 - A `project` shortcode for a linked title with an external-link arrow and a description below it.
 - A localized `latest-posts` shortcode for an automatically updated list of recent articles.
@@ -30,7 +31,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 
 ### Changed
-- Links in descriptions immediately below compact section headings use the same weight as article-list links.
+- Increased spacing before content columns and the site-wide footer using a shared spacing token.
+- Project links and archive links use the same light weight as article-list links, without affecting unrelated text below section headings.
 - Corrected the Go module path to `github.com/zavarovkv/hugo-mini/v3`, as required for v3 releases and Hugo theme-catalog builds. Hugo Module users must add the `/v3` suffix; Git submodule installations are unchanged.
 - Reworded the theme catalog description around concrete, verifiable capabilities.
 - Reworked the README into a concise product overview and quick start; detailed configuration, content, customization, Telegram, and deployment guidance now lives in focused documents under `docs/`.

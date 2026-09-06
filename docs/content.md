@@ -39,12 +39,11 @@ other = "Product"
 | `plug` | Centered three-asterisk divider |
 | `latest-posts` | Newest visible posts in the current language; `count="3"` by default |
 | `project` | Linked project name with an external-link arrow, followed by a Markdown description |
+| `columns` / `column` | Responsive columns; `column` groups Markdown and shortcodes into one column |
 
 Enable KaTeX with `math = true` and Mermaid with `mermaid = true` only on pages that use them. Native Markdown `##` and `###` headings receive copyable anchor links automatically.
 
 Heading classes are preserved: `## Projects {.posts-group-title}` uses the same compact typography as category headings on the blog listing while retaining its heading level and anchor link.
-
-Links in the paragraph immediately after a compact section heading use the same light weight as article-list links.
 
 Add `.no-anchor` to omit the copy link on an individual heading, for example `## Projects {.posts-group-title .no-anchor}`. The heading keeps its ID for direct links.
 
@@ -56,6 +55,21 @@ Set `archive` to the article-listing URL to add a link below the list. `archiveL
 
 ```text
 {{< latest-posts count="3" archive="/blog/" archiveLabel="All articles" >}}
+```
+
+## Columns
+
+Use `columns` to display two equal columns above 768px and a single column on smaller screens. Each direct child block forms a column: `latest-posts` already renders one block, while `column` groups Markdown and nested shortcodes into one block. Spacing after and between stacked blocks uses the same `--section-gap` token as article-listing groups; both layouts share `--columns-gap` horizontally. The larger space before the columns and the footer uses `--section-gap-large`. Content order stays the same for keyboard navigation and screen readers.
+
+```text
+{{< columns >}}
+{{< latest-posts count="3" >}}
+{{< column >}}
+## Projects {.posts-group-title .no-anchor}
+
+A short introduction to your projects.
+{{< /column >}}
+{{< /columns >}}
 ```
 
 ## Projects

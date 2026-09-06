@@ -48,6 +48,9 @@
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-scale: 1em;
+    --columns-gap: 2em;
+    --section-gap: 2.5em;
+    --section-gap-large: 3.5rem;
 
     /* Surfaces & text */
     --background-color: #fff;
@@ -341,11 +344,6 @@
     font-style: italic;
   }
 
-  footer {
-    padding: 35px 0 25px 0;
-    text-align: center;
-  }
-
   .title:hover {
     text-decoration: none;
   }
@@ -480,8 +478,7 @@
   }
 
   main .blog-posts a,
-  main .latest-posts a,
-  main .posts-group-title + p a,
+  main .archive-link,
   main .project-entry a {
     font-weight: 300;
   }
@@ -506,12 +503,12 @@
     font-weight: 600;
   }
 
-  /* Smaller footer text */
+  /* Footer */
   footer {
     font-size: 0.875em;
     font-weight: 300;
     text-align: left;
-    padding-top: 40px;
+    padding: var(--section-gap-large) 0 25px;
     color: var(--color-muted);
   }
 
@@ -990,7 +987,7 @@
   /* Posts grouped by tags in 2 columns */
   .posts-columns {
     display: flex;
-    gap: 2em;
+    gap: var(--columns-gap);
   }
 
   .posts-column {
@@ -998,7 +995,7 @@
   }
 
   .posts-group {
-    margin-bottom: 2.5em;
+    margin-bottom: var(--section-gap);
   }
 
   .posts-group-title {
@@ -1007,6 +1004,18 @@
     line-height: inherit;
     transform: none;
     margin-bottom: 0.4em;
+  }
+
+  .content-columns {
+    display: grid;
+    gap: var(--section-gap) var(--columns-gap);
+    margin-block: var(--section-gap-large) var(--section-gap);
+  }
+  .content-columns > * { min-width: 0; }
+  .content-columns > * > :first-child { margin-top: 0; }
+  .content-columns > * > :last-child { margin-bottom: 0; }
+  @media (min-width: 769px) {
+    .content-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   .project-entry { margin: 1em 0; }
@@ -1045,16 +1054,12 @@
     letter-spacing: 0.5px;
   }
 
-  /* Curated "popular posts" block at the bottom of single post pages.
-     Reuses .posts-group-title + .blog-posts styles from the listing page;
-     the list itself is split into two visual columns via CSS multi-column
-     on desktop, collapses to one column on mobile. */
+  /* Stack article-listing columns on mobile. */
   @media (max-width: 768px) {
     .posts-columns {
       flex-direction: column;
       gap: 0;
     }
-
   }
 
   /* Plug divider */

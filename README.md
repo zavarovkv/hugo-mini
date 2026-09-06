@@ -23,6 +23,8 @@ Add `{{< latest-posts count="3" >}}` to your homepage content to list the three 
 
 The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style.
 
+Use [`columns` and `column`](docs/content.md#columns) to place content blocks side by side on desktop and stack them on mobile.
+
 ## Quick start
 
 Hugo Extended 0.146 or newer is required.
