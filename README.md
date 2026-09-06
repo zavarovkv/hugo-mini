@@ -19,7 +19,7 @@ Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram inte
 - **Useful without a plugin stack.** Dark mode, multilingual navigation, feeds, search metadata, math, diagrams, and sharing are included.
 - **Easy to grow.** Design tokens, template hooks, named blocks, and custom menu icons cover common extensions.
 
-Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. See [content options](docs/content.md) for details.
+Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. Optional `archive` and `archiveLabel` parameters add a link below the list. See [content options](docs/content.md) for details.
 
 The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style.
 

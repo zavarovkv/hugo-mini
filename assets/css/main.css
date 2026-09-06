@@ -480,6 +480,7 @@
   }
 
   main .blog-posts a,
+  main .latest-posts a,
   main .posts-group-title + p a,
   main .project-entry a {
     font-weight: 300;
@@ -1016,15 +1017,19 @@
     line-height: inherit;
     transform: none;
   }
-  .project-title .project-link {
+  .project-title .project-link,
+  .latest-posts .archive-link {
     display: inline-flex;
     align-items: baseline;
     gap: 0.35em;
     border-bottom: none;
   }
-  .project-name { border-bottom: 0.25px solid var(--color-primary-border); }
-  .project-link:hover .project-name { border-bottom-color: var(--color-accent-border); }
-  .project-arrow { color: var(--text-color); }
+  .project-name,
+  .archive-label { border-bottom: 0.25px solid var(--color-primary-border); }
+  .project-link:hover .project-name,
+  .archive-link:hover .archive-label { border-bottom-color: var(--color-accent-border); }
+  .project-arrow,
+  .archive-arrow { color: var(--text-color); }
   .project-description > :first-child { margin-top: 0.25em; }
   .project-description > :last-child { margin-bottom: 0; }
 
