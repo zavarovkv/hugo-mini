@@ -37,12 +37,15 @@ All parameters are optional unless your site content depends on them.
 | `socialSharing` | Likely sharing buttons on posts | `true` |
 | `telegramChannel` | Telegram comments and reaction source | unset |
 | `mermaidSrc` | Custom Mermaid script, including a local copy | pinned CDN URL |
+| `mermaidModuleSrc` | Optional Mermaid ESM entry; takes precedence over `mermaidSrc` | unset |
 | `aiTranslatedLang` | Language marked as AI translated | unset |
 | `consoleArt`, `consoleYoda` | Optional home-page console art | unset |
 
 Social links live under `[params.social]`: `telegram`, `linkedin`, `github`, and `email`. Schema.org author data lives under `[params.author]`, for example `jobTitle`.
 
 Analytics is opt-in. Set any combination of `yandexMetrikaId`, `googleAnalyticsId`, `plausibleDomain` / `plausibleSrc`, or `umamiWebsiteId` / `umamiSrc`.
+
+For self-hosted modular Mermaid, copy `mermaid.esm.min.mjs` and its `chunks/mermaid.esm.min/` directory from the same pinned npm package to `static/js/mermaid/`, then set `mermaidModuleSrc = "js/mermaid/mermaid.esm.min.mjs"`. Keep their relative paths intact. The classic `mermaidSrc` option and the pinned CDN fallback remain supported. Both modes render diagrams near the viewport and preserve the source if loading fails.
 
 ## Multilingual sites
 

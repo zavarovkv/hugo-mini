@@ -14,15 +14,8 @@
       {{- if not (hasSuffix $directory "/") -}}{{- $directory = path.Dir $directory -}}{{- end -}}
       {{- $wanted = path.Join $directory $wanted -}}
     {{- end -}}
-    {{- $sites := slice -}}
-    {{- if ge hugo.Version "0.156.0" -}}{{- $sites = hugo.Sites -}}{{- else -}}{{- $sites = $page.Sites -}}{{- end -}}
-    {{- range $sites -}}
-      {{- range .Pages -}}
-        {{- if eq (strings.TrimSuffix "/" .RelPermalink) (strings.TrimSuffix "/" $wanted) -}}
-          {{- $target = . -}}
-        {{- end -}}
-      {{- end -}}
-    {{- end -}}
+    {{- $index := partialCached "page-url-index.html" $page -}}
+    {{- $target = index $index (strings.TrimSuffix "/" $wanted) -}}
   {{- end -}}
   {{- with $target -}}
     {{- range .AllTranslations -}}

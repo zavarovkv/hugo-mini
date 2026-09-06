@@ -1,1 +1,2 @@
-<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }} />
+{{- $size := partial "image-dimensions.html" . -}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with $size }} width="{{ .width }}" height="{{ .height }}"{{ end }}{{ with .Title }} title="{{ . }}"{{ end }} />

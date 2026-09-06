@@ -80,6 +80,8 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 
 Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
 
+Mermaid diagrams render as they approach the viewport. An optional local ESM bundle loads only the diagram types in use; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
+
 ## Is Mini a good fit?
 
 Choose Mini if you want a text-led personal site or blog, prefer Hugo over a JavaScript application, and want sensible defaults with a small surface for customization.

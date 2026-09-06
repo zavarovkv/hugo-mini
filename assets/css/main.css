@@ -182,11 +182,6 @@
     }
   }
 
-  /* Title text in header - not a heading */
-  .title .title-text {
-    color: inherit;
-  }
-
   a {
     color: var(--link-color);
     cursor: pointer;
@@ -232,6 +227,10 @@
 
   img {
     max-width: 100%;
+  }
+
+  main img[width][height] {
+    height: auto;
   }
 
   .analytics-noscript {
@@ -348,10 +347,6 @@
     text-decoration: none;
   }
 
-  .title h1 {
-    font-size: 1.5em;
-  }
-
   .inline {
     width: auto;
   }
@@ -425,20 +420,6 @@
     --color-code-bg: #2a2a2a;
   }
 
-  [data-theme="dark"] body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-  }
-
-  [data-theme="dark"] h1,
-  [data-theme="dark"] h2,
-  [data-theme="dark"] h3,
-  [data-theme="dark"] h4,
-  [data-theme="dark"] h5,
-  [data-theme="dark"] h6 {
-    color: var(--heading-color);
-  }
-
   /* Quote style (Stratechery-inspired) */
   q {
     display: block;
@@ -472,7 +453,7 @@
   }
 
   /* Content links: medium weight — between body 300 and bold 600
-     (relies on Inter 500 face declared in fonts.html). */
+     (relies on the Inter 500 face declared above). */
   main a {
     font-weight: 500;
   }
@@ -553,30 +534,7 @@
     border-bottom-color: var(--color-primary-border);
   }
 
-  .title:link .title-text,
-  .title:active .title-text {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary-border);
-  }
-
-  .title:visited .title-text {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary-border);
-  }
-
   .title:hover .title-text {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent-border);
-  }
-
-  [data-theme="dark"] .title .title-text,
-  [data-theme="dark"] .title:link .title-text,
-  [data-theme="dark"] .title:visited .title-text {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary-border);
-  }
-
-  [data-theme="dark"] .title:hover .title-text {
     color: var(--color-accent);
     border-bottom-color: var(--color-accent-border);
   }
@@ -594,11 +552,6 @@
   .title-selected:hover .title-text {
     color: var(--color-primary);
     border-bottom: none;
-  }
-
-  [data-theme="dark"] .title-selected .title-text,
-  [data-theme="dark"] .title-selected:hover .title-text {
-    color: var(--color-primary);
   }
 
   .title-avatar-container {
@@ -709,12 +662,6 @@
     .title-first-name {
       display: none;
     }
-  }
-
-/* Ensure h1 has proper margin-bottom */
-  main h1,
-  article h1 {
-    margin-bottom: 35px;
   }
 
   /* Post meta row: a flex line containing [views + date] on the left
@@ -976,12 +923,6 @@
     font-weight: bold;
     border-bottom: none;
     cursor: default;
-  }
-
-  [data-theme="dark"] .link-selected,
-  [data-theme="dark"] .link-selected:link,
-  [data-theme="dark"] .link-selected:visited {
-    color: var(--color-accent);
   }
 
   /* Posts grouped by tags in 2 columns */
@@ -1364,14 +1305,6 @@
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 2px;
-  }
-
-  [data-theme="dark"] a:focus-visible,
-  [data-theme="dark"] button:focus-visible,
-  [data-theme="dark"] input:focus-visible,
-  [data-theme="dark"] textarea:focus-visible,
-  [data-theme="dark"] select:focus-visible {
-    outline-color: var(--color-primary);
   }
 
   /* Back to top — left gutter click area (Telegram blog style) */

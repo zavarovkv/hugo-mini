@@ -1,0 +1,30 @@
+{{- /* Only inspect local images. External URLs and unsupported formats keep
+       their original markup; this helper never makes a network request. */ -}}
+{{- $size := dict -}}
+{{- $url := urls.Parse .Destination -}}
+{{- $base := urls.Parse .Page.Site.BaseURL -}}
+{{- $local := and (in (slice "" "http" "https") $url.Scheme) (or (not $url.Host) (eq $url.Host $base.Host)) -}}
+{{- $ext := lower (path.Ext $url.Path) -}}
+{{- $supported := in (slice ".jpg" ".jpeg" ".png" ".gif" ".webp") $ext -}}
+{{- /* WebP decoding requires the Extended build advertised by the theme.
+       Leave it alone in non-Extended installations rather than failing. */ -}}
+{{- if and $local $supported (or (ne $ext ".webp") hugo.IsExtended) -}}
+  {{- $image := .Page.Resources.Get $url.Path -}}
+  {{- with $image -}}
+    {{- $size = dict "width" .Width "height" .Height -}}
+  {{- else -}}
+    {{- $source := $url.Path -}}
+    {{- if not (hasPrefix $source "/") -}}
+      {{- $source = path.Join .Page.RelPermalink $source -}}
+    {{- end -}}
+    {{- if hasPrefix $source $base.Path -}}
+      {{- $file := path.Join "static" (strings.TrimPrefix $base.Path $source) -}}
+      {{- if fileExists $file -}}
+        {{- with try (images.Config $file) -}}
+          {{- with .Value -}}{{- $size = dict "width" .Width "height" .Height -}}{{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $size -}}

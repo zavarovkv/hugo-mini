@@ -7,6 +7,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Sharing assets are omitted from section listings and when `socialSharing` is disabled.
+- Local Markdown images reserve their intrinsic dimensions while remaining responsive.
 - Markdown headings preserve their CSS class attributes, allowing the compact section-heading style to be reused at any heading level.
 - Copying fenced code preserves its source without Chroma line numbers; copy buttons are visible on keyboard focus.
 - Empty category arrays appear in Miscellaneous, empty sections stay empty, and nested section posts are included in listings.
@@ -18,6 +20,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- Optional `mermaidModuleSrc` for a local ESM entry and lazy-loaded diagram modules, preserving the classic `mermaidSrc` option.
 - `columns` and `column` shortcodes for two equal desktop columns that stack on mobile, with spacing matching article-listing groups.
 - Optional archive link below the `latest-posts` list, with a neutral, unlined arrow matching project links.
 - A `project` shortcode for a linked title with an external-link arrow and a description below it.
@@ -31,6 +34,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 
 ### Changed
+- Mermaid loads near the first diagram and renders subsequent diagrams near the viewport; theme changes are serialized and missing assets leave readable source.
+- Removed redundant color overrides and obsolete header rules without changing typography; fallback page-link lookup shares a permalink index.
 - Increased spacing before content columns and the site-wide footer using a shared spacing token.
 - Project links and archive links use the same light weight as article-list links, without affecting unrelated text below section headings.
 - Corrected the Go module path to `github.com/zavarovkv/hugo-mini/v3`, as required for v3 releases and Hugo theme-catalog builds. Hugo Module users must add the `/v3` suffix; Git submodule installations are unchanged.

@@ -32,6 +32,8 @@ other = "Product"
 
 ## Shortcodes
 
+Markdown images from page bundles or `static/` receive `width` and `height` automatically for supported local raster formats (JPEG, PNG, GIF, and WebP). They stay responsive; the attributes reserve their aspect ratio before downloading. External images are never fetched during the build. Raw HTML `<img>` tags bypass Markdown hooks, so include their intrinsic `width` and `height` explicitly.
+
 | Shortcode | Use |
 | --- | --- |
 | `caption` | Caption text below an image |

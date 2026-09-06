@@ -298,6 +298,103 @@
     });
   })();
 
+  // Mermaid: load once near the first diagram, then render only diagrams
+  // near the viewport. Serialize renders so theme changes cannot reset a
+  // node while Mermaid is still writing its SVG.
+  ready(function () {
+    var configText = document.body.getAttribute('data-mermaid');
+    if (!configText) return;
+    var config = JSON.parse(configText);
+    var entries = Array.from(document.querySelectorAll('.mermaid'), function (node) {
+      return { node: node, source: node.textContent, visible: false, theme: null, failed: false };
+    });
+    if (!entries.length) return;
+    var library;
+    var running = false;
+    var observer;
+
+    function load() {
+      if (!library) {
+        if (config.module) {
+          library = import(config.src).then(function (module) { return module.default; });
+        } else {
+          library = new Promise(function (resolve, reject) {
+            var script = document.createElement('script');
+            script.src = config.src;
+            if (config.integrity) {
+              script.integrity = config.integrity;
+              script.crossOrigin = 'anonymous';
+              script.referrerPolicy = 'no-referrer';
+            }
+            script.onload = function () {
+              if (window.mermaid) resolve(window.mermaid);
+              else reject(new Error('Mermaid did not initialize'));
+            };
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+      }
+      return library;
+    }
+
+    async function render() {
+      if (running) return;
+      running = true;
+      try {
+        var mermaid = await load();
+        mermaid.initialize({ startOnLoad: false });
+        if (document.fonts) await document.fonts.ready;
+        while (true) {
+          var theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'neutral';
+          var entry = entries.find(function (item) {
+            return item.visible && !item.failed && item.theme !== theme;
+          });
+          if (!entry) break;
+          entry.node.textContent = entry.source;
+          entry.node.removeAttribute('data-processed');
+          mermaid.initialize({ startOnLoad: false, theme: theme });
+          try {
+            await mermaid.run({ nodes: [entry.node] });
+          } catch (error) {
+            entry.node.textContent = entry.source;
+            entry.failed = true;
+          }
+          entry.theme = theme;
+          entry.node.style.visibility = 'visible';
+        }
+      } catch (error) {
+        // A missing entry/chunk must leave readable source, not a blank block.
+        entries.forEach(function (entry) {
+          entry.node.textContent = entry.source;
+          entry.node.style.visibility = 'visible';
+          entry.failed = true;
+        });
+        if (observer) observer.disconnect();
+      } finally {
+        running = false;
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(function (changes) {
+        changes.forEach(function (change) {
+          if (!change.isIntersecting) return;
+          entries.find(function (entry) { return entry.node === change.target; }).visible = true;
+          observer.unobserve(change.target);
+          render();
+        });
+      }, { rootMargin: '200px' });
+      entries.forEach(function (entry) { observer.observe(entry.node); });
+    } else {
+      entries.forEach(function (entry) { entry.visible = true; });
+      render();
+    }
+    new MutationObserver(function () {
+      if (entries.some(function (entry) { return entry.visible && !entry.failed; })) render();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  });
+
   // ── Recent-posts sidebar: absolute in the right gutter on desktop ───────
   (function () {
     var MIN_GUTTER = 180;

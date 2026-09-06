@@ -113,7 +113,7 @@
   {{- /* Likely social sharing — assets only loaded on blog posts. The
          small block of CSS that styles .likely is part of the bundled
          main.css above (always loaded, ~200 bytes minified). */ -}}
-  {{- if in (site.Params.mainSections | default (slice "blog")) .Type }}
+  {{- if and .IsPage (in (site.Params.mainSections | default (slice "blog")) .Type) (site.Params.socialSharing | default true) }}
   <link rel="stylesheet" href="{{ "likely/likely.css" | relURL }}">
   <script defer src="{{ "likely/likely.js" | relURL }}"></script>
   {{- end }}
@@ -139,7 +139,17 @@
   "copy" (i18n "copy" | default "Copy")
   "copied" (i18n "copied" | default "Copied")
 -}}
-<body data-i18n="{{ $i18n | jsonify }}">
+{{- $mermaid := dict -}}
+{{- if .Params.mermaid -}}
+  {{- if .Site.Params.mermaidModuleSrc -}}
+    {{- $mermaid = dict "src" (.Site.Params.mermaidModuleSrc | relURL) "module" true -}}
+  {{- else if .Site.Params.mermaidSrc -}}
+    {{- $mermaid = dict "src" (.Site.Params.mermaidSrc | relURL) -}}
+  {{- else -}}
+    {{- $mermaid = dict "src" "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js" "integrity" "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy" -}}
+  {{- end -}}
+{{- end -}}
+<body data-i18n="{{ $i18n | jsonify }}"{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
   {{- with .Site.Params.yandexMetrikaId }}
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" class="analytics-noscript" alt="" /></div></noscript>
   {{- end }}
@@ -174,63 +184,7 @@
   {{- /* Per-template extension point, same idea as the "head" block above. */ -}}
   {{- block "scripts" . }}{{ end }}
 
-  {{ if .Params.mermaid }}
-  {{- /* Mermaid is the theme's only third-party runtime dependency, and it is
-         loaded only on pages with `mermaid = true` in front matter.
 
-         By default it comes from jsDelivr, pinned to a known-good version and
-         guarded with an SRI hash. Set `params.mermaidSrc` to serve it from
-         somewhere else — e.g. drop mermaid.min.js into your site's static/js/
-         and point the param at "js/mermaid.min.js" for a CDN-free build.
-         A custom src is emitted without integrity/crossorigin, since the
-         pinned hash only matches the pinned file.
-
-         When bumping the pinned version, test a page that uses modern syntax
-         (animated edges, @{ shape: ... }) — older 11.x releases fail silently.
-         Recompute the hash with:
-         curl -s https://registry.npmjs.org/mermaid/-/mermaid-<ver>.tgz | tar -xzO package/dist/mermaid.min.js | openssl dgst -sha384 -binary | openssl base64 -A */ -}}
-  {{- with .Site.Params.mermaidSrc }}
-  <script defer src="{{ . | relURL }}"></script>
-  {{- else }}
-  <script defer
-          src="https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js"
-          integrity="sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"></script>
-  {{- end }}
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var diagrams = document.querySelectorAll('.mermaid');
-      function show() {
-        diagrams.forEach(function(el) { el.style.visibility = 'visible'; });
-      }
-      // CDN script failed (offline, SRI mismatch) — unhide the raw diagram
-      // source instead of leaving a blank hole in the article.
-      if (typeof mermaid === 'undefined') { show(); return; }
-
-      // Keep the original sources so diagrams can be re-rendered when the
-      // color scheme changes (mermaid bakes the theme into the SVG).
-      var sources = [];
-      diagrams.forEach(function(el) { sources.push([el, el.textContent]); });
-
-      function render() {
-        var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-        mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral' });
-        mermaid.run().then(show).catch(show);
-      }
-
-      new MutationObserver(function() {
-        sources.forEach(function(pair) {
-          pair[0].textContent = pair[1];
-          pair[0].removeAttribute('data-processed');
-        });
-        render();
-      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-      render();
-    });
-  </script>
-  {{ end }}
 
 </body>
 

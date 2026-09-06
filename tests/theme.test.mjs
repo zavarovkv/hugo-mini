@@ -48,16 +48,22 @@ contentDir = "content/ru"
 weight = 2
 `);
     await writeFile(join(root, "static/images/avatar.svg"), '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>');
+    const pixel = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aM1sAAAAASUVORK5CYII=", "base64");
+    await writeFile(join(root, "static/images/pixel.png"), pixel);
     const code = 'if ready:\n    print("<hello> & goodbye")\n';
     const body = `## Intro\n\n[Translated](${baseURL}shared/?mode=1#intro)\n\n` +
       '```python {linenos=inline}\n' + code + '```\n\n' +
-      '```python {linenos=table}\n' + code + '```\n';
+      '```python {linenos=table}\n' + code + '```\n\n' +
+      `![Local](${baseURL}images/pixel.png?v=2 "A title")\n\n![External](https://elsewhere.example/pixel.png)\n\n![Missing](${basePath}images/missing.png)\n`;
     for (const lang of ["en", "ru"]) {
       await writeFile(join(root, `content/${lang}/blog/shared.md`), `+++\ntitle="Shared"\nslug="shared"\ndate=2026-01-01\ncategories=[]\n+++\n${body}`);
       await writeFile(join(root, `content/${lang}/blog/uncategorized.md`), '+++\ntitle="Uncategorized"\nslug="uncategorized"\ndate=2026-01-01\n+++\nText\n');
       await writeFile(join(root, `content/${lang}/blog/hidden.md`), '+++\ntitle="Hidden"\nslug="hidden"\ndate=2026-01-01\nhidden=true\n+++\nText\n');
     }
     await writeFile(join(root, "content/en/notes/hidden.md"), '+++\ntitle="Hidden note"\nhidden=true\n+++\nText\n');
+    await mkdir(join(root, "content/en/blog/bundle"));
+    await writeFile(join(root, "content/en/blog/bundle/pixel.png"), pixel);
+    await writeFile(join(root, "content/en/blog/bundle/index.md"), '+++\ntitle="Bundle"\nslug="bundle"\n+++\n![Bundle image](pixel.png)');
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const output = join(root, "public");
     const listing = await readFile(join(output, "blog/index.html"), "utf8");
@@ -73,6 +79,19 @@ weight = 2
     assert.equal(feed.home_page_url, `${baseURL}ru/`);
     assert.equal(feed.feed_url, `${baseURL}ru/index.json`);
     const post = await readFile(join(output, "ru/shared/index.html"), "utf8");
+    assert.ok(!post.includes("likely/likely."), "disabled sharing must not load its assets");
+    assert.ok(!listing.includes("likely/likely."), "section pages must not load sharing assets");
+    const imageTags = [...post.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
+    const localImage = imageTags.find((tag) => attribute(tag, "alt") === "Local");
+    assert.equal(attribute(localImage, "width"), "1");
+    assert.equal(attribute(localImage, "height"), "1");
+    assert.equal(attribute(localImage, "src"), `${baseURL}images/pixel.png?v=2`);
+    assert.equal(attribute(localImage, "title"), "A title");
+    for (const alt of ["External", "Missing"]) assert.equal(attribute(imageTags.find((tag) => attribute(tag, "alt") === alt), "width"), undefined);
+    const bundle = await readFile(join(output, "bundle/index.html"), "utf8");
+    const bundleImage = [...bundle.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "alt") === "Bundle image");
+    assert.equal(attribute(bundleImage, "width"), "1");
+    assert.equal(attribute(bundleImage, "height"), "1");
     assert.ok(post.includes(`${basePath}ru/shared/?mode=1#intro`), "same-site links must select the existing translation");
     assert.ok(!post.includes("id=recent-sidebar") && !post.includes('id="recent-sidebar"'));
     assert.ok(!post.includes("has-hover-avatar"), "one avatar must not enable two-frame styles");
@@ -92,6 +111,10 @@ weight = 2
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const originalLinks = await readFile(join(output, "ru/shared/index.html"), "utf8");
     assert.ok(originalLinks.includes(`${baseURL}shared/?mode=1#intro`), "localizeLinks=false must preserve the destination");
+    await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true"));
+    execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
+    assert.ok((await readFile(join(output, "ru/shared/index.html"), "utf8")).includes("likely/likely.js"));
+    assert.ok(!(await readFile(join(output, "blog/index.html"), "utf8")).includes("likely/likely."));
   });
 }
 
