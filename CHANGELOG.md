@@ -7,9 +7,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
-- Code blocks use a readable 15px font, light/dark syntax colors, and visible copy controls on touch devices.
-- Recent articles remain below the post whenever the viewport cannot fit a sidebar, including with JavaScript disabled.
-- The mobile menu moves focus inside, keeps Tab navigation within the open menu, restores focus on closing, and cleans up when switching to desktop.
 - Markdown headings preserve their CSS class attributes, allowing the compact section-heading style to be reused at any heading level.
 - Copying fenced code preserves its source without Chroma line numbers; copy buttons are visible on keyboard focus.
 - Empty category arrays appear in Miscellaneous, empty sections stay empty, and nested section posts are included in listings.

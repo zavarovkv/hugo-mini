@@ -50,9 +50,3 @@ Add `.no-anchor` to omit the copy link on an individual heading, for example `##
 ## Latest articles
 
 Place `{{< latest-posts count="3" >}}` in your homepage `_index.md` wherever the list belongs. It follows `params.mainSections`, sorts by date, and excludes hidden posts. Hugo also excludes drafts and future posts in normal production builds. Pinned posts retain their date order here; pinning applies only to category listings. With no posts, nothing is rendered.
-
-## Code highlighting
-
-Set `markup.highlight.noClasses = false` to use Mini's light/dark syntax palette in its bundled stylesheet (including in any language-specific markup blocks). The `--syntax-*` CSS tokens control the palette. The example site enables this setting.
-
-Setting `noClasses = true` preserves Hugo's inline colors and the configured `style`; those colors do not adapt to the theme toggle. Copy buttons are always visible on touch devices and appear on hover or keyboard focus elsewhere.

@@ -76,8 +76,6 @@ ignoreErrors    = ["error-disable-taxonomy"]
     email     = "jane@example.com"
 
 [markup]
-  [markup.highlight]
-    noClasses = false
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true   # required for shortcodes and HTML in content

@@ -64,20 +64,6 @@
     --color-control-border: #ccc;
     --color-control-border-hover: #999;
     --color-code-bg: transparent;   /* light: inline code has no fill */
-
-    /* Chroma syntax colors (class-based highlighting). */
-    --syntax-bg: #f6f8fa;
-    --syntax-text: #24292f;
-    --syntax-muted: #57606a;
-    --syntax-keyword: #cf222e;
-    --syntax-name: #0550ae;
-    --syntax-string: #0a3069;
-    --syntax-function: #6639ba;
-    --syntax-type: #953800;
-    --syntax-tag: #116329;
-    --syntax-line: #eaeef2;
-    --syntax-deleted-bg: #ffebe9;
-    --syntax-inserted-bg: #dafbe1;
   }
 
   body {
@@ -277,8 +263,7 @@
   .highlight pre {
     padding: 16px 20px;
     border-radius: 6px;
-    font-size: 0.9375rem;
-    font-weight: 400;
+    font-size: 0.875em;
     line-height: 1.6;
     overflow-x: auto;
     -webkit-text-size-adjust: 100%;
@@ -290,43 +275,6 @@
     background: none;
   }
 
-  /* Chroma's structural classes support both inline and table line numbers.
-     Token colors use the same palette in every language and switch with the
-     rest of the theme. Inline-style highlighting remains a site opt-out. */
-  .chroma {
-    color: var(--syntax-text);
-    background-color: var(--syntax-bg);
-  }
-  .chroma .line { display: flex; }
-  .chroma .cl { flex: 1; }
-  .chroma .hl { background-color: var(--syntax-line); }
-  .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
-  .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-  .chroma .lntd:first-child { width: 1%; }
-  .chroma .lnt, .chroma .ln {
-    white-space: pre;
-    user-select: none;
-    -webkit-user-select: none;
-    margin-right: 0.4em;
-    padding: 0 0.4em;
-    color: var(--syntax-muted);
-  }
-  .chroma .lnlinks { color: inherit; text-decoration: none; border: 0; }
-  .chroma :is(.k, .kd, .kn, .kr, .kt, .o, .ow, .err, .gr, .gt) { color: var(--syntax-keyword); }
-  .chroma :is(.kc, .kp, .nb, .bp, .no, .nl, .py, .nv, .vc, .vg, .vi, .vm, .m, .mb, .mf, .mh, .mi, .il, .mo) { color: var(--syntax-name); }
-  .chroma :is(.s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss, .l, .ld) { color: var(--syntax-string); }
-  .chroma :is(.nf, .fm, .nd) { color: var(--syntax-function); }
-  .chroma :is(.nc, .ne, .na, .ni) { color: var(--syntax-type); }
-  .chroma .nt { color: var(--syntax-tag); }
-  .chroma :is(.c, .ch, .cm, .c1, .cs, .cp, .cpf) { color: var(--syntax-muted); font-style: italic; }
-  .chroma :is(.go, .gp, .w) { color: var(--syntax-muted); }
-  .chroma :is(.gh, .gu) { color: var(--syntax-function); font-weight: bold; }
-  .chroma .gd { color: var(--syntax-keyword); background-color: var(--syntax-deleted-bg); }
-  .chroma .gi { color: var(--syntax-tag); background-color: var(--syntax-inserted-bg); }
-  .chroma .ge { font-style: italic; }
-  .chroma .gs { font-weight: bold; }
-  .chroma .gl { text-decoration: underline; }
-
   .copy-btn {
     position: absolute;
     top: 8px;
@@ -337,7 +285,7 @@
     border: none;
     border-radius: 5px;
     background: rgba(0, 0, 0, 0.06);
-    color: rgba(0, 0, 0, 0.65);
+    color: rgba(0, 0, 0, 0.35);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -349,15 +297,6 @@
   .highlight:hover .copy-btn,
   .copy-btn:focus-visible {
     opacity: 1;
-  }
-
-  @media (hover: none), (pointer: coarse) {
-    .copy-btn {
-      opacity: 1;
-      width: 40px;
-      height: 40px;
-    }
-    .highlight pre { padding-top: 52px; }
   }
 
   .copy-btn:hover {
@@ -486,18 +425,6 @@
     --color-control-border: #333;
     --color-control-border-hover: #666;
     --color-code-bg: #2a2a2a;
-    --syntax-bg: #0d1117;
-    --syntax-text: #e6edf3;
-    --syntax-muted: #8b949e;
-    --syntax-keyword: #ff7b72;
-    --syntax-name: #79c0ff;
-    --syntax-string: #a5d6ff;
-    --syntax-function: #d2a8ff;
-    --syntax-type: #ffa657;
-    --syntax-tag: #7ee787;
-    --syntax-line: #263041;
-    --syntax-deleted-bg: #490202;
-    --syntax-inserted-bg: #0f5323;
   }
 
   [data-theme="dark"] body {
@@ -987,9 +914,7 @@
       overflow-y: auto;
       opacity: 0;
       visibility: hidden;
-      /* Visibility must change immediately so focus can enter on opening
-         and cannot return to the hidden links after closing. */
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .main-nav.active {
@@ -1391,6 +1316,14 @@
     .theme-toggle svg { width: 20px; height: 20px; }
   }
 
+  /* Code blocks: invert background in dark theme for readability */
+  [data-theme="dark"] .highlight pre,
+  [data-theme="dark"] .highlight table {
+    background-color: #0d1117 !important;
+  }
+
+
+
   /* Keyboard focus styles */
   a:focus-visible,
   button:focus-visible,
@@ -1466,20 +1399,28 @@
     flex-shrink: 0;
   }
 
-  /* Static by default, including without JS and at intermediate widths. */
+  /* Recent posts sidebar — desktop: absolute in right gutter (JS); mobile: static block at bottom */
   .recent-sidebar {
-    margin-top: 50px;
+    display: none; /* JS shows on desktop; mobile media query overrides below */
   }
 
-  .recent-sidebar:not(.is-sidebar) .recent-sidebar-label {
-    font-size: 1em;
-    margin-bottom: 0.4em;
+  @media (max-width: 768px) {
+    .recent-sidebar {
+      display: block;
+      margin-top: 50px;
+    }
+
+    .recent-sidebar .recent-sidebar-label {
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--heading-color);
+      margin-bottom: 0.4em;
+    }
   }
 
   /* Desktop sidebar styles (applied via JS inline) */
   .recent-sidebar.is-sidebar {
     position: absolute;
-    margin-top: 0;
     max-width: 160px;
     font-size: 0.775rem;
     line-height: 1.45;

@@ -45,7 +45,7 @@
     {{ end }}
 
     {{- /* Recent posts — desktop: absolute sidebar in the right gutter (JS);
-           other widths: static block at the bottom (CSS). */}}
+           mobile: static block at the bottom (CSS). */}}
     {{ with partial "recent-posts.html" . }}
     <aside class="recent-sidebar" id="recent-sidebar">
       <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>

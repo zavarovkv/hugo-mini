@@ -105,8 +105,6 @@ title = "Reading fixture"
 theme = "hugo-mini"
 defaultContentLanguage = "en"
 disableKinds = ["taxonomy", "term"]
-[markup.highlight]
-noClasses = false
 [params]
 mainSections = ["writing"]
 [languages.en]
@@ -143,8 +141,6 @@ weight = 2
     const links = [...list.matchAll(/<a\b[^>]*>/g)].map((m) => attribute(m[0], "href"));
     assert.deepEqual(links, ["latest", "next", "third"].map((slug) => `/sub/${prefix}writing/${slug}/`));
     assert.ok(list.includes(lang === "en" ? "Latest articles" : "Последние статьи"));
-    const post = await readFile(join(output, "writing/latest/index.html"), "utf8");
-    assert.ok(/<pre\b[^>]*class=(?:"chroma"|chroma)/.test(post), "class-based highlighting uses the theme's colors");
   }
 });
 
