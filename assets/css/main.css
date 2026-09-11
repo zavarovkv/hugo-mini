@@ -51,8 +51,8 @@
     --columns-gap: 2em;
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
-    --wavy-arrow-width: 2.6em;
-    --wavy-arrow-height: 0.9em;
+    --wavy-arrow-width: 2.25em;
+    --wavy-arrow-height: 1.125em;
 
     /* Surfaces & text */
     --background-color: #fff;
@@ -222,8 +222,8 @@
     display: inline-block;
     width: var(--wavy-arrow-width);
     height: var(--wavy-arrow-height);
-    vertical-align: -0.1em;
-    margin-inline: 0.15em;
+    vertical-align: baseline;
+    margin-inline: 0.075em;
   }
 
   table {

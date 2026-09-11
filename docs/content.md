@@ -58,7 +58,7 @@ Place `{{< wavy-arrow >}}` between dates or other inline text:
 From 2021 {{< wavy-arrow >}} 2025, I taught product management.
 ```
 
-The arrow uses `currentColor`, has no animation, and scales with the text (about 42px wide at a 16px font size). Its screen-reader label defaults to the localized `wavy_arrow_to` string ("to" in English, "по" in Russian); set `label="until"` to override it. The `--wavy-arrow-width` and `--wavy-arrow-height` CSS tokens default to `2.6em` and `0.9em`.
+The arrow has a gently rising stroke, one tilted oval loop, and a softly curved arrowhead. It uses `currentColor`, has no animation, and scales with the text (36px wide at a 16px font size), with its tip aligned to the middle of adjacent numerals. Its screen-reader label defaults to the localized `wavy_arrow_to` string ("to" in English, "по" in Russian); set `label="until"` to override it. The `--wavy-arrow-width` and `--wavy-arrow-height` CSS tokens default to `2.25em` and `1.125em`.
 
 ## Latest articles
 
