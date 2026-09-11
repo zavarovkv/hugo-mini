@@ -42,12 +42,23 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | `latest-posts` | Newest visible posts in the current language; `count="3"` by default |
 | `project` | Linked project name with an external-link arrow, followed by a Markdown description |
 | `columns` / `column` | Responsive columns; `column` groups Markdown and shortcodes into one column |
+| `wavy-arrow` | Thin inline SVG arrow that follows the surrounding text color and size |
 
 Enable KaTeX with `math = true` and Mermaid with `mermaid = true` only on pages that use them. Native Markdown `##` and `###` headings receive copyable anchor links automatically.
 
 Heading classes are preserved: `## Projects {.posts-group-title}` uses the same compact typography as category headings on the blog listing while retaining its heading level and anchor link.
 
 Add `.no-anchor` to omit the copy link on an individual heading, for example `## Projects {.posts-group-title .no-anchor}`. The heading keeps its ID for direct links.
+
+## Wavy arrow
+
+Place `{{< wavy-arrow >}}` between dates or other inline text:
+
+```text
+From 2021 {{< wavy-arrow >}} 2025, I taught product management.
+```
+
+The arrow uses `currentColor`, has no animation, and scales with the text (about 42px wide at a 16px font size). Its screen-reader label defaults to the localized `wavy_arrow_to` string ("to" in English, "по" in Russian); set `label="until"` to override it. The `--wavy-arrow-width` and `--wavy-arrow-height` CSS tokens default to `2.6em` and `0.9em`.
 
 ## Latest articles
 

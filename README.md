@@ -25,6 +25,8 @@ The [`project` shortcode](docs/content.md#projects) displays a linked project na
 
 Use [`columns` and `column`](docs/content.md#columns) to place content blocks side by side on desktop and stack them on mobile.
 
+Use [`wavy-arrow`](docs/content.md#wavy-arrow) for a thin inline SVG arrow between dates or other text.
+
 ## Quick start
 
 Hugo Extended 0.146 or newer is required.

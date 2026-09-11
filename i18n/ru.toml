@@ -130,3 +130,6 @@ other = "Скопировать ссылку на раздел"
 
 [telegram_reactions]
 other = "Реакции в Telegram"
+
+[wavy_arrow_to]
+other = "по"

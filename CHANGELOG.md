@@ -21,6 +21,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- A `wavy-arrow` shortcode for a thin, static inline SVG arrow with a localized accessible label and text-relative sizing.
 - Optional `mermaidModuleSrc` for a local ESM entry and lazy-loaded diagram modules, preserving the classic `mermaidSrc` option.
 - `columns` and `column` shortcodes for two equal desktop columns that stack on mobile, with spacing matching article-listing groups.
 - Optional archive link below the `latest-posts` list, with a neutral, unlined arrow matching project links.
