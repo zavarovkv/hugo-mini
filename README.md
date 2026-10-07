@@ -23,6 +23,8 @@ Add `{{< latest-posts count="3" >}}` to your homepage content to list the three 
 
 The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style.
 
+Add [`github-stars`](docs/content.md#github-stars) inside a description for a GitHub link with a subtle star count, fetched before the build and rendered without browser requests.
+
 Use [`columns` and `column`](docs/content.md#columns) to place content blocks side by side on desktop and stack them on mobile.
 
 Use [`wavy-arrow`](docs/content.md#wavy-arrow) for a thin inline SVG arrow between dates or other text.

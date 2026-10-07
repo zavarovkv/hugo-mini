@@ -1,0 +1,14 @@
+{{- $repo := .Get "repo" -}}
+{{- if not (findRE `^[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+$` $repo) -}}
+  {{- errorf "github-stars requires repo=\"owner/repo\" (%s)" .Position -}}
+{{- end -}}
+{{- $label := .Get "label" | default "GitHub" -}}
+{{- $counts := site.Data.github_stars | default dict -}}
+{{- $hasCount := isset $counts $repo -}}
+{{- $count := int (index $counts $repo | default 0) -}}
+{{- $starsLabel := "" -}}
+{{- if $hasCount -}}
+  {{- $starsLabel = i18n "github_stars" (dict "Count" $count) -}}
+{{- end -}}
+<a class="github-repo-link" href="https://github.com/{{ $repo }}" target="_blank" rel="noopener noreferrer"{{ if $hasCount }} aria-label="{{ $label }}: {{ $starsLabel }}" title="{{ $starsLabel }}"{{ end }}><span class="github-repo-label">{{ $label }}</span>{{ if $hasCount }}<span class="github-stars" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m8 1.5 2 4.2 4.6.7-3.3 3.2.8 4.6L8 12l-4.1 2.2.8-4.6-3.3-3.2 4.6-.7Z"/></svg><span>{{ $count }}</span></span>{{ end }}</a>
+{{- /* Keep punctuation adjacent to the inline link. */ -}}

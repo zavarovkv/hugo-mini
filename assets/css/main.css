@@ -993,6 +993,29 @@
   .project-description > :first-child { margin-top: 0.25em; }
   .project-description > :last-child { margin-bottom: 0; }
 
+  .github-repo-link,
+  .github-repo-link:link,
+  .github-repo-link:visited {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4em;
+    border-bottom: none;
+    white-space: nowrap;
+  }
+  .github-repo-label { border-bottom: 0.25px solid var(--color-primary-border); }
+  .github-repo-link:hover .github-repo-label { border-bottom-color: var(--color-accent-border); }
+  .github-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2em;
+    color: var(--color-secondary);
+    font-size: 0.875em;
+    font-weight: 300;
+    font-variant-numeric: tabular-nums;
+  }
+  .github-stars svg { width: 1em; height: 1em; flex: none; }
+  .github-repo-link:hover .github-stars { color: var(--color-accent); }
+
   .badge-new {
     font-size: 0.55em;
     font-weight: 600;

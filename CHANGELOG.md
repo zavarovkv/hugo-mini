@@ -21,6 +21,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- A `github-stars` shortcode and optional build-time fetcher for inline repository links with localized, subtle star counts; API failures retain existing data and browsers make no counter requests.
 - A `wavy-arrow` shortcode for a thin, static inline SVG arrow with a flowing oval loop, a softly curved arrowhead, optical alignment beside numerals, a localized accessible label, and text-relative sizing and spacing.
 - Optional `mermaidModuleSrc` for a local ESM entry and lazy-loaded diagram modules, preserving the classic `mermaidSrc` option.
 - `columns` and `column` shortcodes for two equal desktop columns that stack on mobile, with spacing matching article-listing groups.

@@ -133,3 +133,7 @@ other = "Reactions on Telegram"
 
 [wavy_arrow_to]
 other = "to"
+
+[github_stars]
+one = "{{ .Count }} star on GitHub"
+other = "{{ .Count }} stars on GitHub"

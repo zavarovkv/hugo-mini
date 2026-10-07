@@ -41,6 +41,7 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | `plug` | Centered three-asterisk divider |
 | `latest-posts` | Newest visible posts in the current language; `count="3"` by default |
 | `project` | Linked project name with an external-link arrow, followed by a Markdown description |
+| `github-stars` | Inline GitHub link with an optional, build-time star count |
 | `columns` / `column` | Responsive columns; `column` groups Markdown and shortcodes into one column |
 | `wavy-arrow` | Thin inline SVG arrow that follows the surrounding text color and size |
 
@@ -94,3 +95,24 @@ Use the `project` shortcode below a section heading. The name links to an extern
 A short description. Source code on [GitHub](https://github.com/example/project).
 {{< /project >}}
 ```
+
+## GitHub stars
+
+Use `github-stars` wherever an inline repository link fits, including inside a project description:
+
+```text
+Source code on {{< github-stars repo="example/project" >}}.
+```
+
+The link shows a thin outlined star and an exact count, with a localized accessible label. Optional `label` replaces the default "GitHub" text. Without data it remains a normal repository link; zero is displayed as a valid count.
+
+From the consuming site's root, fetch counts before starting Hugo or building:
+
+```bash
+node themes/hugo-mini/scripts/fetch-github-stars.mjs example/project
+hugo --minify
+```
+
+The helper accepts multiple `owner/repo` arguments and writes `data/github_stars.json`. Public repositories need no token; optional `GITHUB_TOKEN` or `GH_TOKEN` is used only by the helper. Outside CI it also reuses an existing GitHub CLI login, if available, to avoid the lower anonymous rate limit. Credentials are never printed or saved. Each request has a ten-second timeout. API failures preserve previous counts, or omit an unavailable counter, while invalid local data and write errors fail normally. Unchanged counts do not rewrite the file. Commit this data file if you want a fallback available in fresh checkouts.
+
+Run the helper before every production build to update automatically on deploy. A scheduled rebuild can refresh counts between content updates. Hugo itself uses the local data only, so builds and browsers remain independent of GitHub availability.
