@@ -127,6 +127,10 @@ mermaid = false
 
 Set `hidden = true` to keep a page out of listings and feeds while leaving its URL public. Use Hugo's `draft = true` when a page must not be published.
 
+Set `backToTop = false` in front matter to omit the back-to-top control and its event handlers on a page. The same option under `[params]` applies site-wide.
+
+For a custom share card, add `layouts/_partials/custom_og_image.html` in your site and return a Hugo image resource. Return `false` on other pages to keep the generated default. Open Graph and JSON-LD reuse the returned image; see [customization](docs/customization.md#share-cards).
+
 An empty or omitted `categories` list places a post in Miscellaneous. Set `recentSidebarCount = 0` to hide recent posts. A single `avatar` works without `avatarHover` in both color schemes.
 
 ## Optional integrations
@@ -150,3 +154,7 @@ An empty or omitted `categories` list places a post in Miscellaneous. Set `recen
 ## License
 
 [MIT](https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE)
+
+### Exclude a page from the sitemap
+
+The sitemap respects Hugo's standard `[sitemap] disable = true` front matter setting. This controls sitemap inclusion; search indexing is controlled separately by a page's robots metadata.

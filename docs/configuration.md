@@ -32,6 +32,7 @@ All parameters are optional unless your site content depends on them.
 | `copyrightYear` | Starting year of the footer range | current year |
 | `newPostDays` | Age window for the New badge | `30` |
 | `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
+| `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
 | `mainSections` | Sections treated as posts | Hugo default |
 | `socialSharing` | Likely sharing buttons on posts | `true` |
@@ -42,6 +43,8 @@ All parameters are optional unless your site content depends on them.
 | `consoleArt`, `consoleYoda` | Optional home-page console art | unset |
 
 Social links live under `[params.social]`: `telegram`, `linkedin`, `github`, and `email`. Schema.org author data lives under `[params.author]`, for example `jobTitle`.
+
+Set `backToTop = false` in a page's front matter to disable the control on that page, or under site `[params]` to disable it throughout the site. A page value overrides the site setting.
 
 Analytics is opt-in. Set any combination of `yandexMetrikaId`, `googleAnalyticsId`, `plausibleDomain` / `plausibleSrc`, or `umamiWebsiteId` / `umamiSrc`.
 

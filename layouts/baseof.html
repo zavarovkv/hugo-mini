@@ -149,7 +149,7 @@
     {{- $mermaid = dict "src" "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js" "integrity" "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy" -}}
   {{- end -}}
 {{- end -}}
-<body data-i18n="{{ $i18n | jsonify }}"{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
+<body data-i18n="{{ $i18n | jsonify }}"{{ if not (.Param "backToTop" | default true) }} data-back-to-top="false"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
   {{- with .Site.Params.yandexMetrikaId }}
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" class="analytics-noscript" alt="" /></div></noscript>
   {{- end }}

@@ -428,6 +428,8 @@
 
   // ── Back to top: click area in the left gutter ──────────────────────────
   (function () {
+    if (document.body.getAttribute('data-back-to-top') === 'false') return;
+
     var SCROLL_THRESHOLD = 400;
     var MIN_GUTTER = 130;
     var label = t('goUp', 'Go up');

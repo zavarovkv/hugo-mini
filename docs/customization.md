@@ -45,6 +45,20 @@ Use focused overrides whenever possible:
 - Named blocks in `baseof.html` let a template replace `head`, `header`, `main`, `footer`, or `scripts`.
 - Copy a theme template into the matching site path only when the whole template needs to diverge.
 
+## Share cards
+
+The theme generates a 1200×630 share card for each page. To customize selected pages, add `layouts/_partials/custom_og_image.html` to your site. It receives the page and must return an image resource or `false` to keep the default:
+
+```go-html-template
+{{- $image := false -}}
+{{- with .Params.shareImage -}}
+  {{- $image = resources.Get . -}}
+{{- end -}}
+{{- return $image -}}
+```
+
+In this example, `shareImage = "images/event-card.png"` resolves to `assets/images/event-card.png`. The hook may also compose an image with Hugo's image filters. Open Graph, Twitter Cards, and JSON-LD share its URL and dimensions. Image metadata includes the page title as alternative text.
+
 ## Assets
 
 The theme bundles and fingerprints its CSS and JavaScript with Hugo Pipes. Fonts are self-hosted. Mermaid is the only optional CDN asset; set `params.mermaidSrc = "js/mermaid.min.js"` after placing a local bundle in `static/js/` to avoid that request too.

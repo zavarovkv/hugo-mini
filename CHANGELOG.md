@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Sitemaps respect the standard `sitemap.disable` front matter setting when excluding individual pages.
 - Telegram comments synchronize their theme after loading and page restoration, and switch in place without reloading the iframe.
 - Sharing assets are omitted from section listings and when `socialSharing` is disabled.
 - Local Markdown images reserve their intrinsic dimensions while remaining responsive.
@@ -21,6 +22,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- A `custom_og_image.html` partial hook for site-specific share cards, reused by Open Graph and JSON-LD, with image type and alternative-text metadata.
+- Optional `backToTop = false` page or site setting disables the back-to-top control and its event handlers.
 - A `github-stars` shortcode and optional build-time fetcher for inline repository links with localized, subtle star counts; API failures retain existing data and browsers make no counter requests.
 - A `wavy-arrow` shortcode for a thin, static inline SVG arrow with a flowing oval loop, a softly curved arrowhead, optical alignment beside numerals, a localized accessible label, and text-relative sizing and spacing.
 - Optional `mermaidModuleSrc` for a local ESM entry and lazy-loaded diagram modules, preserving the classic `mermaidSrc` option.
