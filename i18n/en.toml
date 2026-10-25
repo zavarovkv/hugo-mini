@@ -92,6 +92,12 @@ other = "Getting Started"
 [new_badge]
 other = "New"
 
+[reading_book]
+other = "Book"
+
+[reading_read]
+other = "Read"
+
 [not_found]
 other = "Page not found. It may have been moved or deleted."
 

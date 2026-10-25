@@ -23,7 +23,8 @@
     <div class="post-meta-inline">
       <div class="post-meta-left">
         {{- partial "telegram-views.html" . -}}
-        <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-date">{{ partial "format-date.html" . }}</time>
+        {{- $dateFormat := cond (eq .Params.date_precision "month") "2006-01" "2006-01-02" -}}
+        <time datetime="{{ .Date.Format $dateFormat }}" class="post-date">{{ partial "format-date.html" . }}</time>
       </div>
       {{- partial "telegram-reactions.html" . -}}
     </div>

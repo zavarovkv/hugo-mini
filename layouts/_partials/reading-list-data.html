@@ -1,0 +1,40 @@
+{{- /* Site-owned data; shared by the shelf and freshness metadata. */ -}}
+{{- $page := .page -}}
+{{- $key := .key -}}
+{{- $source := index $page.Site.Data $key -}}
+{{- if not $source -}}
+  {{- errorf "Reading list %q: data file not found (%s)" $key $page.Path -}}
+{{- end -}}
+{{- $items := slice -}}
+{{- $ids := slice -}}
+{{- $latest := false -}}
+{{- range $source.items -}}
+  {{- if or (not .id) (not .title) (not .author) -}}
+    {{- errorf "Reading list %q: each item needs id, title and author" $key -}}
+  {{- end -}}
+  {{- if in $ids .id -}}
+    {{- errorf "Reading list %q: duplicate id %q" $key .id -}}
+  {{- end -}}
+  {{- $ids = $ids | append .id -}}
+  {{- if not (findRE `^\d{4}-(0[1-9]|1[0-2])$` .read) -}}
+    {{- errorf "Reading list %q, %q: read must be YYYY-MM" $key .id -}}
+  {{- end -}}
+  {{- if and (isset . "rating") (or (lt (float .rating) 0) (gt (float .rating) 10)) -}}
+    {{- errorf "Reading list %q, %q: rating must be between 0 and 10" $key .id -}}
+  {{- end -}}
+  {{- $added := false -}}
+  {{- with .added -}}
+    {{- $added = time.AsTime . -}}
+    {{- if and (not ($added.After now)) (or (not $latest) ($added.After $latest)) -}}
+      {{- $latest = $added -}}
+    {{- end -}}
+  {{- end -}}
+  {{- /* Only display strings vary by language; dates, ratings and links stay shared. */ -}}
+  {{- $localized := index (.translations | default dict) $page.Language.Lang | default dict -}}
+  {{- $items = $items | append (merge . (dict
+    "title" ($localized.title | default .title)
+    "author" ($localized.author | default .author)
+    "added_date" $added
+  )) -}}
+{{- end -}}
+{{- return (dict "items" (sort $items "read" "desc") "latest_added" $latest) -}}

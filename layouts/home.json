@@ -7,6 +7,7 @@
   {{- $languageCode = site.Language.LanguageCode -}}
 {{- end -}}
 {{- range partial "main-pages.html" . -}}
+  {{- $dates := partial "page-dates.html" . -}}
   {{- $item := dict
     "id" .Permalink
     "url" .Permalink
@@ -14,7 +15,7 @@
     "content_text" (.Plain | truncate 500)
     "summary" .Description
     "date_published" (.Date.Format "2006-01-02T15:04:05Z07:00")
-    "date_modified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+    "date_modified" ($dates.modified.Format "2006-01-02T15:04:05Z07:00")
   -}}
   {{- with .Params.categories -}}
     {{- $item = merge $item (dict "tags" .) -}}

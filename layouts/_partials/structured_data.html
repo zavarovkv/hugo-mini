@@ -25,6 +25,7 @@
 
 {{- if .IsPage -}}
   {{- $description := .Description | default .Summary -}}
+  {{- $dates := partial "page-dates.html" . -}}
 
   {{- /* Reuse the generated resource and its URL, including any base path. */ -}}
   {{- $ogImage := partialCached "og-image-resource.html" . .Permalink -}}
@@ -39,7 +40,7 @@
       "author" $author
       "publisher" (dict "@type" "Person" "name" $authorName)
       "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
-      "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified" ($dates.modified.Format "2006-01-02T15:04:05Z07:00")
       "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
     -}}
     {{- with .Params.categories -}}

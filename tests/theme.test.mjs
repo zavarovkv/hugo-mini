@@ -29,6 +29,7 @@ for (const basePath of ["/", "/sub/"]) {
     await writeFile(join(root, "hugo.toml"), `baseURL = "${baseURL}"
 title = "Fixture User"
 theme = "hugo-mini"
+enableRobotsTXT = true
 defaultContentLanguage = "en"
 disableKinds = ["taxonomy", "term"]
 [outputs]
@@ -57,8 +58,8 @@ weight = 2
       `![Local](${baseURL}images/pixel.png?v=2 "A title")\n\n![External](https://elsewhere.example/pixel.png)\n\n![Missing](${basePath}images/missing.png)\n`;
     for (const lang of ["en", "ru"]) {
       await writeFile(join(root, `content/${lang}/blog/shared.md`), `+++\ntitle="Shared"\nslug="shared"\ndate=2026-01-01\ncategories=[]\n+++\n${body}`);
-      await writeFile(join(root, `content/${lang}/blog/uncategorized.md`), '+++\ntitle="Uncategorized"\nslug="uncategorized"\ndate=2026-01-01\n+++\nText\n');
-      await writeFile(join(root, `content/${lang}/blog/hidden.md`), '+++\ntitle="Hidden"\nslug="hidden"\ndate=2026-01-01\nhidden=true\n+++\nText\n');
+      await writeFile(join(root, `content/${lang}/blog/uncategorized.md`), '+++\ntitle="Uncategorized"\nslug="uncategorized"\ndate=2000-01-02\n+++\nText\n');
+      await writeFile(join(root, `content/${lang}/blog/hidden.md`), '+++\ntitle="Hidden"\nslug="hidden"\ndate=2001-02-01\ndate_precision="month"\nhidden=true\n+++\nText\n');
     }
     await writeFile(join(root, "content/en/notes/hidden.md"), '+++\ntitle="Hidden note"\nhidden=true\n+++\nText\n');
     await mkdir(join(root, "content/en/blog/bundle"));
@@ -66,6 +67,19 @@ weight = 2
     await writeFile(join(root, "content/en/blog/bundle/index.md"), '+++\ntitle="Bundle"\nslug="bundle"\n+++\n![Bundle image](pixel.png)');
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const output = join(root, "public");
+    const robots = await readFile(join(output, "robots.txt"), "utf8");
+    assert.match(robots, /^User-agent: \*/);
+    assert.ok(robots.includes(`Sitemap: ${baseURL}sitemap.xml`), "robots advertises the root multilingual sitemap, including a base path");
+    for (const [langPath, monthLabel, exactLabel] of [["", "February 2001", "2 January 2000"], ["ru/", "февраль 2001", "2 января 2000"]]) {
+      const monthlyPost = await readFile(join(output, langPath, "hidden/index.html"), "utf8");
+      const date = [...monthlyPost.matchAll(/<time\b[^>]*>([^<]+)<\/time>/g)].find((match) => match[1] === monthLabel)?.[0];
+      assert.ok(date, "month precision works in both languages without exposing a placeholder day");
+      assert.equal(attribute(date, "datetime"), "2001-02");
+      const exactPost = await readFile(join(output, langPath, "uncategorized/index.html"), "utf8");
+      const exactDate = [...exactPost.matchAll(/<time\b[^>]*>([^<]+)<\/time>/g)].find((match) => match[1] === exactLabel)?.[0];
+      assert.ok(exactDate, "an old article retains its known day, localized month and year");
+      assert.equal(attribute(exactDate, "datetime"), "2000-01-02");
+    }
     const listing = await readFile(join(output, "blog/index.html"), "utf8");
     assert.ok(listing.includes(`${basePath}shared/`), "empty categories must be listed");
     assert.ok(listing.includes(`${basePath}uncategorized/`));

@@ -8,6 +8,10 @@ hugo --minify
 
 The generated site is in `public/`.
 
+With `enableRobotsTXT = true`, the theme advertises the default root
+`sitemap.xml` in `robots.txt`. If you change the sitemap filename or disable
+sitemaps, supply your own `layouts/robots.txt` to match that configuration.
+
 ## GitHub Pages
 
 Use the official Pages actions or another maintained workflow. The essential sequence is:

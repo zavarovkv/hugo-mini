@@ -1,0 +1,30 @@
+{{- $key := .Page.Params.reading_list -}}
+{{- if not $key -}}{{- errorf "reading-list: set reading_list in %s front matter" .Page.Path -}}{{- end -}}
+{{- $list := partialCached "reading-list-data.html" (dict "page" .Page "key" $key) .Page.Language.Lang $key -}}
+<table class="reading-shelf">
+  <thead>
+    <tr>
+      <th scope="col">{{ i18n "reading_book" }}</th>
+      <th scope="col" class="reading-date">{{ i18n "reading_read" }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{- range $list.items }}
+    {{- $book := . -}}
+    <tr id="book-{{ .id }}">
+      <td>
+        {{- with .review -}}
+          {{- with $.Page.Site.GetPage . }}
+        <a href="{{ .RelPermalink }}">{{ $book.title }}</a>
+          {{- else -}}{{- errorf "Reading list %q: review page %q not found" $key . -}}{{- end -}}
+        {{- else }}
+        {{ .title }}
+        {{- end -}}
+        {{ partial "new-badge.html" .added_date }}
+        <div class="reading-meta">{{ .author }}{{ with .year }} · {{ . }}{{ end }}{{ if isset . "rating" }} · {{ lang.FormatNumber 1 (float .rating) }}/10{{ end }}</div>
+      </td>
+      <td class="reading-date">{{ time.Format "01.2006" (time.AsTime (printf "%s-01" .read)) }}</td>
+    </tr>
+    {{- end }}
+  </tbody>
+</table>

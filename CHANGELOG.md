@@ -7,6 +7,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Secondary text, including reading dates and GitHub star counts, retains readable contrast in dark mode.
+- The blog archetype includes a valid numeric Telegram ID example and documents hidden posts.
+- Older articles retain their exact publication date; month-only dates use localized month names in English and Russian.
 - Sitemaps respect the standard `sitemap.disable` front matter setting when excluding individual pages.
 - Telegram comments synchronize their theme after loading and page restoration, and switch in place without reloading the iframe.
 - Sharing assets are omitted from section listings and when `socialSharing` is disabled.
@@ -22,6 +25,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- Generated `robots.txt` advertises the default sitemap URL when `enableRobotsTXT` is enabled.
+- Optional `date_precision = "month"` displays publication dates without an invented day.
+- A data-driven `reading-list` shortcode displays a responsive two-column table in the standard blog typography, supports localized titles and authors, and links to ordinary Markdown reviews. New badges reflect book additions, and collection modification dates propagate to SEO, JSON feeds and sitemaps.
 - A `custom_og_image.html` partial hook for site-specific share cards, reused by Open Graph and JSON-LD, with image type and alternative-text metadata.
 - Optional `backToTop = false` page or site setting disables the back-to-top control and its event handlers.
 - A `github-stars` shortcode and optional build-time fetcher for inline repository links with localized, subtle star counts; API failures retain existing data and browsers make no counter requests.

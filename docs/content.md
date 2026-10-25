@@ -20,6 +20,13 @@ mermaid = false
 
 `pinned` moves a post to the top of its category group. `hidden` removes it from listings, recent posts, RSS, JSON Feed, and `llms.txt`, but the URL remains public and crawlable. Use `draft` for unpublished work. `telegram_post` is the positive numeric ID of a Telegram message, not its URL.
 
+If only the publication month is known, set `date` to the first day of that
+month and `date_precision = "month"`. The visible article date uses the
+localized month name and year (`февраль 2001` / `February 2001`) and its HTML
+`datetime` uses `YYYY-MM`; sorting and structured metadata keep the full
+`date` value. Without this field, articles show the known day, month and year,
+including older articles (`2 января 2000` / `2 January 2000`).
+
 ## Categories
 
 Categories are grouped on the section page. Add display names through i18n so slugs remain stable:
@@ -116,3 +123,60 @@ hugo --minify
 The helper accepts multiple `owner/repo` arguments and writes `data/github_stars.json`. Public repositories need no token; optional `GITHUB_TOKEN` or `GH_TOKEN` is used only by the helper. Outside CI it also reuses an existing GitHub CLI login, if available, to avoid the lower anonymous rate limit. Credentials are never printed or saved. Each request has a ten-second timeout. API failures preserve previous counts, or omit an unavailable counter, while invalid local data and write errors fail normally. Unchanged counts do not rewrite the file. Commit this data file if you want a fallback available in fresh checkouts.
 
 Run the helper before every production build to update automatically on deploy. A scheduled rebuild can refresh counts between content updates. Hugo itself uses the local data only, so builds and browsers remain independent of GitHub availability.
+
+## Reading lists
+
+Store a collection in a site-owned data file, for example `data/books.toml`:
+
+```toml
+[[items]]
+id = "example"
+title = "Book title"
+author = "Author"
+year = 2026
+read = "2026-10"
+added = "2026-10-25"
+rating = 8.5
+review = "/blog/review-example"
+```
+
+On the collection article, set `reading_list = "books"` in front matter and
+insert `{{< reading-list >}}`. The shortcode renders a two-column table in the
+theme's normal typography, newest reading month first. The first column shows
+each title above its author, publication year and rating; reading months align on the right.
+Long titles and author lists wrap within their column on narrow screens. The
+Rows are separated by whitespace. Both column labels share the theme's heading
+weight and color, with a single rule beneath the header and a section gap after
+the table. The table uses the
+shared stylesheet, with no extra scripts or network requests.
+
+`id`, `title`, `author` and `read` (YYYY-MM) are required. Optional
+`year` is the publication year, `rating` is a number from 0 to 10, and
+`review` is a Hugo content reference. Missing ratings are omitted; zero is
+displayed. Interface labels and number formatting follow the current page language.
+
+Optional per-language display strings belong to the same record:
+
+```toml
+[items.translations.en]
+title = "English edition title"
+author = "Author's published name"
+```
+
+Only `title` and `author` are localized; IDs, reading dates, publication years,
+ratings, addition dates and review references stay shared. Missing translated
+strings fall back to the original. Use published titles or retain the original
+when no translated edition has been confirmed.
+
+Optional `added` is an ISO date or timestamp. Recent additions give both the
+book and its collection article the standard New badge for `newPostDays`
+days. A collection's publication date does not activate its badge. Historical
+imports can omit `added`; future additions do not activate badges early.
+`newPostDays = 0` disables badges. The latest addition also advances the
+collection's modification date in SEO metadata, its JSON feed and sitemap
+without changing its publication date or moving unrelated posts.
+
+Reviews are ordinary Markdown articles with the theme's existing templates
+and typography. Content references resolve in the current language and work
+under a base path. A review can use `hidden = true` to stay out of listings
+and feeds while remaining indexable and included in the sitemap.

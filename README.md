@@ -23,6 +23,8 @@ Add `{{< latest-posts count="3" >}}` to your homepage content to list the three 
 
 The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style.
 
+[Reading lists](docs/content.md#reading-lists) display site-owned book data in a compact two-column table with ordinary blog typography. Titles and authors can be localized while reading dates, ratings and review references remain shared. Recent book additions can update the New badge on both the book and its collection article.
+
 Add [`github-stars`](docs/content.md#github-stars) inside a description for a GitHub link with a subtle star count, fetched before the build and rendered without browser requests.
 
 Use [`columns` and `column`](docs/content.md#columns) to place content blocks side by side on desktop and stack them on mobile.
@@ -126,6 +128,10 @@ mermaid = false
 ```
 
 Set `hidden = true` to keep a page out of listings and feeds while leaving its URL public. Use Hugo's `draft = true` when a page must not be published.
+
+For a publication date known only to the month, use the first day in `date`
+and set `date_precision = "month"` to display a localized month name and year.
+Other articles retain the full day, month and year regardless of their age.
 
 Set `backToTop = false` in front matter to omit the back-to-top control and its event handlers on a page. The same option under `[params]` applies site-wide.
 

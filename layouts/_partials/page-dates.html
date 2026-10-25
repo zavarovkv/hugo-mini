@@ -1,0 +1,13 @@
+{{- /* A shelf is new only when a book was added, regardless of its page date. */ -}}
+{{- $modified := .Lastmod -}}
+{{- $activity := .Date -}}
+{{- $page := . -}}
+{{- with .Params.reading_list -}}
+  {{- $activity = false -}}
+  {{- $list := partialCached "reading-list-data.html" (dict "page" $page "key" .) $page.Language.Lang . -}}
+  {{- with $list.latest_added -}}
+    {{- if .After $modified -}}{{- $modified = . -}}{{- end -}}
+    {{- $activity = . -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "modified" $modified "activity" $activity) -}}

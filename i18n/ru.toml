@@ -29,40 +29,40 @@ other = "Включить темную тему"
 other = "Переключить тему"
 
 [month_january]
-other = "января"
+other = "январь"
 
 [month_february]
-other = "февраля"
+other = "февраль"
 
 [month_march]
-other = "марта"
+other = "март"
 
 [month_april]
-other = "апреля"
+other = "апрель"
 
 [month_may]
-other = "мая"
+other = "май"
 
 [month_june]
-other = "июня"
+other = "июнь"
 
 [month_july]
-other = "июля"
+other = "июль"
 
 [month_august]
-other = "августа"
+other = "август"
 
 [month_september]
-other = "сентября"
+other = "сентябрь"
 
 [month_october]
-other = "октября"
+other = "октябрь"
 
 [month_november]
-other = "ноября"
+other = "ноябрь"
 
 [month_december]
-other = "декабря"
+other = "декабрь"
 
 # Category display names
 [cat_marketing]
@@ -91,6 +91,12 @@ other = "Начало работы"
 
 [new_badge]
 other = "New"
+
+[reading_book]
+other = "Книга"
+
+[reading_read]
+other = "Прочитана"
 
 [not_found]
 other = "Страница не найдена. Возможно, она была перемещена или удалена."

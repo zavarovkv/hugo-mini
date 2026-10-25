@@ -5,8 +5,11 @@ date = "{{ .Date }}"
 description = ""
 categories = []
 draft = true
-# telegram_post = 0   # uncomment after publishing to enable Discussion comments
-# math = false        # enable KaTeX math rendering
-# mermaid = false     # enable Mermaid diagrams
+
+# Optional fields (uncomment if needed):
+# telegram_post = 123  # Numeric Telegram message ID, not a URL
+# math = true          # Enable KaTeX math rendering
+# mermaid = true       # Enable Mermaid diagrams
+# hidden = true        # Hide from listings and feeds; keep the page crawlable
 +++
 

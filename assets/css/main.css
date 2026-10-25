@@ -377,6 +377,45 @@
     margin-bottom: 0.5em;
   }
 
+  .reading-shelf {
+    margin-block-end: var(--section-gap);
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .reading-shelf td {
+    padding: 0.625em 0;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .reading-shelf th {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-divider);
+    text-align: start;
+    font-size: 0.875em;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--heading-color);
+  }
+
+  .reading-shelf .reading-date {
+    width: 5.5rem;
+    padding-inline-start: 1rem;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .reading-shelf td.reading-date {
+    color: var(--color-secondary);
+  }
+
+  .reading-meta {
+    margin-top: 0.125em;
+    font-size: 0.875em;
+    color: var(--color-secondary);
+  }
+
   /* KaTeX math formulas */
   .katex {
     font-size: 1.1em;
@@ -421,6 +460,7 @@
     --background-color: #1a1a1a;
     --heading-color: #e8e8e8;
     --text-color: #c7ccd1;
+    --color-secondary: var(--color-muted);
     --link-color: var(--color-primary);
     --blockquote-color: #e8e8e8;
     --color-divider: #2a2a2a;
@@ -469,6 +509,7 @@
   }
 
   main .blog-posts a,
+  main .reading-shelf a,
   main .archive-link,
   main .project-entry a {
     font-weight: 300;
