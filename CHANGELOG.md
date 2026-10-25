@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Reading lists and New badges support Hugo 0.146.0 and the current data API without deprecation warnings.
 - Secondary text, including reading dates and GitHub star counts, retains readable contrast in dark mode.
 - The blog archetype includes a valid numeric Telegram ID example and documents hidden posts.
 - Older articles retain their exact publication date; month-only dates use localized month names in English and Russian.

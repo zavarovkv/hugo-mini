@@ -4,5 +4,5 @@
 {{- end -}}
 {{- with . -}}
   {{- $date := time.AsTime . -}}
-  {{- if and (gt $days 0) (not ($date.After now)) (ge $date (now.AddDate 0 0 (mul -1 $days))) }} <span class="badge-new">{{ i18n "new_badge" | default "New" }}</span>{{ end -}}
+  {{- if and (gt $days 0) (not ($date.After now)) (ge $date (now.AddDate 0 0 (int (mul -1 $days)))) }} <span class="badge-new">{{ i18n "new_badge" | default "New" }}</span>{{ end -}}
 {{- end -}}
