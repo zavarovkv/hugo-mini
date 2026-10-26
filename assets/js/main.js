@@ -48,6 +48,7 @@
     var toggle = document.querySelector('.mobile-menu-toggle');
     var nav = document.querySelector('.main-nav');
     if (!toggle || !nav) return;
+    var mobileMql = window.matchMedia(MOBILE_QUERY);
 
     function closeMenu() {
       nav.classList.remove('active');
@@ -83,6 +84,12 @@
       closeMenu();
       toggle.focus();
     });
+
+    function onBreakpointChange() {
+      if (!mobileMql.matches) closeMenu();
+    }
+    if (mobileMql.addEventListener) mobileMql.addEventListener('change', onBreakpointChange);
+    else if (mobileMql.addListener) mobileMql.addListener(onBreakpointChange);
   });
 
   // ── Theme toggle + widgets that follow it ──────────────────────────────
@@ -101,7 +108,8 @@
 
     function storedChoice() {
       try {
-        return localStorage.getItem(STORAGE_KEY);
+        var choice = localStorage.getItem(STORAGE_KEY);
+        return choice === 'light' || choice === 'dark' ? choice : null;
       } catch (e) {
         return null;
       }
@@ -199,6 +207,20 @@
       });
     });
   })();
+
+  // ── KaTeX: shared behavior, enabled only on pages that load its assets ────
+  ready(function () {
+    if (document.body.getAttribute('data-math') !== 'true' || typeof renderMathInElement !== 'function') return;
+    renderMathInElement(document.querySelector('main'), {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+        { left: '\\[', right: '\\]', display: true },
+        { left: '\\(', right: '\\)', display: false },
+      ],
+      throwOnError: false,
+    });
+  });
 
   // ── Copy button on code blocks ─────────────────────────────────────────
   (function () {

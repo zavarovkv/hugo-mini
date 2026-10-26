@@ -27,6 +27,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/_shortcodes/` contains `caption`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, and `column`.
 - `assets/css/main.css` is the single stylesheet; design tokens live at its top.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
+- `assets/js/theme-init.js` is the small, testable before-paint exception, inlined before CSS to resolve the saved or system color scheme.
 - `static/` contains self-hosted fonts, KaTeX, Likely, and shared images.
 - `i18n/` contains built-in English and Russian interface strings.
 - `exampleSite/` is the bilingual integration fixture and public demo content.
@@ -43,6 +44,7 @@ Layouts use Hugo's current template system introduced in 0.146.0: page templates
 - Put styles in `assets/css/main.css`, not inline `<style>` blocks or extra stylesheets. Add reusable colors and dimensions to the token block.
 - Put browser behavior in `assets/js/main.js`, not inline scripts in templates.
 - Keep templates site-agnostic. Expose reusable behavior through Hugo params, partial hooks, front matter, or i18n rather than hard-coding values for `zavarov.com`.
+- Keep version-specific data and site collection access in `site-data.html` and `sites.html`; callers use cached partials instead of duplicating Hugo API fallbacks.
 - Maintain accessibility, responsive behavior, dark mode, reduced-motion support, and semantic HTML when changing UI.
 - Preserve compatibility with the declared Hugo minimum unless a version bump is intentional and documented in `hugo.toml`, README, CI, and changelog.
 

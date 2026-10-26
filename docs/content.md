@@ -20,6 +20,11 @@ mermaid = false
 
 `pinned` moves a post to the top of its category group. `hidden` removes it from listings, recent posts, RSS, JSON Feed, and `llms.txt`, but the URL remains public and crawlable. Use `draft` for unpublished work. `telegram_post` is the positive numeric ID of a Telegram message, not its URL.
 
+Set `noindex = true` to exclude an accessible page from search results. This is
+independent of listing visibility. Draft previews and 404 pages also emit
+`noindex`. Set `[sitemap] disable = true` separately when a page should stay out
+of the sitemap.
+
 If only the publication month is known, set `date` to the first day of that
 month and `date_precision = "month"`. The visible article date uses the
 localized month name and year (`февраль 2001` / `February 2001`) and its HTML
@@ -144,7 +149,7 @@ On the collection article, set `reading_list = "books"` in front matter and
 insert `{{< reading-list >}}`. The shortcode renders a two-column table in the
 theme's normal typography, newest reading month first. The first column shows
 each title above its author, publication year and rating; reading months align on the right.
-Long titles and author lists wrap within their column on narrow screens. The
+Long titles and author lists wrap within their column on narrow screens.
 Rows are separated by whitespace. Both column labels share the theme's heading
 weight and color, with a single rule beneath the header and a section gap after
 the table. The table uses the

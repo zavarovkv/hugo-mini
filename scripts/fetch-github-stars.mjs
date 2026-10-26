@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { readFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
+import { writeJSON } from "./lib/files.mjs";
 
 const repositoryPattern = /^[A-Za-z0-9][A-Za-z0-9-]*\/[A-Za-z0-9_.-]+$/;
 const validCount = (value) => Number.isSafeInteger(value) && value >= 0;
@@ -45,12 +46,7 @@ export async function fetchGitHubStars({
       warn(`GitHub stars (${repo}): ${error.message}; ${fallback}.`);
     }
   }
-  if (changed) {
-    await mkdir(dirname(output), { recursive: true });
-    const temporary = `${output}.${process.pid}.tmp`;
-    await writeFile(temporary, JSON.stringify(counts, null, 2) + "\n");
-    await rename(temporary, output);
-  }
+  if (changed) await writeJSON(output, counts);
   return counts;
 }
 

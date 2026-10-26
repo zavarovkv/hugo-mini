@@ -15,7 +15,7 @@
 */ -}}
 {{- with .Params.telegram_post -}}
   {{- $key := printf "%v" . -}}
-  {{- with site.Data.telegram_reactions -}}
+  {{- with (partialCached "site-data.html" $).telegram_reactions -}}
     {{- with index . $key -}}
       {{- with .reactions -}}
 <div class="tg-reactions" aria-label="{{ i18n "telegram_reactions" | default "Reactions on Telegram" }}">

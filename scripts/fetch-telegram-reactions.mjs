@@ -55,9 +55,10 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { parseArgs } from "node:util";
 import { pathToFileURL } from "node:url";
+import { writeJSON } from "./lib/files.mjs";
 
 const USER_AGENT = "Mozilla/5.0 (compatible; hugo-mini-telegram-reactions/1.0)";
 const DEFAULT_OUTPUT = "data/telegram_reactions.json";
@@ -82,9 +83,10 @@ function parseCliArgs() {
  *  keys in this dump, so callers should use lowercase property names. */
 function readHugoConfig() {
   try {
-    const json = execSync("hugo config --format json", {
+    const json = execFileSync("hugo", ["config", "--format", "json"], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
+      timeout: 10_000,
     });
     return JSON.parse(json);
   } catch {
@@ -94,7 +96,7 @@ function readHugoConfig() {
 
 /** Resolve effective channel / content dir / output, merging CLI args,
  *  env vars, and Hugo config. CLI wins over env wins over Hugo config. */
-function resolveConfig(cli, hugoConfig) {
+export function resolveConfig(cli, hugoConfig) {
   // Channel
   let channel = cli.channel || process.env.TELEGRAM_CHANNEL;
   if (!channel && hugoConfig) {
@@ -103,10 +105,12 @@ function resolveConfig(cli, hugoConfig) {
 
   // Content dir
   let contentDir = cli["content-dir"];
-  if (!contentDir && hugoConfig && hugoConfig.contentdir) {
-    // Hugo's top-level `contentdir` is already resolved to the default
-    // language's content directory (e.g. "content/ru").
-    contentDir = path.join(hugoConfig.contentdir, DEFAULT_POSTS_SUBDIR);
+  if (!contentDir && hugoConfig) {
+    const language = hugoConfig.defaultcontentlanguage || "en";
+    const mount = hugoConfig.module?.mounts?.find((entry) => entry.target === "content" &&
+      (entry.lang === language || entry.sites?.matrix?.languages?.includes(language)));
+    const source = mount?.source || hugoConfig.contentdir;
+    if (source) contentDir = path.join(source, DEFAULT_POSTS_SUBDIR);
   }
   if (!contentDir) {
     contentDir = path.join("content", DEFAULT_POSTS_SUBDIR);
@@ -205,7 +209,7 @@ function parseViews(html) {
   return m ? m[1].trim() : null;
 }
 
-async function fetchOne(channel, id) {
+async function fetchOne(channel, id, fetchImpl, sleep) {
   const url = `https://t.me/${channel}/${id}?embed=1&mode=tme`;
 
   let lastErr;
@@ -213,7 +217,7 @@ async function fetchOne(channel, id) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-      const res = await fetch(url, {
+      const res = await fetchImpl(url, {
         headers: { "User-Agent": USER_AGENT },
         signal: controller.signal,
       });
@@ -227,7 +231,7 @@ async function fetchOne(channel, id) {
           : Math.min(1000 * 2 ** (attempt - 1), 8000);
         lastErr = new Error(`HTTP ${res.status}`);
         if (attempt < MAX_RETRIES) {
-          await new Promise((r) => setTimeout(r, delay));
+          await sleep(delay);
           continue;
         }
         throw lastErr;
@@ -267,7 +271,7 @@ async function fetchOne(channel, id) {
       // Network errors, aborts, etc. — retry with backoff.
       if (attempt < MAX_RETRIES) {
         const delay = Math.min(1000 * 2 ** (attempt - 1), 8000);
-        await new Promise((r) => setTimeout(r, delay));
+        await sleep(delay);
         continue;
       }
       throw lastErr;
@@ -298,17 +302,12 @@ async function readPrevious(output) {
   return {};
 }
 
-async function main() {
-  const cli = parseCliArgs();
-  const hugoConfig = readHugoConfig();
-  const { channel, contentDir, output } = resolveConfig(cli, hugoConfig);
-
+export async function fetchTelegramReactions({
+  channel, contentDir, output = DEFAULT_OUTPUT, fetchImpl = fetch,
+  sleep = (delay) => new Promise((done) => setTimeout(done, delay)),
+} = {}) {
   if (!channel) {
-    console.error("Missing Telegram channel. Resolve it via one of:");
-    console.error("  - params.telegramChannel in your Hugo config");
-    console.error("  - TELEGRAM_CHANNEL env var");
-    console.error("  - --channel CLI flag");
-    process.exit(1);
+    throw new Error("Set params.telegramChannel in Hugo config, TELEGRAM_CHANNEL, or --channel.");
   }
 
   console.log(`Channel:     @${channel}`);
@@ -316,7 +315,8 @@ async function main() {
   console.log(`Output:      ${output}`);
   console.log("");
 
-  const posts = await collectPostIds(contentDir);
+  // Several articles (or translations) may reference the same channel post.
+  const posts = [...new Map((await collectPostIds(contentDir)).map((post) => [post.id, post])).values()];
   if (posts.length === 0) {
     console.log(`No posts with telegram_post in ${contentDir} — nothing to fetch.`);
     return;
@@ -345,7 +345,7 @@ async function main() {
   let stale = 0;
   for (const p of posts) {
     try {
-      const data = await fetchOne(channel, p.id);
+      const data = await fetchOne(channel, p.id, fetchImpl, sleep);
       results[p.id] = data;
       const summary =
         data.reactions.length > 0
@@ -368,21 +368,19 @@ async function main() {
   }
 
   if (ok === 0) {
-    console.error(
-      `\nAll ${failed} fetches failed — leaving ${output} untouched and exiting with error.`
-    );
-    process.exit(1);
+    throw new Error(`All ${failed} fetches failed — leaving ${output} untouched.`);
   }
 
-  await fs.mkdir(path.dirname(output), { recursive: true });
-  await fs.writeFile(output, JSON.stringify(results, null, 2) + "\n", "utf8");
+  await writeJSON(output, results);
   console.log(
     `\nWrote ${output} (${ok} ok, ${failed} failed${
       stale > 0 ? `, ${stale} kept from previous run` : ""
     }, ${Object.keys(results).length} entries)`
   );
+  return results;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  main().catch((e) => { console.error("Fatal:", e); process.exitCode = 1; });
+  fetchTelegramReactions(resolveConfig(parseCliArgs(), readHugoConfig()))
+    .catch((e) => { console.error("Fatal:", e.message); process.exitCode = 1; });
 }

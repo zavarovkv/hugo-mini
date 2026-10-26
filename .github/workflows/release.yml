@@ -27,12 +27,14 @@ jobs:
       - name: Create tag and release
         env:
           GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.tag }}
         run: |
           set -euo pipefail
-          TAG="${{ inputs.tag || '' }}"
+          TAG="$INPUT_TAG"
           if [ -z "$TAG" ]; then
             TAG="$(tr -d '[:space:]' < .github/RELEASE_TAG)"
           fi
+          git check-ref-format "refs/tags/$TAG"
           echo "Tag: $TAG"
           if gh release view "$TAG" --repo "${{ github.repository }}" > /dev/null 2>&1; then
             echo "Release $TAG already exists — nothing to do."

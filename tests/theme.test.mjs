@@ -23,7 +23,7 @@ for (const basePath of ["/", "/sub/"]) {
   test(`theme outputs remain consistent at ${basePath}`, async (t) => {
     const root = await mkdtemp(join(tmpdir(), "hugo-mini-test-"));
     t.after(() => rm(root, { recursive: true, force: true }));
-    for (const dir of ["themes", "content/en/blog", "content/ru/blog", "content/en/notes", "static/images"]) await mkdir(join(root, dir), { recursive: true });
+    for (const dir of ["themes", "data", "content/en/blog", "content/ru/blog", "content/en/notes", "static/images"]) await mkdir(join(root, dir), { recursive: true });
     await symlink(themeRoot, join(root, "themes/hugo-mini"), "dir");
     const baseURL = `https://example.org${basePath}`;
     await writeFile(join(root, "hugo.toml"), `baseURL = "${baseURL}"
@@ -38,16 +38,18 @@ home = ["HTML", "RSS", "JSON"]
 blog = "/:slug/"
 [params]
 mainSections = ["blog"]
+telegramChannel = "fixture"
 avatar = "images/avatar.svg"
 socialSharing = false
 recentSidebarCount = 0
 [languages.en]
 contentDir = "content/en"
-weight = 1
+weight = 2
 [languages.ru]
 contentDir = "content/ru"
-weight = 2
+weight = 1
 `);
+    await writeFile(join(root, "data/telegram_reactions.json"), JSON.stringify({ "123": { views: "456", reactions: [{ emoji: "❤", count: 7 }] } }));
     await writeFile(join(root, "static/images/avatar.svg"), '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>');
     const pixel = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aM1sAAAAASUVORK5CYII=", "base64");
     await writeFile(join(root, "static/images/pixel.png"), pixel);
@@ -57,7 +59,7 @@ weight = 2
       '```python {linenos=table}\n' + code + '```\n\n' +
       `![Local](${baseURL}images/pixel.png?v=2 "A title")\n\n![External](https://elsewhere.example/pixel.png)\n\n![Missing](${basePath}images/missing.png)\n`;
     for (const lang of ["en", "ru"]) {
-      await writeFile(join(root, `content/${lang}/blog/shared.md`), `+++\ntitle="Shared"\nslug="shared"\ndate=2026-01-01\ncategories=[]\n+++\n${body}`);
+      await writeFile(join(root, `content/${lang}/blog/shared.md`), `+++\ntitle="Shared"\nslug="shared"\ndate=2026-01-01\ncategories=[]\ntelegram_post=123\n+++\n${body}`);
       await writeFile(join(root, `content/${lang}/blog/uncategorized.md`), '+++\ntitle="Uncategorized"\nslug="uncategorized"\ndate=2000-01-02\n+++\nText\n');
       await writeFile(join(root, `content/${lang}/blog/hidden.md`), '+++\ntitle="Hidden"\nslug="hidden"\ndate=2001-02-01\ndate_precision="month"\nhidden=true\n+++\nText\n');
     }
@@ -93,6 +95,12 @@ weight = 2
     assert.equal(feed.home_page_url, `${baseURL}ru/`);
     assert.equal(feed.feed_url, `${baseURL}ru/index.json`);
     const post = await readFile(join(output, "ru/shared/index.html"), "utf8");
+    const defaultLink = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "hreflang") === "x-default");
+    assert.equal(attribute(defaultLink, "href"), `${baseURL}shared/`, "the default language is independent of its display weight");
+    assert.match(post, /class=(?:"tg-views"|tg-views)/, "Telegram data renders without deprecated data APIs");
+    assert.match(post, /class=(?:"tg-reactions"|tg-reactions)/);
+    const notFound = await readFile(join(output, "404.html"), "utf8");
+    assert.match(notFound, /name=robots content="noindex, follow"/);
     assert.ok(!post.includes("likely/likely."), "disabled sharing must not load its assets");
     assert.ok(!listing.includes("likely/likely."), "section pages must not load sharing assets");
     const imageTags = [...post.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
@@ -131,6 +139,22 @@ weight = 2
     assert.ok(!(await readFile(join(output, "blog/index.html"), "utf8")).includes("likely/likely."));
   });
 }
+
+test("noindex and draft previews do not change the indexing of hidden posts", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "hugo-mini-indexing-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const dir of ["themes", "content/blog"]) await mkdir(join(root, dir), { recursive: true });
+  await symlink(themeRoot, join(root, "themes/hugo-mini"), "dir");
+  await writeFile(join(root, "hugo.toml"), 'baseURL="https://example.org/"\ntheme="hugo-mini"\ndisableKinds=["taxonomy","term"]\n');
+  for (const [slug, option] of [["unlisted", "hidden=true"], ["private", "noindex=true"], ["preview", "draft=true"]]) {
+    await writeFile(join(root, `content/blog/${slug}.md`), `+++\ntitle="${slug}"\n${option}\n+++\nText.`);
+  }
+  execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--buildDrafts", "--minify", "--panicOnWarning"], { stdio: "pipe" });
+  for (const slug of ["private", "preview"]) {
+    assert.match(await readFile(join(root, `public/blog/${slug}/index.html`), "utf8"), /name=robots content="noindex, follow"/);
+  }
+  assert.match(await readFile(join(root, "public/blog/unlisted/index.html"), "utf8"), /name=robots content="index, follow/);
+});
 
 test("latest posts respect language, visibility, and dates", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "hugo-mini-reading-test-"));

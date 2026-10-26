@@ -68,4 +68,4 @@
 <meta name="twitter:description" content="{{ $description }}" />
 
 <!-- Crawling -->
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="robots" content="{{ if or .Draft (eq .Kind "404") .Params.noindex }}noindex, follow{{ else }}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{{ end }}" />

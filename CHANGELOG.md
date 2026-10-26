@@ -7,6 +7,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Fixed
+- Theme initialization follows the system scheme even when storage is blocked or contains an invalid choice; mobile-menu state resets when leaving the mobile breakpoint.
+- `x-default` selects the configured default language regardless of language weights. Draft previews, 404 pages, and explicit `noindex` pages no longer advertise indexing.
+- Telegram data uses the current Hugo data API without warnings. The fetcher discovers content through current and legacy language mounts, avoids duplicate message requests, and replaces snapshots atomically.
 - Reading lists and New badges support Hugo 0.146.0 and the current data API without deprecation warnings.
 - Secondary text, including reading dates and GitHub star counts, retains readable contrast in dark mode.
 - The blog archetype includes a valid numeric Telegram ID example and documents hidden posts.
@@ -47,6 +50,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 
 ### Changed
+- Hugo data and site-collection compatibility fallbacks are shared by cached partials. KaTeX initialization lives in the deferred browser bundle; only the small color-scheme initializer runs before paint.
 - Mermaid loads near the first diagram and renders subsequent diagrams near the viewport; theme changes are serialized and missing assets leave readable source.
 - Removed redundant color overrides and obsolete header rules without changing typography; fallback page-link lookup shares a permalink index.
 - Increased spacing before content columns and the site-wide footer using a shared spacing token.

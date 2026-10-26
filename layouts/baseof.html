@@ -7,19 +7,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Theme init (must run before paint to prevent FOUC).
-       Default: follow prefers-color-scheme until user picks explicitly. -->
-  <script>
-    (function() {
-      try {
-        var stored = localStorage.getItem('theme');
-        var resolved = (stored === 'light' || stored === 'dark')
-          ? stored
-          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', resolved);
-      } catch (e) {}
-    })();
-  </script>
+  {{- /* Resolve the color scheme before first paint, even with blocked storage. */}}
+  {{- with resources.Get "js/theme-init.js" }}
+  <script>{{ .Content | safeJS }}</script>
+  {{- end }}
 
   {{- with .Site.Params.yandexMetrikaId }}
   <!-- Yandex.Metrika counter (deferred to avoid blocking first paint) -->
@@ -65,19 +56,6 @@
   <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
   <script defer src="{{ "katex/katex.min.js" | relURL }}"></script>
   <script defer src="{{ "katex/auto-render.min.js" | relURL }}"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      renderMathInElement(document.body, {
-        delimiters: [
-          {left: "$$", right: "$$", display: true},
-          {left: "$", right: "$", display: false},
-          {left: "\\[", right: "\\]", display: true},
-          {left: "\\(", right: "\\)", display: false}
-        ],
-        throwOnError: false
-      });
-    });
-  </script>
   {{ end }}
   
   <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
@@ -92,10 +70,14 @@
   {{- range .Translations }}
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
   {{- end }}
-  {{- /* x-default points to the default-language version (AllTranslations is
-         sorted by language weight, so index 0 is the default language). */}}
+  {{- /* Translation order follows weights, which need not put the default first. */}}
   {{- if .IsTranslated }}
-  <link rel="alternate" hreflang="x-default" href="{{ (index .AllTranslations 0).Permalink }}">
+    {{- $sites := partialCached "sites.html" . -}}
+    {{- range .AllTranslations }}
+      {{- if eq .Language.Lang $sites.Default.Language.Lang }}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+      {{- end }}
+    {{- end }}
   {{- end }}
   <meta name="referrer" content="no-referrer-when-downgrade" />
 
@@ -149,7 +131,7 @@
     {{- $mermaid = dict "src" "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js" "integrity" "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy" -}}
   {{- end -}}
 {{- end -}}
-<body data-i18n="{{ $i18n | jsonify }}"{{ if not (.Param "backToTop" | default true) }} data-back-to-top="false"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
+<body data-i18n="{{ $i18n | jsonify }}"{{ if .Params.math }} data-math="true"{{ end }}{{ if not (.Param "backToTop" | default true) }} data-back-to-top="false"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
   {{- with .Site.Params.yandexMetrikaId }}
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" class="analytics-noscript" alt="" /></div></noscript>
   {{- end }}
@@ -183,9 +165,6 @@
 
   {{- /* Per-template extension point, same idea as the "head" block above. */ -}}
   {{- block "scripts" . }}{{ end }}
-
-
-
 </body>
 
 </html>

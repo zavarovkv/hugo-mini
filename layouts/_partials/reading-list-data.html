@@ -1,12 +1,7 @@
 {{- /* Site-owned data; shared by the shelf and freshness metadata. */ -}}
 {{- $page := .page -}}
 {{- $key := .key -}}
-{{- $source := dict -}}
-{{- if ge hugo.Version "0.156.0" -}}
-  {{- $source = index hugo.Data $key -}}
-{{- else -}}
-  {{- $source = index $page.Site.Data $key -}}
-{{- end -}}
+{{- $source := index (partialCached "site-data.html" $page) $key -}}
 {{- if not $source -}}
   {{- errorf "Reading list %q: data file not found (%s)" $key $page.Path -}}
 {{- end -}}
