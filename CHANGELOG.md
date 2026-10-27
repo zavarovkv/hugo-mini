@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.2.0] — 2026-10-28
+
 ### Changed
 - Shared typography and native-control styles come from a locally bundled Beauty.css foundation. Heading scale, rhythm, links, quotations, lists, code and editorial helpers have one canonical implementation in Beauty; the theme configures variables and retains font loading, palette, layout and components. Hugo builds require no extra dependency installation or network access.
 - Preserve legacy editorial helper selectors without copying typography rules. Add a semantic `callout` shortcode with language-aware Markdown rendering.
@@ -281,7 +283,8 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.2...v3.1.0
 [3.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.0...v3.0.1
