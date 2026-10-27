@@ -41,6 +41,7 @@ mainSections = ["blog"]
 telegramChannel = "fixture"
 avatar = "images/avatar.svg"
 socialSharing = false
+notFoundYoda = true
 recentSidebarCount = 0
 [languages.en]
 contentDir = "content/en"
@@ -101,6 +102,10 @@ weight = 1
     assert.match(post, /class=(?:"tg-reactions"|tg-reactions)/);
     const notFound = await readFile(join(output, "404.html"), "utf8");
     assert.match(notFound, /name=robots content="noindex, follow"/);
+    assert.match(notFound, /class=not-found-art data-ascii-animation(?:="")? aria-hidden=true/);
+    assert.ok(notFound.includes("The page you seek, here it is not"));
+    const russianNotFound = await readFile(join(output, "ru/404.html"), "utf8");
+    assert.ok(russianNotFound.includes("Не ту страницу ищешь ты"));
     assert.ok(!post.includes("likely/likely."), "disabled sharing must not load its assets");
     assert.ok(!listing.includes("likely/likely."), "section pages must not load sharing assets");
     const imageTags = [...post.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);

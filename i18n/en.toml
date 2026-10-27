@@ -101,6 +101,9 @@ other = "Read"
 [not_found]
 other = "Page not found. It may have been moved or deleted."
 
+[not_found_yoda]
+other = "The page you seek, here it is not"
+
 [back_home]
 other = "Go to the homepage"
 

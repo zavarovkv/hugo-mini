@@ -17,7 +17,7 @@ function element(attributes = {}) {
   });
 }
 
-function page({ saved, blocked = false, dark = false, mobile = true, math = false } = {}) {
+function page({ saved, blocked = false, dark = false, mobile = true, math = false, ascii, reduced = false } = {}) {
   const root = element();
   const body = element({ 'data-back-to-top': 'false', 'data-math': String(math) });
   const toggle = element();
@@ -25,19 +25,25 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
   const content = element();
   const system = Object.assign(new EventTarget(), { matches: dark });
   const viewport = Object.assign(new EventTarget(), { matches: mobile });
+  const motion = Object.assign(new EventTarget(), { matches: reduced });
+  const art = ascii === undefined ? null : Object.assign(element(), { textContent: ascii });
+  const intervals = new Map();
+  let intervalID = 0;
   const document = Object.assign(new EventTarget(), {
     documentElement: root, body, readyState: 'complete',
-    querySelector: (selector) => ({ '.mobile-menu-toggle': toggle, '.main-nav': nav, main: content })[selector] || null,
+    querySelector: (selector) => ({ '.mobile-menu-toggle': toggle, '.main-nav': nav, main: content, '[data-ascii-animation]': art })[selector] || null,
     querySelectorAll: () => [], getElementById: () => null,
   });
   const window = Object.assign(new EventTarget(), {
     document, navigator: {}, setTimeout, clearTimeout, scrollTo() {},
+    setInterval: (callback) => { intervals.set(++intervalID, callback); return intervalID; },
+    clearInterval: (id) => intervals.delete(id),
     localStorage: { getItem() { if (blocked) throw new Error('Storage blocked'); return saved; } },
-    matchMedia: (query) => query.includes('prefers-color-scheme') ? system : viewport,
+    matchMedia: (query) => query.includes('prefers-color-scheme') ? system : query.includes('reduced-motion') ? motion : viewport,
   });
   window.window = window;
   runInNewContext(init, window);
-  return { window, document, root, body, toggle, nav, content, system, viewport, start: () => runInNewContext(main, window) };
+  return { window, document, root, body, toggle, nav, content, system, viewport, art, motion, intervals, start: () => runInNewContext(main, window) };
 }
 
 test('first paint resolves a saved or system scheme even with blocked storage', () => {
@@ -89,4 +95,30 @@ test('math renders inside main only on opted-in pages, with a safe missing-libra
     }
   }
   assert.doesNotThrow(() => page({ math: true }).start());
+});
+
+test('the ASCII scan preserves the silhouette and stops for reduced motion or hidden tabs', () => {
+  const source = '   _._\n  /   \\';
+  const p = page({ ascii: source });
+  p.window.Math = Object.assign(Object.create(Math), { random: () => 0 });
+  p.start();
+  assert.equal(p.intervals.size, 1);
+  p.intervals.values().next().value();
+  assert.notEqual(p.art.textContent, source);
+  assert.equal(p.art.textContent.replace(/\S/g, 'x'), source.replace(/\S/g, 'x'));
+  p.motion.matches = true;
+  p.motion.dispatchEvent(new Event('change'));
+  assert.equal(p.intervals.size, 0);
+  assert.equal(p.art.textContent, source);
+  p.motion.matches = false;
+  p.motion.dispatchEvent(new Event('change'));
+  assert.equal(p.intervals.size, 1);
+  p.document.hidden = true;
+  p.document.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(p.intervals.size, 0);
+  assert.equal(p.art.textContent, source);
+  const reduced = page({ ascii: source, reduced: true });
+  reduced.start();
+  assert.equal(reduced.intervals.size, 0);
+  assert.equal(reduced.art.textContent, source);
 });

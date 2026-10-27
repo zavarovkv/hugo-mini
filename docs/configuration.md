@@ -41,6 +41,7 @@ All parameters are optional unless your site content depends on them.
 | `mermaidModuleSrc` | Optional Mermaid ESM entry; takes precedence over `mermaidSrc` | unset |
 | `aiTranslatedLang` | Language marked as AI translated | unset |
 | `consoleArt`, `consoleYoda` | Optional home-page console art | unset |
+| `notFoundYoda` | Show the built-in ASCII Yoda and a localized message on the 404 page | `false` |
 
 Social links live under `[params.social]`: `telegram`, `linkedin`, `github`, and `email`. Schema.org author data lives under `[params.author]`, for example `jobTitle`.
 

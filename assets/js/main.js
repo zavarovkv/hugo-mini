@@ -316,6 +316,42 @@
     });
   })();
 
+  // ── Decorative ASCII scan on the 404 page ───────────────────────────────
+  ready(function () {
+    var art = document.querySelector('[data-ascii-animation]');
+    if (!art) return;
+    var source = art.textContent;
+    var lines = source.split('\n');
+    var glyphs = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var timer = null;
+    var head = 0;
+
+    function frame() {
+      art.textContent = lines.map(function (line, row) {
+        var distance = (head - row + lines.length + 8) % (lines.length + 8);
+        var chance = distance < 5 ? (5 - distance) * 0.08 : 0;
+        return Array.from(line, function (character) {
+          return /\S/.test(character) && Math.random() < chance
+            ? glyphs[Math.floor(Math.random() * glyphs.length)]
+            : character;
+        }).join('');
+      }).join('\n');
+      head = (head + 1) % (lines.length + 8);
+    }
+
+    function sync() {
+      if (timer !== null) window.clearInterval(timer);
+      timer = null;
+      art.textContent = source;
+      if (!document.hidden && !reducedMotion.matches) timer = window.setInterval(frame, 110);
+    }
+    document.addEventListener('visibilitychange', sync);
+    if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', sync);
+    else if (reducedMotion.addListener) reducedMotion.addListener(sync);
+    sync();
+  });
+
   // Mermaid: load once near the first diagram, then render only diagrams
   // near the viewport. Serialize renders so theme changes cannot reset a
   // node while Mermaid is still writing its SVG.

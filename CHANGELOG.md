@@ -29,6 +29,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- Optional `notFoundYoda` displays the built-in ASCII illustration on a responsive, localized 404 page using the shared theme palette. A character scan animates the silhouette, pauses in hidden tabs, and respects reduced-motion preferences.
 - Generated `robots.txt` advertises the default sitemap URL when `enableRobotsTXT` is enabled.
 - Optional `date_precision = "month"` displays publication dates without an invented day.
 - A data-driven `reading-list` shortcode displays a responsive two-column table in the standard blog typography, supports localized titles and authors, and links to ordinary Markdown reviews. New badges reflect book additions, and collection modification dates propagate to SEO, JSON feeds and sitemaps.
