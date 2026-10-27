@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.2.1] — 2026-10-28
+
 ### Fixed
 - Native Markdown quotations and legacy callouts share the same quotation frame, including book reviews.
 - Project titles and archive navigation use the standard content-link weight and underline alignment, with arrows inheriting the link color.
@@ -288,7 +290,8 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.1...HEAD
+[3.2.1]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.2...v3.1.0
 [3.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.1...v3.0.2
