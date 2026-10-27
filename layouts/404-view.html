@@ -1,0 +1,8 @@
+{{- /* Render is intentional: unlike a cross-language partial call, it binds
+       i18n and the global site object to the translated 404 page. */ -}}
+{{- with .Store.Get "mini.not-found-page" -}}
+<div data-not-found-ui="{{ partial "ui-strings.html" . | jsonify }}"></div>
+<header>{{ partial "header.html" . }}</header>
+<main>{{ partial "not-found.html" . }}</main>
+<footer>{{ partial "footer.html" . }}</footer>
+{{- end -}}

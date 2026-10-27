@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Fixed
+- Missing URLs select the correct translated 404 content, navigation and controls on static hosts that always serve the root error page. Language matching respects site base paths and keeps the original URL and HTTP 404 status.
+
 ## [3.1.0] — 2026-10-27
 
 Adds composable homepage blocks, localized reading lists and optional page controls, with fixes for multilingual output, asset loading and Hugo compatibility. Requires Hugo Extended 0.146.0 or newer.

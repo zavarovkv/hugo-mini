@@ -1,0 +1,19 @@
+{{- $art := "" -}}
+{{- if .Site.Params.notFoundYoda -}}
+  {{- with resources.Get "console-yoda.txt" -}}
+    {{- /* Remove the console's common left indent before centering the figure. */ -}}
+    {{- $art = .Content | replaceRE `(?m)^ {7}` "" -}}
+  {{- end -}}
+{{- end -}}
+<div class="not-found{{ if $art }} not-found-with-art{{ end }}" data-not-found-prefix="{{ .Site.Home.RelPermalink }}">
+  <div class="not-found-content">
+    <hgroup class="not-found-heading">
+      <h1>404</h1>
+      <p class="not-found-message">{{ if $art }}{{ i18n "not_found_yoda" | default "The page you seek, here it is not" }}{{ else }}{{ i18n "not_found" | default "Page not found. It may have been moved or deleted." }}{{ end }}</p>
+    </hgroup>
+    <p><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "back_home" | default "Go to the homepage" }} →</a></p>
+  </div>
+  {{- with $art }}
+  <pre class="not-found-art" data-ascii-animation aria-hidden="true">{{ strings.TrimRight "\n" . }}</pre>
+  {{- end }}
+</div>

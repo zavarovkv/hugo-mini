@@ -114,13 +114,7 @@
 {{- /* UI strings main.js needs, passed through the DOM. This is what lets
        assets/js/main.js stay a plain .js file — lintable and formattable —
        rather than a Go template that breaks on any `{{` in JS syntax. */ -}}
-{{- $i18n := dict
-  "goUp" (i18n "go_up" | default "Go up")
-  "toDark" (i18n "theme_dark" | default "Switch to dark theme")
-  "toLight" (i18n "theme_light" | default "Switch to light theme")
-  "copy" (i18n "copy" | default "Copy")
-  "copied" (i18n "copied" | default "Copied")
--}}
+{{- $i18n := partial "ui-strings.html" . -}}
 {{- $mermaid := dict -}}
 {{- if .Params.mermaid -}}
   {{- if .Site.Params.mermaidModuleSrc -}}

@@ -122,3 +122,75 @@ test('the ASCII scan preserves the silhouette and stops for reduced motion or hi
   assert.equal(reduced.intervals.size, 0);
   assert.equal(reduced.art.textContent, source);
 });
+
+function missingPage({ pathname, currentPrefix, lang = 'ru', dark = false, alternatives }) {
+  const p = page({ dark });
+  p.root.lang = lang;
+  p.window.URL = URL;
+  p.window.location = Object.freeze({ pathname, href: `https://example.org${pathname}?q=1#part`, origin: 'https://example.org' });
+  p.window.fetch = () => { throw new Error('404 localization must not fetch another page'); };
+  const regions = Object.fromEntries(['header', 'main', 'footer'].map((name) => [name, element()]));
+  const button = element();
+  for (const name of Object.keys(regions)) regions[name].replaceWith = (node) => { regions[name] = node; };
+  const variants = alternatives.map(({ prefix, lang, origin = 'https://example.org' }) => {
+    const ui = element({ 'data-not-found-ui': JSON.stringify({ toDark: `dark-${lang}`, toLight: `light-${lang}` }) });
+    const translated = Object.fromEntries(Object.keys(regions).map((name) => [name, {
+      cloneNode: () => Object.assign(element(), { lang, home: prefix }),
+    }]));
+    return Object.assign(element({
+      'data-not-found-prefix': prefix,
+      'data-not-found-language': lang,
+      'data-not-found-url': `${origin}${prefix}404.html`,
+      'data-not-found-title': `404 | ${lang}`,
+      'data-not-found-description': `Missing page (${lang})`,
+    }), {
+      content: { querySelector: (selector) => translated[selector] || (selector === '[data-not-found-ui]' ? ui : null) },
+      remove() { this.removed = true; },
+    });
+  });
+  const find = p.document.querySelector;
+  p.document.querySelector = (selector) => selector === '[data-not-found-prefix]'
+    ? element({ 'data-not-found-prefix': currentPrefix })
+    : selector === '.theme-toggle' ? button : regions[selector] || find(selector);
+  p.document.querySelectorAll = (selector) => selector === 'template[data-not-found-language]' ? variants : [];
+  return { ...p, regions, variants, button };
+}
+
+test('a root 404 selects translated content and controls without changing the missing URL', () => {
+  for (const base of ['/', '/sub/']) for (const dark of [false, true]) {
+    const prefix = `${base}en/`;
+    for (const pathname of [`${prefix}missing/page/`, prefix.slice(0, -1)]) {
+      const p = missingPage({ pathname, currentPrefix: base, dark, alternatives: [{ prefix, lang: 'en' }] });
+      const href = p.window.location.href;
+      p.start();
+      assert.equal(p.root.lang, 'en');
+      assert.equal(p.document.title, '404 | en');
+      for (const region of Object.values(p.regions)) {
+        assert.equal(region.lang, 'en');
+        assert.equal(region.home, prefix);
+      }
+      assert.equal(p.button.getAttribute('aria-label'), `${dark ? 'light' : 'dark'}-en`, 'controls initialize after selecting the translated strings');
+      assert.equal(p.root.getAttribute('data-theme'), dark ? 'dark' : 'light');
+      assert.equal(p.window.location.href, href);
+      assert.ok(p.variants.every((variant) => variant.removed));
+    }
+  }
+});
+
+test('404 language matching respects path boundaries, specificity, and language domains', () => {
+  for (const options of [
+    { pathname: '/english/missing/', currentPrefix: '/', lang: 'ru', alternatives: [{ prefix: '/en/', lang: 'en' }] },
+    { pathname: '/en/404.html', currentPrefix: '/en/', lang: 'en', alternatives: [{ prefix: '/', lang: 'ru' }] },
+    { pathname: '/en/missing/', currentPrefix: '/', lang: 'ru', alternatives: [{ prefix: '/en/', lang: 'en', origin: 'https://other.example' }] },
+  ]) {
+    const p = missingPage(options);
+    p.start();
+    assert.equal(p.root.lang, options.lang);
+    assert.ok(Object.values(p.regions).every((node) => !node.lang));
+  }
+  const p = missingPage({ pathname: '/sub/en/us/missing/', currentPrefix: '/sub/', alternatives: [
+    { prefix: '/sub/en/', lang: 'en' }, { prefix: '/sub/en/us/', lang: 'en-us' },
+  ] });
+  p.start();
+  assert.equal(p.root.lang, 'en-us');
+});

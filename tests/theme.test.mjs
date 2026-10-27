@@ -106,6 +106,13 @@ weight = 1
     assert.ok(notFound.includes("The page you seek, here it is not"));
     const russianNotFound = await readFile(join(output, "ru/404.html"), "utf8");
     assert.ok(russianNotFound.includes("Не ту страницу ищешь ты"));
+    const russianView = [...notFound.matchAll(/<template\b([^>]*)>([\s\S]*?)<\/template>/g)].find((match) => attribute(match[0], "data-not-found-language") === "ru");
+    assert.ok(russianView, "the fallback 404 includes an inert translated view");
+    assert.equal(attribute(russianView[0], "data-not-found-prefix"), `${basePath}ru/`);
+    assert.ok(russianView[2].includes("На главную"), "the view renders i18n in its own language context");
+    assert.ok(russianView[2].includes(`href=${basePath}ru/`) || russianView[2].includes(`href="${basePath}ru/"`));
+    const uiTag = russianView[2].match(/<div\b[^>]*data-not-found-ui[^>]*>/)[0];
+    assert.equal(JSON.parse(attribute(uiTag, "data-not-found-ui")).copy, "Копировать");
     assert.ok(!post.includes("likely/likely."), "disabled sharing must not load its assets");
     assert.ok(!listing.includes("likely/likely."), "section pages must not load sharing assets");
     const imageTags = [...post.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);

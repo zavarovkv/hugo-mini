@@ -13,6 +13,59 @@
   // Breakpoint shared with CSS (@media max-width: 768px). Keep in sync.
   var MOBILE_QUERY = '(max-width: 768px)';
 
+  // Static hosts may serve the default-language 404 for any missing URL.
+  // Select its translated view before initializing controls and UI strings.
+  (function () {
+    var variants = document.querySelectorAll('template[data-not-found-language]');
+    if (!variants.length) return;
+    var current = document.querySelector('[data-not-found-prefix]');
+    if (!current) return;
+    var pathname = window.location.pathname;
+    function matches(prefix) {
+      return prefix && (pathname.indexOf(prefix) === 0 || pathname === prefix.replace(/\/$/, ''));
+    }
+    var currentPrefix = current.getAttribute('data-not-found-prefix');
+    var length = matches(currentPrefix) ? currentPrefix.length : 0;
+    var selected = null;
+    variants.forEach(function (variant) {
+      var prefix = variant.getAttribute('data-not-found-prefix');
+      var url = new URL(variant.getAttribute('data-not-found-url'), window.location.href);
+      if (url.origin === window.location.origin && matches(prefix) && prefix.length > length) {
+        selected = variant;
+        length = prefix.length;
+      }
+    });
+    if (selected) {
+      ['header', 'main', 'footer'].forEach(function (selector) {
+        var original = document.querySelector(selector);
+        var translated = selected.content.querySelector(selector);
+        if (original && translated) original.replaceWith(translated.cloneNode(true));
+      });
+      document.documentElement.lang = selected.getAttribute('data-not-found-language');
+      document.title = selected.getAttribute('data-not-found-title');
+      document.body.setAttribute('data-i18n', selected.content.querySelector('[data-not-found-ui]').getAttribute('data-not-found-ui'));
+      document.querySelectorAll('link[rel="canonical"], meta[property="og:url"]').forEach(function (node) {
+        node.setAttribute(node.tagName === 'LINK' ? 'href' : 'content', selected.getAttribute('data-not-found-url'));
+      });
+      document.querySelectorAll('meta[property="og:title"], meta[name="twitter:title"]').forEach(function (node) {
+        node.setAttribute('content', document.title);
+      });
+      document.querySelectorAll('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]').forEach(function (node) {
+        node.setAttribute('content', selected.getAttribute('data-not-found-description'));
+      });
+      var locale = document.querySelector('meta[property="og:locale"]');
+      if (locale) {
+        var previousLocale = locale.getAttribute('content');
+        var nextLocale = selected.getAttribute('data-not-found-locale');
+        document.querySelectorAll('meta[property="og:locale:alternate"]').forEach(function (node) {
+          if (node.getAttribute('content') === nextLocale) node.setAttribute('content', previousLocale);
+        });
+        locale.setAttribute('content', nextLocale);
+      }
+    }
+    variants.forEach(function (variant) { variant.remove(); });
+  })();
+
   var i18n = {};
   try {
     i18n = JSON.parse(document.body.getAttribute('data-i18n') || '{}');
