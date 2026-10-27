@@ -6,6 +6,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.2.3] — 2026-10-28
+
+### Fixed
+- Repository labels use the same inline underline position as ordinary content links while retaining aligned star counts.
+- Navigation arrows keep the body text's light weight independently of their medium-weight link labels.
+
 ## [3.2.2] — 2026-10-28
 
 ### Fixed
@@ -295,7 +301,8 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.2...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.3...HEAD
+[3.2.3]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.1.0...v3.2.0

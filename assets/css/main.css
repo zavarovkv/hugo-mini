@@ -985,6 +985,7 @@
   .archive-arrow {
     margin-inline-start: 0.35em;
     color: inherit;
+    font-weight: var(--beauty-font-weight);
   }
   .project-description > :first-child { margin-top: 0.25em; }
   .project-description > :last-child { margin-bottom: 0; }
@@ -992,9 +993,7 @@
   .github-repo-link,
   .github-repo-link:link,
   .github-repo-link:visited {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.4em;
+    display: inline;
     border-bottom: none;
     white-space: nowrap;
   }
@@ -1003,6 +1002,7 @@
   .github-stars {
     display: inline-flex;
     align-items: baseline;
+    margin-inline-start: 0.4em;
     gap: 0.2em;
     color: var(--color-secondary);
     font-size: 0.875em;
