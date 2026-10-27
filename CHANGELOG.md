@@ -6,6 +6,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Changed
+- Shared typography and native-control styles come from a locally bundled Beauty.css foundation. Heading scale, rhythm, links, quotations, lists, code and editorial helpers have one canonical implementation in Beauty; the theme configures variables and retains font loading, palette, layout and components. Hugo builds require no extra dependency installation or network access.
+- Preserve legacy editorial helper selectors without copying typography rules. Add a semantic `callout` shortcode with language-aware Markdown rendering.
+
 ### Fixed
 - Missing URLs select the correct translated 404 content, navigation and controls on static hosts that always serve the root error page. Language matching respects site base paths and keeps the original URL and HTTP 404 status.
 

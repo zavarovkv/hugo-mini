@@ -24,8 +24,9 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/home.html`, `list.html`, `single.html`, and `404.html` provide page layouts.
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, and links.
-- `layouts/_shortcodes/` contains `caption`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, and `column`.
-- `assets/css/main.css` is the single stylesheet; design tokens live at its top.
+- `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, and `column`.
+- `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
+  `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
 - `assets/js/theme-init.js` is the small, testable before-paint exception, inlined before CSS to resolve the saved or system color scheme.
 - `static/` contains self-hosted fonts, KaTeX, Likely, and shared images.
@@ -41,7 +42,10 @@ Layouts use Hugo's current template system introduced in 0.146.0: page templates
 - Prefer CSS over JavaScript. Add browser JavaScript only when CSS cannot implement the behavior.
 - Preserve zero required configuration. Optional integrations must degrade gracefully when their params or data are absent.
 - Keep critical assets self-hosted and avoid new third-party requests in the core page path.
-- Put styles in `assets/css/main.css`, not inline `<style>` blocks or extra stylesheets. Add reusable colors and dimensions to the token block.
+- Put theme layout and component styles in `assets/css/main.css`, not inline blocks or extra stylesheets. Shared native typography and editorial helpers belong to Beauty.css; configure its variables instead of copying selectors into the theme. Add reusable colors and dimensions to the token block.
+- Never edit the generated Beauty.css artifact. Refresh it with `scripts/vendor-beauty.mjs`
+  using a full upstream commit SHA; its manifest and license live in `vendor/`.
+- Joint local development may use `--local <checkout>` with an explicitly unreleased `-dev` library version. Replace that snapshot with a reviewed upstream pin before releasing the theme; see `docs/vendor-assets.md`.
 - Put browser behavior in `assets/js/main.js`, not inline scripts in templates.
 - Keep templates site-agnostic. Expose reusable behavior through Hugo params, partial hooks, front matter, or i18n rather than hard-coding values for `zavarov.com`.
 - Keep version-specific data and site collection access in `site-data.html` and `sites.html`; callers use cached partials instead of duplicating Hugo API fallbacks.

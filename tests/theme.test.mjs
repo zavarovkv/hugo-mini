@@ -56,6 +56,7 @@ weight = 1
     await writeFile(join(root, "static/images/pixel.png"), pixel);
     const code = 'if ready:\n    print("<hello> & goodbye")\n';
     const body = `## Intro\n\n[Translated](${baseURL}shared/?mode=1#intro)\n\n` +
+      '{{< callout >}}\n**Highlighted** quotation.\n{{< /callout >}}\n\n' +
       '```python {linenos=inline}\n' + code + '```\n\n' +
       '```python {linenos=table}\n' + code + '```\n\n' +
       `![Local](${baseURL}images/pixel.png?v=2 "A title")\n\n![External](https://elsewhere.example/pixel.png)\n\n![Missing](${basePath}images/missing.png)\n`;
@@ -96,6 +97,13 @@ weight = 1
     assert.equal(feed.home_page_url, `${baseURL}ru/`);
     assert.equal(feed.feed_url, `${baseURL}ru/index.json`);
     const post = await readFile(join(output, "ru/shared/index.html"), "utf8");
+    assert.match(post, /<blockquote class=(?:"beauty-callout"|beauty-callout)><p><strong>Highlighted<\/strong> quotation\.<\/p><\/blockquote>/,
+      "callouts preserve Markdown and render as semantic block quotations");
+    const stylesheet = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "rel") === "stylesheet");
+    const css = await readFile(join(output, new URL(attribute(stylesheet, "href"), baseURL).pathname.slice(basePath.length)), "utf8");
+    for (const selector of [".beauty-emphasis", ".underline", ".beauty-caption", ".caption", ".beauty-button", ".button"]) {
+      assert.ok(css.includes(selector), `${selector} remains available in the bundled foundation`);
+    }
     const defaultLink = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "hreflang") === "x-default");
     assert.equal(attribute(defaultLink, "href"), `${baseURL}shared/`, "the default language is independent of its display weight");
     assert.match(post, /class=(?:"tg-views"|tg-views)/, "Telegram data renders without deprecated data APIs");

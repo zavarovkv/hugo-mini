@@ -6,6 +6,32 @@ import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const base = new URL("../", import.meta.url);
+test("the Beauty.css foundation matches its pinned upstream artifact", async () => {
+  const manifest = JSON.parse(await readFile(new URL("vendor/beauty-css.json", base), "utf8"));
+  if (manifest.source === "local-development") {
+    assert.equal(manifest.revision, null);
+    assert.match(manifest.version, /-dev\./);
+  } else {
+    assert.match(manifest.revision, /^[a-f0-9]{40}$/);
+  }
+  const css = await readFile(new URL(manifest.file, base));
+  assert.equal(createHash("sha256").update(css).digest("hex"), manifest.sha256);
+  assert.ok(css.toString().startsWith(`/*! Beauty.css v${manifest.version} | MIT`));
+  assert.doesNotMatch(css.toString(), /@import|url\(|\{\{/);
+  assert.match(await readFile(new URL("vendor/beauty-css.LICENSE", base), "utf8"), /^MIT License/);
+});
+
+test("the theme configures shared typography without redefining native text styles", async () => {
+  const css = (await readFile(new URL("assets/css/main.css", base), "utf8"))
+    .replace(/\/\*[\s\S]*?\*\//g, "");
+  const nativeText = /^(?:(?:main|article)\s+)?(?:body|main|article|h[1-6]|p|a|ul|ol|li|blockquote|code|pre|time|q|strong|b)(?::[\w-]+)?$/;
+  for (const [, selectors, declarations] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (!selectors.split(",").every((selector) => nativeText.test(selector.trim()))) continue;
+    assert.doesNotMatch(declarations, /(?:^|;)\s*(?:font(?:-[\w-]+)?|line-height|letter-spacing|text-decoration(?:-[\w-]+)?|color|background(?:-color)?)\s*:/,
+      `${selectors.trim()}: move generic typography to Beauty and configure its tokens here`);
+  }
+});
+
 test("committed KaTeX assets match their pinned manifest and render formulas", async () => {
   const manifest = JSON.parse(await readFile(new URL("vendor/katex.json", base), "utf8"));
   for (const [source, checksum] of Object.entries(manifest.files)) {

@@ -8,6 +8,9 @@ A writer-first Hugo theme for fast, multilingual personal blogs.
 
 Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram integration — without a frontend framework.
 
+The reading foundation comes from [Beauty.css](https://github.com/zavarovkv/beauty-css), pinned and
+bundled locally with the theme's own styles. No additional installation is required.
+
 **[Live demo](https://zavarov.com/)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Quick start](#quick-start)** · **[Documentation](#documentation)**
 
 ![Hugo Mini theme preview](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/screenshot.png)

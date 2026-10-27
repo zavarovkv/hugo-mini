@@ -85,12 +85,23 @@
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
   {{ end -}}
 
-  {{- /* Bundled theme stylesheet. ExecuteAsTemplate so that
-         {{ "..." | relURL }} substitutions inside the CSS resolve at build
-         time (font urls, underline svg). Minified and fingerprinted so the
-         URL changes when the content changes — safe to send long-cache headers. */ -}}
-  {{- $css := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/main.css" . | resources.Minify | resources.Fingerprint "sha256" -}}
+  {{- /* Pinned Beauty.css foundation, followed by the theme's own identity and
+         components. The foundation is plain CSS; only theme assets need Hugo
+         URL substitutions. Both are delivered as one fingerprinted local file. */ -}}
+  {{- $themeCSS := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/theme.css" . -}}
+  {{- with resources.Get "css/beauty.css" -}}
+  {{- /* Alias the theme's public helpers without duplicating typography rules
+         or coupling the independent library to Hugo-specific markup. */ -}}
+  {{- $foundation := .Content -}}
+  {{- range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" -}}
+    {{- $foundation = replace $foundation $selector (printf ":is(%s,%s)" $selector $alias) -}}
+  {{- end -}}
+  {{- $foundationCSS := resources.FromString "css/beauty-compatible.css" $foundation -}}
+  {{- $css := slice $foundationCSS $themeCSS | resources.Concat "css/main.css" | resources.Minify | resources.Fingerprint "sha256" -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{- else -}}
+    {{- errorf "Missing pinned Beauty.css foundation at assets/css/beauty.css. After adding this asset, restart the Hugo server." -}}
+  {{- end -}}
 
   {{- /* Likely social sharing — assets only loaded on blog posts. The
          small block of CSS that styles .likely is part of the bundled
