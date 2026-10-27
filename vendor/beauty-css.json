@@ -1,7 +1,7 @@
 {
   "repository": "https://github.com/zavarovkv/beauty-css",
-  "revision": "456bc3a5af4743d2d4fcb9f0c2693e5561a8ccd8",
-  "version": "0.2.0",
+  "revision": "228a3d22e14480bcf8a40632b1f54e2fef91877f",
+  "version": "0.2.1",
   "file": "assets/css/beauty.css",
-  "sha256": "e4e5c087b532010137a39d14be2be2d8390bbba2c134d2025b18cf169e658bd8"
+  "sha256": "de3dd1706a9b13427a2fa821e40365fc789ce11813b2711a2125e9802bc93d9a"
 }

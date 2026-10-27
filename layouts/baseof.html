@@ -96,7 +96,9 @@
   {{- range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" -}}
     {{- $foundation = replace $foundation $selector (printf ":is(%s,%s)" $selector $alias) -}}
   {{- end -}}
-  {{- $foundationCSS := resources.FromString "css/beauty-compatible.css" $foundation -}}
+  {{- /* FromString caches by target path; content keys keep live vendor refreshes current. */ -}}
+  {{- $foundationPath := printf "css/beauty-compatible.%s.css" (crypto.SHA256 $foundation) -}}
+  {{- $foundationCSS := resources.FromString $foundationPath $foundation -}}
   {{- $css := slice $foundationCSS $themeCSS | resources.Concat "css/main.css" | resources.Minify | resources.Fingerprint "sha256" -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{- else -}}

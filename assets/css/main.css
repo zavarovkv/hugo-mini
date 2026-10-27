@@ -101,11 +101,16 @@
     --beauty-link-border: 0.25px solid var(--color-primary-border);
     --beauty-link-border-hover: var(--color-accent-border);
     --beauty-focus-offset: 2px;
-    --beauty-quote-border: 1px solid var(--color-blockquote-border);
-    --beauty-quote-inset: 40px;
-    --beauty-quote-padding: 20px;
-    --beauty-quote-style: italic;
-    --beauty-quote-text: var(--blockquote-color);
+    /* One quotation treatment for Markdown, callouts and legacy quote markup. */
+    --beauty-quote-border: var(--beauty-callout-border);
+    --beauty-quote-inset: 0;
+    --beauty-quote-padding: 1.2rem;
+    --beauty-quote-padding-block: 0.5rem;
+    --beauty-quote-padding-end: 1.2rem;
+    --beauty-quote-margin-block: 1.2em;
+    --beauty-quote-background: var(--beauty-callout-background);
+    --beauty-quote-style: normal;
+    --beauty-quote-text: var(--text-color);
     --beauty-code-size: 0.9em;
     --beauty-code-padding: 2px 5px;
     --beauty-code-radius: 3px;
@@ -968,9 +973,8 @@
   }
   .project-title .project-link,
   .latest-posts .archive-link {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.35em;
+    --beauty-link-weight: 500;
+    display: inline;
     border-bottom: none;
   }
   .project-name,
@@ -978,7 +982,10 @@
   .project-link:hover .project-name,
   .archive-link:hover .archive-label { border-bottom-color: var(--color-accent-border); }
   .project-arrow,
-  .archive-arrow { color: var(--text-color); }
+  .archive-arrow {
+    margin-inline-start: 0.35em;
+    color: inherit;
+  }
   .project-description > :first-child { margin-top: 0.25em; }
   .project-description > :last-child { margin-bottom: 0; }
 

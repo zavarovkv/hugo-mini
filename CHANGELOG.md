@@ -6,6 +6,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Fixed
+- Native Markdown quotations and legacy callouts share the same quotation frame, including book reviews.
+- Project titles and archive navigation use the standard content-link weight and underline alignment, with arrows inheriting the link color.
+- Refreshing the vendored foundation invalidates the intermediate CSS resource in a running Hugo server.
+
 ## [3.2.0] — 2026-10-28
 
 ### Changed
