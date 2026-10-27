@@ -6,6 +6,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.2.2] — 2026-10-28
+
+### Fixed
+- GitHub star counts align their numeric baseline with the repository label while keeping the star centered beside the count.
+
 ## [3.2.1] — 2026-10-28
 
 ### Fixed
@@ -290,7 +295,8 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.1...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.2...HEAD
+[3.2.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.2...v3.1.0

@@ -1002,14 +1002,14 @@
   .github-repo-link:hover .github-repo-label { border-bottom-color: var(--color-accent-border); }
   .github-stars {
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0.2em;
     color: var(--color-secondary);
     font-size: 0.875em;
     font-weight: 300;
     font-variant-numeric: tabular-nums;
   }
-  .github-stars svg { width: 1em; height: 1em; flex: none; }
+  .github-stars svg { width: 1em; height: 1em; flex: none; align-self: center; }
   .github-repo-link:hover .github-stars { color: var(--color-accent); }
 
   .badge-new {
