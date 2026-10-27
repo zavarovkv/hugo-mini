@@ -6,6 +6,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.1.0] — 2026-10-27
+
+Adds composable homepage blocks, localized reading lists and optional page controls, with fixes for multilingual output, asset loading and Hugo compatibility. Requires Hugo Extended 0.146.0 or newer.
+
 ### Fixed
 - Theme initialization follows the system scheme even when storage is blocked or contains an invalid choice; mobile-menu state resets when leaving the mobile breakpoint.
 - `x-default` selects the configured default language regardless of language weights. Draft previews, 404 pages, and explicit `noindex` pages no longer advertise indexing.
@@ -47,8 +51,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Security
 - Updated self-hosted KaTeX from 0.16.9 to 0.16.47, including CSS, auto-render, fonts, and its license. A pinned manifest and regression check verify the complete asset set.
-- Updated the pinned Mermaid fallback from 11.14.0 to 11.16.1 and refreshed its SRI hash.
-- Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
 
 ### Changed
 - Hugo data and site-collection compatibility fallbacks are shared by cached partials. KaTeX initialization lives in the deferred browser bundle; only the small color-scheme initializer runs before paint.
@@ -56,7 +58,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Removed redundant color overrides and obsolete header rules without changing typography; fallback page-link lookup shares a permalink index.
 - Increased spacing before content columns and the site-wide footer using a shared spacing token.
 - Project links and archive links use the same light weight as article-list links, without affecting unrelated text below section headings.
+
+## [3.0.2] — 2026-08-17
+
+### Fixed
 - Corrected the Go module path to `github.com/zavarovkv/hugo-mini/v3`, as required for v3 releases and Hugo theme-catalog builds. Hugo Module users must add the `/v3` suffix; Git submodule installations are unchanged.
+
+## [3.0.1] — 2026-08-17
+
+### Security
+- Updated the pinned Mermaid fallback from 11.14.0 to 11.16.1 and refreshed its SRI hash.
+- Likely share counters are disabled, preventing automatic requests to third-party social APIs when an article loads. Sharing links still work on click.
+
+### Changed
 - Reworded the theme catalog description around concrete, verifiable capabilities.
 - Reworked the README into a concise product overview and quick start; detailed configuration, content, customization, Telegram, and deployment guidance now lives in focused documents under `docs/`.
 - Language examples and templates use `label`, `.Language.Locale`, and `hugo.Sites` on current Hugo releases, with version-gated fallbacks that preserve the documented Hugo 0.146 minimum.
@@ -260,7 +274,10 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.2...v3.1.0
+[3.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/zavarovkv/hugo-mini/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/zavarovkv/hugo-mini/compare/v1.0.1...v1.0.2

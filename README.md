@@ -31,6 +31,8 @@ Use [`columns` and `column`](docs/content.md#columns) to place content blocks si
 
 Use [`wavy-arrow`](docs/content.md#wavy-arrow) for a thin inline SVG arrow between dates or other text.
 
+Set [`params.notFoundYoda = true`](docs/configuration.md#parameters) for an illustrated 404 page with a character-scan animation that respects reduced-motion preferences.
+
 ## Quick start
 
 Hugo Extended 0.146 or newer is required.
