@@ -46,6 +46,9 @@ Layouts use Hugo's current template system introduced in 0.146.0: page templates
 - Put theme layout and component styles in `assets/css/main.css`, not inline blocks or extra stylesheets. Shared native typography and editorial helpers belong to Beauty.css; configure its variables instead of copying selectors into the theme. Add reusable colors and dimensions to the token block.
 - Never edit the generated Beauty.css artifact. Refresh it with `scripts/vendor-beauty.mjs`
   using a full upstream commit SHA; its manifest and license live in `vendor/`.
+- Reading type, wrapping, heading rhythm and compound-link decorations belong to Beauty. Select
+  its `beauty-reading`, `beauty-link-label`, `beauty-link-icon` and `beauty-nowrap` helpers in markup;
+  keep theme CSS limited to variable configuration, layout and UI components.
 - Joint local development may use `--local <checkout>` with an explicitly unreleased `-dev` library version. Replace that snapshot with a reviewed upstream pin before releasing the theme; see `docs/vendor-assets.md`.
 - Put browser behavior in `assets/js/main.js`, not inline scripts in templates.
 - Keep templates site-agnostic. Expose reusable behavior through Hugo params, partial hooks, front matter, or i18n rather than hard-coding values for `zavarov.com`.

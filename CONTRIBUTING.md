@@ -35,7 +35,8 @@ layouts/_partials/custom_head.html  empty site-wide <head> hook
 layouts/_partials/custom_body.html  empty site-wide <body>-end hook
 layouts/_markup/               render hooks (headings, images, links)
 layouts/_shortcodes/           caption, mermaid, plug
-assets/css/main.css            all styles; design tokens declared at the top
+assets/css/beauty.css          generated, pinned Beauty.css foundation; never edit by hand
+assets/css/main.css            theme tokens, font loading, layout and components
 assets/js/main.js              theme toggle, mobile menu, code-copy, sidebar
 i18n/                          UI strings (en, ru)
 exampleSite/                   demonstration site (bilingual)
@@ -45,8 +46,10 @@ scripts/                       optional Node helper for Telegram counters
 
 CSS and JS are bundled through Hugo Pipes from `assets/` — minified and
 fingerprinted. Do not add a second stylesheet or inline `<style>` blocks to
-templates; put styles in `assets/css/main.css`, and colours in the token block
-at the top of that file so they stay overridable.
+templates. Shared typography and editorial helpers belong in Beauty.css; configure its public
+variables in the token block of `assets/css/main.css`. Keep theme layout and component styles in
+that file, and refresh the generated foundation only through `scripts/vendor-beauty.mjs` as
+documented in `docs/vendor-assets.md`.
 
 ## Submitting Changes
 

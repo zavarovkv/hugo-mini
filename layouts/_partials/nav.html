@@ -37,5 +37,5 @@
   {{- $class := "" -}}
   {{- if $isActive -}}{{- $class = ` class="link-selected" aria-current="page"` -}}{{- end -}}
   {{- if $isExternal -}}{{- $class = ` target="_blank" rel="noopener noreferrer"` -}}{{- end -}}
-  <a href="{{ .URL }}"{{ $class | safeHTMLAttr }}>{{ $icon }}<span class="nav-label">{{ .Name }}</span></a>
+  <a href="{{ .URL }}"{{ $class | safeHTMLAttr }}>{{ $icon }}<span class="nav-label beauty-link-label">{{ .Name }}</span></a>
 {{- end }}

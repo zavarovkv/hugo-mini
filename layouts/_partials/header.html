@@ -14,9 +14,9 @@
            single text node, unchanged. */ -}}
     {{- $parts := split .Site.Title " " -}}
     {{- if gt (len $parts) 1 -}}
-    <span class="title-text"><span class="title-first-name">{{ index $parts 0 }} </span><span class="title-last-name">{{ delimit (after 1 $parts) " " }}</span></span>
+    <span class="title-text beauty-link-label"><span class="title-first-name">{{ index $parts 0 }} </span><span class="title-last-name">{{ delimit (after 1 $parts) " " }}</span></span>
     {{- else -}}
-    <span class="title-text">{{ .Site.Title }}</span>
+    <span class="title-text beauty-link-label">{{ .Site.Title }}</span>
     {{- end }}
   </a>
   <button class="mobile-menu-toggle" type="button" aria-label="{{ i18n "toggle_menu" | default "Toggle menu" }}" aria-expanded="false" aria-controls="main-navigation">

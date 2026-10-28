@@ -77,28 +77,34 @@
     /* Bridge the theme's public palette and type settings to Beauty.css. */
     --beauty-font: var(--font-secondary);
     --beauty-heading-font: var(--font-main);
-    --beauty-heading-weight: 700;
-    --beauty-h1-size: 3em;
-    --beauty-h1-font: 400 3em/1.1 var(--font-main);
-    --beauty-h1-margin: 0.67em 35px;
-    --beauty-h1-tracking: normal;
-    --beauty-h1-transform: scaleY(1.1);
-    --beauty-h2-size: 1.5em;
-    --beauty-h2-size-small: 1.2em;
-    --beauty-h2-font: 500 1.5em/1.1 var(--font-main);
-    --beauty-h2-margin: 35px 0.83em;
-    --beauty-h2-tracking: normal;
-    --beauty-h2-transform: scaleY(1.05);
+    --beauty-heading-weight: 600;
+    --beauty-h1-size: 3rem;
+    --beauty-h1-size-small: 2rem;
+    --beauty-h1-font: 500 var(--beauty-h1-size)/1.15 var(--font-main);
+    --beauty-h1-margin: 0 1.5rem;
+    --beauty-h1-tracking: -0.025em;
+    --beauty-h1-transform: none;
+    --beauty-h2-size: 1.5rem;
+    --beauty-h2-size-small: 1.375rem;
+    --beauty-h2-font: 600 var(--beauty-h2-size)/1.25 var(--font-main);
+    --beauty-h2-margin: 2.5rem 0.75rem;
+    --beauty-h2-tracking: -0.015em;
+    --beauty-h2-transform: none;
+    --beauty-h3-margin: 2rem 0.5rem;
     --beauty-font-mono: monospace;
     --beauty-font-size: var(--font-scale);
     --beauty-font-weight: 300;
     --beauty-line-height: 1.5;
     --beauty-content-line-height: 1.6;
-    --beauty-block-start: 1em;
-    --beauty-list-indent: 40px;
-    --beauty-list-gap: 5px;
-    --beauty-link-decoration: none;
-    --beauty-link-border: 0.25px solid var(--color-primary-border);
+    --beauty-block-start: 0;
+    --beauty-list-indent: 1.5em;
+    --beauty-list-gap: 0.4em;
+    --beauty-link-decoration: underline;
+    --beauty-link-thickness: 0.5px;
+    --beauty-link-offset: 0.1em;
+    --beauty-link-decoration-color: var(--color-primary-border);
+    --beauty-link-decoration-hover: var(--color-accent-border);
+    --beauty-link-border: 0 solid transparent;
     --beauty-link-border-hover: var(--color-accent-border);
     --beauty-focus-offset: 2px;
     /* One quotation treatment for Markdown, callouts and legacy quote markup. */
@@ -123,9 +129,9 @@
     --beauty-lead-weight: 200;
     --beauty-caption-align: right;
     --beauty-caption-style: italic;
-    --beauty-caption-margin: 0 0 25px;
+    --beauty-caption-margin: 0.5em 0 1.5rem;
     --beauty-emphasis-color: var(--color-emphasis);
-    --beauty-space: 1em;
+    --beauty-space: 1.125rem;
     --beauty-background: var(--background-color);
     --beauty-text: var(--text-color);
     --beauty-heading: var(--heading-color);
@@ -363,6 +369,13 @@
     color: var(--color-secondary);
   }
 
+  @media (max-width: 768px) {
+    .reading-shelf .reading-date {
+      width: 4.75rem;
+      padding-inline-start: 0.75rem;
+    }
+  }
+
   .reading-meta {
     margin-top: 0.125em;
     font-size: 0.875em;
@@ -532,19 +545,17 @@
 
   .title .title-text {
     font-size: 0.9rem;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--color-primary);
-    border-bottom: 0.25px solid;
-    border-bottom-color: var(--color-primary-border);
   }
 
   .title:hover .title-text {
     color: var(--color-accent);
-    border-bottom-color: var(--color-accent-border);
   }
 
   /* Selected title (on home page) */
   .title-selected {
+    --beauty-link-decoration: none;
     cursor: default;
   }
 
@@ -590,22 +601,6 @@
     color: currentColor;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
                 filter 0.3s ease;
-  }
-
-  /* Switch from border-bottom to text-decoration for icon links —
-     text-decoration naturally skips inline-block children (the SVG),
-     so the text is underlined but the icon is not. */
-  nav a:has(.nav-icon),
-  nav a:has(.nav-icon):link,
-  nav a:has(.nav-icon):visited {
-    border-bottom: none;
-    text-decoration: underline;
-    text-decoration-color: var(--color-primary-border);
-    text-underline-offset: 4px;
-  }
-
-  nav a:has(.nav-icon):hover {
-    text-decoration-color: var(--color-accent-border);
   }
 
   nav a:hover .nav-icon {
@@ -849,6 +844,7 @@
 
     /* Full-screen overlay menu (Miro-style) */
     .main-nav {
+      --beauty-link-decoration: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -924,7 +920,8 @@
   .link-selected:link,
   .link-selected:visited {
     color: var(--color-accent);
-    font-weight: bold;
+    --beauty-link-decoration: none;
+    font-weight: 600;
     border-bottom: none;
     cursor: default;
   }
@@ -977,16 +974,6 @@
     display: inline;
     border-bottom: none;
   }
-  .project-name,
-  .archive-label { border-bottom: 0.25px solid var(--color-primary-border); }
-  .project-link:hover .project-name,
-  .archive-link:hover .archive-label { border-bottom-color: var(--color-accent-border); }
-  .project-arrow,
-  .archive-arrow {
-    margin-inline-start: 0.35em;
-    color: inherit;
-    font-weight: var(--beauty-font-weight);
-  }
   .project-description > :first-child { margin-top: 0.25em; }
   .project-description > :last-child { margin-bottom: 0; }
 
@@ -997,8 +984,6 @@
     border-bottom: none;
     white-space: nowrap;
   }
-  .github-repo-label { border-bottom: 0.25px solid var(--color-primary-border); }
-  .github-repo-link:hover .github-repo-label { border-bottom-color: var(--color-accent-border); }
   .github-stars {
     display: inline-flex;
     align-items: baseline;
@@ -1120,6 +1105,7 @@
   .lang-toggle:link,
   .lang-toggle:visited,
   .lang-toggle:active {
+    --beauty-link-decoration: none;
     display: grid;
     place-items: center;
     box-sizing: border-box;

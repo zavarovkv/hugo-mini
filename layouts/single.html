@@ -11,7 +11,7 @@
 
   <h1>{{ .Title }}</h1>
 
-  <article lang="{{ .Language.Lang }}">
+  <article{{ if not .Params.reading_list }} class="beauty-reading"{{ end }} lang="{{ .Language.Lang }}">
     {{ .Content }}
   </article>
 

@@ -20,6 +20,13 @@ links, code, captions and optional editorial helpers. The theme configures these
 `--beauty-*` variables; it owns font loading, its public palette, page layout, interactive components
 and KaTeX/Chroma/Likely integration. Do not add parallel native-text rules to `main.css`.
 
+The optional `beauty-reading` treatment supplies the reading measure and responsive type size for
+home and article content. The theme selects it in markup and configures heading/spacing tokens;
+compact tables keep their ordinary UI text size. Compound links use `beauty-link-label` and
+`beauty-link-icon`, so plain links, project names and archive navigation share native underline
+geometry. Reading-month cells use `time`; short editorial values may use `beauty-nowrap`.
+All these style rules live in Beauty, with no client-side text rewriting or extra dependency.
+
 The bundle aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
 Beauty's selectors. This preserves existing theme content without duplicating CSS declarations or
 adding Hugo-specific selectors to the independent library. Prefer `.beauty-emphasis`,

@@ -6,11 +6,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.3.0] — 2026-10-28
+
 ### Fixed
 - Update the self-hosted KaTeX bundle to 0.18.2, preventing inherited options from enabling trusted rendering. Matching CSS and all pinned assets preserve existing formula appearance.
 - Invalidate cached KaTeX styles and scripts by including their content hashes in local resource URLs.
 
 ### Changed
+- Bundle Beauty.css 0.3.0 for natural heading proportions, a consistent spacing hierarchy and native wrapping through tokens; shared typography stays in the independent library and reading text remains 16 px on desktop and mobile.
+- Use Beauty's native compound-link labels and light arrows instead of separate border underlines.
+- Give mobile book titles more room while keeping both table headings and the existing date typeface; reading months use semantic time elements.
 - Minify and fingerprint self-hosted sharing assets with Hugo Pipes, preserving all sharing controls without adding a build dependency.
 - Reuse the sorted post collection across listings, feeds, shortcodes and sidebars within each language.
 - Stop publishing three unused Inter font files and the obsolete SVG underline; retain all four active font faces.
@@ -310,7 +315,8 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.3...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.3...v3.3.0
 [3.2.3]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.0...v3.2.1

@@ -12,7 +12,7 @@
   </ul>
   {{- with $archive }}
   {{- $url := partial "localized-link.html" (dict "Destination" . "Page" $page) }}
-  <p><a class="archive-link" href="{{ $url }}"><span class="archive-label">{{ $archiveLabel }}</span><span class="archive-arrow" aria-hidden="true">→</span></a></p>
+  <p><a class="archive-link" href="{{ $url }}"><span class="archive-label beauty-link-label">{{ $archiveLabel }}</span><span class="archive-arrow beauty-link-icon" aria-hidden="true">→</span></a></p>
   {{- end }}
 </section>
 {{- end -}}
