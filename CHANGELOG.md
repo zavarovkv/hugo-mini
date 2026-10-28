@@ -6,6 +6,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Fixed
+- Update the self-hosted KaTeX bundle to 0.18.2, preventing inherited options from enabling trusted rendering. Matching CSS and all pinned assets preserve existing formula appearance.
+- Invalidate cached KaTeX styles and scripts by including their content hashes in local resource URLs.
+
 ### Changed
 - Minify and fingerprint self-hosted sharing assets with Hugo Pipes, preserving all sharing controls without adding a build dependency.
 - Reuse the sorted post collection across listings, feeds, shortcodes and sidebars within each language.

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile, access } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
+import { runInNewContext } from "node:vm";
 
 const require = createRequire(import.meta.url);
 const base = new URL("../", import.meta.url);
@@ -48,4 +49,19 @@ test("committed KaTeX assets match their pinned manifest and render formulas", a
   for (const match of css.matchAll(/url\(([^)]+)\)/g)) {
     await access(new URL(`static/katex/${match[1].replace(/["']/g, "")}`, base));
   }
+});
+
+test("KaTeX ignores inherited trust while preserving an explicit trusted choice", async () => {
+  const source = await readFile(new URL("static/katex/katex.min.js", base), "utf8");
+  const module = { exports: {} };
+  const [inherited, explicit] = runInNewContext(`${source}
+    Object.prototype.trust = true;
+    [
+      module.exports.renderToString(formula, { throwOnError: false, strict: "ignore" }),
+      module.exports.renderToString(formula, { throwOnError: false, strict: "ignore", trust: true })
+    ];`, {
+      module, exports: module.exports, formula: String.raw`\href{https://example.invalid/}{link}`,
+  });
+  assert.doesNotMatch(inherited, /<a\b/, "prototype pollution cannot enable trusted links");
+  assert.match(explicit, /<a\b[^>]*href="https:\/\/example\.invalid\/"/);
 });

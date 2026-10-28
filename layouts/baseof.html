@@ -53,9 +53,15 @@
 
   {{ if .Params.math }}
   <!-- KaTeX for math formulas (local files) -->
-  <link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
-  <script defer src="{{ "katex/katex.min.js" | relURL }}"></script>
-  <script defer src="{{ "katex/auto-render.min.js" | relURL }}"></script>
+  {{- range slice "katex.min.css" "katex.min.js" "auto-render.min.js" }}
+    {{- $path := printf "katex/%s" . }}
+    {{- $url := printf "%s?v=%s" ($path | relURL) (crypto.SHA256 (readFile (printf "static/%s" $path))) }}
+    {{- if hasSuffix . ".css" }}
+  <link rel="stylesheet" href="{{ $url }}">
+    {{- else }}
+  <script defer src="{{ $url }}"></script>
+    {{- end }}
+  {{- end }}
   {{ end }}
   
   <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />

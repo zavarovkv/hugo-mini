@@ -55,22 +55,25 @@ generated minified output. Existing theme button markup and disabled counters ar
 
 ## KaTeX
 
-KaTeX is committed under `static/katex/` so consuming sites do not need npm or a CDN to render formulas. The current bundle is **0.16.47**, from the maintained 0.16 release line, and includes matching JavaScript, CSS, auto-render, all font formats, and the upstream MIT license.
+KaTeX is committed under `static/katex/` so consuming sites do not need npm or a CDN to render formulas. The current bundle is **0.18.2**, with the inherited-option security fix, matching JavaScript, CSS, auto-render, all font formats, and the upstream MIT license. Its CSS and script URLs include their content hashes to invalidate cached copies when an asset changes.
 
 `vendor/katex.json` records the npm tarball URL/integrity and SHA-256 of every copied file. These files are outside a consuming site's package-lock and npm audit; review upstream [security advisories](https://github.com/KaTeX/KaTeX/security/advisories) when updating them.
 
-The 2026-10-28 review identified the low-severity [GHSA-238p-pmpm-9mq7](https://github.com/KaTeX/KaTeX/security/advisories/GHSA-238p-pmpm-9mq7)
-in this pinned version. Exploitation requires existing prototype pollution and attacker-controlled
-expressions or options; the renderer does not introduce prototype pollution itself. The upstream
-fix is in 0.18.2. A compatibility-preserving cleanup retains the current formula rendering;
-a future upgrade must replace matching JavaScript, CSS, auto-render and fonts together, update
-the manifest, and verify formula output. Consuming sites should review their Mermaid dependency
-separately because it can bundle another KaTeX copy.
+The 2026-10-28 compatibility check verified the fix for low-severity
+[GHSA-238p-pmpm-9mq7](https://github.com/KaTeX/KaTeX/security/advisories/GHSA-238p-pmpm-9mq7).
+The regression test checks that prototype pollution cannot enable trusted rendering, while an explicit
+trusted choice still works. Across Chromium, Firefox and WebKit, 444 before/after formula comparisons
+in the blog and example site preserved pixels, dimensions and MathML; mathematical Mermaid 11 labels
+also remain compatible with this stylesheet.
+
+Mermaid is a separate consumer-owned dependency and may bundle another KaTeX copy. The tested
+Mermaid 12.2.0 upgrade clears npm's advisory but changes diagram defaults and geometry, even with
+classic styling, so consumers must evaluate that major upgrade separately from the standalone fix.
 
 To reproduce the current bundle, install the pinned package into a temporary directory, then run the maintainer script from the theme root:
 
 ```bash
-npm install --prefix /tmp/mini-katex --ignore-scripts --save-exact katex@0.16.47 --registry https://registry.npmjs.org
+npm install --prefix /tmp/mini-katex --ignore-scripts --save-exact katex@0.18.2 --registry https://registry.npmjs.org
 node scripts/vendor-katex.mjs /tmp/mini-katex/node_modules/katex
 node --test tests/vendor-assets.test.mjs
 ```

@@ -1,10 +1,10 @@
 {
-  "version": "0.16.47",
-  "package": "https://registry.npmjs.org/katex/-/katex-0.16.47.tgz",
-  "integrity": "sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==",
+  "version": "0.18.2",
+  "package": "https://registry.npmjs.org/katex/-/katex-0.18.2.tgz",
+  "integrity": "sha512-3snve4y0SXTMequLim1FMiPvLGElySam0blN5xQZBqEY3lOJz1TnuaaiugnBZBqHzlSAGmFTYL7MCQkORuLKCA==",
   "files": {
-    "dist/katex.min.js": "a29d2961d3146de5949d78ac7c1a9d93ae54955bad22a6db4fbe836e88e8bf48",
-    "dist/katex.min.css": "0289a02cf451a44dd73add683a09644252363871ac11713a647b732cee8b1ee3",
+    "dist/katex.min.js": "90354db602936d813daadda391a4376d071f5d1241d8cfddf091df4c2e38730d",
+    "dist/katex.min.css": "7dc91b92608db5f3523cfda520df36307b2b389e1725d71ace6e4ef8dee066c7",
     "dist/contrib/auto-render.min.js": "e5372d199bcdae8b4de71d0f7ceba72a4ba12774a27c60a6f1f77d03b3228ee4",
     "LICENSE": "766ccc1f306c885aa45542a9846bbd0a505b27a0374f146778171c2254ce18e3",
     "dist/fonts/KaTeX_AMS-Regular.ttf": "68534840bcfdd2bffb6f0e8deb48684dd01e7f04ea2813267577afb906de1d13",
