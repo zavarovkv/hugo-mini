@@ -34,6 +34,7 @@ All parameters are optional unless your site content depends on them.
 | `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
 | `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
+| `typography` | Apply language-aware prose spacing at build time; page front matter can override | `true` |
 | `mainSections` | Sections treated as posts | Hugo default |
 | `socialSharing` | Likely sharing buttons on posts | `true` |
 | `telegramChannel` | Telegram comments and reaction source | unset |
@@ -46,6 +47,10 @@ All parameters are optional unless your site content depends on them.
 Social links live under `[params.social]`: `telegram`, `linkedin`, `github`, and `email`. Schema.org author data lives under `[params.author]`, for example `jobTitle`.
 
 Set `backToTop = false` in a page's front matter to disable the control on that page, or under site `[params]` to disable it throughout the site. A page value overrides the site setting.
+
+Set `typography = false` to disable the theme's additional spacing pass, either
+for a page or site-wide. This does not change Goldmark's native smart punctuation.
+See [typography](typography.md) for the rules, exclusions and fragment opt-out.
 
 Analytics is opt-in. Set any combination of `yandexMetrikaId`, `googleAnalyticsId`, `plausibleDomain` / `plausibleSrc`, or `umamiWebsiteId` / `umamiSrc`.
 

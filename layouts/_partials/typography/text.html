@@ -1,0 +1,44 @@
+{{- /* Goldmark owns smart quotes, ellipses and --/---. This pass only adjusts
+     prose spacing; it never guesses numeric ranges or mathematical operators. */ -}}
+{{- $text := string .text -}}
+{{- $lang := lower (index (split .lang "-") 0) -}}
+{{- if in (slice "ru" "en") $lang -}}
+  {{- $space := `[ \t\x{00a0}\x{202f}]` -}}
+  {{- $units := `₽|€|\$|°C|°F|кг|мг|г|км|см|мм|м²|м³|м|мл|л|мс|мин|ч|с|КБ|МБ|ГБ|ТБ|кВт|Вт|Гц|МГц|kg|mg|g|km|cm|mm|m²|m³|m|ml|ms|min|KB|MB|GB|TB|kB|kW|W|Hz|MHz|px` -}}
+  {{- $parts := slice -}}
+  {{- /* Keep visible URLs byte-for-byte, including percent escapes. */ -}}
+  {{- range findRESubmatch `(?is)(.*?)([A-Za-z][A-Za-z0-9+.-]*://[^\s<]+|mailto:[^\s<]+|tel:[^\s<]+|www\.[^\s<]+|/[^\s<]+|$)` $text -}}
+    {{- $prose := index . 1 -}}
+    {{- /* Existing digit groups only: years and unformatted IDs are not regrouped. */ -}}
+    {{- $numbers := slice -}}
+    {{- $groups := printf `(?s)(.*?)([\p{L}\p{N}_]+(?:%s[0-9]{3})+(?:[.,][0-9]+)?[\p{L}\p{N}_]*|$)` $space -}}
+    {{- range findRESubmatch $groups $prose -}}
+      {{- $number := index . 2 -}}
+      {{- if findRE (printf `^[0-9]{1,3}(?:%s[0-9]{3})+(?:[.,][0-9]+)?$` $space) $number -}}
+        {{- $number = replaceRE $space "\u202f" $number -}}
+      {{- end -}}
+      {{- $numbers = $numbers | append (index . 1) $number -}}
+    {{- end -}}
+    {{- $prose = delimit $numbers "" -}}
+    {{- /* Match whole candidates, including word prefixes/suffixes, before
+         validating. This leaves model16px and 10MBps intact and handles
+         adjacent measurements without consuming their shared boundary. */ -}}
+    {{- $measurements := slice -}}
+    {{- $candidates := printf `(?s)(.*?)([\p{L}\p{N}_]*[0-9][\p{L}\p{N}_]*(?:[.,][0-9]+)?%s*(?:%s|[%%‰])[\p{L}\p{N}_²³]*|$)` $space $units -}}
+    {{- range findRESubmatch $candidates $prose -}}
+      {{- $measurement := index . 2 -}}
+      {{- $measurement = replaceRE (printf `^([0-9]+(?:[.,][0-9]+)?)%s*(%s)$` $space $units) "$1\u00a0$2" $measurement -}}
+      {{- $percentSpace := "" -}}
+      {{- if eq $lang "ru" -}}{{- $percentSpace = "\u00a0" -}}{{- end -}}
+      {{- $measurement = replaceRE (printf `^([0-9]+(?:[.,][0-9]+)?)%s*([%%‰])$` $space) (printf "$1%s$2" $percentSpace) $measurement -}}
+      {{- $measurements = $measurements | append (index . 1) $measurement -}}
+    {{- end -}}
+    {{- $prose = delimit $measurements "" -}}
+    {{- if eq $lang "ru" -}}
+      {{- $prose = replaceRE `(\S)[ \t\x{00a0}\x{202f}]+(—|&mdash;|&#8212;|&#x2014;)[ \t\x{00a0}\x{202f}]+` "$1\u00a0$2 " $prose -}}
+    {{- end -}}
+    {{- $parts = $parts | append $prose (index . 2) -}}
+  {{- end -}}
+  {{- $text = delimit $parts "" -}}
+{{- end -}}
+{{- return $text -}}

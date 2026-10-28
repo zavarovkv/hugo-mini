@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Added
+- Apply language-aware prose spacing to Russian and English page bodies during the Hugo build, preserving code, formulas, URLs and HTML attributes. Page and site `typography` settings and `data-typography="off"` fragments control the additional pass; Markdown sources stay unchanged.
+- Document reading typography, native Goldmark punctuation, spacing rules and opt-outs in the README and a dedicated typography guide.
+
+### Changed
+- Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
+
 ### Fixed
 - Keep category spacing consistent when article-list columns stack on mobile; column boundaries no longer add an extra heading margin.
 

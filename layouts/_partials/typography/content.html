@@ -1,0 +1,8 @@
+{{- /* The rendered body is the only input; sources, metadata and feeds stay intact. */ -}}
+{{- $html := .Content -}}
+{{- $lang := lower (index (split .Language.Lang "-") 0) -}}
+{{- if and (in (slice "ru" "en") $lang) (not (eq (.Param "typography") false)) -}}
+  {{- $math := .Params.math | default false -}}
+  {{- $html = partialCached "typography/html.html" (dict "html" $html "lang" .Language.Lang "math" $math) .Language.Lang $math (crypto.SHA256 $html) -}}
+{{- end -}}
+{{- return $html -}}

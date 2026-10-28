@@ -23,6 +23,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/baseof.html` defines the shared page shell and template blocks.
 - `layouts/home.html`, `list.html`, `single.html`, and `404.html` provide page layouts.
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
+- `layouts/_partials/typography/` applies build-time prose spacing to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; native punctuation stays with Goldmark and visual typography stays with Beauty.css. Document rule or opt-out changes in `docs/typography.md` and exercise `tests/typography.test.mjs`.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, and links.
 - `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, and `column`.
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated

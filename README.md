@@ -84,14 +84,33 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 
 | Area | Built in |
 | --- | --- |
-| Writing | Markdown, optional heading links and CSS classes, code copy, captions, KaTeX, Mermaid |
-| Reading | Responsive layout, system-aware dark mode, recent posts, pinned posts |
+| Writing | Markdown, build-time typography, optional heading links and CSS classes, code copy, captions, KaTeX, Mermaid |
+| Reading | Responsive 720 px reading measure, system-aware dark mode, recent posts, pinned posts |
 | Discovery | Open Graph images, JSON-LD, `hreflang`, RSS, JSON Feed, `llms.txt` |
 | Integrations | Telegram comments and reactions, social sharing, optional analytics |
 
 Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
 
 Mermaid diagrams render as they approach the viewport. An optional local ESM bundle loads only the diagram types in use; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
+
+## Reading and typography
+
+Articles use 16 px body text and a reading measure of up to 720 px, narrowing to
+fit smaller screens. Beauty.css owns the shared typography; the theme sets its
+reading-width token and supplies the layout and self-hosted Inter fonts.
+
+Hugo applies typography during the build, without an additional package or
+browser script. Goldmark supplies smart quotes, ellipses and dash substitutions.
+The theme adds language-aware spacing in Russian and English page bodies:
+`1 000 000` keeps its digit groups together, `16px` becomes `16 px`, and percentages
+use `10 %` in Russian and `10%` in English. Russian text also keeps a spaced em
+dash with the preceding word.
+
+Sources stay unchanged. Code, formulas, URLs and HTML attributes are preserved.
+Set `typography = false` in a page's front matter or under site `[params]` to
+disable the theme's spacing pass. Goldmark's punctuation settings are separate.
+See [typography](docs/typography.md) for examples, exclusions and fragment-level
+control.
 
 ## Is Mini a good fit?
 
@@ -156,6 +175,7 @@ An empty or omitted `categories` list places a post in Miscellaneous. Set `recen
 
 - [Configuration and multilingual setup](https://github.com/zavarovkv/hugo-mini/blob/main/docs/configuration.md)
 - [Writing and organizing content](https://github.com/zavarovkv/hugo-mini/blob/main/docs/content.md)
+- [Reading width and build-time typography](https://github.com/zavarovkv/hugo-mini/blob/main/docs/typography.md)
 - [Customizing the theme](https://github.com/zavarovkv/hugo-mini/blob/main/docs/customization.md)
 - [Telegram comments and reactions](https://github.com/zavarovkv/hugo-mini/blob/main/docs/telegram.md)
 - [Deployment](https://github.com/zavarovkv/hugo-mini/blob/main/docs/deployment.md)

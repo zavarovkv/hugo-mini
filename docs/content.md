@@ -32,6 +32,13 @@ localized month name and year (`февраль 2001` / `February 2001`) and its 
 `date` value. Without this field, articles show the known day, month and year,
 including older articles (`2 января 2000` / `2 January 2000`).
 
+## Typography
+
+Homepages and single-page bodies receive language-aware prose spacing during
+the Hugo build, without changing their Markdown sources. Set `typography = false`
+in front matter to disable this pass for a page. Code and formulas are preserved;
+see [typography](typography.md) for examples and fragment-level control.
+
 ## Categories
 
 Categories are grouped on the section page. Add display names through i18n so slugs remain stable:

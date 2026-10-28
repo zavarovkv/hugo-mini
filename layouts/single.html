@@ -12,7 +12,7 @@
   <h1>{{ .Title }}</h1>
 
   <article{{ if not .Params.reading_list }} class="beauty-reading"{{ end }} lang="{{ .Language.Lang }}">
-    {{ .Content }}
+    {{ partial "typography/content.html" . }}
   </article>
 
   {{- if $isPost }}

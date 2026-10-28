@@ -94,6 +94,7 @@
     --beauty-font-mono: monospace;
     --beauty-font-size: var(--font-scale);
     --beauty-font-weight: 300;
+    --beauty-reading-width: 45rem;
     --beauty-line-height: 1.5;
     --beauty-content-line-height: 1.6;
     --beauty-block-start: 0;

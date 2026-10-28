@@ -1,0 +1,59 @@
+{{- /* Tokenize a content fragment. Quoted attributes and comments are atomic;
+     only text outside protected elements and TeX delimiters reaches text.html. */ -}}
+{{- $parts := slice -}}
+{{- $pending := "" -}}
+{{- $protected := "" -}}
+{{- $rawChild := "" -}}
+{{- $depth := 0 -}}
+{{- $lang := .lang -}}
+{{- $void := slice "area" "base" "br" "col" "embed" "hr" "img" "input" "link" "meta" "param" "source" "track" "wbr" -}}
+{{- $verbatim := slice "pre" "code" "script" "style" "textarea" "kbd" "samp" "svg" "math" -}}
+{{- $raw := slice "script" "style" "textarea" -}}
+{{- $inlineMath := "" -}}
+{{- if .math -}}{{- $inlineMath = `|\$(?:\\.|[^$])+\$` -}}{{- end -}}
+{{- $pattern := printf `(?s)<!--.*?-->|<!\[CDATA\[.*?\]\]>|</?[A-Za-z][A-Za-z0-9:-]*(?:\s+(?:"[^"]*"|'[^']*'|[^'"<>])*)?\s*/?>|\\\[.*?\\\]|\\\(.*?\\\)|\$\$.*?\$\$%s|[^<\\$]+|[<\\$]` $inlineMath -}}
+{{- $tokens := findRE $pattern (string .html) -}}
+{{- range $tokens -}}
+  {{- $token := . -}}
+  {{- $tag := "" -}}
+  {{- with findRESubmatch `^</?([A-Za-z][A-Za-z0-9:-]*)` $token -}}
+    {{- $tag = lower (index (index . 0) 1) -}}
+  {{- end -}}
+  {{- $closing := hasPrefix $token "</" -}}
+  {{- $selfClosing := or (in $void $tag) (hasSuffix $token "/>") -}}
+  {{- if $protected -}}
+    {{- $parts = $parts | append $token -}}
+    {{- if $rawChild -}}
+      {{- if and $closing (eq $tag $rawChild) -}}{{- $rawChild = "" -}}{{- end -}}
+    {{- else if and (not (in $raw $protected)) (in $raw $tag) (not $closing) (not $selfClosing) -}}
+      {{- $rawChild = $tag -}}
+    {{- else if eq $tag $protected -}}
+      {{- if $closing -}}
+        {{- $depth = sub $depth 1 -}}
+        {{- if eq $depth 0 -}}{{- $protected = "" -}}{{- end -}}
+      {{- else if and (not $selfClosing) (not (in $raw $protected)) -}}
+        {{- $depth = add $depth 1 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else if or $tag (hasPrefix $token "<!--") (hasPrefix $token "<![CDATA[") (hasPrefix $token `\[`) (hasPrefix $token `\(`) (hasPrefix $token "$$") (and $.math (hasPrefix $token "$") (gt (len $token) 1)) -}}
+    {{- $parts = $parts | append (partial "typography/text.html" (dict "text" $pending "lang" $lang)) $token -}}
+    {{- $pending = "" -}}
+    {{- $skip := in $verbatim $tag -}}
+    {{- if and $tag (not $closing) (in (lower $token) "data-typography") -}}
+      {{- /* Parse whole attributes so a quoted example cannot enable the opt-out. */ -}}
+      {{- range findRESubmatch `([A-Za-z_:][A-Za-z0-9_.:-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?` $token -}}
+        {{- if and (eq (lower (index . 1)) "data-typography") (eq (lower (or (index . 2) (index . 3) (index . 4))) "off") -}}
+          {{- $skip = true -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if and $skip (not $closing) (not $selfClosing) -}}
+      {{- $protected = $tag -}}
+      {{- $depth = 1 -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $pending = printf "%s%s" $pending $token -}}
+  {{- end -}}
+{{- end -}}
+{{- $parts = $parts | append (partial "typography/text.html" (dict "text" $pending "lang" $lang)) -}}
+{{- return (delimit $parts "" | safeHTML) -}}
