@@ -109,8 +109,12 @@
          small block of CSS that styles .likely is part of the bundled
          main.css above (always loaded, ~200 bytes minified). */ -}}
   {{- if and .IsPage (in (site.Params.mainSections | default (slice "blog")) .Type) (site.Params.socialSharing | default true) }}
-  <link rel="stylesheet" href="{{ "likely/likely.css" | relURL }}">
-  <script defer src="{{ "likely/likely.js" | relURL }}"></script>
+  {{- with resources.Get "likely/likely.css" | resources.Minify | resources.Fingerprint "sha256" }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{- end }}
+  {{- with resources.Get "likely/likely.js" | resources.Minify | resources.Fingerprint "sha256" }}
+  <script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{- end }}
   {{- end }}
 
   {{- /* Per-template extension point: any template extending this baseof

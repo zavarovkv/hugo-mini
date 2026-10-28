@@ -8,7 +8,7 @@
          empty, and nested sections contribute their regular pages. */ -}}
   {{- $allPosts := where .RegularPagesRecursive ".Params.hidden" "ne" true -}}
   {{- if and .IsPage (not $allPosts) -}}
-    {{- $allPosts = partial "main-pages.html" . -}}
+    {{- $allPosts = partialCached "main-pages.html" . .Site.Language.Lang -}}
   {{- end -}}
   {{- $allPosts = $allPosts.ByDate.Reverse -}}
 

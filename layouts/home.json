@@ -6,7 +6,7 @@
 {{- else -}}
   {{- $languageCode = site.Language.LanguageCode -}}
 {{- end -}}
-{{- range partial "main-pages.html" . -}}
+{{- range partialCached "main-pages.html" . .Site.Language.Lang -}}
   {{- $dates := partial "page-dates.html" . -}}
   {{- $item := dict
     "id" .Permalink

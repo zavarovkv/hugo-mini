@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { collectPostIds } from "../scripts/fetch-telegram-reactions.mjs";
 
 const themeRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -155,7 +156,17 @@ weight = 1
     assert.ok(originalLinks.includes(`${baseURL}shared/?mode=1#intro`), "localizeLinks=false must preserve the destination");
     await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true"));
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
-    assert.ok((await readFile(join(output, "ru/shared/index.html"), "utf8")).includes("likely/likely.js"));
+    const sharingPost = await readFile(join(output, "ru/shared/index.html"), "utf8");
+    const sharingAssets = [...sharingPost.matchAll(/<(?:link|script)\b[^>]*>/g)]
+      .map(([tag]) => ({ url: attribute(tag, "src") || attribute(tag, "href"), integrity: attribute(tag, "integrity") }))
+      .filter(({ url }) => url?.includes("/likely/"));
+    assert.equal(sharingAssets.length, 2, "enabled sharing loads one local stylesheet and script");
+    for (const { url, integrity } of sharingAssets) {
+      assert.match(url, /\/likely\/likely\.min\.[a-f0-9]+\.(?:css|js)$/);
+      const bytes = await readFile(join(output, new URL(url, baseURL).pathname.slice(basePath.length)));
+      assert.ok(bytes.length > 0);
+      assert.equal(integrity, `sha256-${createHash("sha256").update(bytes).digest("base64")}`);
+    }
     assert.ok(!(await readFile(join(output, "blog/index.html"), "utf8")).includes("likely/likely."));
   });
 }

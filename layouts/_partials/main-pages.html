@@ -13,7 +13,8 @@
   earlier versions hardcoded "blog" and silently produced an empty listing
   for everyone else.
 
-  Usage: {{ $posts := partial "main-pages.html" . }}
+  Reuse the sorted collection for every caller in the same language:
+  {{ $posts := partialCached "main-pages.html" . .Site.Language.Lang }}
 */ -}}
 {{- $sections := site.Params.mainSections | default (slice "blog") -}}
 {{- $pages := where site.RegularPages "Type" "in" $sections -}}

@@ -6,6 +6,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Changed
+- Minify and fingerprint self-hosted sharing assets with Hugo Pipes, preserving all sharing controls without adding a build dependency.
+- Reuse the sorted post collection across listings, feeds, shortcodes and sidebars within each language.
+- Stop publishing three unused Inter font files and the obsolete SVG underline; retain all four active font faces.
+
 ## [3.2.3] — 2026-10-28
 
 ### Fixed

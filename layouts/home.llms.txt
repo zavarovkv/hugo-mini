@@ -34,7 +34,7 @@
 - {{ .Name }}: {{ .URL | absURL }}
 {{- end }}
 {{- end }}
-{{ with partial "main-pages.html" . }}
+{{ with partialCached "main-pages.html" . .Site.Language.Lang }}
 ## {{ i18n "articles" }}
 {{ range . }}
 - [{{ .Title }}]({{ .Permalink }}){{ with .Description }}: {{ . }}{{ end }}

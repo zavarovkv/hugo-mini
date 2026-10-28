@@ -1,5 +1,5 @@
 {{- $pages := where .RegularPagesRecursive ".Params.hidden" "ne" true -}}
-{{- if .IsHome -}}{{- $pages = partial "main-pages.html" . -}}{{- end -}}
+{{- if .IsHome -}}{{- $pages = partialCached "main-pages.html" . .Site.Language.Lang -}}{{- end -}}
 {{- $pages = $pages.ByDate.Reverse -}}
 {{- $limit := .Site.Config.Services.RSS.Limit -}}
 {{- if ge $limit 0 -}}{{- $pages = first $limit $pages -}}{{- end -}}

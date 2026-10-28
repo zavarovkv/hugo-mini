@@ -42,11 +42,30 @@ This verifies the same manifest and license, and records `source: "local-develop
 upstream revision. Before releasing the theme, publish the reviewed library changes and replace
 the development snapshot with a full upstream commit using the normal command above.
 
+## Inter and sharing controls
+
+`static/fonts/` contains the four Inter faces declared by the theme: normal 300, 500 and 600,
+plus italic 300. Their SIL Open Font License is retained in the same directory. The TTF files
+under `assets/fonts/` are separate build inputs for generated share images, not browser downloads.
+
+Likely's upstream files live under `assets/likely/`. Hugo minifies and fingerprints them only
+for article pages with social sharing enabled. The generated CSS and JavaScript stay local;
+no npm install or CDN is required. Keep upstream sources intact rather than editing their
+generated minified output. Existing theme button markup and disabled counters are unchanged.
+
 ## KaTeX
 
 KaTeX is committed under `static/katex/` so consuming sites do not need npm or a CDN to render formulas. The current bundle is **0.16.47**, from the maintained 0.16 release line, and includes matching JavaScript, CSS, auto-render, all font formats, and the upstream MIT license.
 
 `vendor/katex.json` records the npm tarball URL/integrity and SHA-256 of every copied file. These files are outside a consuming site's package-lock and npm audit; review upstream [security advisories](https://github.com/KaTeX/KaTeX/security/advisories) when updating them.
+
+The 2026-10-28 review identified the low-severity [GHSA-238p-pmpm-9mq7](https://github.com/KaTeX/KaTeX/security/advisories/GHSA-238p-pmpm-9mq7)
+in this pinned version. Exploitation requires existing prototype pollution and attacker-controlled
+expressions or options; the renderer does not introduce prototype pollution itself. The upstream
+fix is in 0.18.2. A compatibility-preserving cleanup retains the current formula rendering;
+a future upgrade must replace matching JavaScript, CSS, auto-render and fonts together, update
+the manifest, and verify formula output. Consuming sites should review their Mermaid dependency
+separately because it can bundle another KaTeX copy.
 
 To reproduce the current bundle, install the pinned package into a temporary directory, then run the maintainer script from the theme root:
 

@@ -29,7 +29,8 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
   `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
 - `assets/js/theme-init.js` is the small, testable before-paint exception, inlined before CSS to resolve the saved or system color scheme.
-- `static/` contains self-hosted fonts, KaTeX, Likely, and shared images.
+- `assets/likely/` contains upstream sharing CSS/JS, minified and fingerprinted by Hugo only for pages with sharing enabled.
+- `static/` contains the four used Inter font faces, their license, and KaTeX.
 - `i18n/` contains built-in English and Russian interface strings.
 - `exampleSite/` is the bilingual integration fixture and public demo content.
 - `scripts/fetch-telegram-reactions.mjs` fetches Telegram view/reaction data for consuming sites.

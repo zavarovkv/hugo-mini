@@ -2,7 +2,7 @@
 {{- $page := .Page -}}
 {{- $archive := .Get "archive" -}}
 {{- $archiveLabel := .Get "archiveLabel" | default (i18n "articles") -}}
-{{- with first $count (partial "main-pages.html" .Page) -}}
+{{- with first $count (partialCached "main-pages.html" .Page .Page.Language.Lang) -}}
 <section class="latest-posts">
   <h2 class="posts-group-title">{{ i18n "latest_posts" }}</h2>
   <ul class="blog-posts">
