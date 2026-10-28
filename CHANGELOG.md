@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Fixed
+- Keep category spacing consistent when article-list columns stack on mobile; column boundaries no longer add an extra heading margin.
+
 ## [3.3.0] — 2026-10-28
 
 ### Fixed

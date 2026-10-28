@@ -1009,11 +1009,15 @@
     letter-spacing: 0.5px;
   }
 
-  /* Stack article-listing columns on mobile. */
+  /* Flatten desktop wrappers so mobile category margins collapse uniformly,
+     while the listing retains its outer margins. */
   @media (max-width: 768px) {
     .posts-columns {
-      flex-direction: column;
-      gap: 0;
+      display: flow-root;
+    }
+
+    .posts-column {
+      display: contents;
     }
   }
 
