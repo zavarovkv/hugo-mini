@@ -185,6 +185,11 @@ test("noindex and draft previews do not change the indexing of hidden posts", as
     assert.match(await readFile(join(root, `public/blog/${slug}/index.html`), "utf8"), /name=robots content="noindex, follow"/);
   }
   assert.match(await readFile(join(root, "public/blog/unlisted/index.html"), "utf8"), /name=robots content="index, follow/);
+  const sitemap = await readFile(join(root, "public/sitemap.xml"), "utf8");
+  assert.ok(sitemap.includes("https://example.org/blog/unlisted/"), "hidden posts remain discoverable by crawlers");
+  for (const slug of ["private", "preview"]) {
+    assert.ok(!sitemap.includes(`https://example.org/blog/${slug}/`), `${slug} must not be submitted for indexing`);
+  }
 });
 
 test("latest posts respect language, visibility, and dates", async (t) => {

@@ -11,9 +11,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Document reading typography, native Goldmark punctuation, spacing rules and opt-outs in the README and a dedicated typography guide.
 
 ### Changed
+- Refresh the pinned Beauty.css foundation to include its print-wrapping fix without changing screen typography.
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
 
 ### Fixed
+- Exclude noindex pages and draft previews from the sitemap while retaining indexable hidden posts.
+- Keep Mermaid source readable without JavaScript and restore it after a failed download.
+- Preserve mobile navigation without JavaScript; the overlay is enabled only after its controls initialize.
+- Keep mobile heading links usable without Clipboard API access and remove the invisible back-to-top link from keyboard navigation.
 - Keep category spacing consistent when article-list columns stack on mobile; column boundaries no longer add an extra heading margin.
 
 ## [3.3.0] — 2026-10-28

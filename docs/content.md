@@ -22,8 +22,9 @@ mermaid = false
 
 Set `noindex = true` to exclude an accessible page from search results. This is
 independent of listing visibility. Draft previews and 404 pages also emit
-`noindex`. Set `[sitemap] disable = true` separately when a page should stay out
-of the sitemap.
+`noindex`. Noindex pages and draft previews are omitted from the sitemap automatically;
+hidden posts remain included. Set `[sitemap] disable = true` to omit an otherwise
+indexable page from the sitemap without changing its robots metadata.
 
 If only the publication month is known, set `date` to the first day of that
 month and `date_precision = "month"`. The visible article date uses the

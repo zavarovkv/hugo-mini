@@ -9,7 +9,7 @@ const main = readFileSync(new URL('../assets/js/main.js', import.meta.url), 'utf
 function element(attributes = {}) {
   const classes = new Set();
   return Object.assign(new EventTarget(), {
-    classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c), contains: (c) => classes.has(c) },
+    classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c), contains: (c) => classes.has(c), toggle: (c) => classes.has(c) ? classes.delete(c) : classes.add(c) },
     getAttribute: (name) => attributes[name] ?? null,
     setAttribute: (name, value) => { attributes[name] = value; },
     querySelectorAll: () => [],
@@ -63,7 +63,10 @@ test('an invalid saved value does not prevent following the system scheme', () =
 
 test('the mobile menu resets on a desktop breakpoint and stays closed on return', () => {
   const p = page();
+  assert.ok(!p.nav.classList.contains('menu-ready'));
   p.start();
+  assert.ok(p.nav.classList.contains('menu-ready'));
+  assert.ok(p.toggle.classList.contains('menu-ready'));
   p.toggle.dispatchEvent(new Event('click'));
   assert.equal(p.toggle.getAttribute('aria-expanded'), 'true');
   assert.ok(p.body.classList.contains('menu-open'));
@@ -95,6 +98,65 @@ test('math renders inside main only on opted-in pages, with a safe missing-libra
     }
   }
   assert.doesNotThrow(() => page({ math: true }).start());
+});
+
+test('mobile heading links remain available when the Clipboard API is absent', () => {
+  const p = page();
+  const heading = element();
+  const anchor = Object.assign(element({ 'aria-label': 'Link to section' }), {
+    parentElement: heading, contains: () => false,
+  });
+  p.document.querySelectorAll = (selector) => selector === '.heading-anchor' ? [anchor] : [];
+  p.start();
+  heading.dispatchEvent(new Event('click'));
+  assert.ok(heading.classList.contains('anchor-visible'));
+  const click = new Event('click', { cancelable: true });
+  anchor.dispatchEvent(click);
+  assert.equal(click.defaultPrevented, false, 'native fragment navigation must remain available');
+  heading.dispatchEvent(new Event('click'));
+  assert.ok(!heading.classList.contains('anchor-visible'));
+});
+
+test('back-to-top stays out of keyboard navigation until it is visible', () => {
+  const p = page();
+  let control;
+  p.body.setAttribute('data-back-to-top', 'true');
+  p.body.getBoundingClientRect = () => ({ left: 200 });
+  p.body.appendChild = (node) => { control = node; };
+  p.document.createElement = () => Object.assign(element(), { style: {}, appendChild() {} });
+  p.document.createTextNode = (text) => ({ textContent: text });
+  p.window.pageYOffset = 0;
+  p.window.scroll = () => { p.window.pageYOffset = 0; };
+  p.start();
+  assert.equal(control.getAttribute('tabindex'), '-1');
+  assert.equal(control.getAttribute('aria-hidden'), 'true');
+  assert.equal(control.getAttribute('role'), null, 'use native link keyboard semantics');
+  p.window.pageYOffset = 800;
+  p.window.dispatchEvent(new Event('scroll'));
+  assert.equal(control.getAttribute('tabindex'), '0');
+  assert.equal(control.getAttribute('aria-hidden'), 'false');
+  assert.ok(control.classList.contains('shown'));
+  control.dispatchEvent(new Event('click'));
+  assert.equal(p.window.pageYOffset, 0);
+  assert.equal(control.getAttribute('tabindex'), '-1');
+  assert.ok(!control.classList.contains('shown'));
+});
+
+test('a failed Mermaid download restores every diagram source', async () => {
+  const p = page();
+  const sources = ['graph TD; A-->B', 'sequenceDiagram\nA->>B: Hello'];
+  const diagrams = sources.map((textContent) => ({ textContent, style: {} }));
+  p.body.setAttribute('data-mermaid', JSON.stringify({ src: '/missing-mermaid.js' }));
+  p.document.querySelectorAll = (selector) => selector === '.mermaid' ? diagrams : [];
+  p.document.createElement = () => ({});
+  p.document.head = { appendChild: (script) => script.onerror(new Error('Unavailable')) };
+  p.window.MutationObserver = class { observe() {} };
+  p.start();
+  await new Promise(setImmediate);
+  for (const [index, diagram] of diagrams.entries()) {
+    assert.equal(diagram.textContent, sources[index]);
+    assert.equal(diagram.style.visibility, 'visible');
+  }
 });
 
 test('the ASCII scan preserves the silhouette and stops for reduced motion or hidden tabs', () => {

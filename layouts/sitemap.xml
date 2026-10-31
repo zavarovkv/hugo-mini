@@ -1,6 +1,8 @@
 {{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {{- range where .Data.Pages "Sitemap.Disable" "ne" true }}
+  {{- $pages := where .Data.Pages "Sitemap.Disable" "ne" true -}}
+  {{- $pages = where $pages "Draft" "ne" true -}}
+  {{- range where $pages "Params.noindex" "ne" true }}
   {{- $dates := partial "page-dates.html" . -}}
   <url>
     <loc>{{ .Permalink }}</loc>

@@ -91,7 +91,9 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 
 Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
 
-Mermaid diagrams render as they approach the viewport. An optional local ESM bundle loads only the diagram types in use; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
+Without JavaScript, mobile navigation remains visible as ordinary links. The overlay is enabled only after its controls initialize.
+
+Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
 
 ## Reading and typography
 
@@ -182,10 +184,10 @@ An empty or omitted `categories` list places a post in Miscellaneous. Set `recen
 - [Maintaining vendored assets](https://github.com/zavarovkv/hugo-mini/blob/main/docs/vendor-assets.md)
 - [Changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md) · [Contributing](https://github.com/zavarovkv/hugo-mini/blob/main/CONTRIBUTING.md)
 
+### Exclude a page from the sitemap
+
+The sitemap excludes `noindex = true` pages and draft previews automatically. Hidden posts remain indexable and included. Hugo's standard `[sitemap] disable = true` front matter setting can also omit an otherwise indexable page without changing its robots metadata.
+
 ## License
 
 [MIT](https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE)
-
-### Exclude a page from the sitemap
-
-The sitemap respects Hugo's standard `[sitemap] disable = true` front matter setting. This controls sitemap inclusion; search indexing is controlled separately by a page's robots metadata.

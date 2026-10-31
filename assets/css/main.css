@@ -243,10 +243,6 @@
     left: -9999px;
   }
 
-  .mermaid {
-    visibility: hidden;
-  }
-
   .highlight {
     position: relative;
   }
@@ -832,7 +828,7 @@
       z-index: 1001;
     }
 
-    .mobile-menu-toggle {
+    .mobile-menu-toggle.menu-ready {
       display: flex;
       justify-self: end;
       grid-column: 3;
@@ -843,19 +839,25 @@
       font-size: 1.2em;
     }
 
-    /* Full-screen overlay menu (Miro-style) */
+    /* Without JavaScript, keep an ordinary navigation row in the document. */
     .main-nav {
       --beauty-link-decoration: none;
+      grid-column: 1 / -1;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 16px 0 0;
+      gap: 0;
+    }
+
+    /* Enable the full-screen overlay only once its controls are ready. */
+    .main-nav.menu-ready {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       background-color: var(--background-color);
-      flex-direction: column;
-      align-items: stretch;
       padding: 80px 0 20px;
-      gap: 0;
       z-index: 1000;
       overflow-x: hidden;
       overflow-y: auto;

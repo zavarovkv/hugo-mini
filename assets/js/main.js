@@ -143,6 +143,9 @@
     }
     if (mobileMql.addEventListener) mobileMql.addEventListener('change', onBreakpointChange);
     else if (mobileMql.addListener) mobileMql.addListener(onBreakpointChange);
+    // Enhance an ordinary visible nav only after its controls are wired.
+    nav.classList.add('menu-ready');
+    toggle.classList.add('menu-ready');
   });
 
   // ── Theme toggle + widgets that follow it ──────────────────────────────
@@ -325,7 +328,6 @@
 
   // ── Heading anchors: click copies the section URL ───────────────────────
   (function () {
-    if (!navigator.clipboard) return;
     var FEEDBACK_MS = 1200;
     // Live query: re-evaluated on each interaction so rotating a tablet
     // switches behaviour instead of keeping whatever was true at load.
@@ -350,6 +352,8 @@
       }
 
       anchor.addEventListener('click', function () {
+        // Anchor navigation and mobile reveal also work without Clipboard API.
+        if (!navigator.clipboard) return;
         navigator.clipboard
           .writeText(anchor.href)
           .then(function () {
@@ -413,6 +417,9 @@
     if (!configText) return;
     var config = JSON.parse(configText);
     var entries = Array.from(document.querySelectorAll('.mermaid'), function (node) {
+      // Keep readable source when JavaScript is disabled or the bundle fails.
+      // Only hide it once this loader can restore it on a rendering failure.
+      node.style.visibility = 'hidden';
       return { node: node, source: node.textContent, visible: false, theme: null, failed: false };
     });
     if (!entries.length) return;
@@ -549,7 +556,6 @@
     wrap.className = 'back-to-top-wrap';
     // href keeps it keyboard-focusable; the handler preventDefaults the jump.
     wrap.setAttribute('href', '#');
-    wrap.setAttribute('role', 'button');
     wrap.setAttribute('aria-label', label);
 
     var inner = document.createElement('div');
@@ -564,7 +570,10 @@
     var gutterOk = false;
 
     function onScroll() {
-      if (gutterOk && window.pageYOffset > SCROLL_THRESHOLD) {
+      var shown = gutterOk && window.pageYOffset > SCROLL_THRESHOLD;
+      wrap.setAttribute('tabindex', shown ? '0' : '-1');
+      wrap.setAttribute('aria-hidden', String(!shown));
+      if (shown) {
         wrap.classList.add('shown');
       } else {
         wrap.classList.remove('shown');
