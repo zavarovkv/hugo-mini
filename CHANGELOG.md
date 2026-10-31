@@ -11,10 +11,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Document reading typography, native Goldmark punctuation, spacing rules and opt-outs in the README and a dedicated typography guide.
 
 ### Changed
+- Pin Mermaid's Dagre layout, classic look and flowchart label widths across versions 11 and 12, preserving existing diagram geometry when consumers upgrade their self-hosted bundle.
 - Refresh the pinned Beauty.css foundation to include its print-wrapping fix without changing screen typography.
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
 
 ### Fixed
+- Version local Mermaid entry URLs by content hash so returning visitors cannot load an older cached entry with obsolete chunk paths after an upgrade.
 - Exclude noindex pages and draft previews from the sitemap while retaining indexable hidden posts.
 - Keep Mermaid source readable without JavaScript and restore it after a failed download.
 - Preserve mobile navigation without JavaScript; the overlay is enabled only after its controls initialize.

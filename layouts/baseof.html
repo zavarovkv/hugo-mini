@@ -141,9 +141,9 @@
 {{- $mermaid := dict -}}
 {{- if .Params.mermaid -}}
   {{- if .Site.Params.mermaidModuleSrc -}}
-    {{- $mermaid = dict "src" (.Site.Params.mermaidModuleSrc | relURL) "module" true -}}
+    {{- $mermaid = dict "src" (partial "static-asset-url.html" .Site.Params.mermaidModuleSrc) "module" true -}}
   {{- else if .Site.Params.mermaidSrc -}}
-    {{- $mermaid = dict "src" (.Site.Params.mermaidSrc | relURL) -}}
+    {{- $mermaid = dict "src" (partial "static-asset-url.html" .Site.Params.mermaidSrc) -}}
   {{- else -}}
     {{- $mermaid = dict "src" "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js" "integrity" "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy" -}}
   {{- end -}}

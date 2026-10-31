@@ -1,0 +1,16 @@
+{{- /* Version a local static entry without moving it: relative ESM imports
+     must continue resolving beside the original file. External and missing
+     assets retain their configured URLs. */ -}}
+{{- $url := . | relURL -}}
+{{- $parsed := urls.Parse . -}}
+{{- if and (not $parsed.Scheme) (not $parsed.Host) -}}
+  {{- $file := printf "static/%s" (strings.TrimPrefix "/" $parsed.Path) -}}
+  {{- if fileExists $file -}}
+    {{- $fragment := findRE `#.*$` $url 1 -}}
+    {{- $url = replaceRE `#.*$` "" $url -}}
+    {{- $separator := cond (in $url "?") "&" "?" -}}
+    {{- $url = printf "%s%sv=%s" $url $separator (crypto.SHA256 (readFile $file)) -}}
+    {{- with $fragment -}}{{- $url = printf "%s%s" $url (index . 0) -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $url -}}

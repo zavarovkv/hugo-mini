@@ -241,6 +241,43 @@ weight = 2
   }
 });
 
+test("local Mermaid upgrades change the entry URL without breaking chunk paths or custom URLs", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mermaid-cache-test-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const dir of ["themes", "content/blog", "static/js/mermaid"]) await mkdir(join(root, dir), { recursive: true });
+  await symlink(themeRoot, join(root, "themes/hugo-mini"), "dir");
+  await writeFile(join(root, "content/blog/diagram.md"), '+++\ntitle="Diagram"\nmermaid=true\n+++\n{{< mermaid >}}graph LR; A-->B{{< /mermaid >}}\n');
+  const entry = join(root, "static/js/mermaid/entry.mjs");
+  async function build(param, src) {
+    await writeFile(join(root, "hugo.toml"), `baseURL="https://example.org/sub/"\ntheme="hugo-mini"\ntitle="Fixture"\ndisableKinds=["taxonomy","term"]\n[params]\nsocialSharing=false\n${param}=${JSON.stringify(src)}\n`);
+    execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
+    const html = await readFile(join(root, "public/blog/diagram/index.html"), "utf8");
+    return JSON.parse(attribute(html.match(/<body\b[^>]*>/)[0], "data-mermaid"));
+  }
+  const oldSource = 'import "./chunks/old.mjs";';
+  const newSource = 'import "./chunks/new.mjs";';
+  await writeFile(entry, oldSource);
+  const before = await build("mermaidModuleSrc", "js/mermaid/entry.mjs?mode=local#fragment");
+  await writeFile(entry, newSource);
+  const after = await build("mermaidModuleSrc", "js/mermaid/entry.mjs?mode=local#fragment");
+  assert.equal(after.module, true);
+  assert.notEqual(after.src, before.src, "returning visitors must not reuse the old entry after an upgrade");
+  for (const [config, source] of [[before, oldSource], [after, newSource]]) {
+    const url = new URL(config.src, "https://example.org");
+    assert.equal(url.searchParams.get("v"), createHash("sha256").update(source).digest("hex"));
+    assert.equal(url.searchParams.get("mode"), "local");
+    assert.equal(url.hash, "#fragment");
+    assert.equal(new URL("./chunks/current.mjs", url).pathname, "/sub/js/mermaid/chunks/current.mjs");
+  }
+  const classic = await build("mermaidSrc", "/js/mermaid/entry.mjs");
+  assert.equal(classic.module, undefined);
+  assert.match(classic.src, /\?v=[a-f0-9]{64}$/);
+  for (const src of ["https://cdn.example/entry.mjs?v=12#module", "//cdn.example/entry.mjs"]) {
+    assert.equal((await build("mermaidModuleSrc", src)).src, src);
+  }
+  assert.equal((await build("mermaidModuleSrc", "js/missing.mjs")).src, "/sub/js/missing.mjs");
+});
+
 test("Telegram IDs are discovered in page bundles, only inside front matter", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "telegram-test-"));
   t.after(() => rm(root, { recursive: true, force: true }));

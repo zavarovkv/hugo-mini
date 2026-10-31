@@ -93,7 +93,11 @@ Features that add weight are opt-in. KaTeX and Mermaid load only on pages that r
 
 Without JavaScript, mobile navigation remains visible as ordinary links. The overlay is enabled only after its controls initialize.
 
-Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
+Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use, with a content-hashed entry URL to invalidate stale browser caches after upgrades; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
+
+Mermaid 11 and 12 use explicit Dagre/classic settings and the previous flowchart label widths,
+so switching a self-hosted bundle to v12 preserves the established layout. Mermaid 12 requires
+Node.js 22.12+ and ES2024-capable browsers (Safari 17.4+); the default CDN fallback remains on v11.
 
 ## Reading and typography
 

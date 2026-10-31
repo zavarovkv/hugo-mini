@@ -56,6 +56,18 @@ Analytics is opt-in. Set any combination of `yandexMetrikaId`, `googleAnalyticsI
 
 For self-hosted modular Mermaid, copy `mermaid.esm.min.mjs` and its `chunks/mermaid.esm.min/` directory from the same pinned npm package to `static/js/mermaid/`, then set `mermaidModuleSrc = "js/mermaid/mermaid.esm.min.mjs"`. Keep their relative paths intact. The classic `mermaidSrc` option and the pinned CDN fallback remain supported. Both modes render diagrams near the viewport and preserve the source if loading fails.
 
+For local entries found under `static/`, the theme appends a content hash to the URL. An upgrade
+therefore bypasses the old browser cache while keeping relative chunk imports intact. This applies
+to both `mermaidModuleSrc` and `mermaidSrc`; external URLs and entries not present at build time
+are left unchanged.
+
+The loader supports Mermaid 11 and 12 with explicit `layout: 'dagre'`, `look: 'classic'`,
+`flowchart.wrappingWidth: 200` and `flowchart.minNodeWidth: 0`. These retain the previous flowchart
+geometry and avoid loading ELK solely because of Mermaid 12's changed defaults. Colors still follow
+the site's light/dark setting. Individual diagrams can override these defaults through Mermaid's
+own configuration. A self-hosted Mermaid 12 package requires Node.js 22.12+ to install and
+ES2024-capable browsers (Safari 17.4+); the theme's pinned Mermaid 11 fallback is unchanged.
+
 ## Multilingual sites
 
 Define languages and their menus in `hugo.toml`:

@@ -74,8 +74,12 @@ in the blog and example site preserved pixels, dimensions and MathML; mathematic
 also remain compatible with this stylesheet.
 
 Mermaid is a separate consumer-owned dependency and may bundle another KaTeX copy. The tested
-Mermaid 12.2.0 upgrade clears npm's advisory but changes diagram defaults and geometry, even with
-classic styling, so consumers must evaluate that major upgrade separately from the standalone fix.
+Mermaid 12.2.0 upgrade clears npm's advisory but changes layout, styling and label-width defaults.
+The theme explicitly keeps Dagre/classic with `flowchart.wrappingWidth: 200` and
+`flowchart.minNodeWidth: 0`; classic styling alone does not preserve geometry. Consumers should
+compare their own diagrams when upgrading. See [configuration](configuration.md) for browser and
+Node.js requirements. The pinned CDN fallback remains on Mermaid 11; upgrading a self-hosted
+package is separate from updating the theme's standalone KaTeX bundle.
 
 To reproduce the current bundle, install the pinned package into a temporary directory, then run the maintainer script from the theme root:
 

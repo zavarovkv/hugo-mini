@@ -467,7 +467,12 @@
           if (!entry) break;
           entry.node.textContent = entry.source;
           entry.node.removeAttribute('data-processed');
-          mermaid.initialize({ startOnLoad: false, theme: theme });
+          // Keep the established layout and label wrapping across Mermaid 11/12.
+          // Mermaid 12 defaults to ELK, neo styling and narrower, fixed-width nodes.
+          mermaid.initialize({
+            startOnLoad: false, theme: theme, layout: 'dagre', look: 'classic',
+            flowchart: { wrappingWidth: 200, minNodeWidth: 0 }
+          });
           try {
             await mermaid.run({ nodes: [entry.node] });
           } catch (error) {
