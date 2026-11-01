@@ -27,6 +27,11 @@ compact tables keep their ordinary UI text size. Compound links use `beauty-link
 geometry. Reading-month cells use `time`; short editorial values may use `beauty-nowrap`.
 All these style rules live in Beauty, with no client-side text rewriting or extra dependency.
 
+Numeric summaries can use Beauty's `beauty-stat-value` and `beauty-stat-label`
+helpers on semantic values and labels. The library owns responsive sizing,
+tabular numerals and muted labels; consumers own grid arrangement and spacing.
+`--beauty-stat-size` allows an explicit size when the surrounding layout needs it.
+
 The bundle aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
 Beauty's selectors. This preserves existing theme content without duplicating CSS declarations or
 adding Hugo-specific selectors to the independent library. Prefer `.beauty-emphasis`,

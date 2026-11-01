@@ -72,16 +72,16 @@
 
   {{- partial "seo_tags.html" . -}}
   {{- partial "structured_data.html" . -}}
-  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">
   {{- range .Translations }}
-  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">
   {{- end }}
   {{- /* Translation order follows weights, which need not put the default first. */}}
   {{- if .IsTranslated }}
     {{- $sites := partialCached "sites.html" . -}}
     {{- range .AllTranslations }}
       {{- if eq .Language.Lang $sites.Default.Language.Lang }}
-  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  <link rel="alternate" hreflang="x-default" href="{{ (partial "page-seo.html" .).canonical }}">
       {{- end }}
     {{- end }}
   {{- end }}

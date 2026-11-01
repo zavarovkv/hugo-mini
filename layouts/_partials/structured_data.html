@@ -22,6 +22,7 @@
 {{- end -}}
 
 {{- $blocks := slice -}}
+{{- $seo := partial "page-seo.html" . -}}
 
 {{- if .IsPage -}}
   {{- $description := .Description | default .Summary -}}
@@ -41,7 +42,7 @@
       "publisher" (dict "@type" "Person" "name" $authorName)
       "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
       "dateModified" ($dates.modified.Format "2006-01-02T15:04:05Z07:00")
-      "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+      "mainEntityOfPage" (dict "@type" "WebPage" "@id" $seo.canonical)
     -}}
     {{- with .Params.categories -}}
       {{- $post = merge $post (dict "keywords" (delimit . ", ")) -}}
@@ -61,11 +62,23 @@
       "@type" "WebPage"
       "name" .Title
       "description" $description
-      "url" .Permalink
+      "url" $seo.canonical
+      "inLanguage" .Language.Lang
+      "isPartOf" (dict "@type" "WebSite" "url" $seo.siteURL "name" $seo.siteName)
       "author" $author
     ) -}}
   {{- end -}}
 
+  {{- if and .Params.seoSiteURL (not $isPost) -}}
+  {{- /* Independent landings retain the author's identity, not a blog trail. */ -}}
+  {{- $blocks = $blocks | append (dict
+    "@context" "https://schema.org"
+    "@type" "WebSite"
+    "name" $seo.siteName
+    "url" $seo.siteURL
+    "author" $author
+  ) -}}
+  {{- else -}}
   {{- /* Breadcrumbs: Home › [section] › page. The section step is included
          only for pages that live in a section with its own listing page. */ -}}
   {{- $crumbs := slice (dict "@type" "ListItem" "position" 1 "name" (i18n "home") "item" site.Home.Permalink) -}}
@@ -82,13 +95,14 @@
     "@type" "ListItem"
     "position" (add (len $crumbs) 1)
     "name" .Title
-    "item" .Permalink
+    "item" $seo.canonical
   ) -}}
   {{- $blocks = $blocks | append (dict
     "@context" "https://schema.org"
     "@type" "BreadcrumbList"
     "itemListElement" $crumbs
   ) -}}
+  {{- end -}}
 
 {{- else -}}
   {{- $site := dict

@@ -167,6 +167,12 @@ Set `backToTop = false` in front matter to omit the back-to-top control and its 
 
 For a custom share card, add `layouts/_partials/custom_og_image.html` in your site and return a Hugo image resource. Return `false` on other pages to keep the generated default. Open Graph and JSON-LD reuse the returned image; see [customization](docs/customization.md#share-cards).
 
+Custom page layouts can reuse `footer-content.html` to select their own social links while keeping the theme's language and color-scheme controls; see [footer customization](docs/customization.md#footer-links-on-custom-pages).
+
+Use `brand-link` for a project-name link that retains heading color without an underline. It configures Beauty.css link tokens and preserves keyboard focus.
+
+Pages published on another origin can set `canonicalURL`; project landings can also set `seoSiteName` and `seoSiteURL`. Canonical, social and structured metadata stay aligned; see [content configuration](docs/content.md).
+
 An empty or omitted `categories` list places a post in Miscellaneous. Set `recentSidebarCount = 0` to hide recent posts. A single `avatar` works without `avatarHover` in both color schemes.
 
 ## Optional integrations

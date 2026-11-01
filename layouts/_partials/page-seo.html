@@ -1,0 +1,6 @@
+{{- /* One page identity shared by canonical, social tags and structured data. */ -}}
+{{- return (dict
+  "canonical" (.Params.canonicalURL | default .Permalink)
+  "siteName" (.Params.seoSiteName | default .Site.Title)
+  "siteURL" (.Params.seoSiteURL | default .Site.Home.Permalink)
+) -}}

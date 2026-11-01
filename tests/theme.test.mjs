@@ -67,6 +67,7 @@ weight = 1
       await writeFile(join(root, `content/${lang}/blog/hidden.md`), '+++\ntitle="Hidden"\nslug="hidden"\ndate=2001-02-01\ndate_precision="month"\nhidden=true\n+++\nText\n');
     }
     await writeFile(join(root, "content/en/notes/hidden.md"), '+++\ntitle="Hidden note"\nhidden=true\n+++\nText\n');
+    await writeFile(join(root, "content/en/about.md"), '+++\ntitle="About"\ncanonicalURL="https://project.example/"\nseoSiteName="Example Project"\nseoSiteURL="https://project.example/"\n+++\nAbout\n');
     await mkdir(join(root, "content/en/blog/bundle"));
     await writeFile(join(root, "content/en/blog/bundle/pixel.png"), pixel);
     await writeFile(join(root, "content/en/blog/bundle/index.md"), '+++\ntitle="Bundle"\nslug="bundle"\n+++\n![Bundle image](pixel.png)');
@@ -132,6 +133,15 @@ weight = 1
     assert.equal(attribute(localImage, "title"), "A title");
     for (const alt of ["External", "Missing"]) assert.equal(attribute(imageTags.find((tag) => attribute(tag, "alt") === alt), "width"), undefined);
     const bundle = await readFile(join(output, "bundle/index.html"), "utf8");
+    const standalone = await readFile(join(output, "about/index.html"), "utf8");
+    assert.match(standalone, /property=(?:"og:type"|og:type) content=(?:"website"|website)/);
+    assert.doesNotMatch(standalone, /article:(?:published|modified)_time/, "standalone pages must not acquire article dates");
+    const standaloneCanonical = [...standalone.matchAll(/<link\b[^>]*>/g)].map(m => m[0]).find(tag => attribute(tag, "rel") === "canonical");
+    assert.equal(attribute(standaloneCanonical, "href"), "https://project.example/");
+    const standaloneBlocks = [...standalone.matchAll(/<script\b[^>]*type=(?:"application\/ld\+json"|application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)].map(m => JSON.parse(m[1]));
+    assert.equal(standaloneBlocks.find(block => block["@type"] === "WebPage").url, "https://project.example/");
+    assert.equal(standaloneBlocks.find(block => block["@type"] === "WebSite").name, "Example Project");
+    assert.match(post, /property=(?:"og:type"|og:type) content=(?:"article"|article)/);
     const bundleImage = [...bundle.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "alt") === "Bundle image");
     assert.equal(attribute(bundleImage, "width"), "1");
     assert.equal(attribute(bundleImage, "height"), "1");

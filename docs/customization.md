@@ -45,6 +45,25 @@ Use focused overrides whenever possible:
 - Named blocks in `baseof.html` let a template replace `head`, `header`, `main`, `footer`, or `scripts`.
 - Copy a theme template into the matching site path only when the whole template needs to diverge.
 
+For a project-name link in a custom header, use `<a class="brand-link" href="…"><strong>Project name</strong></a>`. It retains the heading color and bold text without an underline, including on hover; keyboard focus remains visible through Beauty.css.
+
+### Footer links on custom pages
+
+Reuse `footer-content.html` inside a `footer` block to change the links while keeping the theme's icons, language switcher and color-scheme control:
+
+```go-html-template
+{{ define "footer" }}
+  {{ partial "footer-content.html" (dict
+    "page" .
+    "social" (dict "github" "https://github.com/owner/project" "telegram" "https://t.me/project")
+    "labels" (dict "github" "Project on GitHub" "telegram" "Project on Telegram")
+    "copyright" "© Example Project"
+  ) }}
+{{ end }}
+```
+
+Pass `rss = true` in the dictionary to include the current language's feed. Omitted labels use the platform names; omitted copyright uses the standard year range. The default `footer.html` passes `params.social` and enables RSS, preserving the regular blog footer.
+
 ## Share cards
 
 The theme generates a 1200×630 share card for each page. To customize selected pages, add `layouts/_partials/custom_og_image.html` to your site. It receives the page and must return an image resource or `false` to keep the default:

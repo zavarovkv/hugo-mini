@@ -26,6 +26,17 @@ independent of listing visibility. Draft previews and 404 pages also emit
 hidden posts remain included. Set `[sitemap] disable = true` to omit an otherwise
 indexable page from the sitemap without changing its robots metadata.
 
+For content also published on another origin, set an absolute `canonicalURL` in
+front matter. The theme uses it consistently in canonical links, Open Graph,
+JSON-LD and translated `hreflang` links. Exclude the duplicate from this site's
+sitemap with `[sitemap] disable = true`, and publish only canonical URLs in the
+destination site's sitemap. Each language needs its own canonical URL.
+
+Independent project landings may also set `seoSiteName` and `seoSiteURL` to their
+project identity. They retain the site's author attribution but emit their own
+`WebSite` data instead of a breadcrumb trail through the blog. These options do
+not change visible navigation, content permalinks or the default site metadata.
+
 If only the publication month is known, set `date` to the first day of that
 month and `date_precision = "month"`. The visible article date uses the
 localized month name and year (`февраль 2001` / `February 2001`) and its HTML
