@@ -16,12 +16,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Document reading typography, native Goldmark punctuation, spacing rules and opt-outs in the README and a dedicated typography guide.
 
 ### Changed
-- Pin Beauty.css's responsive numeric highlights, connected steps, compact headings and secondary notes to reviewed upstream commit `fb72779`, with more expressive mobile counters and reusable workflow lists.
+- Pin Beauty.css's responsive numeric highlights, connected steps, compact headings and secondary notes to reviewed upstream commit `d6d9962`, with more expressive mobile counters and reusable workflow lists.
 - Pin Mermaid's Dagre layout, classic look and flowchart label widths across versions 11 and 12, preserving existing diagram geometry when consumers upgrade their self-hosted bundle.
 - Refresh the pinned Beauty.css foundation to include its print-wrapping fix without changing screen typography.
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
 
 ### Fixed
+- Correct stale architecture and example documentation for asset loading, fonts, category listings, recent posts, shared link styles and Telegram counters.
+- Include Beauty.css fixes for configurable semantic emphasis weight and valid placeholder selectors in both entries.
+- Keep the mobile navigation hidden during initial enhancement and breakpoint changes; preserve its open/close animation for user interaction.
+- Close expanded navigation when keyboard focus leaves it, keeping the newly focused page content unobscured.
 - Use the shared secondary-text palette for footer copyright and language labels, keeping small text readable in both themes.
 - Keep standalone pages and landing pages as Open Graph websites without article publication dates; post metadata remains limited to configured main sections.
 - Version local Mermaid entry URLs by content hash so returning visitors cannot load an older cached entry with obsolete chunk paths after an upgrade.

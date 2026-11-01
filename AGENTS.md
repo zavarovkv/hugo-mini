@@ -25,7 +25,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
 - `layouts/_partials/typography/` applies build-time prose spacing to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; native punctuation stays with Goldmark and visual typography stays with Beauty.css. Document rule or opt-out changes in `docs/typography.md` and exercise `tests/typography.test.mjs`.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, and links.
-- `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, and `column`.
+- `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, `column`, `github-stars`, `reading-list` and `wavy-arrow`.
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
   `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
@@ -49,7 +49,8 @@ Layouts use Hugo's current template system introduced in 0.146.0: page templates
   using a full upstream commit SHA; its manifest and license live in `vendor/`.
 - Reading type, wrapping, heading rhythm and compound-link decorations belong to Beauty. Select
   its `beauty-reading`, `beauty-link-label`, `beauty-link-icon` and `beauty-nowrap` helpers in markup;
-  keep theme CSS limited to variable configuration, layout and UI components.
+  keep theme CSS limited to variable configuration, layout and UI components. Numeric highlights
+  (`beauty-stat-*`) and connected steps (`beauty-steps`) also belong to the library.
 - Joint local development may use `--local <checkout>` with an explicitly unreleased `-dev` library version. Replace that snapshot with a reviewed upstream pin before releasing the theme; see `docs/vendor-assets.md`.
 - Put browser behavior in `assets/js/main.js`, not inline scripts in templates.
 - Keep templates site-agnostic. Expose reusable behavior through Hugo params, partial hooks, front matter, or i18n rather than hard-coding values for `zavarov.com`.

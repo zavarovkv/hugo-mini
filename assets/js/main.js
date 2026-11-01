@@ -113,6 +113,7 @@
 
     function openMenu() {
       window.scrollTo(0, 0);
+      nav.classList.add('menu-animated');
       nav.classList.add('active');
       toggle.classList.add('active');
       toggle.setAttribute('aria-expanded', 'true');
@@ -138,7 +139,15 @@
       toggle.focus();
     });
 
+    // A disclosure must not cover content after keyboard focus leaves it.
+    document.addEventListener('focusin', function (e) {
+      if (nav.classList.contains('active') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
     function onBreakpointChange() {
+      nav.classList.remove('menu-animated');
       if (!mobileMql.matches) closeMenu();
     }
     if (mobileMql.addEventListener) mobileMql.addEventListener('change', onBreakpointChange);

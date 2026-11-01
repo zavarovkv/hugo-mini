@@ -6,92 +6,67 @@ description = "Architecture decisions and technical details that make Mini fast,
 categories = ["getting-started"]
 +++
 
-Mini is built around a few deliberate constraints. This post explains what they are and why they matter.
+Mini keeps the reading foundation separate from page layout and browser behavior.
 
-## Zero External Requests
+## Self-hosted Assets
 
-Every asset is self-hosted: fonts, CSS, JavaScript, icons. Your readers never send requests to Google Fonts, CDNs, or third-party analytics by default. This means:
-
-- **Faster loads** — no DNS lookups, no waterfall of third-party resources
-- **Full privacy** — no user data leaks to external services
-- **Offline-capable** — the site works without an internet connection once cached
-- **GDPR-friendly** — no cookie banners needed for font or analytics services
-
-The only exceptions are opt-in: Mermaid (loaded from CDN per-page) and Telegram widgets (if configured).
+CSS, JavaScript, Inter fonts, KaTeX and sharing assets are served from the site's own domain. Ordinary Hugo builds need no npm installation. Optional Mermaid diagrams use a pinned CDN fallback unless the site provides a local bundle. Configured analytics, Telegram widgets and sharing actions can contact their own services.
 
 ## Conditional Loading
 
-Heavy libraries are never loaded globally. Instead, they're gated by front matter flags:
+| Feature | When it loads |
+| --- | --- |
+| Shared theme CSS and JavaScript | Every page; minified and fingerprinted by Hugo |
+| KaTeX | Pages with `math = true` |
+| Mermaid | Near diagrams on pages with `mermaid = true` |
+| Likely | Posts with social sharing enabled |
+| Telegram comments | Near the comments section, when channel and message ID are configured |
 
-| Library | Front matter | Size |
-|---------|-------------|------|
-| KaTeX | `math = true` | ~300 KB |
-| Mermaid | `mermaid = true` | ~2 MB |
-| Likely | always (unless disabled) | ~15 KB |
-
-A typical blog post loads only HTML, CSS, and one font file. No JavaScript at all unless the page needs it.
+A local Mermaid ESM bundle can load only the diagram modules in use. Failed downloads leave diagram source readable. Exact transfer size depends on content, enabled features and browser caching.
 
 ## Inter Font
 
-Mini uses [Inter](https://rsms.me/inter/) — a typeface designed specifically for screens. Only the weights actually used are included:
+The theme includes four WOFF2 faces with Latin and Cyrillic characters:
 
-- **200** — light UI accents
-- **300** — body text (comfortable for long reading)
-- **300 italic** — blockquotes
-- **400** — regular weight
-- **500** — medium emphasis
-- **600** — bold text, headings
-- **700** — strong headings
+- **300** — body text
+- **300 italic** — italic text
+- **500** — medium emphasis and prominent links
+- **600** — headings and bold text
 
-Files are in WOFF2 format with Latin and Cyrillic subsets. Two weights (300 and 600) are preloaded in `<head>` to prevent layout shift.
+Weights 300 and 600 are preloaded. Other faces load when used. The font license is included with the files.
 
 ## Render Hooks
 
-Mini uses Hugo's render hooks to enhance Markdown output without shortcodes:
+**Images** (`render-image.html`) receive lazy loading and asynchronous decoding. Local raster images also receive intrinsic dimensions to reserve space. Raw HTML images need explicit dimensions; remote images are not downloaded during the build.
 
-**Images** (`render-image.html`) — adds `loading="lazy"` and `decoding="async"` to every image automatically. No extra syntax needed.
+**Links** (`render-link.html`) open external URLs in a new tab with `rel="noopener noreferrer"`. Internal page links resolve to the current language when a translation exists; `localizeLinks = false` disables that behavior.
 
-**Links** (`render-link.html`) — detects external URLs and adds `target="_blank"` with `rel="noopener noreferrer"`. Internal links are left untouched.
+**Headings** (`render-heading.html`) retain IDs and optional classes. H2 and H3 headings receive a copyable section link unless marked `.no-anchor`.
 
 ## CSS Architecture
 
-All styles live in two partials:
+- `assets/css/beauty.css` is the generated, pinned Beauty.css foundation for native typography and editorial helpers.
+- `assets/css/main.css` configures public tokens and owns fonts, page layout and theme components.
 
-- `style.html` — base reset, typography, layout (theme-agnostic)
-- `custom_head.html` — colors, components, dark mode, responsive rules
+Hugo Pipes combines both into one minified, fingerprinted stylesheet. The shared browser bundle is cached across languages; localized labels come from HTML. No frontend framework or separate bundler is needed by a consuming site.
 
-There's no build step, no Sass, no PostCSS. Raw CSS in `<style>` tags, inlined in `<head>` for zero render-blocking. CSS custom properties make theming straightforward:
+Use tokens in site-specific CSS rather than copying the shared typography:
 
 ```css
 :root {
-  --color-primary: #0060a0;
-  --color-accent: #d04000;
+  --color-link: #0060a0;
+  --color-accent: #b73700;
 }
 ```
 
-## Dark Mode Implementation
+`custom_head.html` and `custom_body.html` are extension hooks, not the theme's stylesheet or script sources. Beauty updates go through the theme's vendoring helper with a reviewed upstream commit and checksum.
 
-Dark mode uses the `data-theme` attribute on `<html>`:
+## Dark Mode
 
-1. An inline `<script>` in `<head>` reads `localStorage` or `prefers-color-scheme` **before first paint** — no flash of wrong theme (FOUC)
-2. CSS selects `[data-theme="dark"]` for all dark overrides
-3. The footer toggle saves the choice to `localStorage`
-4. System preference changes are respected until the user explicitly clicks the toggle
+A small script resolves the saved or system preference before the stylesheet loads. The footer toggle saves an explicit choice in `localStorage`; until then, system changes remain active. CSS also follows the system palette without JavaScript.
 
-## SEO
+## Metadata and Performance
 
-Every page automatically gets:
+Shared templates generate canonical URLs, social metadata, structured data, language alternates and feeds. Page-specific configuration controls indexing and optional features.
 
-- Open Graph meta tags (title, description, image, type)
-- Structured data (JSON-LD) for articles
-- Canonical URLs
-- Hreflang tags for multilingual pages
-- RSS feed with autodiscovery
-
-## Code Copy Button
-
-Code blocks show a copy button on hover — top-right corner, with a check animation on success. Pure JavaScript, no dependencies. The button inherits the code block's dark background, so it looks native in both themes.
-
-## Performance Budget
-
-A typical Mini page weighs under 50 KB (HTML + CSS + fonts). There are no layout shifts, no cumulative content jumps. Lighthouse scores consistently hit 100/100 on Performance, Accessibility, Best Practices, and SEO.
+Measure the built site with representative content and an empty browser cache. Image dimensions, conditional loading and cached assets reduce avoidable work, but the theme does not guarantee a fixed page size, offline availability or a Lighthouse score.

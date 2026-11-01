@@ -870,6 +870,10 @@
       overflow-y: auto;
       opacity: 0;
       visibility: hidden;
+    }
+
+    /* Animate user interaction, never the initial enhancement or a breakpoint. */
+    .main-nav.menu-ready.menu-animated {
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 

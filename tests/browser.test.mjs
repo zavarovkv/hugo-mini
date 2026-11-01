@@ -13,6 +13,7 @@ function element(attributes = {}) {
     getAttribute: (name) => attributes[name] ?? null,
     setAttribute: (name, value) => { attributes[name] = value; },
     querySelectorAll: () => [],
+    contains(node) { return node === this; },
     focus() { this.focused = true; },
   });
 }
@@ -83,6 +84,27 @@ test('the mobile menu resets on a desktop breakpoint and stays closed on return'
   Object.defineProperty(escape, 'key', { value: 'Escape' });
   p.document.dispatchEvent(escape);
   assert.ok(p.toggle.focused);
+});
+
+test('leaving the expanded navigation closes it without stealing focus from the page', () => {
+  const p = page();
+  const link = element();
+  p.nav.contains = (node) => node === p.nav || node === link;
+  p.start();
+  p.toggle.dispatchEvent(new Event('click'));
+  function focus(target) {
+    const event = new Event('focusin');
+    Object.defineProperty(event, 'target', { value: target });
+    p.document.dispatchEvent(event);
+  }
+  focus(link);
+  assert.equal(p.toggle.getAttribute('aria-expanded'), 'true');
+  focus(p.toggle);
+  assert.equal(p.toggle.getAttribute('aria-expanded'), 'true');
+  focus(p.content);
+  assert.equal(p.toggle.getAttribute('aria-expanded'), 'false');
+  assert.ok(!p.body.classList.contains('menu-open'));
+  assert.ok(!p.toggle.focused, 'Tab should continue to the newly focused page element');
 });
 
 test('math renders inside main only on opted-in pages, with a safe missing-library fallback', () => {

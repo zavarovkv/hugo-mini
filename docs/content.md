@@ -68,6 +68,7 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | Shortcode | Use |
 | --- | --- |
 | `caption` | Caption text below an image |
+| `callout` | Block quotation with Markdown content and the shared Beauty.css treatment |
 | `mermaid` | Diagram source rendered by Mermaid |
 | `plug` | Centered three-asterisk divider |
 | `latest-posts` | Newest visible posts in the current language; `count="3"` by default |
@@ -75,6 +76,7 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | `github-stars` | Inline GitHub link with an optional, build-time star count |
 | `columns` / `column` | Responsive columns; `column` groups Markdown and shortcodes into one column |
 | `wavy-arrow` | Thin inline SVG arrow that follows the surrounding text color and size |
+| `reading-list` | Localized book records from a site-owned data file |
 
 Enable KaTeX with `math = true` and Mermaid with `mermaid = true` only on pages that use them. Native Markdown `##` and `###` headings receive copyable anchor links automatically.
 
@@ -96,7 +98,7 @@ The arrow has a gently rising stroke, one tilted oval loop, and a softly curved 
 
 Place `{{< latest-posts count="3" >}}` in your homepage `_index.md` wherever the list belongs. It follows `params.mainSections`, sorts by date, and excludes hidden posts. Hugo also excludes drafts and future posts in normal production builds. Pinned posts retain their date order here; pinning applies only to category listings. With no posts, nothing is rendered.
 
-Set `archive` to the article-listing URL to add a link below the list. `archiveLabel` sets its text (defaults to the localized "Articles" label). The link uses the same light weight as article titles, with a neutral, unlined right arrow matching the project-link style. Internal page URLs resolve to the current language when available.
+Set `archive` to the article-listing URL to add a link below the list. `archiveLabel` sets its text (defaults to the localized "Articles" label). The link uses medium weight, matching project names, with the same underline geometry as ordinary content links. Its unlined arrow inherits the link color and keeps the body text's light weight. Article-list links remain light. Internal page URLs resolve to the current language when available.
 
 ```text
 {{< latest-posts count="3" archive="/blog/" archiveLabel="All articles" >}}

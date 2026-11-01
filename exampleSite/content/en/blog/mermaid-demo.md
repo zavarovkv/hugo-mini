@@ -18,7 +18,7 @@ graph TD
     A[Write content] --> B{Need diagrams?}
     B -->|Yes| C[Add mermaid = true]
     C --> D[Use mermaid shortcode]
-    D --> E[Hugo renders it]
+    D --> E[Build with Hugo]
     B -->|No| E
     E --> F[Publish]
 {{< /mermaid >}}
@@ -74,4 +74,4 @@ mermaid = true
 +++
 ```
 
-Mermaid diagrams automatically adapt their colors to the current theme — light or dark.
+The browser renders diagrams near the viewport and adapts their colors to the light or dark theme. Hugo emits the source, not the diagram image. A local ESM bundle is supported; without JavaScript or after a loading failure, the source remains readable.

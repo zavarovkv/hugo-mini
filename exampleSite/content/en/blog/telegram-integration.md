@@ -2,14 +2,14 @@
 title = "Telegram Integration"
 slug = "telegram-integration"
 date = "2026-04-05T12:00:00+00:00"
-description = "Discussion comments and live reaction counts — the theme's two Telegram features"
+description = "Discussion comments and build-time reaction counts — the theme's two Telegram features"
 categories = ["getting-started"]
 +++
 
 Mini treats Telegram as a first-class engagement surface for blogs whose audience lives partly on the messenger. Two independent features plug into the same `telegramChannel` + `telegram_post` configuration:
 
 1. Discussion comments via Telegram's official widget
-2. Live reaction counts and view counts surfaced next to the post date
+2. Build-time reaction counts and view counts surfaced next to the post date
 
 Each feature renders only when its config is present, so you can enable them one at a time.
 
@@ -31,7 +31,7 @@ telegram_post = 42
 +++
 ```
 
-Mini embeds Telegram's official Discussion Comments widget on the page, lazy-loaded when the section scrolls into view (via `IntersectionObserver`). The widget syncs with the theme toggle — flips to dark/light mode in real time by rebuilding itself when the user clicks the theme button.
+Mini embeds Telegram's official Discussion Comments widget on the page, lazy-loaded when the section scrolls into view (via `IntersectionObserver`). The existing widget switches between light and dark mode without reloading the comments.
 
 ## Reactions & View Counts
 
@@ -78,7 +78,7 @@ Call the script in CI before `hugo --minify`:
   run: hugo --minify
 ```
 
-`continue-on-error: true` is important — if Telegram is unreachable, the deploy still goes through and the partials render nothing instead of breaking the build.
+`continue-on-error: true` lets publishing continue during an outage. The fetcher retries transient failures and preserves saved counts. A fresh runner needs a restored cache, artifact or committed snapshot to have previous values; without one, unavailable counts are omitted.
 
 ### Auto-resolution and overrides
 
@@ -123,4 +123,4 @@ telegram_post = 42
 
 And wire the fetch script into `package.json` + CI as shown above.
 
-That's it — comments widget and live reaction counts kick in on every post that has `telegram_post` set. Remove the `telegram_post` field from a post's front matter and the comments widget + reactions row disappear for that post specifically.
+That's it — comments widget and build-time reaction counts kick in on every post that has `telegram_post` set. Remove the `telegram_post` field from a post's front matter and the comments widget + reactions row disappear for that post specifically.

@@ -91,7 +91,7 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 
 Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
 
-Without JavaScript, mobile navigation remains visible as ordinary links. The overlay is enabled only after its controls initialize.
+Without JavaScript, mobile navigation remains visible as ordinary links. The overlay initializes hidden without a loading flash, and closes on Escape, link selection or keyboard focus leaving the navigation.
 
 Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use, with a content-hashed entry URL to invalidate stale browser caches after upgrades; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
 

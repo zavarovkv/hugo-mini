@@ -32,6 +32,11 @@ helpers on semantic values and labels. The library owns responsive sizing,
 tabular numerals and muted labels; consumers own grid arrangement and spacing.
 `--beauty-stat-size` allows an explicit size when the surrounding layout needs it.
 
+Connected workflows can use `ol.beauty-steps` with a `beauty-step-marker` and a
+content `div` inside each `li`. Beauty owns the numbered circles, connecting
+lines, logical positioning and text rhythm. Consumers supply the list content
+and surrounding section layout; the component adds no interaction or progress state.
+
 The bundle aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
 Beauty's selectors. This preserves existing theme content without duplicating CSS declarations or
 adding Hugo-specific selectors to the independent library. Prefer `.beauty-emphasis`,

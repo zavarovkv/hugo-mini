@@ -32,7 +32,7 @@ Internal links like [Articles](/blog/) behave normally. External links like [Hug
 
 Unordered lists:
 
-- Self-hosted Inter font family (200–700 weights)
+- Self-hosted Inter: normal 300, 500 and 600, plus italic 300
 - Dark mode with system preference detection
 - Multilingual support with language switcher
 - Mobile-first responsive layout

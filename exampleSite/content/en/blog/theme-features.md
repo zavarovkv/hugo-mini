@@ -29,7 +29,7 @@ Posts can be grouped by categories using front matter:
 categories = ["getting-started"]
 ```
 
-The blog listing page shows category pills at the top. Clicking a category filters posts instantly — no page reload, just JavaScript.
+The blog listing groups articles under category headings: two columns on desktop and one on mobile. Groups and article order are rendered by Hugo, without client-side filtering.
 
 ## "New" Badge
 
@@ -55,7 +55,7 @@ All external links in post content automatically open in a new tab with `rel="no
 
 ## Telegram Integration
 
-Mini has two Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a Discussion comments widget, and live reaction/view counts surfaced next to the post date. See the dedicated [Telegram Integration](/telegram-integration/) post for the full walkthrough.
+Mini has two Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a Discussion comments widget, and build-time reaction/view counts next to the post date. See the dedicated [Telegram Integration](/telegram-integration/) post for the full walkthrough.
 
 ## Multilingual
 
@@ -73,11 +73,11 @@ Mini supports two languages out of the box: English and Russian. The language sw
 
 ## Hidden Posts
 
-Set `hidden = true` in front matter to exclude a post from the blog listing while keeping it accessible by direct URL — useful for drafts shared with reviewers.
+Set `hidden = true` to exclude a post from listings and feeds while keeping its public URL, sitemap entry and search indexing. Use `draft = true` for unpublished content; `hidden` does not restrict access.
 
 ```toml
 +++
-title = "Secret Post"
+title = "Unlisted Post"
 hidden = true
 +++
 ```
@@ -153,8 +153,8 @@ Any menu item can display an inline SVG icon via `params.icon`. Built-in icon: `
 
 ## Back to Top
 
-On wide screens, hovering the left margin reveals a "Go up" label. Clicking anywhere in the left gutter scrolls back to the top — Telegram blog style. The button appears only after scrolling past 400px and only when the viewport is wide enough to have a meaningful gutter (> 130px). No configuration needed — works automatically on all pages.
+On wide screens, hovering the left margin reveals a "Go up" label. Clicking anywhere in the left gutter scrolls back to the top — Telegram blog style. The button appears only after scrolling past 400px and only when the viewport is wide enough to have a meaningful gutter (> 130px). Set `backToTop = false` in page front matter or site parameters to disable it.
 
 ## Mobile Navigation
 
-On narrow screens, the navigation collapses into a full-screen overlay menu with a hamburger toggle. No external libraries — pure CSS and minimal JavaScript.
+On narrow screens, the navigation collapses into a full-screen overlay menu with a hamburger toggle. The overlay initializes hidden, closes on Escape, link selection or focus leaving it, and returns to desktop navigation at the breakpoint. Without JavaScript, ordinary navigation links stay visible.

@@ -24,7 +24,7 @@ root of `layouts/`, and `_partials` / `_shortcodes` / `_markup` carry the
 underscore prefix.
 
 ```
-layouts/baseof.html            shell; defines the title/head/header/main/footer/scripts blocks
+layouts/baseof.html            shell; title/head/favicon/header/main/footer/scripts blocks
 layouts/home.html              home page
 layouts/list.html              section listings (blog index, grouped by category)
 layouts/single.html            single post
@@ -34,14 +34,15 @@ layouts/_partials/             header, footer, nav, SEO tags, OG image, Telegram
 layouts/_partials/custom_head.html  empty site-wide <head> hook
 layouts/_partials/custom_body.html  empty site-wide <body>-end hook
 layouts/_markup/               render hooks (headings, images, links)
-layouts/_shortcodes/           caption, mermaid, plug
+layouts/_shortcodes/           content helpers; see docs/content.md
 assets/css/beauty.css          generated, pinned Beauty.css foundation; never edit by hand
 assets/css/main.css            theme tokens, font loading, layout and components
 assets/js/main.js              theme toggle, mobile menu, code-copy, sidebar
 i18n/                          UI strings (en, ru)
 exampleSite/                   demonstration site (bilingual)
 archetypes/                    content scaffolding templates
-scripts/                       optional Node helper for Telegram counters
+scripts/                       counter fetchers and maintainer asset-vendoring tools
+tests/                         browser-behavior, template and helper regression tests
 ```
 
 CSS and JS are bundled through Hugo Pipes from `assets/` — minified and
@@ -55,7 +56,9 @@ documented in `docs/vendor-assets.md`.
 
 1. Fork the repository
 2. Create a feature branch
-3. Test with the exampleSite: `hugo server --themesDir ../..`
+3. From the theme root, run `node --test tests/*.test.mjs` and
+   `hugo -s exampleSite --themesDir ../.. --minify --panicOnWarning`.
+   Check the example pages on mobile and desktop, in both color schemes and with keyboard navigation.
 4. Open a pull request with a clear description
 
 ## Reporting Issues

@@ -2,9 +2,9 @@
 description = "A minimal Hugo blog theme with dark mode and multilingual support"
 +++
 
-Welcome to **Mini** — a fast, minimal Hugo blog theme built for writers who want a clean, distraction-free reading experience. No JavaScript framework, no CDN, no build pipeline beyond Hugo itself.
+Welcome to **Mini** — a minimal Hugo blog theme for writers who want a clear reading experience. The theme needs no JavaScript framework or build pipeline beyond Hugo.
 
-Everything is self-hosted: the Inter font, the minified CSS and JS, the OG images generated at compile time. Your readers never talk to a third party — and the pages still load in under a second.
+Inter fonts, shared CSS and JavaScript, and generated share images are self-hosted. Optional integrations such as Telegram, analytics and the Mermaid CDN fallback are enabled separately.
 
 <h3 class="posts-group-title">Start here</h3>
 
