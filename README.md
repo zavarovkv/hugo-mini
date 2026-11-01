@@ -171,6 +171,8 @@ Custom page layouts can reuse `footer-content.html` to select their own social l
 
 Use `brand-link` for a project-name link that retains heading color without an underline. It configures Beauty.css link tokens and preserves keyboard focus.
 
+Custom headers can reuse the mobile burger through `menu-toggle.html` and a `main-nav` navigation element; see [customization](docs/customization.md).
+
 Pages published on another origin can set `canonicalURL`; project landings can also set `seoSiteName` and `seoSiteURL`. Canonical, social and structured metadata stay aligned; see [content configuration](docs/content.md).
 
 An empty or omitted `categories` list places a post in Miscellaneous. Set `recentSidebarCount = 0` to hide recent posts. A single `avatar` works without `avatarHover` in both color schemes.
