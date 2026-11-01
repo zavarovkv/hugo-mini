@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Allow custom page templates to replace the site's favicon links through a dedicated `favicon` block.
 - Share the mobile menu toggle partial with custom headers so project pages use the blog's navigation behavior and appearance.
 - Add a neutral project-name link component using Beauty.css tokens, preserving heading color and keyboard focus without an underline.
 - Support per-page canonical URLs and project identities consistently across social tags, multilingual alternates and structured data.
@@ -15,7 +16,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Document reading typography, native Goldmark punctuation, spacing rules and opt-outs in the README and a dedicated typography guide.
 
 ### Changed
-- Pin Beauty.css's responsive numeric highlights, step markers, compact headings and secondary notes to reviewed upstream commit `515d71e`, with larger mobile counters.
+- Pin Beauty.css's responsive numeric highlights, connected steps, compact headings and secondary notes to reviewed upstream commit `fb72779`, with more expressive mobile counters and reusable workflow lists.
 - Pin Mermaid's Dagre layout, classic look and flowchart label widths across versions 11 and 12, preserving existing diagram geometry when consumers upgrade their self-hosted bundle.
 - Refresh the pinned Beauty.css foundation to include its print-wrapping fix without changing screen typography.
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.

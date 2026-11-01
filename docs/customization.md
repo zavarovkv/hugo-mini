@@ -42,7 +42,7 @@ Use focused overrides whenever possible:
 
 - `layouts/_partials/custom_head.html` adds site-specific tags to `<head>`.
 - `layouts/_partials/custom_body.html` adds scripts or markup before the closing `</body>` tag.
-- Named blocks in `baseof.html` let a template replace `head`, `header`, `main`, `footer`, or `scripts`.
+- Named blocks in `baseof.html` let a template replace `head`, `favicon`, `header`, `main`, `footer`, or `scripts`. The `favicon` block defaults to the site's configured icons, so standalone project templates can supply their own without duplicate icon links.
 - Copy a theme template into the matching site path only when the whole template needs to diverge.
 
 For a project-name link in a custom header, use `<a class="brand-link" href="…"><strong>Project name</strong></a>`. It retains the heading color and bold text without an underline, including on hover; keyboard focus remains visible through Beauty.css.
