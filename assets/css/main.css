@@ -419,6 +419,8 @@
     font-size: clamp(8px, 2vw, 10px);
     line-height: 1.1;
     white-space: pre;
+    /* Decorative glyph overhang must not inherit a code block's scroll container. */
+    overflow: visible;
     color: var(--color-secondary);
     padding: 0;
     background: none;

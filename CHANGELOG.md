@@ -22,6 +22,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
 
 ### Fixed
+- Prevent a spurious scrollbar around the decorative 404 illustration when monospace glyphs extend beyond its tight line boxes.
 - Correct stale architecture and example documentation for asset loading, fonts, category listings, recent posts, shared link styles and Telegram counters.
 - Include Beauty.css fixes for configurable semantic emphasis weight and valid placeholder selectors in both entries.
 - Keep the mobile navigation hidden during initial enhancement and breakpoint changes; preserve its open/close animation for user interaction.
