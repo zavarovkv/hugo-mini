@@ -977,6 +977,7 @@
   }
 
   .project-entry { margin: 1em 0; }
+  .project-entry + .project-entry { margin-top: 1.75em; }
   .project-title {
     margin: 0;
     font-size: 1em;
@@ -991,6 +992,8 @@
     border-bottom: none;
   }
   .project-description > :first-child { margin-top: 0.25em; }
+  .project-description > p { margin-bottom: 0; }
+  .project-description > .beauty-note { margin-top: 0.375rem; }
   .project-description > :last-child { margin-bottom: 0; }
 
   .github-repo-link,

@@ -24,7 +24,7 @@ bundled locally with the theme's own styles. No additional installation is requi
 
 Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. Optional `archive` and `archiveLabel` parameters add a link below the list. See [content options](docs/content.md) for details.
 
-The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style.
+The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style. Optional `beauty-note` source links sit close to their description, with a larger gap between projects.
 
 [Reading lists](docs/content.md#reading-lists) display site-owned book data in a compact two-column table with ordinary blog typography. Titles and authors can be localized while reading dates, ratings and review references remain shared. Recent book additions can update the New badge on both the book and its collection article.
 

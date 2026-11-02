@@ -123,6 +123,8 @@ A short introduction to your projects.
 
 Use the `project` shortcode below a section heading. The name links to an external project page; the description accepts Markdown and keeps links at the same weight as the body text.
 
+For a separate secondary source link, put it in a `<p class="beauty-note">` inside the description. Project layout keeps this note close to the preceding paragraph and separates adjacent projects with a larger gap. Its text size and color come from Beauty.css.
+
 ```text
 {{< project name="My project" url="https://example.com/" >}}
 A short description. Source code on [GitHub](https://github.com/example/project).
