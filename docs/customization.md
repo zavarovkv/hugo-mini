@@ -86,7 +86,7 @@ In this example, `shareImage = "images/event-card.png"` resolves to `assets/imag
 
 ## Loading values
 
-Use `loading-skeleton` on an inline value whose visible content is wrapped in child elements. It preserves that content's space and covers it with a static, theme-aware placeholder. Set `aria-busy="true"` during the request; remove both the class and the attribute on success or failure. Keep saved values available without JavaScript and during background refreshes. The component has no animation.
+Use `loading-skeleton` on an inline value whose visible content is wrapped in child elements. It preserves that content's space and covers it with a compact, theme-aware placeholder. Set `aria-busy="true"` during the request; remove both the class and the attribute on success or failure. Keep known values available without JavaScript and during refreshes; use the placeholder only when no value is known. It pulses gently and disables animation for reduced-motion preferences.
 
 ## Assets
 
