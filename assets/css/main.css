@@ -976,6 +976,20 @@
     .content-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
+  .loading-skeleton {
+    display: inline-block;
+    position: relative;
+    min-inline-size: 1.75ch;
+  }
+  .loading-skeleton > * { visibility: hidden; }
+  .loading-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0.18em 0 0.1em;
+    border-radius: 0.1em;
+    background: var(--color-divider);
+  }
+
   .project-entry { margin: 1em 0; }
   .project-entry + .project-entry { margin-top: 1.75em; }
   .project-title {

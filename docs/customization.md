@@ -84,6 +84,10 @@ The theme generates a 1200×630 share card for each page. To customize selected 
 
 In this example, `shareImage = "images/event-card.png"` resolves to `assets/images/event-card.png`. The hook may also compose an image with Hugo's image filters. Open Graph, Twitter Cards, and JSON-LD share its URL and dimensions. Image metadata includes the page title as alternative text.
 
+## Loading values
+
+Use `loading-skeleton` on an inline value whose visible content is wrapped in child elements. It preserves that content's space and covers it with a static, theme-aware placeholder. Set `aria-busy="true"` during the request; remove both the class and the attribute on success or failure. Keep saved values available without JavaScript and during background refreshes. The component has no animation.
+
 ## Assets
 
 The theme bundles and fingerprints its CSS and JavaScript with Hugo Pipes. Fonts are self-hosted. Mermaid is the only optional CDN asset; set `params.mermaidSrc = "js/mermaid.min.js"` after placing a local bundle in `static/js/` to avoid that request too.

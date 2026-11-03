@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add a reusable static `loading-skeleton` state for inline values while their first request is pending.
 - Allow custom page templates to replace the site's favicon links through a dedicated `favicon` block.
 - Share the mobile menu toggle partial with custom headers so project pages use the blog's navigation behavior and appearance.
 - Add a neutral project-name link component using Beauty.css tokens, preserving heading color and keyboard focus without an underline.

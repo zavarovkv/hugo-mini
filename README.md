@@ -26,6 +26,8 @@ Add `{{< latest-posts count="3" >}}` to your homepage content to list the three 
 
 The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style. Optional `beauty-note` source links sit close to their description, with a larger gap between projects.
 
+Custom pages can use the static [`loading-skeleton` state](docs/customization.md#loading-values) while fetching inline values; it preserves content space and follows the active theme.
+
 [Reading lists](docs/content.md#reading-lists) display site-owned book data in a compact two-column table with ordinary blog typography. Titles and authors can be localized while reading dates, ratings and review references remain shared. Recent book additions can update the New badge on both the book and its collection article.
 
 Add [`github-stars`](docs/content.md#github-stars) inside a description for a GitHub link with a subtle star count, fetched before the build and rendered without browser requests.
