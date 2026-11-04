@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Language.Lang }}">
+<html lang="{{ .Language.Lang }}"{{ with .Site.Params.preferenceCookieDomain }} data-preference-cookie-domain="{{ . }}"{{ end }}{{ if .Site.Params.rememberLanguage }} data-remember-language="true"{{ if or .IsHome (.Param "languagePreferenceEntry") }} data-language-preference-entry="true"{{ end }}{{ end }}>
 
 <head>
   {{- /* charset must sit within the first 1024 bytes of the document, so it
@@ -7,7 +7,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  {{- /* Resolve the color scheme before first paint, even with blocked storage. */}}
+  {{- /* Published alternates also let the opt-in language preference resolve
+         entry pages before CSS. Keep these ordinary URLs for static packagers. */}}
+  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">
+  {{- range .Translations }}
+  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">
+  {{- end }}
+  {{- /* Translation order follows weights, which need not put the default first. */}}
+  {{- if .IsTranslated }}
+    {{- $sites := partialCached "sites.html" . -}}
+    {{- range .AllTranslations }}
+      {{- if eq .Language.Lang $sites.Default.Language.Lang }}
+  <link rel="alternate" hreflang="x-default" href="{{ (partial "page-seo.html" .).canonical }}">
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- /* Resolve preferences before first paint, even with blocked storage. */}}
   {{- with resources.Get "js/theme-init.js" }}
   <script>{{ .Content | safeJS }}</script>
   {{- end }}
@@ -72,19 +88,6 @@
 
   {{- partial "seo_tags.html" . -}}
   {{- partial "structured_data.html" . -}}
-  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">
-  {{- range .Translations }}
-  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">
-  {{- end }}
-  {{- /* Translation order follows weights, which need not put the default first. */}}
-  {{- if .IsTranslated }}
-    {{- $sites := partialCached "sites.html" . -}}
-    {{- range .AllTranslations }}
-      {{- if eq .Language.Lang $sites.Default.Language.Lang }}
-  <link rel="alternate" hreflang="x-default" href="{{ (partial "page-seo.html" .).canonical }}">
-      {{- end }}
-    {{- end }}
-  {{- end }}
   <meta name="referrer" content="no-referrer-when-downgrade" />
 
   {{ with .OutputFormats.Get "rss" -}}

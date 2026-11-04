@@ -165,6 +165,7 @@
       dark: t('toLight', 'Switch to light theme'),
     };
     var root = document.documentElement;
+    var preferences = window.hugoMiniPreferences;
     var mql = window.matchMedia('(prefers-color-scheme: dark)');
 
     function currentTheme() {
@@ -172,6 +173,7 @@
     }
 
     function storedChoice() {
+      if (preferences) return preferences.get(STORAGE_KEY);
       try {
         var choice = localStorage.getItem(STORAGE_KEY);
         return choice === 'light' || choice === 'dark' ? choice : null;
@@ -232,10 +234,8 @@
       observer.observe(container);
     }
 
-    // Follow the system until the user makes an explicit choice.
-    function onSystemChange() {
-      if (storedChoice() !== null) return;
-      root.setAttribute('data-theme', mql.matches ? 'dark' : 'light');
+    function applyTheme(theme) {
+      if (root.getAttribute('data-theme') !== theme) root.setAttribute('data-theme', theme);
       var btn = document.querySelector('.theme-toggle');
       if (btn) {
         btn.title = LABELS[currentTheme()];
@@ -244,31 +244,51 @@
       syncLikelyTheme();
       syncTelegramTheme();
     }
+
+    function syncPreferences() {
+      applyTheme(storedChoice() || (mql.matches ? 'dark' : 'light'));
+      if (preferences) preferences.applyLanguage();
+    }
+
+    // Follow the system until the user makes an explicit choice.
+    function onSystemChange() {
+      if (storedChoice() === null) applyTheme(mql.matches ? 'dark' : 'light');
+    }
     if (mql.addEventListener) mql.addEventListener('change', onSystemChange);
     else if (mql.addListener) mql.addListener(onSystemChange); // Safari < 14
 
-    // A mobile browser can restore an article together with its old iframe.
-    window.addEventListener('pageshow', syncTelegramTheme);
+    // Cookies do not emit cross-origin storage events. Refresh when returning
+    // from another tab/subdomain, including a page restored from the back cache.
+    window.addEventListener('pageshow', syncPreferences);
+    window.addEventListener('focus', syncPreferences);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') syncPreferences();
+    });
+    window.addEventListener('storage', function (event) {
+      if (event.key === null || event.key === 'theme' || event.key === 'language') syncPreferences();
+    });
 
     ready(function initThemeToggle() {
-      syncLikelyTheme();
+      applyTheme(storedChoice() || (mql.matches ? 'dark' : 'light'));
       observeTelegramWidget();
+      if (preferences && root.getAttribute('data-remember-language') === 'true') {
+        document.querySelectorAll('.lang-toggle').forEach(function (link) {
+          function saveLanguage(event) {
+            if (event.type === 'click' || event.button === 1) preferences.set('language', link.getAttribute('data-lang'));
+          }
+          link.addEventListener('click', saveLanguage);
+          link.addEventListener('auxclick', saveLanguage);
+        });
+      }
       var btn = document.querySelector('.theme-toggle');
       if (!btn) return;
-      btn.title = LABELS[currentTheme()];
-      btn.setAttribute('aria-label', LABELS[currentTheme()]);
       btn.addEventListener('click', function () {
         var next = currentTheme() === 'dark' ? 'light' : 'dark';
-        try {
-          localStorage.setItem(STORAGE_KEY, next);
-        } catch (e) {
-          /* private mode — the choice just won't persist */
+        if (preferences) preferences.set(STORAGE_KEY, next);
+        else {
+          try { localStorage.setItem(STORAGE_KEY, next); } catch (e) { /* Storage may be blocked. */ }
         }
-        root.setAttribute('data-theme', next);
-        btn.title = LABELS[next];
-        btn.setAttribute('aria-label', LABELS[next]);
-        syncLikelyTheme();
-        syncTelegramTheme();
+        applyTheme(next);
       });
     });
   })();

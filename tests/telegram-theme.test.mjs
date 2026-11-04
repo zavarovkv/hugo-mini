@@ -27,13 +27,13 @@ function page({ theme = 'light', lazy = true, comments = true } = {}) {
     window, navigator: {}, setTimeout, clearTimeout,
     localStorage: { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) },
     matchMedia: () => media,
-    document: {
+    document: Object.assign(new EventTarget(), {
       readyState: 'complete', documentElement: root, body: element(),
       querySelector: (selector) => selector === '.theme-toggle' ? button : null,
       querySelectorAll: () => [],
       getElementById: (id) => comments && id === 'tg-comments' ? container : null,
       createElement: () => element(), createTextNode: () => ({}),
-    },
+    }),
   });
   if (lazy) window.IntersectionObserver = class {
     constructor(callback) { enter = () => callback([{ isIntersecting: true }]); }

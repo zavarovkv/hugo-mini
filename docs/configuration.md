@@ -34,6 +34,8 @@ All parameters are optional unless your site content depends on them.
 | `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
 | `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
+| `preferenceCookieDomain` | Share explicit theme/language preferences with subdomains of this parent host | unset |
+| `rememberLanguage` | Remember footer language choices and apply them to homepages and pages marked `languagePreferenceEntry = true` | `false` |
 | `typography` | Apply language-aware prose spacing at build time; page front matter can override | `true` |
 | `mainSections` | Sections treated as posts | Hugo default |
 | `socialSharing` | Likely sharing buttons on posts | `true` |

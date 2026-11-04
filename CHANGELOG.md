@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add opt-in shared theme/language preferences for a configured parent domain; remember explicit language choices on homepages and marked landing pages while preserving direct article URLs.
 - Add a reusable `loading-skeleton` state for unknown inline values, with a compact placeholder and reduced-motion support.
 - Allow custom page templates to replace the site's favicon links through a dedicated `favicon` block.
 - Share the mobile menu toggle partial with custom headers so project pages use the blog's navigation behavior and appearance.
@@ -23,6 +24,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
 
 ### Fixed
+- Refresh saved preferences when returning to an open tab or browser-history page, retaining existing Telegram comment widgets.
 - Keep secondary project links close to their descriptions, with more space between separate project entries.
 - Prevent a spurious scrollbar around the decorative 404 illustration when monospace glyphs extend beyond its tight line boxes.
 - Correct stale architecture and example documentation for asset loading, fonts, category listings, recent posts, shared link styles and Telegram counters.

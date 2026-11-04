@@ -171,6 +171,34 @@ For a custom share card, add `layouts/_partials/custom_og_image.html` in your si
 
 Custom page layouts can reuse `footer-content.html` to select their own social links while keeping the theme's language and color-scheme controls; see [footer customization](docs/customization.md#footer-links-on-custom-pages).
 
+### Remembering preferences across subdomains
+
+By default, the explicit light/dark choice stays in the current origin's local
+storage, and language links navigate normally. To share choices between a site
+and its subdomains, opt in on each site:
+
+```toml
+[params]
+  preferenceCookieDomain = "example.com"
+  rememberLanguage = true
+```
+
+The shared `hugo-mini-theme` and `hugo-mini-language` cookies take precedence over
+older local storage. An existing explicit choice migrates when no shared choice
+exists; automatic system colors are never saved as a fixed theme. Cookies use
+the configured parent domain, a one-year lifetime, `SameSite=Lax`, and `Secure`
+on HTTPS. Local storage remains the fallback when cookies are unavailable or
+the page is on a different host, such as a local preview.
+
+With `rememberLanguage`, the footer saves explicit language selections. Homepages
+apply the selection using their published, same-origin `hreflang` links. Set
+`languagePreferenceEntry = true` in a landing page's front matter or cascade to
+give it the same behavior. Direct article URLs retain their language; merely
+opening a translated URL does not change the saved preference. Query strings and
+fragments survive an automatic entry-page redirect. Theme and entry-page language
+refresh when returning to an open tab or restoring a page from browser history.
+Without JavaScript, language links still work as ordinary links.
+
 Use `brand-link` for a project-name link that retains heading color without an underline. It configures Beauty.css link tokens and preserves keyboard focus.
 
 Custom headers can reuse the mobile burger through `menu-toggle.html` and a `main-nav` navigation element; see [customization](docs/customization.md).
