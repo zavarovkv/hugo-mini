@@ -151,6 +151,13 @@
     box-sizing: content-box;
   }
 
+  /* Keep readable gutters while giving narrow phone screens more room. */
+  @media (max-width: 600px) {
+    body {
+      padding-inline: 16px;
+    }
+  }
+
   /* Anchor link next to h2/h3 — click to copy section URL.
      SVG link icon in left margin on desktop, hidden on mobile. */
   h2, h3 {
