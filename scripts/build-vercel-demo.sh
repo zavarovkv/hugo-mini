@@ -29,6 +29,12 @@ curl --fail --location --silent --show-error --retry 3 \
 printf '%s  %s\n' "$HUGO_SHA256" "$archive" | sha256sum --check --status
 tar --extract --gzip --file "$archive" --directory "$temp_dir" hugo
 
+# Vercel checks out repositories into a generic directory (e.g. /vercel/path0).
+# Hugo finds a theme by its directory name, so expose this checkout under the
+# expected `hugo-mini` name without copying or mutating repository sources.
+mkdir --parents "${temp_dir}/themes"
+ln --symbolic "${PWD}" "${temp_dir}/themes/hugo-mini"
+
 "${temp_dir}/hugo" version
-"${temp_dir}/hugo" -s exampleSite --themesDir ../.. \
+"${temp_dir}/hugo" -s exampleSite --themesDir "${temp_dir}/themes" \
   --baseURL "https://${demo_host%/}/" --minify --panicOnWarning

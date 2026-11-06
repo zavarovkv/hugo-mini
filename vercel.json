@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "hugo",
+  "framework": null,
   "installCommand": "",
   "buildCommand": "bash scripts/build-vercel-demo.sh",
   "outputDirectory": "exampleSite/public"
