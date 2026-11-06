@@ -13,7 +13,7 @@ bundled locally with the theme's own styles. No additional installation is requi
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Deploy to Vercel](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Quick start](#quick-start)** · **[Documentation](#documentation)**
 
-[![Hugo Mini — desktop and mobile preview cycling between light and dark themes](images/readme-preview.gif)](https://hugo-mini-demo.vercel.app/)
+[![Hugo Mini — desktop and mobile preview cycling between light and dark themes](images/readme-preview-v2.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Why Mini
 
