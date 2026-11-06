@@ -70,6 +70,7 @@ Keep both language switchers working. Other documentation under `docs/` is
 currently in English.
 Keep the READMEs brief; link to `docs/` for implementation details. In Russian
 README text, use `е` instead of `ё` consistently (and `Е` instead of `Ё`).
+Use absolute HTTPS URLs for README images so they render in the Hugo Themes gallery.
 
 ## Reporting Issues
 

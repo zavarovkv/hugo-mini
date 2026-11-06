@@ -27,3 +27,11 @@ test("both READMEs expose the language switcher and matching examples", () => {
 test("Russian README consistently uses е instead of ё", () => {
   assert.doesNotMatch(ru, /[Ёё]/);
 });
+
+test("README images use absolute URLs for the Hugo Themes gallery", () => {
+  for (const readme of [en, ru]) {
+    const images = [...readme.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)].map(([, url]) => url);
+    assert.ok(images.length > 0, "README should include a preview image");
+    for (const url of images) assert.match(url, /^https:\/\//);
+  }
+});

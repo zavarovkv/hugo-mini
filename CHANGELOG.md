@@ -19,6 +19,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Streamline the README around setup, key capabilities and documentation links, with detailed preference sharing guidance in the configuration guide.
 
 ### Fixed
+- Use an absolute image URL in both README versions so the animated preview renders in the Hugo Themes gallery.
 - Prevent the mobile navigation links from flashing before JavaScript initializes the menu, while keeping a fallback if the bundle fails or scripting is disabled.
 - Correct outdated CSS variable names in the customization guide and example article; show how to load site overrides after the theme stylesheet.
 
