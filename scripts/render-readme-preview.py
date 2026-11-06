@@ -74,7 +74,7 @@ def frame(shots: dict[str, Image.Image], mode: str) -> Image.Image:
     result = Image.new("RGBA", CANVAS, (0, 0, 0, 0))
     paint = ImageDraw.Draw(result)
     chrome = "#ffffff" if mode == "light" else "#1a1a1a"
-    outline = "#dddddd" if mode == "light" else "#414141"
+    outline = "#b9bfc7" if mode == "light" else "#626b74"
     dot = "#cacaca" if mode == "light" else "#676767"
 
     x, y, width, height = DESKTOP
@@ -86,7 +86,22 @@ def frame(shots: dict[str, Image.Image], mode: str) -> Image.Image:
     for dx in (16, 28, 40):
         paint.ellipse((x + dx - 3, y + 12, x + dx + 3, y + 18), fill=dot)
     paint.line((x, y + bar, x + width - 1, y + bar), fill=outline)
-    result.alpha_composite(shots["desktop"].convert("RGBA"), (x, y + bar))
+    screen = shots["desktop"].convert("RGBA")
+    # Preserve the browser's rounded bottom corners instead of letting the
+    # rectangular screenshot paint over the outer frame.
+    screen_alpha = Image.new("L", screen.size)
+    ImageDraw.Draw(screen_alpha).rounded_rectangle(
+        (0, -bar, width - 1, height - 1), radius=10, fill=255
+    )
+    screen.putalpha(screen_alpha)
+    result.alpha_composite(screen, (x, y + bar))
+    # Paint the outline *after* the screenshot and *before* the foreground
+    # iPhone. Otherwise the desktop's side/bottom borders disappear.
+    paint = ImageDraw.Draw(result)
+    paint.rounded_rectangle(
+        (x, y, x + width - 1, y + bar + height - 1),
+        radius=10, outline=outline, width=2,
+    )
 
     # An understated iPhone silhouette with a Dynamic Island and real mobile
     # viewport content. The safe-area top is intentionally separate from the
