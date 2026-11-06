@@ -25,7 +25,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Widen the reading measure to 720 px through Beauty.css's reading-width token, keeping the 16 px body size and responsive layout.
 
 ### Fixed
-- Give smartphone reading text a little more horizontal space with 16 px gutters while keeping left alignment.
+- Preserve 20 px phone gutters and left-aligned prose; use ordinary line wrapping on narrow screens to avoid excessive right-hand gaps from `text-wrap: pretty`.
 - Preserve explicit language-prefixed Markdown links (for example `/ru/`) instead of rewriting them to the current language.
 - Refresh saved preferences when returning to an open tab or browser-history page, retaining existing Telegram comment widgets.
 - Keep secondary project links close to their descriptions, with more space between separate project entries.
