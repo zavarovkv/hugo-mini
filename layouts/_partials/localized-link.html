@@ -9,7 +9,7 @@
   {{- /* Explicit /ru/ (or another non-default language prefix) is a deliberate
          language choice; only unqualified links should follow the page language. */ -}}
   {{- $explicitLanguage := false -}}
-  {{- range $page.Sites -}}
+  {{- range (partialCached "sites.html" $page) -}}
     {{- $languageRoot := .Home.RelPermalink -}}
     {{- if and (ne $languageRoot $base.Path) (hasPrefix $url.Path $languageRoot) -}}
       {{- $explicitLanguage = true -}}
