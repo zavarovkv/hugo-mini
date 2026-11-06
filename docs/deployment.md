@@ -43,8 +43,8 @@ automatic exposure of Vercel system environment variables. Vercel builds with
 `scripts/build-vercel-demo.sh` and publishes `exampleSite/public/`.
 
 The script downloads a pinned Hugo Extended release, verifies its SHA-256 digest
-against the official release, and builds the example site using the same
-`--themesDir ../..` setting as CI. It chooses the production hostname from
+against the official release, and creates a temporary theme-directory symlink
+so the build works with Vercel's generic checkout path. It chooses the production hostname from
 `VERCEL_PROJECT_PRODUCTION_URL` and preview hostnames from `VERCEL_URL`, keeping
 absolute URLs correct for each deployment. Updating the Hugo version requires
 updating the checksum in the same commit.
