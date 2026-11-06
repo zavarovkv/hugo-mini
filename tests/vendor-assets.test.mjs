@@ -33,6 +33,15 @@ test("the theme configures shared typography without redefining native text styl
   }
 });
 
+test("reading lists use Beauty's native table headers without theme overrides", async () => {
+  const css = await readFile(new URL("assets/css/main.css", base), "utf8");
+  const beauty = await readFile(new URL("assets/css/beauty.css", base), "utf8");
+  assert.match(css, /\.reading-shelf\s*\{[^}]*--beauty-table-cell-padding:\s*0\.625em 0;/);
+  assert.doesNotMatch(css, /\.reading-shelf\s+th\s*\{/);
+  assert.match(beauty, /--beauty-table-header-gap:/);
+  assert.match(beauty, /border-block-end-color:currentColor/);
+});
+
 test("mobile wrapping uses the shared Beauty.css token for every paragraph", async () => {
   const css = await readFile(new URL("assets/css/main.css", base), "utf8");
   assert.match(css, /@media\s*\(max-width:\s*600px\)\s*\{\s*:root\s*\{\s*--beauty-text-wrap:\s*wrap\s*;/);
