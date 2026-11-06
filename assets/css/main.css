@@ -146,6 +146,12 @@
   body {
     margin: auto;
     padding: 20px;
+    /* With viewport-fit=cover, preserve the usual 20px gutter *inside* the
+       device's safe area, including in landscape and below the home bar. */
+    padding-top: calc(20px + env(safe-area-inset-top, 0px));
+    padding-right: calc(20px + env(safe-area-inset-right, 0px));
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(20px + env(safe-area-inset-left, 0px));
     max-width: var(--width);
     text-align: left;
     box-sizing: content-box;
@@ -540,7 +546,8 @@
     padding-top: 0;
   }
 
-  /* Thin reading marker: no track, easing or extra paint while idle. Its
+  /* Thin reading marker at the physical viewport edge, above the safe area
+     on edge-to-edge devices. No track, easing or extra paint while idle. Its
      width follows the article, not the comments and footer below it. */
   .reading-progress {
     position: fixed;
@@ -903,7 +910,12 @@
       right: 0;
       bottom: 0;
       background-color: var(--background-color);
-      padding: 80px 0 20px;
+      /* The full-screen menu must stay below the sensor housing too; its
+         links retain their existing 80px separation from the viewport edge. */
+      padding: calc(80px + env(safe-area-inset-top, 0px))
+               env(safe-area-inset-right, 0px)
+               calc(20px + env(safe-area-inset-bottom, 0px))
+               env(safe-area-inset-left, 0px);
       z-index: 1000;
       overflow-x: hidden;
       overflow-y: auto;

@@ -216,6 +216,19 @@ socialSharing=false
   assert.match(await adjusted.read('blog/short/index.html'), /data-reading-progress/);
 });
 
+test('edge-to-edge reading progress preserves safe content and menu gutters', async () => {
+  const head = await readFile(join(theme, 'layouts/baseof.html'), 'utf8');
+  const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
+  assert.match(head, /name="viewport" content="[^"]*viewport-fit=cover"/);
+  for (const side of ['top', 'right', 'bottom', 'left']) {
+    assert.match(css, new RegExp(`padding-${side}: calc\\(20px \\+ env\\(safe-area-inset-${side}, 0px\\)\\)`),
+      `${side} content gutter should preserve 20px inside the safe area`);
+  }
+  assert.match(css, /\.main-nav\.menu-ready\s*\{[^}]*padding: calc\(80px \+ env\(safe-area-inset-top, 0px\)\)/);
+  assert.match(css, /\.reading-progress\s*\{\s*position: fixed;\s*inset: 0 0 auto;/);
+  assert.match(css, /\.reading-progress-fill\s*\{[^}]*background: var\(--color-primary\)/);
+});
+
 test('RSS needs no social accounts and sitemap priorities follow mainSections', async (t) => {
   const example = await site(t, `baseURL="https://example.org/"
 title="Minimal blog"
