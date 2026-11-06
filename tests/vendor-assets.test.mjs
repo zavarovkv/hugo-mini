@@ -42,6 +42,16 @@ test("reading lists use Beauty's native table headers without theme overrides", 
   assert.match(beauty, /border-block-end-color:currentColor/);
 });
 
+test("page titles balance and section headings use Beauty's natural wrapping", async () => {
+  const css = await readFile(new URL("assets/css/main.css", base), "utf8");
+  const beauty = await readFile(new URL("assets/css/beauty.css", base), "utf8");
+  assert.match(beauty, /--beauty-heading-wrap:balance/);
+  assert.match(beauty, /--beauty-section-heading-wrap:wrap/);
+  assert.match(beauty, /text-wrap:var\(--beauty-heading-wrap\)/);
+  assert.match(beauty, /text-wrap:var\(--beauty-section-heading-wrap\)/);
+  assert.doesNotMatch(css, /^\s*text-wrap\s*:/m);
+});
+
 test("mobile wrapping uses the shared Beauty.css token for every paragraph", async () => {
   const css = await readFile(new URL("assets/css/main.css", base), "utf8");
   assert.match(css, /@media\s*\(max-width:\s*600px\)\s*\{\s*:root\s*\{\s*--beauty-text-wrap:\s*wrap\s*;/);

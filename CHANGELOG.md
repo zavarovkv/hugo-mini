@@ -10,6 +10,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
 
 ### Changed
+- Keep balanced wrapping for page titles while restoring natural line breaks in article section headings through the shared Beauty.css foundation.
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 - Streamline the README around setup, key capabilities and documentation links, with detailed preference sharing guidance in the configuration guide.
 
