@@ -1,7 +1,6 @@
 /*
  * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
- * code-copy buttons, heading anchors, reading progress, recent-posts sidebar,
- * back-to-top.
+ * code-copy buttons, heading anchors, recent-posts sidebar, back-to-top.
  *
  * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
  * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
@@ -554,64 +553,6 @@
     new MutationObserver(function () {
       if (entries.some(function (entry) { return entry.visible && !entry.failed; })) render();
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  });
-
-  // ── Long-form reading progress ────────────────────────────────────────
-  ready(function initReadingProgress() {
-    var progress = document.querySelector('[data-reading-progress]');
-    if (!progress) return;
-    // Safari 26 on iPhone can position fixed bars below the translucent
-    // status area, over scrolling text. This is a narrow compatibility guard,
-    // not a general mobile exception. Safari's iOS 26 UA freezes the OS token
-    // at 18.x, so match the Safari Version/26 token instead.
-    var ua = (window.navigator && window.navigator.userAgent) || '';
-    if (/\biPhone\b/.test(ua) && /\bVersion\/26(?:\.\d+)?\b/.test(ua) &&
-        /\bSafari\//.test(ua) && !/\b(?:CriOS|FxiOS|EdgiOS|OPiOS)\//.test(ua)) return;
-    var article = document.querySelector('main article');
-    if (!article) return;
-    var fill = progress.querySelector('.reading-progress-fill');
-    if (!fill) return;
-    var queued = false;
-    var lastPercent = -1;
-
-    function update() {
-      queued = false;
-      var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-      var rect = article.getBoundingClientRect();
-      // Even a wordy article can fit on a tall screen. Avoid a rapidly
-      // filling marker when there is too little actual reading distance.
-      if (!viewportHeight || rect.height <= viewportHeight * 1.5) {
-        progress.hidden = true;
-        return;
-      }
-      progress.hidden = false;
-
-      var scrollY = window.scrollY || window.pageYOffset || 0;
-      var start = rect.top + scrollY;
-      // Reach 100% when the article's last line enters the viewport; ignore
-      // sharing buttons, Telegram comments and the footer below the article.
-      var fraction = Math.max(0, Math.min(1,
-        (scrollY - start) / (rect.height - viewportHeight)));
-      fill.style.transform = 'scaleX(' + fraction + ')';
-      var percent = Math.round(fraction * 100);
-      if (percent !== lastPercent) {
-        progress.setAttribute('aria-valuenow', String(percent));
-        lastPercent = percent;
-      }
-    }
-
-    function schedule() {
-      if (queued) return;
-      queued = true;
-      window.requestAnimationFrame(update);
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    window.addEventListener('pageshow', schedule);
-    // Images, formulas and diagrams can change the article height after load.
-    if ('ResizeObserver' in window) new window.ResizeObserver(schedule).observe(article);
-    update();
   });
 
   // ── Recent posts: progressively enhance the visible bottom block into a rail ──

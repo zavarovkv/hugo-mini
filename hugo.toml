@@ -7,8 +7,6 @@ min = "0.146.0"
 
 [params]
   recentSidebarCount = 8
-  readingProgress = true
-  readingProgressMinWords = 800
   typography = true
   preferenceCookieDomain = ""
   rememberLanguage = false

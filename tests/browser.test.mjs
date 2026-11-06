@@ -19,7 +19,7 @@ function element(attributes = {}) {
   });
 }
 
-function page({ saved, blocked = false, dark = false, mobile = true, math = false, ascii, reduced = false, scrollY = 0, userAgent = '' } = {}) {
+function page({ saved, blocked = false, dark = false, mobile = true, math = false, ascii, reduced = false, scrollY = 0 } = {}) {
   const root = element();
   const body = element({ 'data-back-to-top': 'false', 'data-math': String(math) });
   const toggle = element();
@@ -38,7 +38,7 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
     querySelectorAll: () => [], getElementById: () => null,
   });
   const window = Object.assign(new EventTarget(), {
-    document, navigator: { userAgent }, setTimeout, clearTimeout, scrollY, pageYOffset: scrollY,
+    document, navigator: {}, setTimeout, clearTimeout, scrollY, pageYOffset: scrollY,
     scrollTo(x, y) { scrollCalls.push([x, y]); this.scrollY = y; this.pageYOffset = y; },
     setInterval: (callback) => { intervals.set(++intervalID, callback); return intervalID; },
     clearInterval: (id) => intervals.delete(id),
@@ -217,86 +217,6 @@ test('back-to-top stays out of keyboard navigation until it is visible', () => {
   assert.equal(p.window.pageYOffset, 0);
   assert.equal(control.getAttribute('tabindex'), '-1');
   assert.ok(!control.classList.contains('shown'));
-});
-
-test('reading progress follows only the article and coalesces scroll updates', () => {
-  const p = page();
-  const frames = [];
-  const fill = Object.assign(element(), { style: {} });
-  const bar = Object.assign(element({ 'aria-valuenow': '0' }), {
-    hidden: true,
-    querySelector: (selector) => selector === '.reading-progress-fill' ? fill : null,
-  });
-  const top = 200;
-  let height = 2400;
-  const article = {
-    getBoundingClientRect: () => ({
-      top: top - p.window.scrollY,
-      bottom: top + height - p.window.scrollY,
-      height,
-    }),
-  };
-  const query = p.document.querySelector;
-  p.document.querySelector = (selector) => selector === '[data-reading-progress]' ? bar
-    : selector === 'main article' ? article : query(selector);
-  p.window.innerHeight = 800;
-  p.window.requestAnimationFrame = (callback) => { frames.push(callback); return frames.length; };
-  p.start();
-
-  assert.equal(bar.hidden, false);
-  assert.equal(bar.getAttribute('aria-valuenow'), '0');
-  assert.equal(fill.style.transform, 'scaleX(0)');
-
-  p.window.scrollY = 1000;
-  p.window.dispatchEvent(new Event('scroll'));
-  p.window.dispatchEvent(new Event('scroll'));
-  assert.equal(frames.length, 1, 'rapid scroll events share one animation frame');
-  frames.shift()();
-  assert.equal(fill.style.transform, 'scaleX(0.5)');
-  assert.equal(bar.getAttribute('aria-valuenow'), '50');
-
-  p.window.scrollY = 1800;
-  p.window.dispatchEvent(new Event('scroll'));
-  frames.shift()();
-  assert.equal(fill.style.transform, 'scaleX(1)', 'progress ends with the last article line');
-  assert.equal(bar.getAttribute('aria-valuenow'), '100');
-
-  height = 900;
-  p.window.dispatchEvent(new Event('resize'));
-  frames.shift()();
-  assert.equal(bar.hidden, true, 'hide on viewports taller than the article');
-});
-
-test('reading progress skips only affected iPhone Safari 26, not other browsers', () => {
-  const cases = [
-    // Apple freezes iOS 26's OS token at 18.6; Safari's Version token advances.
-    ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1', true],
-    ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 Version/26.7.2 Mobile/15E148 Safari/604.1', true],
-    ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 Version/18.6 Mobile/15E148 Safari/604.1', false],
-    ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 Version/27.0 Mobile/15E148 Safari/604.1', false],
-    ['Mozilla/5.0 (iPad; CPU OS 18_6 like Mac OS X) AppleWebKit/605.1.15 Version/26.0 Mobile/15E148 Safari/604.1', false],
-    ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/26.0 Safari/605.1.15', false],
-    ['Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 CriOS/140.0 Mobile/15E148 Safari/604.1', false],
-    ['Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 FxiOS/140.0 Mobile/15E148 Safari/604.1', false],
-  ];
-
-  for (const [userAgent, shouldSkip] of cases) {
-    const p = page({ userAgent });
-    const fill = Object.assign(element(), { style: {} });
-    const bar = Object.assign(element(), {
-      hidden: true,
-      querySelector: (selector) => selector === '.reading-progress-fill' ? fill : null,
-    });
-    const query = p.document.querySelector;
-    p.document.querySelector = (selector) => selector === '[data-reading-progress]' ? bar
-      : selector === 'main article' ? { getBoundingClientRect: () => ({ top: 200, height: 2400 }) }
-        : query(selector);
-    p.window.innerHeight = 800;
-    p.start();
-    assert.equal(bar.hidden, shouldSkip, userAgent);
-    if (shouldSkip) assert.equal(fill.style.transform, undefined, 'excluded browsers must not initialize progress');
-    else assert.equal(fill.style.transform, 'scaleX(0)');
-  }
 });
 
 test('a failed Mermaid download restores every diagram source', async () => {

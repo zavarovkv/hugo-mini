@@ -9,16 +9,6 @@
          "blog". */ -}}
   {{- $isPost := in (site.Params.mainSections | default (slice "blog")) .Type -}}
 
-  {{- /* A long-form reading aid, scoped to the article rather than the whole
-         page. JavaScript reveals it only when there is room to scroll. */ -}}
-  {{- if and $isPost (.Param "readingProgress") (ge .WordCount (int (.Param "readingProgressMinWords"))) }}
-    <div class="reading-progress" data-reading-progress role="progressbar"
-         aria-label="{{ i18n "reading_progress" }}" aria-valuemin="0"
-         aria-valuemax="100" aria-valuenow="0" hidden>
-      <span class="reading-progress-fill"></span>
-    </div>
-  {{- end }}
-
   <h1>{{ .Title }}</h1>
 
   <article{{ if not .Params.reading_list }} class="beauty-reading"{{ end }} lang="{{ .Language.Lang }}">

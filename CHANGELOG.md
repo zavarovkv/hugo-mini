@@ -6,12 +6,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
-### Added
-- Show an unobtrusive, accessible progress line on long blog posts, measured against article content rather than comments or footer; configurable per site or page and hidden on short viewports.
-
-### Fixed
-- Hide the reading line only on iPhone Safari 26, where fixed-position elements can overlap the translucent status area; keep the original 2 px line in other browsers without changing the site's viewport behavior.
-
 ## [3.5.0] — 2026-11-06
 
 ### Added

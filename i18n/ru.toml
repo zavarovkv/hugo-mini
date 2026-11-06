@@ -19,9 +19,6 @@ other = "Главная"
 [go_up]
 other = "Наверх"
 
-[reading_progress]
-other = "Прогресс чтения"
-
 [theme_light]
 other = "Включить светлую тему"
 
