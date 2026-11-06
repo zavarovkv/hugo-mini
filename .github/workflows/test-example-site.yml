@@ -36,6 +36,13 @@ jobs:
         # resolves to the checked-out repo root.
         run: hugo -s exampleSite --themesDir ../.. --minify --panicOnWarning
 
+      - name: Build the one-click Vercel starter
+        run: |
+          bash starter/scripts/setup-theme.sh
+          hugo -s starter --minify --panicOnWarning
+          test -s starter/public/index.html
+          test -s starter/public/hello-world/index.html
+
       - name: Check JavaScript syntax
         run: |
           for file in assets/js/*.js scripts/*.mjs scripts/lib/*.mjs; do

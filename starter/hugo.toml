@@ -1,0 +1,24 @@
+baseURL = "https://example.com/"
+title = "My Mini Blog"
+theme = "hugo-mini"
+enableRobotsTXT = true
+
+[permalinks]
+  blog = "/:slug/"
+
+[params]
+  authorName = "Your Name"
+  authorURL = ""
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[menu.main]]
+  name = "Articles"
+  url = "/blog/"
+  weight = 1
+
+[[menu.main]]
+  name = "About"
+  url = "/about/"
+  weight = 2
