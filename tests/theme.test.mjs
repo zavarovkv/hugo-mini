@@ -57,6 +57,8 @@ weight = 1
     await writeFile(join(root, "static/images/pixel.png"), pixel);
     const code = 'if ready:\n    print("<hello> & goodbye")\n';
     const body = `## Intro\n\n[Translated](${baseURL}shared/?mode=1#intro)\n\n` +
+      `[Russian homepage](${basePath}ru/)\n\n` +
+      `[Explicit Russian post](${basePath}ru/shared/?mode=2#intro)\n\n` +
       '{{< callout >}}\n**Highlighted** quotation.\n{{< /callout >}}\n\n' +
       '```python {linenos=inline}\n' + code + '```\n\n' +
       '```python {linenos=table}\n' + code + '```\n\n' +
@@ -146,6 +148,9 @@ weight = 1
     assert.equal(attribute(bundleImage, "width"), "1");
     assert.equal(attribute(bundleImage, "height"), "1");
     assert.ok(post.includes(`${basePath}ru/shared/?mode=1#intro`), "same-site links must select the existing translation");
+    const englishPost = await readFile(join(output, "shared/index.html"), "utf8");
+    assert.ok(englishPost.includes(`href=${basePath}ru/`), "an explicit language-prefixed homepage link must not be localized back to English");
+    assert.ok(englishPost.includes(`${basePath}ru/shared/?mode=2#intro`), "explicit language-prefixed post links must retain their requested language and fragment");
     assert.ok(!post.includes("id=recent-sidebar") && !post.includes('id="recent-sidebar"'));
     assert.ok(!post.includes("has-hover-avatar"), "one avatar must not enable two-frame styles");
     const copied = [...post.matchAll(/<div\b[^>]*\bdata-code=(?:"[^"]*"|'[^']*')[^>]*>/g)].map((m) => attribute(m[0], "data-code"));

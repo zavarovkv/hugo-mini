@@ -6,6 +6,15 @@
 {{- $base := urls.Parse $page.Site.BaseURL -}}
 {{- $internal := and (or (not $url.Scheme) (in (slice "http" "https") $url.Scheme)) (or (not $url.Host) (eq $url.Host $base.Host)) -}}
 {{- if and $internal $url.Path ($page.Site.Params.localizeLinks | default true) -}}
+  {{- /* Explicit /ru/ (or another non-default language prefix) is a deliberate
+         language choice; only unqualified links should follow the page language. */ -}}
+  {{- $explicitLanguage := false -}}
+  {{- range (partialCached "sites.html" $page) -}}
+    {{- $languageRoot := .Home.RelPermalink -}}
+    {{- if and (ne $languageRoot $base.Path) (hasPrefix $url.Path $languageRoot) -}}
+      {{- $explicitLanguage = true -}}
+    {{- end -}}
+  {{- end -}}
   {{- $target := $page.GetPage $url.Path -}}
   {{- if not $target -}}
     {{- $wanted := $url.Path -}}
@@ -18,8 +27,10 @@
     {{- $target = index $index (strings.TrimSuffix "/" $wanted) -}}
   {{- end -}}
   {{- with $target -}}
-    {{- range .AllTranslations -}}
-      {{- if eq .Language.Lang $page.Language.Lang -}}{{- $target = . -}}{{- end -}}
+    {{- if not $explicitLanguage -}}
+      {{- range .AllTranslations -}}
+        {{- if eq .Language.Lang $page.Language.Lang -}}{{- $target = . -}}{{- end -}}
+      {{- end -}}
     {{- end -}}
     {{- $destination = $target.RelPermalink -}}
     {{- with $url.RawQuery -}}{{- $destination = printf "%s?%s" $destination . -}}{{- end -}}
