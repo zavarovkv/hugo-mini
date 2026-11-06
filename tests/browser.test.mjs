@@ -5,6 +5,7 @@ import { runInNewContext } from 'node:vm';
 
 const init = readFileSync(new URL('../assets/js/theme-init.js', import.meta.url), 'utf8');
 const main = readFileSync(new URL('../assets/js/main.js', import.meta.url), 'utf8');
+const css = readFileSync(new URL('../assets/css/main.css', import.meta.url), 'utf8');
 
 function element(attributes = {}) {
   const classes = new Set();
@@ -34,7 +35,9 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
   let intervalID = 0;
   const document = Object.assign(new EventTarget(), {
     documentElement: root, body, readyState: 'complete',
-    querySelector: (selector) => ({ '.mobile-menu-toggle': toggle, '.main-nav': nav, main: content, '[data-ascii-animation]': art })[selector] || null,
+    querySelector: (selector) => selector === '.main-nav.menu-ready'
+      ? (nav.classList.contains('menu-ready') ? nav : null)
+      : ({ '.mobile-menu-toggle': toggle, '.main-nav': nav, main: content, '[data-ascii-animation]': art })[selector] || null,
     querySelectorAll: () => [], getElementById: () => null,
   });
   const window = Object.assign(new EventTarget(), {
@@ -55,6 +58,26 @@ test('first paint resolves a saved or system scheme even with blocked storage', 
     [{ saved: 'light', dark: true }, 'light'], [{ saved: 'dark' }, 'dark'],
     [{ saved: 'invalid', dark: true }, 'dark'], [{ blocked: true, dark: true }, 'dark'], [{ blocked: true }, 'light'],
   ]) assert.equal(page(options).root.getAttribute('data-theme'), expected);
+});
+
+test('mobile navigation is hidden before the deferred bundle, but restores its fallback if it fails', () => {
+  // The inline initializer runs before CSS, while the menu event handlers
+  // arrive later in the deferred bundle at the bottom of the document.
+  const pending = page();
+  assert.ok(pending.root.classList.contains('hugo-mini-js'));
+  assert.ok(!pending.nav.classList.contains('menu-ready'));
+  assert.match(css, /:where\(html\.hugo-mini-js\) \.main-nav/);
+  assert.match(css, /:where\(html\.hugo-mini-js\) \.mobile-menu-toggle/);
+
+  pending.start();
+  pending.window.dispatchEvent(new Event('load'));
+  assert.ok(pending.root.classList.contains('hugo-mini-js'));
+  assert.ok(pending.nav.classList.contains('menu-ready'));
+
+  const failed = page();
+  failed.window.dispatchEvent(new Event('load'));
+  assert.ok(!failed.root.classList.contains('hugo-mini-js'));
+  assert.ok(!failed.nav.classList.contains('menu-ready'));
 });
 
 test('an invalid saved value does not prevent following the system scheme', () => {

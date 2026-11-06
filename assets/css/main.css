@@ -834,7 +834,8 @@
       z-index: 1001;
     }
 
-    .mobile-menu-toggle.menu-ready {
+    .mobile-menu-toggle.menu-ready,
+    :where(html.hugo-mini-js) .mobile-menu-toggle {
       display: flex;
       justify-self: end;
       grid-column: 3;
@@ -855,8 +856,10 @@
       gap: 0;
     }
 
-    /* Enable the full-screen overlay only once its controls are ready. */
-    .main-nav.menu-ready {
+    /* Reserve the enhanced layout before first paint. If scripting is off or
+       the deferred bundle fails, links remain available as a normal row. */
+    .main-nav.menu-ready,
+    :where(html.hugo-mini-js) .main-nav {
       position: fixed;
       top: 0;
       left: 0;

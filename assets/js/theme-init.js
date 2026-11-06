@@ -1,6 +1,12 @@
 // Resolve preferences before CSS and share the same storage rules with main.js.
 (function () {
   var root = document.documentElement;
+  // CSS needs the enhanced mobile-menu layout before its first paint.
+  // If the deferred bundle fails, restore the ordinary no-JS navigation.
+  root.classList.add('hugo-mini-js');
+  window.addEventListener('load', function () {
+    if (!document.querySelector('.main-nav.menu-ready')) root.classList.remove('hugo-mini-js');
+  });
   var rememberLanguage = root.getAttribute('data-remember-language') === 'true';
   var domain = (root.getAttribute('data-preference-cookie-domain') || '').toLowerCase().replace(/^\./, '');
   var hostname = window.location ? window.location.hostname.toLowerCase() : '';
