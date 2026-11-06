@@ -33,6 +33,12 @@ test("the theme configures shared typography without redefining native text styl
   }
 });
 
+test("mobile wrapping uses the shared Beauty.css token for every paragraph", async () => {
+  const css = await readFile(new URL("assets/css/main.css", base), "utf8");
+  assert.match(css, /@media\s*\(max-width:\s*600px\)\s*\{\s*:root\s*\{\s*--beauty-text-wrap:\s*wrap\s*;/);
+  assert.doesNotMatch(css, /main\s+article\s*\{\s*--beauty-text-wrap\s*:/);
+});
+
 test("committed KaTeX assets match their pinned manifest and render formulas", async () => {
   const manifest = JSON.parse(await readFile(new URL("vendor/katex.json", base), "utf8"));
   for (const [source, checksum] of Object.entries(manifest.files)) {

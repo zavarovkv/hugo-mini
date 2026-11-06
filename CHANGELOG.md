@@ -13,6 +13,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ### Changed
 - Put installation and the Deploy to Vercel button near the top of the README; move optional shortcode details into a separate guide.
 
+### Fixed
+- Use natural wrapping for every Beauty.css paragraph on narrow screens, including content outside articles, while preserving desktop typography.
+
 ## [3.4.0] — 2026-11-06
 
 ### Added
