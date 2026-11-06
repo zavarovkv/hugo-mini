@@ -1,0 +1,27 @@
+name: Render README preview (temporary)
+
+on:
+  push:
+    branches: [readme-preview-capture]
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install Pillow playwright
+      - run: python -m playwright install --with-deps chromium
+      - run: python scripts/render-readme-preview.py
+      - name: Commit rendered samples to the preview branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/readme-preview-v3.gif .preview-stills/light.png .preview-stills/dark.png
+          git commit -m "docs: render fresh mobile README preview"
+          git push
