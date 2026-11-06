@@ -1,7 +1,6 @@
 baseURL = "https://example.com/"
 title = "My Mini Blog"
 theme = "hugo-mini"
-languageCode = "en-us"
 enableRobotsTXT = true
 
 [permalinks]
