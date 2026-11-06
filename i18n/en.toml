@@ -19,6 +19,9 @@ other = "Home"
 [go_up]
 other = "Go up"
 
+[reading_progress]
+other = "Reading progress"
+
 [theme_light]
 other = "Switch to light theme"
 

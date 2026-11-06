@@ -182,6 +182,40 @@ test('recent-posts sidebar remains visible until JavaScript places it in the rai
   assert.match(css, /\.recent-sidebar\.is-sidebar\s*\{\s*margin-top:\s*0;/);
 });
 
+test('reading progress renders only for long main-section posts and respects opt-outs', async (t) => {
+  const longText = Array(160).fill('A thoughtful article has enough words to be worth reading slowly.').join('\n\n');
+  const post = (extra = '', content = longText) => `+++\ntitle="A story"\ndate=2026-01-01\n${extra}+++\n${content}`;
+  const config = `baseURL="https://example.org/"
+title="Reading blog"
+theme="hugo-mini"
+[params]
+socialSharing=false
+`;
+  const example = await site(t, config, {
+    'blog/long.md': post(),
+    'blog/short.md': post('', 'A short note.'),
+    'blog/disabled.md': post('readingProgress=false\n'),
+    'about.md': post(),
+  });
+  const long = await example.read('blog/long/index.html');
+  assert.match(long, /data-reading-progress role=progressbar/);
+  assert.match(long, /aria-label="Reading progress"/);
+  assert.match(long, /aria-valuemax=100 aria-valuenow=0 hidden/);
+  for (const path of ['blog/short/index.html', 'blog/disabled/index.html', 'about/index.html']) {
+    assert.doesNotMatch(await example.read(path), /data-reading-progress/, path);
+  }
+
+  const disabledSite = await site(t, `${config}readingProgress=false\n`, {
+    'blog/long.md': post(),
+  });
+  assert.doesNotMatch(await disabledSite.read('blog/long/index.html'), /data-reading-progress/);
+
+  const adjusted = await site(t, `${config}readingProgressMinWords=1\n`, {
+    'blog/short.md': post('', 'A short note.'),
+  });
+  assert.match(await adjusted.read('blog/short/index.html'), /data-reading-progress/);
+});
+
 test('RSS needs no social accounts and sitemap priorities follow mainSections', async (t) => {
   const example = await site(t, `baseURL="https://example.org/"
 title="Minimal blog"

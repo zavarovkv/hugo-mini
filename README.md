@@ -78,7 +78,7 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 | Area | Built in |
 | --- | --- |
 | Writing | Markdown, build-time typography, optional heading links and CSS classes, code copy, captions, KaTeX, Mermaid |
-| Reading | Responsive 720 px reading measure, system-aware dark mode, recent posts, pinned posts |
+| Reading | Responsive 720 px reading measure, system-aware dark mode, long-article progress, recent posts, pinned posts |
 | Discovery | Open Graph images, JSON-LD, `hreflang`, RSS, JSON Feed, `llms.txt` |
 | Integrations | Telegram comments and reactions, social sharing, optional analytics |
 
@@ -97,6 +97,14 @@ Node.js 22.12+ and ES2024-capable browsers (Safari 17.4+); the default CDN fallb
 Articles use 16 px body text and a reading measure of up to 720 px, narrowing to
 fit smaller screens. Beauty.css owns the shared typography; the theme sets its
 reading-width token and supplies the layout and self-hosted Inter fonts.
+
+Posts with at least 800 words show a discreet 2 px reading-progress line along
+the top of the viewport. It follows the article itself (not comments or the
+footer) and stays hidden when the article is too short for meaningful scrolling.
+The indicator uses the existing script and theme colors, with no animation or
+additional dependencies. Disable it per post with `readingProgress = false` in
+front matter, or for the whole site under `[params]`. Set
+`readingProgressMinWords = 1200` under `[params]` to change the threshold.
 
 Hugo applies typography during the build, without an additional package or
 browser script. Goldmark supplies smart quotes, ellipses and dash substitutions.

@@ -219,6 +219,54 @@ test('back-to-top stays out of keyboard navigation until it is visible', () => {
   assert.ok(!control.classList.contains('shown'));
 });
 
+test('reading progress follows only the article and coalesces scroll updates', () => {
+  const p = page();
+  const frames = [];
+  const fill = Object.assign(element(), { style: {} });
+  const bar = Object.assign(element({ 'aria-valuenow': '0' }), {
+    hidden: true,
+    querySelector: (selector) => selector === '.reading-progress-fill' ? fill : null,
+  });
+  const top = 200;
+  let height = 2400;
+  const article = {
+    getBoundingClientRect: () => ({
+      top: top - p.window.scrollY,
+      bottom: top + height - p.window.scrollY,
+      height,
+    }),
+  };
+  const query = p.document.querySelector;
+  p.document.querySelector = (selector) => selector === '[data-reading-progress]' ? bar
+    : selector === 'main article' ? article : query(selector);
+  p.window.innerHeight = 800;
+  p.window.requestAnimationFrame = (callback) => { frames.push(callback); return frames.length; };
+  p.start();
+
+  assert.equal(bar.hidden, false);
+  assert.equal(bar.getAttribute('aria-valuenow'), '0');
+  assert.equal(fill.style.transform, 'scaleX(0)');
+
+  p.window.scrollY = 1000;
+  p.window.dispatchEvent(new Event('scroll'));
+  p.window.dispatchEvent(new Event('scroll'));
+  assert.equal(frames.length, 1, 'rapid scroll events share one animation frame');
+  frames.shift()();
+  assert.equal(fill.style.transform, 'scaleX(0.5)');
+  assert.equal(bar.getAttribute('aria-valuenow'), '50');
+
+  p.window.scrollY = 1800;
+  p.window.dispatchEvent(new Event('scroll'));
+  frames.shift()();
+  assert.equal(fill.style.transform, 'scaleX(1)', 'progress ends with the last article line');
+  assert.equal(bar.getAttribute('aria-valuenow'), '100');
+
+  height = 900;
+  p.window.dispatchEvent(new Event('resize'));
+  frames.shift()();
+  assert.equal(bar.hidden, true, 'hide on viewports taller than the article');
+});
+
 test('a failed Mermaid download restores every diagram source', async () => {
   const p = page();
   const sources = ['graph TD; A-->B', 'sequenceDiagram\nA->>B: Hello'];

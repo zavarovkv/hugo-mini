@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Added
+- Show an unobtrusive, accessible progress line on long blog posts, measured against article content rather than comments or footer; configurable per site or page and hidden on short viewports.
+
 ## [3.5.0] — 2026-11-06
 
 ### Added
