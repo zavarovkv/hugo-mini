@@ -68,6 +68,8 @@ documented in `docs/vendor-assets.md`.
 including links, badges, screenshots, commands, examples, and feature descriptions.
 Keep both language switchers working. Other documentation under `docs/` is
 currently in English.
+Keep the READMEs brief; link to `docs/` for implementation details. In Russian
+README text, use `е` instead of `ё` consistently (and `Е` instead of `Ё`).
 
 ## Reporting Issues
 

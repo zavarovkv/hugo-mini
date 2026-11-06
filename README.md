@@ -8,34 +8,31 @@
   <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
 </p>
 
-A lightweight Hugo theme for personal blogs where the writing comes first.
+A minimal Hugo theme for personal blogs, built around reading.
 
-Clean typography, dark mode, multilingual navigation, SEO, and optional Telegram comments. A standard Hugo build is enough — no frontend framework or Node.js build step required.
-
-Typography is built on [Beauty.css](https://github.com/zavarovkv/beauty-css). A pinned version is already bundled with the theme, so there is nothing extra to install.
+Clean typography powered by [Beauty.css](https://github.com/zavarovkv/beauty-css), light and dark modes, multilingual support, SEO, and self-hosted assets. Just Hugo — no Node.js build step.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
 [![Hugo Mini — desktop and mobile preview cycling between light and dark themes](images/readme-preview-v4.gif)](https://hugo-mini-demo.vercel.app/)
 
-## Why Mini
+## Features
 
-- **Reading comes first.** A quiet layout keeps the focus on your words.
-- **Fast without extra setup.** Styles, scripts, and fonts are served from your own domain with cache-friendly file names.
-- **Useful features included.** Dark mode, languages, feeds, SEO metadata, math, diagrams, and sharing are ready to use.
-- **Room to customize.** Adjust colors, menus, and templates through theme settings and extension hooks.
-
-Mini is made for personal sites and text-led blogs, not magazine homepages or app-like interfaces.
+- **Made for reading.** Clean typography, a 720 px text column, and a responsive layout.
+- **Fast by default.** CSS, JavaScript, and fonts are bundled and served from your site.
+- **Ready to publish.** Multilingual navigation, SEO metadata, RSS, JSON Feed, and sharing.
+- **Extras when needed.** Math, diagrams, Telegram comments, and analytics are optional.
+- **Easy to customize.** Change colors, menus, and templates without modifying the theme.
 
 ## Quick start
 
-**One-click starter on Vercel** — creates a new repository with an editable blog and deploys it automatically:
+**Deploy to Vercel in one click:**
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
 
-[View the starter files](starter/) · [How the one-click setup works](starter/README.md)
+[Starter files](starter/) · [Setup guide](starter/README.md)
 
-**Or set it up locally** with Hugo Extended 0.146 or newer:
+**Run locally** with Hugo Extended 0.146 or newer:
 
 ```bash
 hugo new site myblog
@@ -44,31 +41,20 @@ git init
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 ```
 
-Replace `hugo.toml` with a minimal configuration:
+Replace the generated `hugo.toml` with:
 
 ```toml
 baseURL = "https://example.com/"
 title = "My Blog"
 theme = "hugo-mini"
-enableRobotsTXT = true
-
-[permalinks]
-  blog = "/:slug/"
-
-[params]
-  authorName = "Jane Doe"
-  authorURL = "https://example.com/"
-
-[markup.goldmark.renderer]
-  unsafe = true
 
 [[menu.main]]
-  name = "Articles"
+  name = "Blog"
   url = "/blog/"
   weight = 1
 ```
 
-Create the blog section and your first article:
+Create your first post and start the server:
 
 ```bash
 hugo new content blog/_index.md
@@ -76,104 +62,18 @@ hugo new content blog/hello-world.md
 hugo server -D
 ```
 
-Open `http://localhost:1313/`. For a ready-to-run reference, see the [example site](exampleSite/). Prefer Hugo Modules? See [installation options](docs/configuration.md#installation).
+Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Modules setup](docs/configuration.md#installation).
 
-## What is included
-
-| Area | Built in |
-| --- | --- |
-| Writing | Markdown, build-time typography, optional heading links and CSS classes, code copy, captions, KaTeX, Mermaid |
-| Reading | Responsive 720 px reading measure, system-aware dark mode, print-friendly articles, recent posts, pinned posts |
-| Discovery | Open Graph images, JSON-LD, `hreflang`, RSS, JSON Feed, `llms.txt` |
-| Integrations | Telegram comments and reactions, social sharing, optional analytics |
-
-Explore [content components and advanced options](docs/advanced-features.md). Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
-
-Without JavaScript, mobile navigation remains visible as ordinary links. The overlay initializes hidden without a loading flash, and closes on Escape, link selection or keyboard focus leaving the navigation. Opening and closing it preserves the article's scroll position.
-
-The search shortcut is shown by default: an icon at the far right of the desktop navigation and a text-only "Search" link before the last mobile menu item. Both lead to the homepage until search is implemented. Set `showSearchButton = false` under `[params]` to hide the shortcut.
-
-Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use, with a content-hashed entry URL to invalidate stale browser caches after upgrades; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
-
-## Reading and typography
-
-Articles use 16 px text and a reading measure of up to 720 px. The bundled
-Beauty.css foundation handles typography; Hugo adds language-aware spacing for
-Russian and English during the build, without changing Markdown files or running
-text-rewriting JavaScript in the browser. Set `typography = false` to opt out.
-See [reading and typography](docs/typography.md) for examples and fine-grained control.
-
-## Everyday configuration
-
-Most sites only need a few parameters:
-
-```toml
-[params]
-  favicon = "images/favicon.png"
-  avatar = "images/avatar.webp"
-  avatarHover = "images/avatar-hover.webp"
-  copyrightYear = 2024
-  recentSidebarCount = 8
-  socialSharing = true
-
-  [params.social]
-    telegram = "https://t.me/janedoe"
-    github = "https://github.com/janedoe"
-    email = "jane@example.com"
-```
-
-Posts use TOML front matter:
-
-```toml
-+++
-title = "My first post"
-date = 2026-08-17
-description = "A short summary for listings and search results."
-categories = ["notes"]
-pinned = false
-math = false
-mermaid = false
-+++
-```
-
-Set `hidden = true` to exclude a page from listings and feeds while keeping its
-URL public; use Hugo's `draft = true` to keep it unpublished. Set
-`date_precision = "month"` when only a publication month is known. See
-[content options](docs/content.md) for visibility, canonical URLs, categories,
-dates and printing.
-
-Recent articles appear beside posts when space allows, or below them on narrow
-screens; `recentSidebarCount = 0` hides the list. `backToTop = false` disables
-the back-to-top control on a page or site-wide. See [configuration](docs/configuration.md)
-for the complete parameter list and [customization](docs/customization.md) for
-share cards, custom headers, footer links and other extension points.
-
-Theme and language choices stay local by default. To share these preferences
-between a site and its subdomains, see [preference sharing](docs/configuration.md#shared-theme-and-language-preferences).
-
-## Optional integrations
-
-- **Multilingual sites:** per-language menus, translated interface strings, `hreflang`, a footer switcher for two languages or a menu for three or more, and internal Markdown links to available translations. Set `localizeLinks = false` to keep their original destinations.
-- **Telegram:** lazy-loaded comments plus build-time view and reaction counts.
-- **Math and diagrams:** per-page KaTeX and Mermaid switches.
-- **Analytics:** Yandex Metrika, Google Analytics, Plausible, and Umami; each is disabled unless configured.
-- **Customization:** color tokens, custom SVG menu icons, partial hooks, and named layout blocks.
+**Search:** The menu icon currently links to the homepage. Set `showSearchButton = false` under `[params]` to hide it.
 
 ## Documentation
 
-- [Configuration and multilingual setup](docs/configuration.md)
-- [Writing and organizing content](docs/content.md)
-- [Content components and advanced options](docs/advanced-features.md)
-- [Vercel one-click starter](starter/)
-- [Reading width and build-time typography](docs/typography.md)
-- [Customizing the theme](docs/customization.md)
-- [Telegram comments and reactions](docs/telegram.md)
-- [Deployment](docs/deployment.md)
-- [Maintaining vendored assets](docs/vendor-assets.md)
-- [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+- **Getting started:** [Configuration & languages](docs/configuration.md), [Deployment](docs/deployment.md), [Vercel starter](starter/).
+- **Writing:** [Content](docs/content.md), [Typography](docs/typography.md), [Advanced features](docs/advanced-features.md).
+- **Customizing:** [Theme](docs/customization.md), [Telegram](docs/telegram.md), [Bundled assets](docs/vendor-assets.md).
+- **Project:** [Changelog](CHANGELOG.md), [Contributing](CONTRIBUTING.md).
 
-Found a bug or have an idea? [Open an issue](https://github.com/zavarovkv/hugo-mini/issues).
-If Mini helps you publish, a [GitHub star](https://github.com/zavarovkv/hugo-mini) makes it easier for other writers to discover the theme.
+[Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)
 
 ## License
 

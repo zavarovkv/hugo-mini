@@ -32,6 +32,7 @@ All parameters are optional unless your site content depends on them.
 | `copyrightYear` | Starting year of the footer range | current year |
 | `newPostDays` | Age window for the New badge | `30` |
 | `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
+| `showSearchButton` | Show a search shortcut in navigation (currently opens the homepage); `false` hides it | `true` |
 | `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
 | `preferenceCookieDomain` | Share explicit theme/language preferences with subdomains of this parent host | unset |
