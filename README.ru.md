@@ -8,21 +8,20 @@
   <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
 </p>
 
-Минималистичная тема Hugo для личного блога, в котором главное — текст.
+**Минималистичная тема Hugo для личных блогов.** Меньше настроек — больше времени на тексты.
 
-Аккуратная типографика на основе [Beauty.css](https://github.com/zavarovkv/beauty-css), светлая и темная темы, несколько языков и SEO. Все основные файлы загружаются с вашего сайта. Для сборки нужен только Hugo, без Node.js.
+Аккуратная типографика на основе [Beauty.css](https://github.com/zavarovkv/beauty-css), удобное чтение на любом экране, светлое и темное оформление. Несколько языков, SEO, RSS и JSON Feed доступны сразу. Для сборки нужен только Hugo: без Node.js и обязательных внешних сервисов.
 
 **[Демо](https://hugo-mini-demo.vercel.app/)** · **[Быстрый старт](#быстрый-старт)** · **[Каталог тем Hugo](https://themes.gohugo.io/themes/hugo-mini/)** · **[Документация](#документация)**
 
 [![Hugo Mini — компьютерная и мобильная версии в светлом и темном оформлении](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v4.gif)](https://hugo-mini-demo.vercel.app/)
 
-## Возможности
+## Почему Mini
 
-- **Для чтения.** Аккуратная типографика, колонка текста до 720 px и адаптивная верстка.
-- **Быстрая загрузка.** Стили, скрипты и шрифты включены в тему и загружаются с вашего сайта.
-- **Готово к публикации.** Несколько языков, SEO, RSS, JSON Feed и кнопки «Поделиться».
-- **По желанию.** Формулы, диаграммы, комментарии Telegram и аналитика.
-- **Простая настройка.** Цвета, меню и шаблоны можно менять без правки кода темы.
+- **Текст на первом месте.** Продуманная типографика и колонка до 720 px.
+- **Ничего лишнего.** Адаптивная верстка; шрифты, стили и скрипты загружаются с вашего сайта.
+- **Все для публикации.** Светлая и темная темы, несколько языков, SEO, RSS и JSON Feed.
+- **Только нужные функции.** Настройка цветов и меню; формулы, диаграммы, комментарии Telegram, кнопки «Поделиться» и аналитика — по желанию.
 
 ## Быстрый старт
 
@@ -64,18 +63,15 @@ hugo server -D
 
 Откройте `http://localhost:1313/`. Смотрите [пример сайта](exampleSite/) и [установку через Hugo Modules](docs/configuration.md#installation).
 
-**Поиск:** кнопка в меню пока ведет на главную страницу. Чтобы ее скрыть, установите `showSearchButton = false` в `[params]`.
-
 ## Документация
 
-Подробные руководства пока доступны на английском:
+Руководства на английском:
 
-- **Начало работы:** [Настройка и языки](docs/configuration.md), [Публикация сайта](docs/deployment.md), [Шаблон Vercel](starter/).
-- **Статьи:** [Контент](docs/content.md), [Типографика](docs/typography.md), [Дополнительные возможности](docs/advanced-features.md).
-- **Оформление:** [Настройка темы](docs/customization.md), [Telegram](docs/telegram.md), [Встроенные библиотеки](docs/vendor-assets.md).
-- **Проект:** [История изменений](CHANGELOG.md), [Участие в разработке](CONTRIBUTING.md).
+- [Установка и языки](docs/configuration.md) · [Публикация сайта](docs/deployment.md) · [Написание статей](docs/content.md)
+- [Типографика](docs/typography.md) · [Настройка темы](docs/customization.md) · [Дополнительные возможности](docs/advanced-features.md)
+- [Telegram](docs/telegram.md) · [Ресурсы темы](docs/vendor-assets.md) · [История изменений](CHANGELOG.md)
 
-[Сообщить об ошибке](https://github.com/zavarovkv/hugo-mini/issues) · [Поставить звезду на GitHub](https://github.com/zavarovkv/hugo-mini)
+[Сообщить об ошибке](https://github.com/zavarovkv/hugo-mini/issues) · [Участвовать в разработке](CONTRIBUTING.md) · [Поставить звезду на GitHub](https://github.com/zavarovkv/hugo-mini)
 
 ## Лицензия
 

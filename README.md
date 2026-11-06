@@ -8,21 +8,20 @@
   <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
 </p>
 
-A minimal Hugo theme for personal blogs, built around reading.
+**A minimal Hugo theme for personal blogs.** Less setup, more writing.
 
-Clean typography powered by [Beauty.css](https://github.com/zavarovkv/beauty-css), light and dark modes, multilingual support, SEO, and self-hosted assets. Just Hugo — no Node.js build step.
+Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beauty-css), a calm reading experience on every screen, and light and dark modes. Multilingual support, SEO, and feeds are built in. Just Hugo to build your blog — no Node.js or required external services.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
 [![Hugo Mini — desktop and mobile preview cycling between light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v4.gif)](https://hugo-mini-demo.vercel.app/)
 
-## Features
+## Why Mini?
 
-- **Made for reading.** Clean typography, a 720 px text column, and a responsive layout.
-- **Fast by default.** CSS, JavaScript, and fonts are bundled and served from your site.
-- **Ready to publish.** Multilingual navigation, SEO metadata, RSS, JSON Feed, and sharing.
-- **Extras when needed.** Math, diagrams, Telegram comments, and analytics are optional.
-- **Easy to customize.** Change colors, menus, and templates without modifying the theme.
+- **Focus on writing.** Readable typography and a quiet 720 px text column.
+- **Stay lightweight.** Responsive layout, with fonts, CSS, and JavaScript served from your site.
+- **Publish out of the box.** Light and dark modes, multiple languages, SEO, RSS, and JSON Feed.
+- **Add only what you need.** Customize colors and menus; opt into math, diagrams, Telegram comments, sharing, and analytics.
 
 ## Quick start
 
@@ -64,16 +63,13 @@ hugo server -D
 
 Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Modules setup](docs/configuration.md#installation).
 
-**Search:** The menu icon currently links to the homepage. Set `showSearchButton = false` under `[params]` to hide it.
-
 ## Documentation
 
-- **Getting started:** [Configuration & languages](docs/configuration.md), [Deployment](docs/deployment.md), [Vercel starter](starter/).
-- **Writing:** [Content](docs/content.md), [Typography](docs/typography.md), [Advanced features](docs/advanced-features.md).
-- **Customizing:** [Theme](docs/customization.md), [Telegram](docs/telegram.md), [Bundled assets](docs/vendor-assets.md).
-- **Project:** [Changelog](CHANGELOG.md), [Contributing](CONTRIBUTING.md).
+- [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md) · [Writing posts](docs/content.md)
+- [Typography](docs/typography.md) · [Customization](docs/customization.md) · [Optional features](docs/advanced-features.md)
+- [Telegram](docs/telegram.md) · [Bundled assets](docs/vendor-assets.md) · [Changelog](CHANGELOG.md)
 
-[Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)
+[Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Contribute](CONTRIBUTING.md) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)
 
 ## License
 

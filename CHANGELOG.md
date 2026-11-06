@@ -12,11 +12,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
 
 ### Changed
-- Condense both README translations to a focused feature overview, quick start, and documentation links; document the default search shortcut in the configuration guide.
-- Refine the English and Russian README copy with a clearer writer-first introduction, concise feature benefits, and more natural Russian explanations.
+- Focus both README translations on a minimal personal blog for writers, with clear benefits and a short path to the first post; document the search shortcut in the configuration guide.
 - Keep balanced wrapping for page titles while restoring natural line breaks in article section headings through the shared Beauty.css foundation.
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
-- Streamline the README around setup, key capabilities and documentation links, with detailed preference sharing guidance in the configuration guide.
 
 ### Fixed
 - Use an absolute image URL in both README versions so the animated preview renders in the Hugo Themes gallery.
