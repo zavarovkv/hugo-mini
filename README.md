@@ -88,7 +88,7 @@ Explore [content components and advanced options](docs/advanced-features.md). Fe
 
 Without JavaScript, mobile navigation remains visible as ordinary links. The overlay initializes hidden without a loading flash, and closes on Escape, link selection or keyboard focus leaving the navigation. Opening and closing it preserves the article's scroll position.
 
-To preview the upcoming search placement, set `showSearchButton = true` under `[params]`. This adds a search icon at the far right of the desktop navigation and a text-only "Search" link before the last mobile menu item. Both link to the homepage until search is implemented.
+The search shortcut is shown by default: an icon at the far right of the desktop navigation and a text-only "Search" link before the last mobile menu item. Both lead to the homepage until search is implemented. Set `showSearchButton = false` under `[params]` to hide the shortcut.
 
 Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use, with a content-hashed entry URL to invalidate stale browser caches after upgrades; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
 

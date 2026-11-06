@@ -78,6 +78,18 @@ weight = 1
     const robots = await readFile(join(output, "robots.txt"), "utf8");
     assert.match(robots, /^User-agent: \*/);
     assert.ok(robots.includes(`Sitemap: ${baseURL}sitemap.xml`), "robots advertises the root multilingual sitemap, including a base path");
+    for (const [langPath, label] of [["", "Search"], ["ru/", "Поиск"]]) {
+      const home = await readFile(join(output, langPath, "index.html"), "utf8");
+      const links = [...home.matchAll(/(<a\b[^>]*class="search-toggle search-toggle-(mobile|desktop)"[^>]*>)([\s\S]*?)<\/a>/g)];
+      assert.equal(links.length, 2, "search is enabled by default on desktop and mobile");
+      for (const [, tag] of links) {
+        assert.equal(attribute(tag, "href"), `${basePath}${langPath}`, "search links to the current language homepage");
+      }
+      const mobile = links.find((link) => link[2] === "mobile");
+      const desktop = links.find((link) => link[2] === "desktop");
+      assert.ok(mobile[3].includes(label) && !mobile[3].includes("<svg"), "mobile search is text-only");
+      assert.ok(desktop[3].includes("<svg"), "desktop search keeps the Octicon");
+    }
     for (const [langPath, monthLabel, exactLabel] of [["", "February 2001", "2 January 2000"], ["ru/", "февраль 2001", "2 января 2000"]]) {
       const monthlyPost = await readFile(join(output, langPath, "hidden/index.html"), "utf8");
       const date = [...monthlyPost.matchAll(/<time\b[^>]*>([^<]+)<\/time>/g)].find((match) => match[1] === monthLabel)?.[0];
@@ -169,9 +181,10 @@ weight = 1
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const originalLinks = await readFile(join(output, "ru/shared/index.html"), "utf8");
     assert.ok(originalLinks.includes(`${baseURL}shared/?mode=1#intro`), "localizeLinks=false must preserve the destination");
-    await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true"));
+    await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true\nshowSearchButton = false"));
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const sharingPost = await readFile(join(output, "ru/shared/index.html"), "utf8");
+    assert.ok(!sharingPost.includes("search-toggle"), "a site can hide the default search shortcut");
     const sharingAssets = [...sharingPost.matchAll(/<(?:link|script)\b[^>]*>/g)]
       .map(([tag]) => ({ url: attribute(tag, "src") || attribute(tag, "href"), integrity: attribute(tag, "integrity") }))
       .filter(({ url }) => url?.includes("/likely/"));

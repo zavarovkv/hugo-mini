@@ -7,7 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
-- Add an opt-in search placeholder linking to the homepage: a right-aligned footer-style GitHub Octicon on desktop and a text-only mobile menu entry before the final navigation link.
+- Add a default-on search shortcut linking to the homepage: a right-aligned footer-style GitHub Octicon on desktop and a text-only mobile menu entry before the final navigation link. It can be hidden with `showSearchButton = false`.
 - Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
 
 ### Changed
