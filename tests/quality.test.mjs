@@ -216,17 +216,15 @@ socialSharing=false
   assert.match(await adjusted.read('blog/short/index.html'), /data-reading-progress/);
 });
 
-test('edge-to-edge reading progress preserves safe content and menu gutters', async () => {
+test('mobile reading progress keeps its top surface out of the header and article text', async () => {
   const head = await readFile(join(theme, 'layouts/baseof.html'), 'utf8');
   const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
-  assert.match(head, /name="viewport" content="[^"]*viewport-fit=cover"/);
-  for (const side of ['top', 'right', 'bottom', 'left']) {
-    assert.match(css, new RegExp(`padding-${side}: calc\\(20px \\+ env\\(safe-area-inset-${side}, 0px\\)\\)`),
-      `${side} content gutter should preserve 20px inside the safe area`);
-  }
-  assert.match(css, /\.main-nav\.menu-ready\s*\{[^}]*padding: calc\(80px \+ env\(safe-area-inset-top, 0px\)\)/);
+  assert.doesNotMatch(head, /viewport-fit=cover/, 'avoid changing the whole site for a reading aid');
   assert.match(css, /\.reading-progress\s*\{\s*position: fixed;\s*inset: 0 0 auto;/);
   assert.match(css, /\.reading-progress-fill\s*\{[^}]*background: var\(--color-primary\)/);
+  assert.match(css, /@media \(max-width: 768px\)\s*\{\s*\.reading-progress\s*\{\s*height: 24px;\s*background: var\(--background-color\);/);
+  assert.match(css, /\.reading-progress:not\(\.is-reading\)\s*\{\s*visibility: hidden;/);
+  assert.match(css, /\.reading-progress-fill\s*\{\s*position: absolute;\s*bottom: 0;\s*height: 2px;/);
 });
 
 test('RSS needs no social accounts and sitemap priorities follow mainSections', async (t) => {

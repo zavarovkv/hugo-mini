@@ -581,6 +581,10 @@
 
       var scrollY = window.scrollY || window.pageYOffset || 0;
       var start = rect.top + scrollY;
+      // The phone-sized opaque bar must not cover the header before the
+      // reader reaches the article. Desktop keeps the original slim marker.
+      if (scrollY > start) progress.classList.add('is-reading');
+      else progress.classList.remove('is-reading');
       // Reach 100% when the article's last line enters the viewport; ignore
       // sharing buttons, Telegram comments and the footer below the article.
       var fraction = Math.max(0, Math.min(1,

@@ -10,7 +10,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Show an unobtrusive, accessible progress line on long blog posts, measured against article content rather than comments or footer; configurable per site or page and hidden on short viewports.
 
 ### Fixed
-- Place the reading line at the physical top edge on edge-to-edge devices while keeping text and mobile navigation within the safe area, without model-specific offsets.
+- Keep mobile reading progress on a slim opaque surface so Safari's translucent status area and scrolling article do not compete with the line, without changing the site's viewport behavior.
 
 ## [3.5.0] — 2026-11-06
 

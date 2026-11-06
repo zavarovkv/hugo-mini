@@ -246,6 +246,7 @@ test('reading progress follows only the article and coalesces scroll updates', (
   assert.equal(bar.hidden, false);
   assert.equal(bar.getAttribute('aria-valuenow'), '0');
   assert.equal(fill.style.transform, 'scaleX(0)');
+  assert.equal(bar.classList.contains('is-reading'), false, 'mobile surface should not cover the header');
 
   p.window.scrollY = 1000;
   p.window.dispatchEvent(new Event('scroll'));
@@ -254,12 +255,18 @@ test('reading progress follows only the article and coalesces scroll updates', (
   frames.shift()();
   assert.equal(fill.style.transform, 'scaleX(0.5)');
   assert.equal(bar.getAttribute('aria-valuenow'), '50');
+  assert.equal(bar.classList.contains('is-reading'), true);
 
   p.window.scrollY = 1800;
   p.window.dispatchEvent(new Event('scroll'));
   frames.shift()();
   assert.equal(fill.style.transform, 'scaleX(1)', 'progress ends with the last article line');
   assert.equal(bar.getAttribute('aria-valuenow'), '100');
+
+  p.window.scrollY = 0;
+  p.window.dispatchEvent(new Event('scroll'));
+  frames.shift()();
+  assert.equal(bar.classList.contains('is-reading'), false, 'returning above the article uncovers the header');
 
   height = 900;
   p.window.dispatchEvent(new Event('resize'));

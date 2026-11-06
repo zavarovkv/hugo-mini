@@ -146,12 +146,6 @@
   body {
     margin: auto;
     padding: 20px;
-    /* With viewport-fit=cover, preserve the usual 20px gutter *inside* the
-       device's safe area, including in landscape and below the home bar. */
-    padding-top: calc(20px + env(safe-area-inset-top, 0px));
-    padding-right: calc(20px + env(safe-area-inset-right, 0px));
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    padding-left: calc(20px + env(safe-area-inset-left, 0px));
     max-width: var(--width);
     text-align: left;
     box-sizing: content-box;
@@ -546,9 +540,9 @@
     padding-top: 0;
   }
 
-  /* Thin reading marker at the physical viewport edge, above the safe area
-     on edge-to-edge devices. No track, easing or extra paint while idle. Its
-     width follows the article, not the comments and footer below it. */
+  /* Thin reading marker. On phones an opaque, narrow top surface prevents
+     the scrolling article from crossing the indicator and gives Safari a
+     solid surface to sample for its translucent status area. No easing. */
   .reading-progress {
     position: fixed;
     inset: 0 0 auto;
@@ -567,6 +561,23 @@
     opacity: 0.7;
     transform: scaleX(0);
     transform-origin: left center;
+  }
+
+  @media (max-width: 768px) {
+    .reading-progress {
+      height: 24px;
+      background: var(--background-color);
+    }
+
+    /* Show the surface only after the article reaches the top; otherwise it
+       would cover the header while the reader is still above the post. */
+    .reading-progress:not(.is-reading) { visibility: hidden; }
+
+    .reading-progress-fill {
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+    }
   }
 
   body.menu-open .reading-progress { visibility: hidden; }
@@ -910,12 +921,7 @@
       right: 0;
       bottom: 0;
       background-color: var(--background-color);
-      /* The full-screen menu must stay below the sensor housing too; its
-         links retain their existing 80px separation from the viewport edge. */
-      padding: calc(80px + env(safe-area-inset-top, 0px))
-               env(safe-area-inset-right, 0px)
-               calc(20px + env(safe-area-inset-bottom, 0px))
-               env(safe-area-inset-left, 0px);
+      padding: 80px 0 20px;
       z-index: 1000;
       overflow-x: hidden;
       overflow-y: auto;
