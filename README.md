@@ -45,6 +45,7 @@ Hugo Extended 0.146 or newer is required.
 ```bash
 hugo new site myblog
 cd myblog
+git init
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 ```
 

@@ -28,8 +28,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   favicon    = "images/favicon.png"
   # favicon192     = "images/favicon-192.png"
   # appleTouchIcon = "images/apple-touch-icon.png"
-  authorName = "Jane Doe"
-  authorURL  = "https://example.com/"
+  authorName = "Jane Doe"  # fictitious example author
+  authorURL  = ""          # no real profile in the public demo
 
   # Appearance
   avatar      = "images/avatar.svg"
@@ -63,17 +63,10 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # umamiSrc          = "https://cloud.umami.is/script.js"    # override for self-hosted
 
   [params.author]
-    jobTitle = "Product Manager"
+    jobTitle = "Writer"
 
   [params.social]
-    telegram  = "https://t.me/janedoe"
-    linkedin  = "https://linkedin.com/in/janedoe"
-    github    = "https://github.com/janedoe"
-    x         = "https://x.com/janedoe"
-    youtube   = "https://youtube.com/@janedoe"
-    facebook  = "https://facebook.com/janedoe"
-    instagram = "https://instagram.com/janedoe"
-    email     = "jane@example.com"
+    github = "https://github.com/zavarovkv/hugo-mini"
 
 [markup]
   [markup.goldmark]
@@ -99,12 +92,10 @@ ignoreErrors    = ["error-disable-taxonomy"]
         url        = "/about/"
         weight     = 2
       [[languages.en.menu.main]]
-        identifier = "telegram"
-        name       = "Subscribe"
-        url        = "https://t.me/pmgen"
+        identifier = "source"
+        name       = "Source code"
+        url        = "https://github.com/zavarovkv/hugo-mini"
         weight     = 3
-        [languages.en.menu.main.params]
-          icon = "telegram"
 
   [languages.ru]
     weight = 2
@@ -124,9 +115,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
         url        = "/ru/about/"
         weight     = 2
       [[languages.ru.menu.main]]
-        identifier = "telegram"
-        name       = "Подписаться"
-        url        = "https://t.me/pmgen"
+        identifier = "source"
+        name       = "Исходный код"
+        url        = "https://github.com/zavarovkv/hugo-mini"
         weight     = 3
-        [languages.ru.menu.main.params]
-          icon = "telegram"

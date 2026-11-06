@@ -15,5 +15,5 @@ description = "Пример отдельной страницы в теме Mini
 {{< callout >}}Лучшие темы — те, которые не мешают контенту говорить самому за себя.{{< /callout >}}
 
 <div class="beauty-fine-print">
-Jane Doe, продакт-менеджер
+Jane Doe, автор блога
 </div>

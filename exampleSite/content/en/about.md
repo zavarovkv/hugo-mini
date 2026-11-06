@@ -15,5 +15,5 @@ Any standard Markdown and shortcodes work here, just like in blog posts.
 {{< callout >}}The best themes are the ones that get out of your way and let the content speak for itself.{{< /callout >}}
 
 <div class="beauty-fine-print">
-Jane Doe, Product Manager
+Jane Doe, Writer
 </div>

@@ -2,5 +2,6 @@
 /resources/_gen/
 .hugo_build.lock
 .DS_Store
+.vercel/
 exampleSite/public/
 exampleSite/resources/_gen/
