@@ -748,7 +748,7 @@
     white-space: nowrap;
   }
 
-  /* Search is a non-interactive placeholder until a search index is added. */
+  /* Desktop search stays in the header; mobile gets a text-only menu entry. */
   .search-toggle-mobile { display: none; }
 
   /* Mobile menu toggle button (burger) */
@@ -770,8 +770,7 @@
   /* Icon controls own their geometry; Beauty's text buttons have larger targets. */
   .mobile-menu-toggle,
   .copy-btn,
-  .theme-toggle,
-  .search-toggle {
+  .theme-toggle {
     min-block-size: 0;
     font: revert;
   }
@@ -915,35 +914,8 @@
       border-top: 1px solid var(--color-divider);
     }
 
-    /* Same mobile menu rhythm as the links, immediately before the CTA. */
-    .main-nav .search-toggle-mobile {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 18px 20px;
-      font: inherit;
-      font-size: 1.1rem;
-      text-align: left;
-      color: var(--color-muted);
-      background: transparent;
-      border: 0;
-      border-bottom: 1px solid var(--color-divider);
-      border-radius: 0;
-      opacity: 1;
-      cursor: default;
-    }
-
-    .main-nav .search-toggle-mobile:first-child {
-      border-top: 1px solid var(--color-divider);
-    }
-
-    .search-toggle-mobile svg {
-      width: 20px;
-      height: 20px;
-      flex: none;
-    }
+    /* The search link uses the same typography and spacing as menu links. */
+    .main-nav .search-toggle-mobile { display: block; }
 
     /* Current-page link has `border-bottom: none` globally — put the
        divider back so it keeps the rhythm of the overlay list. */
@@ -1289,11 +1261,15 @@
 
   .search-toggle-desktop {
     flex: none;
-    opacity: 1;
-    cursor: default;
+    text-decoration: none;
   }
 
-  .search-toggle-desktop .search-label { display: none; }
+  .search-toggle-desktop:hover {
+    color: var(--color-primary);
+    border-color: var(--color-control-border-hover);
+  }
+
+  .search-toggle-desktop:active { transform: scale(0.95); }
 
   .search-toggle-desktop svg {
     display: block;
