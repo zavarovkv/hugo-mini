@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add an opt-in, disabled search-button placeholder: a right-aligned footer-style icon on desktop and a mobile menu row before the final navigation entry, using GitHub Octicons.
 - Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
 
 ### Changed

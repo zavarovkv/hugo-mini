@@ -11,7 +11,14 @@
   on a single element rather than two copies of the same SVG in the markup.
 */ -}}
 {{- $currentPath := strings.TrimSuffix "/" .RelPermalink -}}
-{{ range .Site.Menus.main }}
+{{- $entries := .Site.Menus.main | default (slice) -}}
+{{- $count := len $entries -}}
+{{ range $index, $entry := $entries }}
+  {{- /* The final menu entry is commonly a CTA. Keep search just before it
+         on mobile; on desktop the control lives at the header's right edge. */ -}}
+  {{- if and $.Site.Params.showSearchButton (gt $count 1) (eq $index (sub $count 1)) -}}
+    {{- partial "search-button.html" (dict "variant" "mobile") -}}
+  {{- end -}}
   {{- $isExternal := or (hasPrefix .URL "http://") (hasPrefix .URL "https://") -}}
   {{- $isActive := false -}}
   {{- if not $isExternal -}}
@@ -38,4 +45,7 @@
   {{- if $isActive -}}{{- $class = ` class="link-selected" aria-current="page"` -}}{{- end -}}
   {{- if $isExternal -}}{{- $class = ` target="_blank" rel="noopener noreferrer"` -}}{{- end -}}
   <a href="{{ .URL }}"{{ $class | safeHTMLAttr }}>{{ $icon }}<span class="nav-label beauty-link-label">{{ .Name }}</span></a>
+{{- end }}
+{{- if and .Site.Params.showSearchButton (le $count 1) -}}
+  {{- partial "search-button.html" (dict "variant" "mobile") -}}
 {{- end }}

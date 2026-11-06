@@ -748,6 +748,9 @@
     white-space: nowrap;
   }
 
+  /* Search is a non-interactive placeholder until a search index is added. */
+  .search-toggle-mobile { display: none; }
+
   /* Mobile menu toggle button (burger) */
   .mobile-menu-toggle {
     display: none;
@@ -767,7 +770,8 @@
   /* Icon controls own their geometry; Beauty's text buttons have larger targets. */
   .mobile-menu-toggle,
   .copy-btn,
-  .theme-toggle {
+  .theme-toggle,
+  .search-toggle {
     min-block-size: 0;
     font: revert;
   }
@@ -909,6 +913,36 @@
 
     .main-nav a:first-child {
       border-top: 1px solid var(--color-divider);
+    }
+
+    /* Same mobile menu rhythm as the links, immediately before the CTA. */
+    .main-nav .search-toggle-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 18px 20px;
+      font: inherit;
+      font-size: 1.1rem;
+      text-align: left;
+      color: var(--color-muted);
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--color-divider);
+      border-radius: 0;
+      opacity: 1;
+      cursor: default;
+    }
+
+    .main-nav .search-toggle-mobile:first-child {
+      border-top: 1px solid var(--color-divider);
+    }
+
+    .search-toggle-mobile svg {
+      width: 20px;
+      height: 20px;
+      flex: none;
     }
 
     /* Current-page link has `border-bottom: none` globally — put the
@@ -1234,8 +1268,9 @@
   .lang-option:focus-visible { background: var(--color-divider); }
   .lang-option[aria-current="page"] { color: var(--color-secondary); }
 
-  /* Theme toggle button — circle with border */
-  .theme-toggle {
+  /* Shared outline icon control for the footer and desktop search. */
+  .theme-toggle,
+  .search-toggle-desktop {
     display: grid;
     place-items: center;
     box-sizing: border-box;
@@ -1246,9 +1281,24 @@
     border: 0.5px solid var(--color-control-border);
     border-radius: 50%;
     color: var(--color-muted);
-    cursor: pointer;
     overflow: hidden;
     transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .theme-toggle { cursor: pointer; }
+
+  .search-toggle-desktop {
+    flex: none;
+    opacity: 1;
+    cursor: default;
+  }
+
+  .search-toggle-desktop .search-label { display: none; }
+
+  .search-toggle-desktop svg {
+    display: block;
+    width: 16px;
+    height: 16px;
   }
 
   .theme-toggle:hover {
@@ -1337,6 +1387,7 @@
 
   /* Larger touch targets for mobile footer */
   @media (max-width: 768px) {
+    .search-toggle-desktop { display: none; }
     .social-icons { gap: 16px; }
     .social-icon svg { width: 20px; height: 20px; }
     .footer-controls { gap: 10px; }

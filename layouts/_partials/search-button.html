@@ -1,0 +1,9 @@
+{{- /* Temporary, accessible search control; intentionally no search behavior yet. */ -}}
+{{- $label := i18n "search" | default "Search" -}}
+{{- $soon := i18n "search_coming_soon" | default "Coming soon" -}}
+{{- with resources.Get "icons/search.svg" -}}
+<button type="button" class="search-toggle search-toggle-{{ $.variant }}" disabled aria-label="{{ $label }} — {{ $soon }}" title="{{ $label }} — {{ $soon }}">
+  <span class="search-label">{{ $label }}</span>
+  {{ .Content | safeHTML }}
+</button>
+{{- end -}}

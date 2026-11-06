@@ -134,6 +134,12 @@ other = "Скопировано"
 [toggle_menu]
 other = "Открыть или закрыть меню"
 
+[search]
+other = "Поиск"
+
+[search_coming_soon]
+other = "скоро появится"
+
 [copy_section_link]
 other = "Скопировать ссылку на раздел"
 

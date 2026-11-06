@@ -21,4 +21,7 @@
   </a>
   {{ partial "menu-toggle.html" . }}
   <nav class="main-nav" id="main-navigation">{{- partial "nav.html" . -}}</nav>
+  {{- if .Site.Params.showSearchButton }}
+  {{ partial "search-button.html" (dict "variant" "desktop") }}
+  {{- end }}
 </div>
