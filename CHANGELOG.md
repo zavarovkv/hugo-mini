@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.4.0] — 2026-11-06
+
 ### Added
 - Add a neutral, automatically buildable Vercel demo of the existing bilingual `exampleSite`, with a pinned and SHA-256-verified Hugo Extended binary.
 - Add opt-in shared theme/language preferences for a configured parent domain; remember explicit language choices on homepages and marked landing pages while preserving direct article URLs.
