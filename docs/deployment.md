@@ -53,3 +53,19 @@ The example site's source configuration retains `https://example.com/` for
 local builds and CI; the Vercel build passes its actual hostname with
 `--baseURL`. The demo shows neutral example content with no author-specific
 Telegram links or analytics.
+
+### One-click blog starter on Vercel
+
+For a blog you can customize, use the [Deploy to Vercel button](../starter/README.md).
+Vercel clones only the `starter/` subdirectory into a new repository in your
+account. This is separate from the public, read-only example site above.
+
+The starter's `scripts/setup-theme.sh` clones an exact Hugo Mini release and
+checks its commit SHA. Its Vercel build script downloads Hugo Extended from the
+official release, verifies SHA-256, then builds the site. The generated theme
+and output directories are ignored by Git. Edit the starter's `hugo.toml`,
+homepage, and first post before sharing the site.
+
+For correct absolute canonical URLs, enable Vercel system environment variables
+or set your own domain in `hugo.toml`. The build falls back to site-root
+relative URLs when the Vercel hostname is unavailable.

@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Added
+- Add a Vercel one-click starter with an editable blog, a pinned and verified Hugo Mini release, and reproducible Hugo Extended builds.
+- Add a custom social preview card and its editable vector source for sharing the project.
+
+### Changed
+- Put installation and the Deploy to Vercel button near the top of the README; move optional shortcode details into a separate guide.
+
 ## [3.4.0] — 2026-11-06
 
 ### Added

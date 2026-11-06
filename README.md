@@ -11,7 +11,7 @@ Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram inte
 The reading foundation comes from [Beauty.css](https://github.com/zavarovkv/beauty-css), pinned and
 bundled locally with the theme's own styles. No additional installation is required.
 
-**[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Quick start](#quick-start)** · **[Documentation](#documentation)**
+**[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Deploy to Vercel](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Quick start](#quick-start)** · **[Documentation](#documentation)**
 
 ![Hugo Mini theme preview](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/screenshot.png)
 
@@ -22,25 +22,15 @@ bundled locally with the theme's own styles. No additional installation is requi
 - **Useful without a plugin stack.** Dark mode, multilingual navigation, feeds, search metadata, math, diagrams, and sharing are included.
 - **Easy to grow.** Design tokens, template hooks, named blocks, and custom menu icons cover common extensions.
 
-Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. Optional `archive` and `archiveLabel` parameters add a link below the list. See [content options](docs/content.md) for details.
-
-The [`project` shortcode](docs/content.md#projects) displays a linked project name and a short description in the same minimal style. Optional `beauty-note` source links sit close to their description, with a larger gap between projects.
-
-Custom pages can use the [`loading-skeleton` state](docs/customization.md#loading-values) while fetching inline values; it preserves content space and follows the active theme.
-
-[Reading lists](docs/content.md#reading-lists) display site-owned book data in a compact two-column table with ordinary blog typography. Titles and authors can be localized while reading dates, ratings and review references remain shared. Recent book additions can update the New badge on both the book and its collection article.
-
-Add [`github-stars`](docs/content.md#github-stars) inside a description for a GitHub link with a subtle star count, fetched before the build and rendered without browser requests.
-
-Use [`columns` and `column`](docs/content.md#columns) to place content blocks side by side on desktop and stack them on mobile.
-
-Use [`wavy-arrow`](docs/content.md#wavy-arrow) for a thin inline SVG arrow between dates or other text.
-
-Set [`params.notFoundYoda = true`](docs/configuration.md#parameters) for an illustrated 404 page with a character-scan animation that respects reduced-motion preferences. The decorative figure fits the page without an internal scroll area.
-
 ## Quick start
 
-Hugo Extended 0.146 or newer is required.
+**One-click starter on Vercel** — creates a new repository with an editable blog and deploys it automatically:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
+
+[View the starter files](starter/) · [How the one-click setup works](starter/README.md)
+
+**Or set it up locally** with Hugo Extended 0.146 or newer:
 
 ```bash
 hugo new site myblog
@@ -92,7 +82,7 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 | Discovery | Open Graph images, JSON-LD, `hreflang`, RSS, JSON Feed, `llms.txt` |
 | Integrations | Telegram comments and reactions, social sharing, optional analytics |
 
-Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
+Explore [content components and advanced options](docs/advanced-features.md). Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
 
 Without JavaScript, mobile navigation remains visible as ordinary links. The overlay initializes hidden without a loading flash, and closes on Escape, link selection or keyboard focus leaving the navigation.
 
@@ -222,6 +212,8 @@ An empty or omitted `categories` list places a post in Miscellaneous. Set `recen
 
 - [Configuration and multilingual setup](https://github.com/zavarovkv/hugo-mini/blob/main/docs/configuration.md)
 - [Writing and organizing content](https://github.com/zavarovkv/hugo-mini/blob/main/docs/content.md)
+- [Content components and advanced options](https://github.com/zavarovkv/hugo-mini/blob/main/docs/advanced-features.md)
+- [Vercel one-click starter](https://github.com/zavarovkv/hugo-mini/tree/main/starter)
 - [Reading width and build-time typography](https://github.com/zavarovkv/hugo-mini/blob/main/docs/typography.md)
 - [Customizing the theme](https://github.com/zavarovkv/hugo-mini/blob/main/docs/customization.md)
 - [Telegram comments and reactions](https://github.com/zavarovkv/hugo-mini/blob/main/docs/telegram.md)
@@ -232,6 +224,8 @@ An empty or omitted `categories` list places a post in Miscellaneous. Set `recen
 ### Exclude a page from the sitemap
 
 The sitemap excludes `noindex = true` pages and draft previews automatically. Hidden posts remain indexable and included. Hugo's standard `[sitemap] disable = true` front matter setting can also omit an otherwise indexable page without changing its robots metadata.
+
+If Mini helps you publish, a [GitHub star](https://github.com/zavarovkv/hugo-mini) makes it easier for other writers to discover the theme.
 
 ## License
 
