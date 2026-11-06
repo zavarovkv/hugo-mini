@@ -540,9 +540,8 @@
     padding-top: 0;
   }
 
-  /* Thin reading marker. On phones an opaque, narrow top surface prevents
-     the scrolling article from crossing the indicator and gives Safari a
-     solid surface to sample for its translucent status area. No easing. */
+  /* Thin reading marker: no track, easing or extra paint while idle. Its
+     width follows the article, not the comments and footer below it. */
   .reading-progress {
     position: fixed;
     inset: 0 0 auto;
@@ -561,23 +560,6 @@
     opacity: 0.7;
     transform: scaleX(0);
     transform-origin: left center;
-  }
-
-  @media (max-width: 768px) {
-    .reading-progress {
-      height: 24px;
-      background: var(--background-color);
-    }
-
-    /* Show the surface only after the article reaches the top; otherwise it
-       would cover the header while the reader is still above the post. */
-    .reading-progress:not(.is-reading) { visibility: hidden; }
-
-    .reading-progress-fill {
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-    }
   }
 
   body.menu-open .reading-progress { visibility: hidden; }

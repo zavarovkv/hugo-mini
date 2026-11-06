@@ -99,10 +99,10 @@ fit smaller screens. Beauty.css owns the shared typography; the theme sets its
 reading-width token and supplies the layout and self-hosted Inter fonts.
 
 Posts with at least 800 words show a discreet 2 px reading-progress line at
-the top of the viewport. On narrow screens, a matching opaque surface keeps
-the line separate from the scrolling text; it appears once reading starts.
-The line follows the article itself (not comments or the footer) and stays
-hidden when the article is too short for meaningful scrolling.
+the top of the viewport. The line follows the article itself (not comments
+or the footer) and stays hidden when the article is too short for meaningful
+scrolling. It is also omitted on iPhone Safari 26 because of its fixed-position
+behavior near the translucent status area; other browsers retain the feature.
 The indicator uses the existing script and theme colors, with no animation or
 additional dependencies. Disable it per post with `readingProgress = false` in
 front matter, or for the whole site under `[params]`. Set

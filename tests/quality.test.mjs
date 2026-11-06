@@ -216,15 +216,13 @@ socialSharing=false
   assert.match(await adjusted.read('blog/short/index.html'), /data-reading-progress/);
 });
 
-test('mobile reading progress keeps its top surface out of the header and article text', async () => {
+test('reading progress keeps its two-pixel marker without changing the page viewport', async () => {
   const head = await readFile(join(theme, 'layouts/baseof.html'), 'utf8');
   const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
   assert.doesNotMatch(head, /viewport-fit=cover/, 'avoid changing the whole site for a reading aid');
-  assert.match(css, /\.reading-progress\s*\{\s*position: fixed;\s*inset: 0 0 auto;/);
+  assert.match(css, /\.reading-progress\s*\{\s*position: fixed;\s*inset: 0 0 auto;\s*height: 2px;/);
   assert.match(css, /\.reading-progress-fill\s*\{[^}]*background: var\(--color-primary\)/);
-  assert.match(css, /@media \(max-width: 768px\)\s*\{\s*\.reading-progress\s*\{\s*height: 24px;\s*background: var\(--background-color\);/);
-  assert.match(css, /\.reading-progress:not\(\.is-reading\)\s*\{\s*visibility: hidden;/);
-  assert.match(css, /\.reading-progress-fill\s*\{\s*position: absolute;\s*bottom: 0;\s*height: 2px;/);
+  assert.doesNotMatch(css, /\.reading-progress:not\(\.is-reading\)/);
 });
 
 test('RSS needs no social accounts and sitemap priorities follow mainSections', async (t) => {

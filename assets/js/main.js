@@ -560,6 +560,13 @@
   ready(function initReadingProgress() {
     var progress = document.querySelector('[data-reading-progress]');
     if (!progress) return;
+    // Safari 26 on iPhone can position fixed bars below the translucent
+    // status area, over scrolling text. This is a narrow compatibility guard,
+    // not a general mobile exception. Safari's iOS 26 UA freezes the OS token
+    // at 18.x, so match the Safari Version/26 token instead.
+    var ua = (window.navigator && window.navigator.userAgent) || '';
+    if (/\biPhone\b/.test(ua) && /\bVersion\/26(?:\.\d+)?\b/.test(ua) &&
+        /\bSafari\//.test(ua) && !/\b(?:CriOS|FxiOS|EdgiOS|OPiOS)\//.test(ua)) return;
     var article = document.querySelector('main article');
     if (!article) return;
     var fill = progress.querySelector('.reading-progress-fill');
@@ -581,10 +588,6 @@
 
       var scrollY = window.scrollY || window.pageYOffset || 0;
       var start = rect.top + scrollY;
-      // The phone-sized opaque bar must not cover the header before the
-      // reader reaches the article. Desktop keeps the original slim marker.
-      if (scrollY > start) progress.classList.add('is-reading');
-      else progress.classList.remove('is-reading');
       // Reach 100% when the article's last line enters the viewport; ignore
       // sharing buttons, Telegram comments and the footer below the article.
       var fraction = Math.max(0, Math.min(1,
