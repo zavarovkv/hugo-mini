@@ -15,10 +15,10 @@ from PIL import Image, ImageDraw
 from playwright.sync_api import sync_playwright
 
 
-CANVAS = (1020, 550)
+CANVAS = (1020, 575)
 DESKTOP = (22, 24, 770, 457)
-PHONE = (770, 55, 214, 464)
-TOP_SAFE_AREA = 26
+PHONE = (753, 35, 238, 517)
+TOP_SAFE_AREA = 29
 
 
 def capture(url: str) -> dict[str, dict[str, Image.Image]]:
@@ -29,8 +29,8 @@ def capture(url: str) -> dict[str, dict[str, Image.Image]]:
             for mode in ("light", "dark"):
                 shots[mode] = {}
                 for device, width, height in (
-                    ("desktop", 1050, 623),
-                    ("phone", 390, 798),
+                    ("desktop", 1050, 595),
+                    ("phone", 390, 800),
                 ):
                     is_phone = device == "phone"
                     context = browser.new_context(
@@ -101,8 +101,8 @@ def frame(shots: dict[str, Image.Image], mode: str) -> Image.Image:
     result.alpha_composite(rounded(inside, 24), (px, py))
     paint = ImageDraw.Draw(result)
     paint.rounded_rectangle(
-        (px + pw // 2 - 30, py + 6, px + pw // 2 + 30, py + 19),
-        radius=7, fill="#070809",
+        (px + pw // 2 - 34, py + 7, px + pw // 2 + 34, py + 22),
+        radius=8, fill="#070809",
     )
     return result
 
