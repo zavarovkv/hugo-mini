@@ -8,12 +8,11 @@
   <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
 </p>
 
-A writer-first Hugo theme for fast, multilingual personal blogs.
+A lightweight Hugo theme for personal blogs where the writing comes first.
 
-Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram integration — without a frontend framework.
+Clean typography, dark mode, multilingual navigation, SEO, and optional Telegram comments. A standard Hugo build is enough — no frontend framework or Node.js build step required.
 
-The reading foundation comes from [Beauty.css](https://github.com/zavarovkv/beauty-css), pinned and
-bundled locally with the theme's own styles. No additional installation is required.
+Typography is built on [Beauty.css](https://github.com/zavarovkv/beauty-css). A pinned version is already bundled with the theme, so there is nothing extra to install.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
@@ -21,12 +20,12 @@ bundled locally with the theme's own styles. No additional installation is requi
 
 ## Why Mini
 
-- **Made for reading.** The interface stays out of the way and gives articles room to breathe.
-- **Fast by default.** CSS, JavaScript, and fonts are bundled, fingerprinted, and served from your domain.
-- **Useful without a plugin stack.** Dark mode, multilingual navigation, feeds, search-engine metadata, math, diagrams, and sharing are included.
-- **Easy to grow.** Design tokens, template hooks, named blocks, and custom menu icons cover common extensions.
+- **Reading comes first.** A quiet layout keeps the focus on your words.
+- **Fast without extra setup.** Styles, scripts, and fonts are served from your own domain with cache-friendly file names.
+- **Useful features included.** Dark mode, languages, feeds, SEO metadata, math, diagrams, and sharing are ready to use.
+- **Room to customize.** Adjust colors, menus, and templates through theme settings and extension hooks.
 
-Mini is for text-led blogs and personal sites, rather than magazine homepages or application-style interfaces.
+Mini is made for personal sites and text-led blogs, not magazine homepages or app-like interfaces.
 
 ## Quick start
 
@@ -149,7 +148,7 @@ the back-to-top control on a page or site-wide. See [configuration](docs/configu
 for the complete parameter list and [customization](docs/customization.md) for
 share cards, custom headers, footer links and other extension points.
 
-Color choices stay local by default. To share theme and language preferences
+Theme and language choices stay local by default. To share these preferences
 between a site and its subdomains, see [preference sharing](docs/configuration.md#shared-theme-and-language-preferences).
 
 ## Optional integrations
