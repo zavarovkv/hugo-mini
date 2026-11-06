@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add a neutral, automatically buildable Vercel demo of the existing bilingual `exampleSite`, with a pinned and SHA-256-verified Hugo Extended binary.
 - Add opt-in shared theme/language preferences for a configured parent domain; remember explicit language choices on homepages and marked landing pages while preserving direct article URLs.
 - Add a reusable `loading-skeleton` state for unknown inline values, with a compact placeholder and reduced-motion support.
 - Allow custom page templates to replace the site's favicon links through a dedicated `favicon` block.
