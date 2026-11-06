@@ -1,3 +1,2 @@
-{{- /* Keep the original source independent of Chroma's line-number markup. */ -}}
 {{- $result := transform.HighlightCodeBlock . -}}
-<div class="code-block" data-code="{{ .Inner }}">{{ $result.Wrapped }}</div>
+<div class="code-block">{{ $result.Wrapped }}</div>

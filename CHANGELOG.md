@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+## [3.5.0] — 2026-11-06
+
 ### Added
 - Add a Vercel one-click starter with an editable blog, a pinned and verified Hugo Mini release, and reproducible Hugo Extended builds.
 - Add a custom social preview card and its editable vector source for sharing the project.
@@ -17,6 +19,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Include complete plain-text post content in JSON Feed items, with optional fields omitted when unset.
 
 ### Fixed
+- Copy highlighted code directly from Chroma's rendered lines, excluding inline and table line numbers without duplicating the source in HTML attributes.
+- Remove three obsolete README preview animations; keep only the currently referenced GIF.
+- Show the RSS footer link even when no social accounts or email are configured.
+- Wrap long Open Graph image titles within the card, scale very long titles and cap overflowing text with an ellipsis.
+- Apply sitemap post priority to all configured `mainSections`, not only the default `blog` section.
 - Use natural wrapping for every Beauty.css paragraph on narrow screens, including content outside articles, while preserving desktop typography.
 - Let Hugo reject unsafe Markdown link and image URL schemes instead of explicitly marking every destination safe.
 - Restore the original reading position after closing the mobile menu, including through Escape, focus change and responsive resizing.

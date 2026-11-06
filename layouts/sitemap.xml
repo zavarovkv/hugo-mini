@@ -4,6 +4,7 @@
   {{- $pages = where $pages "Draft" "ne" true -}}
   {{- range where $pages "Params.noindex" "ne" true }}
   {{- $dates := partial "page-dates.html" . -}}
+  {{- $isPost := and .IsPage (in (site.Params.mainSections | default (slice "blog")) .Type) -}}
   <url>
     <loc>{{ .Permalink }}</loc>
     {{- if not $dates.modified.IsZero }}
@@ -15,7 +16,7 @@
     {{- else if eq .Kind "section" }}
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    {{- else if eq .Type "blog" }}
+    {{- else if $isPost }}
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     {{- else }}

@@ -1,0 +1,51 @@
+{{- /* Fit a heading inside the 1200x630 OG card, keeping its original 52px
+       typography for ordinary titles. Split long words only when necessary. */ -}}
+{{- $title := . | replaceRE "\\s+" " " | strings.TrimSpace -}}
+{{- $size := 52 -}}
+{{- $length := strings.RuneCount $title -}}
+{{- if gt $length 160 -}}
+  {{- $size = 42 -}}
+{{- else if gt $length 90 -}}
+  {{- $size = 46 -}}
+{{- end -}}
+{{- /* The content area starts at x=80; leave ample room before the right edge. */ -}}
+{{- $maxWidth := div 960.0 (float $size) -}}
+{{- $lines := slice -}}
+{{- $line := "" -}}
+{{- $lineWidth := 0.0 -}}
+{{- range split $title " " -}}
+  {{- $wordWidth := partial "og-text-width.html" . -}}
+  {{- if and $line (gt (add $lineWidth 0.31 $wordWidth) $maxWidth) -}}
+    {{- $lines = $lines | append $line -}}
+    {{- $line = "" -}}
+    {{- $lineWidth = 0.0 -}}
+  {{- end -}}
+  {{- if $line -}}
+    {{- $line = printf "%s " $line -}}
+    {{- $lineWidth = add $lineWidth 0.31 -}}
+  {{- end -}}
+  {{- range split . "" -}}
+    {{- $charWidth := partial "og-text-width.html" . -}}
+    {{- if and $line (gt (add $lineWidth $charWidth) $maxWidth) -}}
+      {{- $lines = $lines | append $line -}}
+      {{- $line = "" -}}
+      {{- $lineWidth = 0.0 -}}
+    {{- end -}}
+    {{- $line = printf "%s%s" $line . -}}
+    {{- $lineWidth = add $lineWidth $charWidth -}}
+  {{- end -}}
+{{- end -}}
+{{- if $line }}{{ $lines = $lines | append $line }}{{ end -}}
+{{- $maxLines := 5 -}}
+{{- if gt (len $lines) $maxLines -}}
+  {{- $visible := first (sub $maxLines 1) $lines -}}
+  {{- $last := index $lines (sub $maxLines 1) -}}
+  {{- $ellipsisWidth := partial "og-text-width.html" "…" -}}
+  {{- range seq 1 5 -}}
+    {{- if gt (add (partial "og-text-width.html" $last) $ellipsisWidth) $maxWidth -}}
+      {{- $last = strings.SliceString $last 0 (sub (strings.RuneCount $last) 1) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $lines = $visible | append (printf "%s…" (strings.TrimSpace $last)) -}}
+{{- end -}}
+{{- return (dict "text" (delimit $lines "\n") "size" $size) -}}

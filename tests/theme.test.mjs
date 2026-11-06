@@ -153,9 +153,9 @@ weight = 1
     assert.ok(englishPost.includes(`${basePath}ru/shared/?mode=2#intro`), "explicit language-prefixed post links must retain their requested language and fragment");
     assert.ok(!post.includes("id=recent-sidebar") && !post.includes('id="recent-sidebar"'));
     assert.ok(!post.includes("has-hover-avatar"), "one avatar must not enable two-frame styles");
-    const copied = [...post.matchAll(/<div\b[^>]*\bdata-code=(?:"[^"]*"|'[^']*')[^>]*>/g)].map((m) => attribute(m[0], "data-code"));
-    assert.equal(copied.length, 2);
-    for (const source of copied) assert.equal(source.trimEnd(), code.trimEnd());
+    const renderedBlocks = [...post.matchAll(/<div\b[^>]*\bclass=(?:"code-block"|code-block)[^>]*>/g)].map(([tag]) => tag);
+    assert.equal(renderedBlocks.length, 2);
+    for (const tag of renderedBlocks) assert.equal(attribute(tag, "data-code"), undefined, "highlighted source must not be duplicated in HTML attributes");
     const ogTag = [...post.matchAll(/<meta\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "property") === "og:image");
     const ogURL = attribute(ogTag, "content");
     const blocks = [...post.matchAll(/<script\b[^>]*type=(?:"application\/ld\+json"|'application\/ld\+json'|application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));

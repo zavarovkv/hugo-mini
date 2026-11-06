@@ -145,6 +145,38 @@ test('math renders inside main only on opted-in pages, with a safe missing-libra
   assert.doesNotThrow(() => page({ math: true }).start());
 });
 
+test('copying highlighted code excludes inline and table line numbers', async () => {
+  const source = 'if ready:\n    print("<hello> & goodbye")';
+  for (const mode of ['plain', 'inline', 'table']) {
+    const p = page();
+    const copied = [];
+    let button;
+    p.window.navigator.clipboard = { writeText: async (value) => { copied.push(value); } };
+    p.window.setTimeout = () => 1;
+    p.document.createElement = () => Object.assign(element(), {
+      querySelector: () => element(),
+    });
+    const lines = [
+      { textContent: '1if ready:\n', lastElementChild: { textContent: 'if ready:\n' } },
+      { textContent: '2    print("<hello> & goodbye")', lastElementChild: { textContent: '    print("<hello> & goodbye")' } },
+    ];
+    const code = {
+      textContent: mode === 'inline' ? '1if ready:\n2    print("<hello> & goodbye")' : source,
+      querySelectorAll: () => mode === 'plain' ? [] : lines,
+    };
+    const block = {
+      querySelector: (selector) => selector === 'code[data-lang]' ? code : (mode === 'table' ? { textContent: '1\n2\n' } : code),
+      appendChild: (node) => { button = node; },
+    };
+    p.document.querySelectorAll = (selector) => selector === '.highlight' ? [block] : [];
+    p.start();
+    assert.ok(button, `${mode}: copy button is present`);
+    button.dispatchEvent(new Event('click'));
+    await Promise.resolve();
+    assert.deepEqual(copied, [source], `${mode}: only the original text is copied`);
+  }
+});
+
 test('mobile heading links remain available when the Clipboard API is absent', () => {
   const p = page();
   const heading = element();

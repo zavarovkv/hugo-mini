@@ -12,7 +12,8 @@
     {{- $title = $author -}}
     {{- $subtitle = .Site.Params.description | default .Site.Title -}}
   {{- end -}}
-  {{- $image = $base.Filter (images.Text $title (dict "color" "#ffffff" "size" 52 "linespacing" 8 "x" 80 "y" 80 "font" $bold)) -}}
+  {{- $heading := partial "og-title-layout.html" $title -}}
+  {{- $image = $base.Filter (images.Text $heading.text (dict "color" "#ffffff" "size" $heading.size "linespacing" 8 "x" 80 "y" 80 "font" $bold)) -}}
   {{- $image = $image.Filter (images.Text $subtitle (dict "color" "#888888" "size" 24 "x" 80 "y" 540 "font" $regular)) -}}
   {{- $basePath := (urls.Parse .Site.BaseURL).Path -}}
   {{- $pagePath := strings.TrimPrefix $basePath .RelPermalink | strings.TrimPrefix "/" | strings.TrimSuffix ".html" -}}

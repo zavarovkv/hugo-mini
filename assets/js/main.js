@@ -324,10 +324,15 @@
     var FEEDBACK_MS = 1500;
 
     document.querySelectorAll('.highlight').forEach(function (block) {
-      var code = block.querySelector('code');
+      // Chroma's table mode puts line numbers in a separate <code> first.
+      var code = block.querySelector('code[data-lang]') || block.querySelector('code');
       if (!code) return;
-      var wrapper = block.closest('.code-block[data-code]');
-      var source = wrapper ? wrapper.getAttribute('data-code') : code.textContent;
+      // In inline mode, the first child of each line is its number. Read the
+      // last child instead; the source stays in the page only once.
+      var lines = code.querySelectorAll(':scope > span[style*="display:flex"], :scope > span.line');
+      var source = lines.length
+        ? Array.from(lines, function (line) { return line.lastElementChild ? line.lastElementChild.textContent : line.textContent; }).join('')
+        : code.textContent;
       var btn = document.createElement('button');
       btn.className = 'copy-btn';
       btn.type = 'button';

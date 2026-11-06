@@ -1,0 +1,19 @@
+{{- /* Approximate Inter Bold glyph widths in em for OG-image line breaking.
+       Counting runes alone overflows on wide capitals and wastes space on narrow text. */ -}}
+{{- $width := 0.0 -}}
+{{- range split . "" -}}
+  {{- $em := 0.70 -}}
+  {{- if eq . " " -}}
+    {{- $em = 0.31 -}}
+  {{- else if in "MW@%&МШЩЖЮЫФ" . -}}
+    {{- $em = 1.05 -}}
+  {{- else if in "mwмшщжюыфцдъДЦЪ" . -}}
+    {{- $em = 0.90 -}}
+  {{- else if in "ilIftjr|.,:;!‘’'`" . -}}
+    {{- $em = 0.36 -}}
+  {{- else if in "ABCDEFGHKLNOPQRSTUVXYZАБВГЕЗИКЛНОПРСТУХЧЭЯ" . -}}
+    {{- $em = 0.76 -}}
+  {{- end -}}
+  {{- $width = add $width $em -}}
+{{- end -}}
+{{- return $width -}}

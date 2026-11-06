@@ -11,7 +11,7 @@ const hugoVersion = execFileSync(process.env.HUGO_BIN || 'hugo', ['version'], { 
 const [, major, minor] = hugoVersion.match(/v(\d+)\.(\d+)\./) || [];
 const languageLabelKey = Number(major) > 0 || Number(minor) >= 158 ? 'label' : 'languageName';
 
-async function site(t, config, content) {
+async function site(t, config, content, templates = {}) {
   const root = await mkdtemp(join(tmpdir(), 'hugo-mini-quality-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, 'themes'));
@@ -22,9 +22,15 @@ async function site(t, config, content) {
     await mkdir(dirname(filename), { recursive: true });
     await writeFile(filename, source);
   }
+  for (const [name, source] of Object.entries(templates)) {
+    const filename = join(root, 'layouts', name);
+    await mkdir(dirname(filename), { recursive: true });
+    await writeFile(filename, source);
+  }
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source', root, '--minify', '--panicOnWarning'], { stdio: 'pipe' });
   return {
     read: (name) => readFile(join(root, 'public', name), 'utf8'),
+    readBytes: (name) => readFile(join(root, 'public', name)),
   };
 }
 
@@ -174,4 +180,71 @@ test('recent-posts sidebar remains visible until JavaScript places it in the rai
   const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
   assert.match(css, /\.recent-sidebar\s*\{\s*display:\s*block;/);
   assert.match(css, /\.recent-sidebar\.is-sidebar\s*\{\s*margin-top:\s*0;/);
+});
+
+test('RSS needs no social accounts and sitemap priorities follow mainSections', async (t) => {
+  const example = await site(t, `baseURL="https://example.org/"
+title="Minimal blog"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params]
+mainSections=["writing"]
+`, {
+    'writing/post.md': '+++\ntitle="A post"\ndate=2026-01-01\n+++\nText.',
+    'notes/page.md': '+++\ntitle="Another page"\ndate=2026-01-01\n+++\nText.',
+  });
+
+  const home = await example.read('index.html');
+  assert.match(home, /class=social-icons>\s*<a\b[^>]*class="?social-icon social-rss"?/, 'a sole RSS icon must render without social links');
+  assert.match(home, /href=https:\/\/example\.org\/index\.xml/);
+  assert.doesNotMatch(home, /social-(telegram|github|email)/);
+
+  const sitemap = await example.read('sitemap.xml');
+  const post = sitemap.match(/<url>\s*<loc>https:\/\/example\.org\/writing\/post\/<\/loc>([\s\S]*?)<\/url>/)?.[1];
+  const note = sitemap.match(/<url>\s*<loc>https:\/\/example\.org\/notes\/page\/<\/loc>([\s\S]*?)<\/url>/)?.[1];
+  assert.ok(post, 'the custom-section post is in the sitemap');
+  assert.ok(note, 'other regular pages are in the sitemap');
+  assert.match(post, /<priority>0\.7<\/priority>/, 'main section posts keep the expected priority');
+  assert.match(note, /<priority>0\.5<\/priority>/, 'standalone pages retain their lower priority');
+});
+
+test('OG headings fit their card, including Cyrillic and long unbroken titles', async (t) => {
+  const titles = new Map([
+    ['short', 'A quiet corner of the web'],
+    ['russian', 'Как создать удобный и быстрый блог без лишних отвлекающих элементов и сложных настроек'],
+    ['wide', 'W'.repeat(130)],
+    ['long', 'A very long article title with many different words about simplicity and design. '.repeat(5).trim()],
+  ]);
+  const content = Object.fromEntries([...titles].map(([slug, title]) => [
+    `blog/${slug}.md`, `+++\ntitle=${JSON.stringify(title)}\ndate=2026-01-01\n+++\n{{< check-og-title >}}`,
+  ]));
+  const example = await site(t, `baseURL="https://example.org/"
+title="Open Graph"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+`, content, {
+    '_shortcodes/check-og-title.html': '{{- $layout := partial "og-title-layout.html" .Page.Title -}}<pre id="og-size">{{ $layout.size }}</pre><pre id="og-lines">{{ $layout.text }}</pre>',
+  });
+
+  for (const [slug, title] of titles) {
+    const html = await example.read(`blog/${slug}/index.html`);
+    const size = Number(html.match(/<pre id=og-size>(\d+)<\/pre>/)?.[1]);
+    const wrapped = html.match(/<pre id=og-lines>([\s\S]*?)<\/pre>/)?.[1];
+    assert.ok(wrapped, `${slug}: exposes the computed title layout`);
+    const lines = wrapped.split('\n');
+    assert.ok(lines.length <= 5, `${slug}: title must stay within the five-line area`);
+    assert.ok(lines.every((line) => line.length > 0), `${slug}: no blank lines`);
+    if (slug === 'short') {
+      assert.equal(size, 52, 'ordinary headings retain the established size');
+      assert.equal(wrapped, title);
+    } else {
+      assert.ok(lines.length >= 2, `${slug}: long headings wrap`);
+    }
+    if (slug === 'russian') assert.equal(lines.join(' ').replace(/\s+/g, ' '), title, 'Cyrillic words stay intact');
+    if (slug === 'long') assert.ok(wrapped.endsWith('…'), 'overflowing headings end in an ellipsis');
+    const png = await example.readBytes(`blog/${slug}/og.png`);
+    assert.equal(png.subarray(1, 4).toString(), 'PNG', `${slug}: rendered a PNG image`);
+    assert.equal(png.readUInt32BE(16), 1200);
+    assert.equal(png.readUInt32BE(20), 630);
+  }
 });

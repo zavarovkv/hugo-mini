@@ -27,7 +27,7 @@
 {{- $email := $social.email -}}
 
 <div class="footer-bar">
-  {{ if or $hasBrand $email }}
+  {{ if or $hasBrand $email .rss }}
   <div class="social-icons">
     {{- range $brands }}
       {{- $brand := . -}}
