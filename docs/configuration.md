@@ -1,6 +1,6 @@
 # Configuration
 
-Hugo Mini requires Hugo Extended 0.146 or newer. The [example configuration](https://github.com/zavarovkv/hugo-mini/blob/main/exampleSite/hugo.toml) is the complete reference.
+Hugo Mini requires Hugo Extended 0.146 or newer. The [example configuration](../exampleSite/hugo.toml) is the complete reference.
 
 ## Installation
 
@@ -69,6 +69,35 @@ geometry and avoid loading ELK solely because of Mermaid 12's changed defaults. 
 the site's light/dark setting. Individual diagrams can override these defaults through Mermaid's
 own configuration. A self-hosted Mermaid 12 package requires Node.js 22.12+ to install and
 ES2024-capable browsers (Safari 17.4+); the theme's pinned Mermaid 11 fallback is unchanged.
+
+## Shared theme and language preferences
+
+By default, an explicit light/dark choice is saved in the current origin's local
+storage, and language links navigate normally. To share choices between a site
+and its subdomains, opt in on **each** site:
+
+```toml
+[params]
+  preferenceCookieDomain = "example.com"
+  rememberLanguage = true
+```
+
+Shared `hugo-mini-theme` and `hugo-mini-language` cookies take precedence over
+older local storage. An existing explicit choice migrates when no shared choice
+exists; automatic system colors are never saved as a fixed theme. Cookies use
+the configured parent domain, a one-year lifetime, `SameSite=Lax`, and `Secure`
+on HTTPS. Local storage remains the fallback when cookies are unavailable or
+the page is on another host, such as a local preview.
+
+With `rememberLanguage`, the footer saves explicit language selections.
+Homepages apply the selection using their published, same-origin `hreflang`
+links. Set `languagePreferenceEntry = true` in a landing page's front matter or
+cascade to give it the same behavior. Direct article URLs retain their
+language; simply opening a translated URL does not save a preference. Query
+strings and fragments survive an automatic entry-page redirect. Theme and
+entry-page language preferences refresh when returning to an open tab or
+restoring a page from browser history. Without JavaScript, language links
+still work as ordinary links.
 
 ## Multilingual sites
 

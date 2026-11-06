@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Added
+- Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
+
+### Changed
+- Streamline the README around setup, key capabilities and documentation links, with detailed preference sharing guidance in the configuration guide.
+
+### Fixed
+- Correct outdated CSS variable names in the customization guide and example article; show how to load site overrides after the theme stylesheet.
+
 ## [3.5.0] — 2026-11-06
 
 ### Added

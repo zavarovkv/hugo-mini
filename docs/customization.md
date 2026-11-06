@@ -8,21 +8,33 @@ Override design tokens in your site's CSS instead of copying the theme styleshee
 
 ```css
 :root {
-  --color-text: #202124;
-  --color-link: #1769aa;
-  --color-background: #ffffff;
+  --text-color: #202124;
+  --color-primary: #1769aa;
+  --color-primary-border: rgba(23, 105, 170, 0.35);
+  --background-color: #ffffff;
   --color-divider: #e5e7eb;
   --color-control-border: #d1d5db;
 }
 
 :root[data-theme="dark"] {
-  --color-text: #e5e7eb;
-  --color-link: #7dd3fc;
-  --color-background: #111827;
+  --text-color: #e5e7eb;
+  --color-primary: #7dd3fc;
+  --color-primary-border: rgba(125, 211, 252, 0.35);
+  --background-color: #111827;
 }
 ```
 
-The full token list is at the top of [`assets/css/main.css`](https://github.com/zavarovkv/hugo-mini/blob/main/assets/css/main.css).
+Place the CSS in your site's `assets/css/custom.css` and load it **after** the
+theme stylesheet using `layouts/_partials/custom_head.html`:
+
+```go-html-template
+{{ with resources.Get "css/custom.css" }}
+  {{ $css := . | minify | fingerprint "sha256" }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ end }}
+```
+
+The full token list is in [`assets/css/main.css`](../assets/css/main.css).
 
 ## Menu icons
 

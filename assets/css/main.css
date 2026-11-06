@@ -1493,3 +1493,90 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* Print the writing, not the interface. Beauty.css already supplies the
+     typographic print rules (widows, heading breaks and wrapped code); these
+     overrides only handle theme components and explicit dark-mode colors. */
+  @media print {
+    @page { margin: 18mm; }
+
+    :root,
+    :root[data-theme="dark"] {
+      color-scheme: light;
+      --background-color: #fff;
+      --heading-color: #111;
+      --text-color: #222;
+      --color-primary: #222;
+      --color-secondary: #555;
+      --color-divider: #bbb;
+      --color-callout-bg: #fff;
+      --color-code-bg: #fff;
+      --beauty-background: #fff;
+      --beauty-text: #222;
+      --beauty-heading: #111;
+      --beauty-link: #222;
+      --beauty-muted: #555;
+      --beauty-border: #bbb;
+      --beauty-surface: #fff;
+      --beauty-font-size: 11pt;
+      --beauty-h1-size: 22pt;
+      --beauty-h1-margin: 0 0 0.75em;
+    }
+
+    html,
+    body { overflow: visible !important; }
+
+    body {
+      position: static !important;
+      box-sizing: border-box;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body > header { margin: 0 0 1.75rem; padding: 0; }
+    .header-container { display: block; position: static; }
+    .title,
+    .title:link,
+    .title:visited { display: inline; --beauty-link-decoration: none; }
+    .title .title-text { color: #555; font-size: 9pt; }
+    .title-first-name { display: inline; }
+
+    .title-avatar-container,
+    .main-nav,
+    .mobile-menu-toggle,
+    body > footer,
+    .likely,
+    #tg-comments,
+    .recent-sidebar,
+    .back-to-top-wrap,
+    .copy-btn,
+    .heading-anchor,
+    .tg-views,
+    .tg-reactions { display: none !important; }
+
+    main { margin: 0; padding: 0; }
+    article.beauty-reading { max-inline-size: none; }
+
+    /* Keep the publication date as a quiet source note after the article. */
+    .post-meta-inline { margin-top: 1.5rem; font-size: 9pt; }
+    .post-meta-inline .post-date { color: #555; }
+
+    main img,
+    main figure,
+    main tr { break-inside: avoid-page; }
+    main img { max-height: 240mm; object-fit: contain; }
+
+    /* Scroll containers cannot scroll on paper. Let wide code wrap instead. */
+    .highlight,
+    .code-block,
+    .beauty-scroll,
+    .katex-display,
+    pre { overflow: visible !important; }
+
+    [data-theme="dark"] .highlight pre,
+    [data-theme="dark"] .highlight table {
+      background: #fff !important;
+      color: #222 !important;
+    }
+  }

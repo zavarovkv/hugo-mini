@@ -54,7 +54,8 @@ Use tokens in site-specific CSS rather than copying the shared typography:
 
 ```css
 :root {
-  --color-link: #0060a0;
+  --color-primary: #0060a0;
+  --color-primary-border: rgba(0, 96, 160, 0.35);
   --color-accent: #b73700;
 }
 ```
