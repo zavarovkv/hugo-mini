@@ -61,6 +61,14 @@ documented in `docs/vendor-assets.md`.
    Check the example pages on mobile and desktop, in both color schemes and with keyboard navigation.
 4. Open a pull request with a clear description
 
+### README translations
+
+`README.md` (English) and `README.ru.md` (Russian) are maintained together.
+**Every README change must update all language versions in the same commit**,
+including links, badges, screenshots, commands, examples, and feature descriptions.
+Keep both language switchers working. Other documentation under `docs/` is
+currently in English.
+
 ## Reporting Issues
 
 Please include Hugo version (`hugo version`), a minimal reproduction case, and expected vs. actual behavior.

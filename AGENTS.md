@@ -77,7 +77,8 @@ For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 
 ## Documentation and Releases
 
-- Update `README.md` when public setup, configuration, behavior, or supported versions change.
+- Update every README translation when public setup, configuration, behavior, or supported versions change.
+- Keep `README.md` (English) and `README.ru.md` (Russian) synchronized in the same commit whenever either README changes. Apply every content, link, badge, screenshot, example, and version update to **all existing README languages**, preserving their meaning and language switchers; never update only one translation.
 - Update `CHANGELOG.md` for user-visible changes.
 - Follow `CONTRIBUTING.md` for contribution conventions.
 - `.github/RELEASE_TAG` triggers tag and GitHub release creation on `main`; change it only when a release is explicitly requested.

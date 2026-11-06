@@ -4,6 +4,10 @@
 [![Build](https://github.com/zavarovkv/hugo-mini/actions/workflows/test-example-site.yml/badge.svg)](https://github.com/zavarovkv/hugo-mini/actions/workflows/test-example-site.yml)
 [![License](https://img.shields.io/github/license/zavarovkv/hugo-mini)](https://github.com/zavarovkv/hugo-mini/blob/main/LICENSE)
 
+<p align="center">
+  <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
+</p>
+
 A writer-first Hugo theme for fast, multilingual personal blogs.
 
 Clean typography, self-hosted assets, dark mode, SEO, and optional Telegram integration — without a frontend framework.
