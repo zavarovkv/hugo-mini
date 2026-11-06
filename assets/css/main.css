@@ -151,10 +151,11 @@
     box-sizing: content-box;
   }
 
-  /* Keep readable gutters while giving narrow phone screens more room. */
+  /* On narrow screens, use ordinary line wrapping so prose fills each line
+     naturally. The decorative 'pretty' algorithm can leave uneven gaps. */
   @media (max-width: 600px) {
-    body {
-      padding-inline: 16px;
+    main article {
+      --beauty-text-wrap: wrap;
     }
   }
 
