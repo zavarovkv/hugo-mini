@@ -12,23 +12,32 @@
     "id" .Permalink
     "url" .Permalink
     "title" .Title
-    "content_text" (.Plain | truncate 500)
-    "summary" .Description
+    "content_text" (.Plain | htmlUnescape)
     "date_published" (.Date.Format "2006-01-02T15:04:05Z07:00")
     "date_modified" ($dates.modified.Format "2006-01-02T15:04:05Z07:00")
   -}}
+  {{- with partial "page-description.html" . -}}
+    {{- $item = merge $item (dict "summary" .) -}}
+  {{- end -}}
   {{- with .Params.categories -}}
     {{- $item = merge $item (dict "tags" .) -}}
   {{- end -}}
   {{- $items = $items | append $item -}}
 {{- end -}}
-{{- dict
+{{- $author := dict "name" (site.Params.authorName | default site.Title) -}}
+{{- with site.Params.authorURL -}}
+  {{- $author = merge $author (dict "url" .) -}}
+{{- end -}}
+{{- $feed := dict
   "version" "https://jsonfeed.org/version/1.1"
   "title" site.Title
   "home_page_url" site.Home.Permalink
   "feed_url" (.OutputFormats.Get "JSON").Permalink
-  "description" site.Params.description
   "language" $languageCode
-  "authors" (slice (dict "name" (site.Params.authorName | default site.Title) "url" site.Params.authorURL))
+  "authors" (slice $author)
   "items" $items
-| jsonify (dict "indent" "  ") -}}
+-}}
+{{- with site.Params.description -}}
+  {{- $feed = merge $feed (dict "description" (. | plainify | htmlUnescape)) -}}
+{{- end -}}
+{{- $feed | jsonify (dict "indent" "  ") -}}

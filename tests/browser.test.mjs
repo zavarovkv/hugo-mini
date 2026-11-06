@@ -12,13 +12,14 @@ function element(attributes = {}) {
     classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c), contains: (c) => classes.has(c), toggle: (c) => classes.has(c) ? classes.delete(c) : classes.add(c) },
     getAttribute: (name) => attributes[name] ?? null,
     setAttribute: (name, value) => { attributes[name] = value; },
+    style: { top: '' },
     querySelectorAll: () => [],
     contains(node) { return node === this; },
     focus() { this.focused = true; },
   });
 }
 
-function page({ saved, blocked = false, dark = false, mobile = true, math = false, ascii, reduced = false } = {}) {
+function page({ saved, blocked = false, dark = false, mobile = true, math = false, ascii, reduced = false, scrollY = 0 } = {}) {
   const root = element();
   const body = element({ 'data-back-to-top': 'false', 'data-math': String(math) });
   const toggle = element();
@@ -29,6 +30,7 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
   const motion = Object.assign(new EventTarget(), { matches: reduced });
   const art = ascii === undefined ? null : Object.assign(element(), { textContent: ascii });
   const intervals = new Map();
+  const scrollCalls = [];
   let intervalID = 0;
   const document = Object.assign(new EventTarget(), {
     documentElement: root, body, readyState: 'complete',
@@ -36,7 +38,8 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
     querySelectorAll: () => [], getElementById: () => null,
   });
   const window = Object.assign(new EventTarget(), {
-    document, navigator: {}, setTimeout, clearTimeout, scrollTo() {},
+    document, navigator: {}, setTimeout, clearTimeout, scrollY, pageYOffset: scrollY,
+    scrollTo(x, y) { scrollCalls.push([x, y]); this.scrollY = y; this.pageYOffset = y; },
     setInterval: (callback) => { intervals.set(++intervalID, callback); return intervalID; },
     clearInterval: (id) => intervals.delete(id),
     localStorage: { getItem() { if (blocked) throw new Error('Storage blocked'); return saved; } },
@@ -44,7 +47,7 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
   });
   window.window = window;
   runInNewContext(init, window);
-  return { window, document, root, body, toggle, nav, content, system, viewport, art, motion, intervals, start: () => runInNewContext(main, window) };
+  return { window, document, root, body, toggle, nav, content, system, viewport, art, motion, intervals, scrollCalls, start: () => runInNewContext(main, window) };
 }
 
 test('first paint resolves a saved or system scheme even with blocked storage', () => {
@@ -84,6 +87,26 @@ test('the mobile menu resets on a desktop breakpoint and stays closed on return'
   Object.defineProperty(escape, 'key', { value: 'Escape' });
   p.document.dispatchEvent(escape);
   assert.ok(p.toggle.focused);
+});
+
+test('opening and closing the mobile menu preserves the reading position', () => {
+  const p = page({ scrollY: 847 });
+  p.start();
+  p.toggle.dispatchEvent(new Event('click'));
+  assert.equal(p.body.style.top, '-847px');
+  assert.deepEqual(p.scrollCalls, [], 'opening must not jump to the top');
+
+  p.toggle.dispatchEvent(new Event('click'));
+  assert.equal(p.body.style.top, '');
+  assert.deepEqual(p.scrollCalls, [[0, 847]]);
+
+  p.window.scrollY = 1325;
+  p.window.pageYOffset = 1325;
+  p.toggle.dispatchEvent(new Event('click'));
+  p.viewport.matches = false;
+  p.viewport.dispatchEvent(new Event('change'));
+  assert.equal(p.body.style.top, '');
+  assert.deepEqual(p.scrollCalls.at(-1), [0, 1325], 'resizing must also restore scroll');
 });
 
 test('leaving the expanded navigation closes it without stealing focus from the page', () => {

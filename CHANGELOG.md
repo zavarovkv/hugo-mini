@@ -12,9 +12,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Changed
 - Put installation and the Deploy to Vercel button near the top of the README; move optional shortcode details into a separate guide.
+- Show recent articles below a post until the desktop viewport has room for a right-hand rail, including when JavaScript is unavailable.
+- Support any language pair in the compact footer switcher and show a native language menu for sites with three or more languages.
+- Include complete plain-text post content in JSON Feed items, with optional fields omitted when unset.
 
 ### Fixed
 - Use natural wrapping for every Beauty.css paragraph on narrow screens, including content outside articles, while preserving desktop typography.
+- Let Hugo reject unsafe Markdown link and image URL schemes instead of explicitly marking every destination safe.
+- Restore the original reading position after closing the mobile menu, including through Escape, focus change and responsive resizing.
+- Normalize descriptions shared by HTML metadata, JSON-LD and JSON Feed, removing HTML markup and double-escaped entities.
+- Restore readable muted-text contrast in light mode without altering the existing dark palette.
 
 ## [3.4.0] — 2026-11-06
 

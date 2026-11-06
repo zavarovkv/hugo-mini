@@ -15,15 +15,7 @@
 {{- $title := .Title | default site.Title -}}
 {{- $seo := partial "page-seo.html" . -}}
 {{- $isPost := and .IsPage (in (site.Params.mainSections | default (slice "blog")) .Type) -}}
-{{- $description := "" -}}
-{{- if .Description -}}
-  {{- $description = .Description -}}
-{{- else if .IsPage -}}
-  {{- $description = .Summary -}}
-{{- else -}}
-  {{- $description = site.Params.description -}}
-{{- end -}}
-{{- $description = $description | plainify | truncate 300 -}}
+{{- $description := partial "page-description.html" . -}}
 
 {{- /* OG locale comes from each language's own configuration (see
        og-locale.html) instead of a hardcoded en/ru pair, so a third language is

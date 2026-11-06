@@ -1,0 +1,29 @@
+{{- /* Translate the current page when possible, otherwise use that language's home. */ -}}
+{{- $page := . -}}
+{{- $options := slice -}}
+{{- range partialCached "sites.html" $page -}}
+  {{- $lang := .Language.Lang -}}
+  {{- $url := .Home.Permalink -}}
+  {{- $current := eq $lang $page.Language.Lang -}}
+  {{- if $current -}}
+    {{- $url = $page.Permalink -}}
+  {{- else -}}
+    {{- range $page.Translations -}}
+      {{- if eq .Language.Lang $lang -}}{{- $url = .Permalink -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $label := upper $lang -}}
+  {{- if ge hugo.Version "0.158.0" -}}
+    {{- $label = .Language.Label | default $label -}}
+  {{- else -}}
+    {{- $label = .Language.LanguageName | default $label -}}
+  {{- end -}}
+  {{- $options = $options | append (dict
+    "lang" $lang
+    "short" (upper $lang)
+    "label" $label
+    "url" $url
+    "current" $current
+  ) -}}
+{{- end -}}
+{{- return $options -}}

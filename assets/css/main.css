@@ -61,7 +61,7 @@
     --text-color: #444;
     --link-color: #0060a0;
     --blockquote-color: #222;
-    --color-muted: #9da2a6;
+    --color-muted: #6b737b;
     --color-secondary: #556677;
 
     /* Lines & borders */
@@ -475,6 +475,7 @@
   /* Dark palette — overrides the same token names declared at the top. */
   [data-theme="dark"] {
     color-scheme: dark;
+    --color-muted: #9da2a6;
     --color-primary: #6ab0e6;
     --color-accent: #ff7a40;
     --color-primary-border: rgba(106, 176, 230, 0.35);
@@ -1157,7 +1158,7 @@
     gap: 10px;
   }
 
-  /* Language toggle — pill button with grid swap */
+  /* Language control — compact pill for two languages, native menu for more. */
   .lang-toggle,
   .lang-toggle:link,
   .lang-toggle:visited,
@@ -1166,9 +1167,9 @@
     display: grid;
     place-items: center;
     box-sizing: border-box;
-    width: 42px;
+    min-width: 42px;
     height: 28px;
-    padding: 0;
+    padding: 0 9px;
     background: transparent;
     border: 0.5px solid var(--color-control-border);
     border-radius: 9999px;
@@ -1186,22 +1187,16 @@
   }
 
   .lang-label {
-    grid-area: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
     font-family: var(--font-main);
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.5px;
     color: var(--beauty-muted);
-    transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
-                opacity 0.25s ease,
-                color 0.2s ease;
+    transition: color 0.2s ease;
     pointer-events: none;
-  }
-
-  .lang-label-en {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
   }
 
   .lang-sparkle {
@@ -1214,30 +1209,39 @@
     transition: color 0.2s ease;
   }
 
-  /* Default: RU visible, EN hidden */
-  .lang-label-ru {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  .lang-label-en {
-    transform: translateY(8px);
-    opacity: 0;
-  }
+  .lang-toggle:hover .lang-label { color: var(--heading-color); }
 
-  /* When lang=en: swap */
-  .lang-toggle[data-lang="en"] .lang-label-ru {
-    transform: translateY(-8px);
-    opacity: 0;
+  .lang-menu { position: relative; }
+  .lang-menu > summary { list-style: none; }
+  .lang-menu > summary::-webkit-details-marker { display: none; }
+  .lang-menu-options {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 8px);
+    min-width: 8rem;
+    padding: 4px;
+    background: var(--background-color);
+    border: 1px solid var(--color-control-border);
+    border-radius: 6px;
+    z-index: 2;
   }
-  .lang-toggle[data-lang="en"] .lang-label-en {
-    transform: translateY(0);
-    opacity: 1;
+  .lang-option,
+  .lang-option:link,
+  .lang-option:visited {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 9px;
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    text-decoration: none;
+    border-bottom: none;
+    border-radius: 3px;
+    white-space: nowrap;
   }
-
-  /* Hover: only color the visible label */
-  .lang-toggle:hover .lang-label-ru { color: var(--heading-color); }
-  .lang-toggle[data-lang="en"]:hover .lang-label-ru { color: var(--color-muted); }
-  .lang-toggle[data-lang="en"]:hover .lang-label-en { color: var(--heading-color); }
+  .lang-option:hover,
+  .lang-option:focus-visible { background: var(--color-divider); }
+  .lang-option[aria-current="page"] { color: var(--color-secondary); }
 
   /* Theme toggle button — circle with border */
   .theme-toggle {
@@ -1348,7 +1352,7 @@
     .lang-toggle,
     .lang-toggle:link,
     .lang-toggle:visited,
-    .lang-toggle:active { width: 48px; height: 34px; }
+    .lang-toggle:active { min-width: 48px; height: 34px; }
     .lang-label { font-size: 0.7rem; }
     .theme-toggle { width: 34px; height: 34px; }
     .theme-toggle svg { width: 20px; height: 20px; }
@@ -1418,9 +1422,10 @@
     flex-shrink: 0;
   }
 
-  /* Recent posts sidebar — desktop: absolute in right gutter (JS); mobile: static block at bottom */
+  /* Recent posts remain readable below the article until a desktop rail fits. */
   .recent-sidebar {
-    display: none; /* JS shows on desktop; mobile media query overrides below */
+    display: block;
+    margin-top: var(--section-gap-large);
   }
 
   @media (max-width: 768px) {
@@ -1439,6 +1444,7 @@
 
   /* Desktop sidebar styles (applied via JS inline) */
   .recent-sidebar.is-sidebar {
+    margin-top: 0;
     box-sizing: content-box;
     position: absolute;
     max-width: 160px;

@@ -102,4 +102,6 @@ defaultContentLanguageInSubdir = false
 
 Use `languageCode` and `languageName` instead of `locale` and `label` when the site itself must stay compatible with Hugo versions before those fields were introduced. The theme supports both forms across its documented Hugo range.
 
-Interface translations are TOML files under `i18n/`. Copy an existing file, translate its values, and keep the keys unchanged. Content translations should share Hugo's translation key or filename so the footer switcher can link matching pages.
+Interface translations are TOML files under `i18n/`. Copy an existing file, translate its values, and keep the keys unchanged. The footer shows a compact switcher for two configured languages, or a keyboard-accessible native menu for three or more. A choice leads to the translated page when available, and to that language's homepage otherwise. Language names follow `label` (or `languageName` on older Hugo versions); the control is not limited to Russian and English.
+
+In JSON Feed, each post's `content_text` contains the complete plain text rather than a truncated excerpt. Descriptions and summaries are plain text, and optional metadata such as an author URL is omitted when not configured.

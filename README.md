@@ -84,7 +84,7 @@ Open `http://localhost:1313/`. For a ready-to-run reference, see the [example si
 
 Explore [content components and advanced options](docs/advanced-features.md). Features that add weight are opt-in. KaTeX and Mermaid load only on pages that request them; analytics and Telegram are absent until configured.
 
-Without JavaScript, mobile navigation remains visible as ordinary links. The overlay initializes hidden without a loading flash, and closes on Escape, link selection or keyboard focus leaving the navigation.
+Without JavaScript, mobile navigation remains visible as ordinary links. The overlay initializes hidden without a loading flash, and closes on Escape, link selection or keyboard focus leaving the navigation. Opening and closing it preserves the article's scroll position.
 
 Mermaid diagrams render as they approach the viewport. Their source stays readable when JavaScript is disabled or loading fails. An optional local ESM bundle loads only the diagram types in use, with a content-hashed entry URL to invalidate stale browser caches after upgrades; see [configuration](docs/configuration.md). Local Markdown images receive intrinsic dimensions to reserve space while loading.
 
@@ -198,11 +198,11 @@ Standalone project templates can replace the site's icon links through the `favi
 
 Pages published on another origin can set `canonicalURL`; project landings can also set `seoSiteName` and `seoSiteURL`. Canonical, social and structured metadata stay aligned; see [content configuration](docs/content.md).
 
-An empty or omitted `categories` list places a post in Miscellaneous. Set `recentSidebarCount = 0` to hide recent posts. A single `avatar` works without `avatarHover` in both color schemes.
+An empty or omitted `categories` list places a post in Miscellaneous. Recent articles appear in a right-hand rail when there is room, or below the post on narrow screens and without JavaScript; set `recentSidebarCount = 0` to hide them. A single `avatar` works without `avatarHover` in both color schemes.
 
 ## Optional integrations
 
-- **Multilingual sites:** per-language menus, translated interface strings, `hreflang`, a footer language switcher, and internal Markdown links to available translations. Set `localizeLinks = false` to keep their original destinations.
+- **Multilingual sites:** per-language menus, translated interface strings, `hreflang`, a footer switcher for two languages or a menu for three or more, and internal Markdown links to available translations. Set `localizeLinks = false` to keep their original destinations.
 - **Telegram:** lazy-loaded comments plus build-time view and reaction counts.
 - **Math and diagrams:** per-page KaTeX and Mermaid switches.
 - **Analytics:** Yandex Metrika, Google Analytics, Plausible, and Umami; each is disabled unless configured.

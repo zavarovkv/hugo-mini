@@ -25,7 +25,7 @@
 {{- $seo := partial "page-seo.html" . -}}
 
 {{- if .IsPage -}}
-  {{- $description := .Description | default .Summary -}}
+  {{- $description := partial "page-description.html" . -}}
   {{- $dates := partial "page-dates.html" . -}}
 
   {{- /* Reuse the generated resource and its URL, including any base path. */ -}}

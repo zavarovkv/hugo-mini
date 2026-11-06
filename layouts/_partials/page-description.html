@@ -1,0 +1,11 @@
+{{- /* One plain-text description for meta tags and structured data. */ -}}
+{{- $description := "" -}}
+{{- if .Description -}}
+  {{- $description = .Description -}}
+{{- else if .IsPage -}}
+  {{- $description = .Summary -}}
+{{- else -}}
+  {{- $description = site.Params.description -}}
+{{- end -}}
+{{- /* Truncate escapes entities; decode only after the final text operation. */ -}}
+{{- return ($description | plainify | truncate 300 | htmlUnescape) -}}

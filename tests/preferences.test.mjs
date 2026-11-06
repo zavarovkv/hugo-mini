@@ -79,6 +79,7 @@ function page({
   lang = 'ru', remember = true, entry = false, dark = false,
   saved = {}, blockedStorage = false, blockedCookies = false, inline = true,
   alternates = { ru: '/', en: '/en/', 'x-default': '/' },
+  menuLanguages = [],
 } = {}) {
   const current = new URL(url);
   const values = state.storage(url);
@@ -93,6 +94,7 @@ function page({
   const body = element({ 'data-back-to-top': 'false' });
   const themeToggle = element();
   const languageToggle = element({ 'data-lang': lang === 'ru' ? 'en' : 'ru' });
+  const languageMenuLinks = menuLanguages.map((code) => element({ 'data-lang': code }));
   const links = Object.entries(alternates).map(([language, href]) => Object.assign(
     element({ rel: 'alternate', hreflang: language, href }),
     { href: new URL(href, url).href },
@@ -110,7 +112,7 @@ function page({
     querySelector: (selector) => ({ '.theme-toggle': themeToggle, '.lang-toggle': languageToggle, '.lang-toggle[data-lang]': languageToggle })[selector] || null,
     querySelectorAll(selector) {
       if (selector === 'link[rel="alternate"][hreflang]') return links;
-      if (selector === '.lang-toggle' || selector === '.lang-toggle[data-lang]') return [languageToggle];
+      if (selector === '.lang-toggle[data-lang], .lang-option[data-lang]') return menuLanguages.length ? languageMenuLinks : [languageToggle];
       return [];
     },
     getElementById: () => null,
@@ -146,7 +148,7 @@ function page({
   window.window = window;
   if (inline) runInNewContext(init, window);
   return {
-    state, window, document, root, values, replacements,
+    state, window, document, root, values, replacements, languageMenuLinks,
     start: () => runInNewContext(main, window),
     theme: () => root.getAttribute('data-theme'),
     toggleTheme() { themeToggle.dispatchEvent(new Event('click')); },
@@ -226,6 +228,15 @@ test('language clicks save before navigation without changing ordinary link beha
   translated.toggleLanguage();
   const englishBlog = page({ state, url: 'https://example.com/en/', entry: true, lang: 'en' });
   assert.deepEqual(englishBlog.replacements, ['https://example.com/']);
+});
+
+test('a three-language menu saves the selected language without intercepting navigation', () => {
+  const p = page({ lang: 'en', menuLanguages: ['en', 'ru', 'de'], alternates: { en: '/', ru: '/ru/', de: '/de/' } });
+  p.start();
+  const click = new Event('click', { cancelable: true });
+  p.languageMenuLinks[2].dispatchEvent(click);
+  assert.equal(click.defaultPrevented, false);
+  assert.equal(p.window.hugoMiniPreferences.get('language'), 'de');
 });
 
 test('direct article links keep their language and never overwrite the saved choice', () => {

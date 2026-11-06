@@ -47,7 +47,7 @@ Use focused overrides whenever possible:
 
 For a project-name link in a custom header, use `<a class="brand-link" href="…"><strong>Project name</strong></a>`. It retains the heading color and bold text without an underline, including on hover; keyboard focus remains visible through Beauty.css.
 
-To reuse the theme's mobile menu in a custom header, render `{{ partial "menu-toggle.html" . }}` next to `<nav class="main-nav" id="main-navigation">…</nav>`. The shared stylesheet and browser bundle handle the mobile overlay, Escape, link selection, focus leaving the navigation and the desktop breakpoint. The overlay stays hidden during initialization; opening and closing it retain their animation. Without JavaScript the links remain visible. The custom header owns its brand placement and desktop arrangement.
+To reuse the theme's mobile menu in a custom header, render `{{ partial "menu-toggle.html" . }}` next to `<nav class="main-nav" id="main-navigation">…</nav>`. The shared stylesheet and browser bundle handle the mobile overlay, Escape, link selection, focus leaving the navigation and the desktop breakpoint. The overlay stays hidden during initialization; opening and closing it retain their animation and the underlying scroll position. Without JavaScript the links remain visible. The custom header owns its brand placement and desktop arrangement.
 
 To suppress icons on an independent page, override the `favicon` block with
 `<link rel="icon" href="data:,">`. An empty block falls back to the base template;

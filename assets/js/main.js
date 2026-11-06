@@ -102,17 +102,24 @@
     var nav = document.querySelector('.main-nav');
     if (!toggle || !nav) return;
     var mobileMql = window.matchMedia(MOBILE_QUERY);
+    var lockedScrollY = 0;
 
     function closeMenu() {
+      var wasOpen = nav.classList.contains('active');
       nav.classList.remove('active');
       toggle.classList.remove('active');
       toggle.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('menu-open');
       document.documentElement.classList.remove('menu-open');
+      document.body.style.top = '';
+      if (wasOpen) window.scrollTo(0, lockedScrollY);
     }
 
     function openMenu() {
-      window.scrollTo(0, 0);
+      // Fixing the body without preserving its offset jumps long articles to
+      // the top. Restore the exact position on every close path.
+      lockedScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      document.body.style.top = -lockedScrollY + 'px';
       nav.classList.add('menu-animated');
       nav.classList.add('active');
       toggle.classList.add('active');
@@ -272,7 +279,7 @@
       applyTheme(storedChoice() || (mql.matches ? 'dark' : 'light'));
       observeTelegramWidget();
       if (preferences && root.getAttribute('data-remember-language') === 'true') {
-        document.querySelectorAll('.lang-toggle').forEach(function (link) {
+        document.querySelectorAll('.lang-toggle[data-lang], .lang-option[data-lang]').forEach(function (link) {
           function saveLanguage(event) {
             if (event.type === 'click' || event.button === 1) preferences.set('language', link.getAttribute('data-lang'));
           }
@@ -543,7 +550,7 @@
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   });
 
-  // ── Recent-posts sidebar: absolute in the right gutter on desktop ───────
+  // ── Recent posts: progressively enhance the visible bottom block into a rail ──
   (function () {
     var MIN_GUTTER = 180;
     var GAP = 24;
@@ -563,7 +570,6 @@
         ? Math.round(h1.getBoundingClientRect().top + window.pageYOffset)
         : Math.round(rect.top + window.pageYOffset);
       sidebar.classList.add('is-sidebar');
-      sidebar.style.display = 'block';
       sidebar.style.top = topPos + 'px';
       sidebar.style.left = Math.round(rect.left + window.pageXOffset + rect.width + GAP - 16) + 'px';
       sidebar.style.width = Math.round(gutter - GAP - 16) + 'px';
