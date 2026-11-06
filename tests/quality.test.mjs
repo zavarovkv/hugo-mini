@@ -182,6 +182,36 @@ test('recent-posts sidebar remains visible until JavaScript places it in the rai
   assert.match(css, /\.recent-sidebar\.is-sidebar\s*\{\s*margin-top:\s*0;/);
 });
 
+test('printing keeps article content and date while removing interface chrome', async (t) => {
+  const example = await site(t, `baseURL="https://example.org/"
+title="Paper test"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params]
+mainSections=["blog"]
+recentSidebarCount=3
+`, {
+    'blog/post.md': '+++\ntitle="Printable post"\ndate=2026-01-01\n+++\n## Section\n\nRead the article.\n\n```text\nA long line of code\n```',
+    'blog/another.md': '+++\ntitle="Another post"\ndate=2025-01-01\n+++\nHello',
+  });
+  const html = await example.read('blog/post/index.html');
+  assert.match(html, /<article class=beauty-reading lang=en>/);
+  assert.match(html, /<time datetime=2026-01-01 class=post-date>/);
+  assert.match(html, /class="?recent-sidebar/);
+
+  const sheetURL = html.match(/<link rel=stylesheet href=([^\s>]+)/)?.[1];
+  assert.ok(sheetURL, 'the print rules use the existing theme stylesheet');
+  const css = await example.read(new URL(sheetURL, 'https://example.org/').pathname.slice(1));
+  const print = css.slice(css.lastIndexOf('@media print')).replace(/\s+/g, '');
+  assert.ok(print.startsWith('@mediaprint{'), 'theme rules have their own print media block');
+  assert.match(print, /:root\[data-theme=dark\].*color-scheme:light/, 'dark-mode prints on white paper');
+  for (const selector of ['.main-nav', 'body>footer', '.likely', '#tg-comments', '.recent-sidebar', '.heading-anchor', '.copy-btn']) {
+    assert.ok(print.includes(selector), `${selector} is omitted from paper`);
+  }
+  assert.match(print, /article\.beauty-reading\{max-inline-size:none/, 'prose can use the paper width');
+  assert.match(print, /overflow:visible!important/, 'code and other scroll regions remain printable');
+});
+
 test('RSS needs no social accounts and sitemap priorities follow mainSections', async (t) => {
   const example = await site(t, `baseURL="https://example.org/"
 title="Minimal blog"

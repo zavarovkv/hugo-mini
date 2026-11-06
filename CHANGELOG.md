@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Added
+- Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
+
 ## [3.5.0] — 2026-11-06
 
 ### Added
