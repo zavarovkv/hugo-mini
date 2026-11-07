@@ -15,7 +15,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
-- Refresh GitHub and Vercel preview images with the new asterisk branding, responsive demo, and visible search control.
+- Update Hugo gallery screenshots with the current asterisk branding, desktop search shortcut and mobile layout; remove obsolete preview files and keep social preview exports outside the theme repository.
 - Mark English as the AI-translated language in the example site and test the footer indicator in both languages.
 - Refresh the bilingual README animation with the current asterisk logo, desktop search shortcut, mobile search menu, and both color schemes.
 - Focus both README translations on a minimal personal blog for writers, with clear benefits and a short path to the first post; document the search shortcut in the configuration guide.
