@@ -4,36 +4,26 @@ English | [Русский](typography.ru.md)
 
 Mini uses Goldmark for Markdown punctuation, build-time rules for prose, and Beauty.css for layout. No browser text-rewriting JavaScript.
 
-## Rules
+## English rules
 
-| Input | Russian output | English output |
+| What changes | Before | After |
 | --- | --- | --- |
-| `"Фильм 'Звездные войны'"` | `«Фильм „Звездные войны“»` | Goldmark's smart quotes |
-| `«Фильм «Звездные войны»»` | `«Фильм „Звездные войны“»` | unchanged |
-| `«Звездные войны» - классика` | `«Звездные войны» — классика` | unchanged |
-| `в Москве и на улице` | `в Москве и на улице` | unchanged |
-| `из-за, из-под` | `из‑за, из‑под` | unchanged |
-| `т.е., т. д.` | `т. е., т. д.` | unchanged |
-| `сказал бы, он же` | `сказал бы, он же` | unchanged |
-| `и на улице` | `и на улице` | unchanged |
-| `1 000 000` | `1 000 000` | `1 000 000` |
-| `3000₽` | `3000 ₽` | `3000 ₽` |
-| `16px` | `16 px` | `16 px` |
-| `10 %` | `10 %` | `10%` |
+| Turns straight quotation marks into curly quotes | `"A quote"` | `“A quote”` |
+| Turns `--` into an en dash | `A -- B` | `A – B` |
+| Turns `---` into an em dash | `A --- B` | `A — B` |
+| Turns three dots into an ellipsis | `Wait...` | `Wait…` |
+| Keeps existing thousands groups together | `1 000 000` | `1 000 000` |
+| Adds a nonbreaking space before currency | `3000€` | `3000 €` |
+| Adds a nonbreaking space before units | `16px` | `16 px` |
+| Removes spaces before percent and per mille signs | `10 %, 10 ‰` | `10%, 10‰` |
 
-- **Quotes:** outer `«...»`, inner `„...“` in Russian; nesting works across inline markup, including link text. Apostrophes are preserved.
-- **Dashes:** Goldmark converts `--` → `–`, `---` → `—`; Mini converts spaced `word - word` to an em dash in Russian. `1 - 2` and `по-настоящему` stay intact.
-- **Short words (RU):** `в, к, с, у, о, и, а, на, по, из, от, до, за, во, со, ко, об` join a following word of at least three letters. Two adjacent short words form a three-word group (`и на улице`), without long chains.
-- **Compound prepositions (RU):** `из‑за` and `из‑под` use a nonbreaking hyphen.
-- **Abbreviations (RU):** `т. е., т. д., т. п., т. к., т. н., т. о.` stay together; `т.е.` becomes `т. е.`.
-- **Particles (RU):** `же, ли, ль, бы, б` join the preceding word: `он же`, `сказал бы`.
-- **Spaces:** U+202F within grouped numbers; U+00A0 before units and Russian percentages and em dashes, and in the bound Russian phrases above. U+2011 is the nonbreaking hyphen in `из‑за`.
+The first four rules are provided by Goldmark. Mini formats existing number groups and spacing at build time. U+00A0 is a nonbreaking space; U+202F is a narrow nonbreaking space. Russian-only transformations are documented in the [Russian guide](typography.ru.md).
 
 ## Scope and exclusions
 
-- Applies to Russian and English **homepage and single-page bodies**. Markdown sources, page titles, metadata, listings and feeds are unchanged.
+- Applies to English **homepage and single-page bodies**. Markdown sources, page titles, metadata, listings and feeds are unchanged.
 - Preserves code, formulas, Mermaid, HTML tags and attributes, comments, URLs and paths. No rewriting across HTML tags or guessing ambiguous ranges.
-- Other languages are not processed by Mini's extra pass.
+- Russian uses separate typography rules; languages other than English and Russian are not processed by Mini's extra pass.
 
 ## Control
 
@@ -55,7 +45,7 @@ Or site-wide in `hugo.toml`:
 A page can override the site setting with `typography = true`. Exclude an HTML fragment and its children:
 
 ```html
-<span data-typography="off">«Фильм «Звездные войны»» - 16px</span>
+<span data-typography="off">16px and 10 %</span>
 ```
 
 Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect Mini's **extra pass**, not native Goldmark substitutions. To change those, configure [Goldmark Typographer](https://gohugo.io/configuration/markup/#typographer).

@@ -16,6 +16,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Make the English and Russian typography guides language-specific, with a short explanation and example for each rule.
 - Apply the standard prose typography to reading-list titles while keeping their source metadata untouched.
 - Use the bundled asterisk as the default browser and device favicon, preserving custom icon overrides and separate header avatar branding.
 - Update Hugo gallery screenshots with the current asterisk branding, desktop search shortcut and mobile layout; remove obsolete preview files and keep social preview exports outside the theme repository.
