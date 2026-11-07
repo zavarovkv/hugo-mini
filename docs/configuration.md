@@ -26,9 +26,11 @@ All parameters are optional unless your site content depends on them.
 
 | Parameter | Purpose | Default |
 | --- | --- | --- |
-| `favicon`, `favicon192`, `appleTouchIcon` | Browser and device icons under `static/` | unset |
+| `favicon` | Browser icon: SVG or 32×32 PNG under `static/` | unset |
+| `favicon192`, `appleTouchIcon` | PNG device icons under `static/` | unset |
 | `authorName`, `authorURL` | Author metadata and links | site title / home |
-| `avatar`, `avatarHover` | Header avatar and hover frame | unset |
+| `logo`, `logoDark` | Header logo; optional dark-mode image | unset |
+| `avatar`, `avatarHover` | Header avatar and hover frame (when `logo` is unset) | unset |
 | `copyrightYear` | Starting year of the footer range | current year |
 | `newPostDays` | Age window for the New badge | `30` |
 | `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |

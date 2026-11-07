@@ -1,16 +1,14 @@
 {{- /*
-  Favicons. Every size is opt-in via params, and nothing is emitted for a param
-  that is not set — the previous version hardcoded images/favicon-192.png and
-  images/apple-touch-icon.png, so any site without those exact files served two
-  404s on every page.
+  Favicons are opt-in. The primary icon may be an SVG or a 32x32 PNG.
 
     [params]
-      favicon        = "images/favicon.png"        # 32x32
+      favicon        = "images/favicon.svg"        # SVG or 32x32 PNG
       favicon192     = "images/favicon-192.png"    # 192x192, Android home screen
       appleTouchIcon = "images/apple-touch-icon.png" # 180x180, iOS home screen
 */ -}}
 {{- with site.Params.favicon }}
-<link rel="icon" type="image/png" sizes="32x32" href="{{ . | absURL }}" />
+  {{- $svg := hasSuffix (lower .) ".svg" -}}
+<link rel="icon" type="{{ if $svg }}image/svg+xml{{ else }}image/png{{ end }}" sizes="{{ if $svg }}any{{ else }}32x32{{ end }}" href="{{ . | absURL }}" />
 {{- end }}
 {{- with site.Params.favicon192 }}
 <link rel="icon" type="image/png" sizes="192x192" href="{{ . | absURL }}" />
