@@ -144,6 +144,8 @@ weight = 1
     for (const selector of [".beauty-emphasis", ".underline", ".beauty-caption", ".caption", ".beauty-button", ".button", ".footnote-ref", ".footnote-backref"]) {
       assert.ok(css.includes(selector), `${selector} remains available in the bundled foundation`);
     }
+    assert.match(css, /article sup:has\(>\.footnote-ref\)\{[^}]*vertical-align:super/, "in-text citation numbers stay raised");
+    assert.match(css, /article \.footnotes li::marker\{[^}]*font-variant-position:super/, "endnote list numbers stay raised");
     const defaultLink = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "hreflang") === "x-default");
     assert.equal(attribute(defaultLink, "href"), `${baseURL}shared/`, "the default language is independent of its display weight");
     assert.match(post, /class=(?:"tg-views"|tg-views)/, "Telegram data renders without deprecated data APIs");

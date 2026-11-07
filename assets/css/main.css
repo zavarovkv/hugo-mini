@@ -233,7 +233,7 @@
   article sup:has(> .footnote-ref) {
     font-size: 0.7em;
     font-style: italic;
-    vertical-align: middle;
+    vertical-align: super;
   }
 
   article .footnote-ref,
@@ -259,8 +259,9 @@
   }
 
   article .footnotes li::marker {
-    font-size: 0.7em;
+    content: counter(list-item) " ";
     font-style: italic;
+    font-variant-position: super;
   }
 
   article .footnote-backref,
