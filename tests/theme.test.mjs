@@ -190,6 +190,8 @@ favicon = "images/hugo-mini-favicon.svg"`));
     for (const [variant, file] of [["light", "hugo-mini-logo-light.svg"], ["dark", "hugo-mini-logo-dark.svg"]]) {
       const logo = [...originalLinks.matchAll(/<img\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "class")?.includes(`title-logo-${variant}`));
       assert.equal(attribute(logo, "src"), `${basePath}images/${file}`);
+      assert.equal(attribute(logo, "width"), "26");
+      assert.equal(attribute(logo, "height"), "26");
       await access(join(output, "images", file));
     }
     const svgFavicon = [...originalLinks.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "rel") === "icon");
