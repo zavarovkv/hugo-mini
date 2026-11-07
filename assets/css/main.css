@@ -258,12 +258,12 @@
     display: none;
   }
 
-  article .footnotes > ol > li {
-    position: relative;
+  article .footnotes > ol {
+    list-style: none;
   }
 
-  article .footnotes > ol > li::marker {
-    content: "";
+  article .footnotes > ol > li {
+    position: relative;
   }
 
   article .footnotes > ol > li::before {
