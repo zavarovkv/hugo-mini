@@ -75,7 +75,7 @@ weight=3
   }
   const build = () => execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--panicOnWarning"], { stdio: "pipe" });
   const read = async (path) => (await readFile(join(root, "public", path), "utf8")).match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1];
-  const paragraph = (html, id) => html.match(new RegExp(`<p id="${id}">([\\s\\S]*?)<\\/p>`))?.[1];
+  const paragraph = (html, id) => html.match(new RegExp(`<p id="${id}"(?:\\s+[^>]*)?>([\\s\\S]*?)<\\/p>`))?.[1];
   build();
   for (const lang of ["en", "ru", "de"]) {
     const prefix = lang === "en" ? "" : `${lang}/`;
