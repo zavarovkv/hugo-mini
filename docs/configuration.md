@@ -26,8 +26,8 @@ All parameters are optional unless your site content depends on them.
 
 | Parameter | Purpose | Default |
 | --- | --- | --- |
-| `favicon` | Browser icon: SVG or 32×32 PNG under `static/` | unset |
-| `favicon192`, `appleTouchIcon` | PNG device icons under `static/` | unset |
+| `favicon` | Browser icon: SVG or 32×32 PNG under `static/`; set `false` to disable built-in icons | bundled black asterisk SVG |
+| `favicon192`, `appleTouchIcon` | Android (192×192) and iOS (180×180) PNG icons | bundled asterisk icons unless `favicon` is configured |
 | `authorName`, `authorURL` | Author metadata and links | site title / home |
 | `logo`, `logoDark` | Header logo; optional dark-mode image | unset |
 | `avatar`, `avatarHover` | Header avatar and hover frame (when `logo` is unset) | unset |

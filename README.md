@@ -20,7 +20,7 @@ Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beaut
 
 - **Focus on writing.** Readable typography and a quiet 720 px text column.
 - **Stay lightweight.** Responsive layout, with fonts, CSS, and JavaScript served from your site.
-- **Publish out of the box.** Light and dark modes, multiple languages, SEO, RSS, and JSON Feed.
+- **Publish out of the box.** Light and dark modes, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
 
 ## Quick start

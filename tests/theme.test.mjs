@@ -81,6 +81,15 @@ weight = 1
     assert.ok(robots.includes(`Sitemap: ${baseURL}sitemap.xml`), "robots advertises the root multilingual sitemap, including a base path");
     for (const [langPath, label] of [["", "Search"], ["ru/", "Поиск"]]) {
       const home = await readFile(join(output, langPath, "index.html"), "utf8");
+      const iconLinks = [...home.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag);
+      const browserIcon = iconLinks.find(tag => attribute(tag, "rel") === "icon" && attribute(tag, "sizes") === "any");
+      const androidIcon = iconLinks.find(tag => attribute(tag, "rel") === "icon" && attribute(tag, "sizes") === "192x192");
+      const appleIcon = iconLinks.find(tag => attribute(tag, "rel") === "apple-touch-icon");
+      assert.equal(attribute(browserIcon, "href"), `${baseURL}images/hugo-mini-favicon.svg`);
+      assert.equal(attribute(browserIcon, "type"), "image/svg+xml");
+      assert.equal(attribute(androidIcon, "href"), `${baseURL}images/hugo-mini-favicon-192.png`);
+      assert.equal(attribute(appleIcon, "href"), `${baseURL}images/hugo-mini-apple-touch-icon.png`);
+      assert.ok(home.includes("title-avatar-container"), "default favicon does not replace the header avatar");
       const links = [...home.matchAll(/(<a\b[^>]*class="search-toggle search-toggle-(mobile|desktop)"[^>]*>)([\s\S]*?)<\/a>/g)];
       assert.equal(links.length, 2, "search is enabled by default on desktop and mobile");
       for (const [, tag] of links) {
@@ -95,6 +104,7 @@ weight = 1
       assert.equal(attribute(languageToggle[0], "data-lang"), langPath ? "en" : "ru");
       assert.equal(languageToggle[1].includes("lang-sparkle"), Boolean(langPath), "AI sparkle is shown only for the configured English translation");
     }
+    for (const icon of ["hugo-mini-favicon.svg", "hugo-mini-favicon-192.png", "hugo-mini-apple-touch-icon.png"]) await access(join(output, "images", icon));
     for (const [langPath, monthLabel, exactLabel] of [["", "February 2001", "2 January 2000"], ["ru/", "февраль 2001", "2 января 2000"]]) {
       const monthlyPost = await readFile(join(output, langPath, "hidden/index.html"), "utf8");
       const date = [...monthlyPost.matchAll(/<time\b[^>]*>([^<]+)<\/time>/g)].find((match) => match[1] === monthLabel)?.[0];
@@ -186,7 +196,7 @@ weight = 1
 localizeLinks = false
 logo = "images/hugo-mini-logo-light.svg"
 logoDark = "images/hugo-mini-logo-dark.svg"
-favicon = "images/hugo-mini-favicon.svg"`));
+`));
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const originalLinks = await readFile(join(output, "ru/shared/index.html"), "utf8");
     assert.ok(originalLinks.includes(`${baseURL}shared/?mode=1#intro`), "localizeLinks=false must preserve the destination");
@@ -212,6 +222,9 @@ favicon = "images/hugo-mini-favicon.svg"`));
     const pngFavicon = [...sharingPost.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "rel") === "icon");
     assert.equal(attribute(pngFavicon, "type"), "image/png", "existing PNG favicons remain supported");
     assert.equal(attribute(pngFavicon, "sizes"), "32x32");
+    assert.equal(attribute(pngFavicon, "href"), `${baseURL}images/pixel.png`);
+    assert.equal([...sharingPost.matchAll(/<link\b[^>]*>/g)].filter(([tag]) => attribute(tag, "rel") === "icon").length, 1, "custom favicon suppresses bundled Android icon");
+    assert.ok(!sharingPost.includes("apple-touch-icon"), "custom favicon suppresses bundled Apple icon");
     const sharingAssets = [...sharingPost.matchAll(/<(?:link|script)\b[^>]*>/g)]
       .map(([tag]) => ({ url: attribute(tag, "src") || attribute(tag, "href"), integrity: attribute(tag, "integrity") }))
       .filter(({ url }) => url?.includes("/likely/"));
@@ -223,6 +236,12 @@ favicon = "images/hugo-mini-favicon.svg"`));
       assert.equal(integrity, `sha256-${createHash("sha256").update(bytes).digest("base64")}`);
     }
     assert.ok(!(await readFile(join(output, "blog/index.html"), "utf8")).includes("likely/likely."));
+
+    await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = false\nfavicon = false"));
+    execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
+    const disabled = await readFile(join(output, "index.html"), "utf8");
+    const disabledIcons = [...disabled.matchAll(/<link\b[^>]*>/g)].filter(([tag]) => ["icon", "apple-touch-icon"].includes(attribute(tag, "rel")));
+    assert.equal(disabledIcons.length, 0, "favicon=false disables all bundled icons");
   });
 }
 

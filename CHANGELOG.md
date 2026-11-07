@@ -7,7 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
-- Add the Hugo Mini asterisk as optional light/dark header branding and a black SVG favicon for the demo; let sites supply their own logo and support SVG browser favicons alongside PNG.
+- Add the Hugo Mini asterisk as optional light/dark header branding and a black SVG favicon; let sites supply their own logo and support SVG browser favicons alongside PNG.
 - Add a complete Russian README and language switchers to both README versions; document the requirement to keep every README translation in sync.
 - Add a default-on search shortcut linking to the homepage: a right-aligned footer-style GitHub Octicon on desktop and a text-only mobile menu entry before the final navigation link. It can be hidden with `showSearchButton = false`.
 - Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
@@ -15,6 +15,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Use the bundled asterisk as the default browser and device favicon, preserving custom icon overrides and separate header avatar branding.
 - Update Hugo gallery screenshots with the current asterisk branding, desktop search shortcut and mobile layout; remove obsolete preview files and keep social preview exports outside the theme repository.
 - Mark English as the AI-translated language in the example site and test the footer indicator in both languages.
 - Refresh the bilingual README animation with the current asterisk logo, desktop search shortcut, mobile search menu, and both color schemes.
