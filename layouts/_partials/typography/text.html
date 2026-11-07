@@ -37,13 +37,23 @@
     {{- end -}}
     {{- $prose = delimit $measurements "" -}}
     {{- if eq $lang "ru" -}}
+      {{- /* Bind only common compound prepositions with a nonbreaking hyphen. */ -}}
+      {{- $prose = replaceRE `(?i)(^|[^\p{L}\p{N}_])(из)-(за|под)` "$1$2\u2011$3" $prose -}}
+      {{- /* Keep conventional Russian abbreviations on one line. */ -}}
+      {{- $prose = replaceRE `(?i)(^|[^\p{L}\p{N}_])(т)\.[ \t\x{00a0}]*(е|д|п|к|н|о)\.` "$1$2.\u00a0$3." $prose -}}
+      {{- /* A short conjunction plus preposition can form one small group. */ -}}
+      {{- $short := `в|к|с|у|о|и|а|на|по|из|от|до|за|во|со|ко|об` -}}
+      {{- $chain := printf `(?i)(^|[ \t\x{00a0}\x{202f}\(\[«„]|&laquo;|&ldquo;|&bdquo;)(%s)[ \t]+(%s)[ \t]+([\p{L}]{3,12})` $short $short -}}
+      {{- $prose = replaceRE $chain "$1$2\u00a0$3\u00a0$4" $prose -}}
       {{- /* Only a spaced, word-like hyphen becomes an em dash. Arithmetic,
            ranges and compound words are intentionally left alone. */ -}}
       {{- $prose = replaceRE `([\p{L}\)\]»]|&raquo;|&rdquo;)[ \t]+-[ \t]+([\p{L}])` "$1 — $2" $prose -}}
       {{- $prose = replaceRE `(\S)[ \t\x{00a0}\x{202f}]+(—|&mdash;|&#8212;|&#x2014;)[ \t\x{00a0}\x{202f}]+` "$1\u00a0$2 " $prose -}}
       {{- /* Bind short Russian function words to a following word, without
            creating long unbreakable chains or touching punctuation/code. */ -}}
-      {{- $prose = replaceRE `(?i)(^|[ \t\x{00a0}\x{202f}\(\[«„]|&laquo;|&ldquo;|&bdquo;)(в|к|с|у|о|и|а|на|по|из|от|до|за|во|со|ко|об)[ \t]+([\p{L}]{3,})` "$1$2\u00a0$3" $prose -}}
+      {{- $prose = replaceRE (printf `(?i)(^|[ \t\x{00a0}\x{202f}\(\[«„]|&laquo;|&ldquo;|&bdquo;)(%s)[ \t]+([\p{L}]{3,})` $short) "$1$2\u00a0$3" $prose -}}
+      {{- /* Enclitic particles stay with the preceding word. */ -}}
+      {{- $prose = replaceRE `(?i)([\p{L}\p{N}])[ \t]+(же|ли|ль|бы|б)([ \t.,!?;:…»”\)\]]|&raquo;|&rdquo;|$)` "$1\u00a0$2$3" $prose -}}
       {{- $quoted := partial "typography/quotes.html" (dict "text" $prose "quoteStack" $quoteStack) -}}
       {{- $prose = $quoted.text -}}
       {{- $quoteStack = $quoted.quoteStack -}}
