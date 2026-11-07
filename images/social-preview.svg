@@ -1,72 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
-  <title id="title">Hugo Mini — a writer-first Hugo theme</title>
-  <desc id="desc">A dark editorial social card showing the Hugo Mini name and a clean, minimalist blog preview.</desc>
-  <defs>
-    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#101318"/>
-      <stop offset="1" stop-color="#1c232d"/>
-    </linearGradient>
-    <linearGradient id="screen" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#242930"/>
-      <stop offset="1" stop-color="#1a1e24"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#89c9ff"/>
-      <stop offset="1" stop-color="#4b9bdf"/>
-    </linearGradient>
-    <clipPath id="screen-clip">
-      <rect x="714" y="96" width="504" height="449" rx="19"/>
-    </clipPath>
-  </defs>
+  <title id="title">Hugo Mini — a minimal Hugo theme for personal blogs</title>
+  <desc id="desc">Dark editorial card with the lime Hugo Mini asterisk and a real light-mode desktop and mobile preview.</desc>
 
-  <rect width="1280" height="640" fill="url(#background)"/>
-  <circle cx="1174" cy="52" r="355" fill="#2b5d82" opacity="0.12"/>
-  <circle cx="40" cy="643" r="390" fill="#5ba7db" opacity="0.045"/>
+  <rect width="1280" height="640" fill="#181818"/>
 
-  <g transform="translate(76 92)">
-    <rect width="58" height="58" rx="15" fill="url(#accent)"/>
-    <path d="M14 40V18h7l8 11 8-11h7v22h-8V30l-7 10-7-10v10z" fill="#111820"/>
-    <text x="76" y="38" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="24" fill="#b1bac4">HUGO THEME</text>
+  <g transform="translate(70 70) scale(1.45)" fill="none" stroke="#E2F629" stroke-width="7.5" stroke-linecap="round">
+    <path d="M32 9v46M12 20.5l40 23M12 43.5l40-23"/>
   </g>
 
-  <text x="75" y="286" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="91" letter-spacing="-5" fill="#f3f6f8">Hugo</text>
-  <text x="75" y="394" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="91" letter-spacing="-5" fill="url(#accent)">Mini.</text>
-  <text x="80" y="452" font-family="DejaVu Sans, sans-serif" font-size="26" fill="#d1d8df">A writer-first Hugo theme.</text>
-  <text x="80" y="488" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#9ba8b5">Focus on words, not on tooling.</text>
-
-  <g font-family="DejaVu Sans, sans-serif" font-size="17" fill="#a9b6c4">
-    <text x="81" y="582">MINIMAL</text>
-    <circle cx="204" cy="576" r="3" fill="#65aadd"/>
-    <text x="225" y="582">FAST</text>
-    <circle cx="304" cy="576" r="3" fill="#65aadd"/>
-    <text x="326" y="582">MULTILINGUAL</text>
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="86" y="302" font-size="94" font-weight="600" letter-spacing="-4.5" fill="#F7F7F7">Hugo Mini</text>
+    <text x="88" y="367" font-size="28" font-weight="300" fill="#CBD0D4">A minimal Hugo theme</text>
+    <text x="88" y="408" font-size="28" font-weight="300" fill="#CBD0D4">for personal blogs.</text>
   </g>
 
-  <g clip-path="url(#screen-clip)">
-    <rect x="714" y="96" width="504" height="449" rx="19" fill="url(#screen)" stroke="#49535f" stroke-width="2"/>
-    <rect x="714" y="96" width="504" height="49" fill="#323840"/>
-    <circle cx="743" cy="120" r="6" fill="#e07c74"/>
-    <circle cx="764" cy="120" r="6" fill="#e6c575"/>
-    <circle cx="785" cy="120" r="6" fill="#87bb9d"/>
-    <rect x="892" y="107" width="155" height="25" rx="12" fill="#24292f"/>
-    <text x="970" y="125" font-family="DejaVu Sans, sans-serif" text-anchor="middle" font-size="13" fill="#a9b5c0">myblog.dev</text>
-
-    <g font-family="DejaVu Sans, sans-serif">
-      <circle cx="766" cy="190" r="23" fill="#cf570c"/>
-      <text x="766" y="197" text-anchor="middle" font-weight="bold" font-size="17" fill="white">JD</text>
-      <text x="843" y="198" text-anchor="middle" font-weight="bold" font-size="23" fill="#80bced">Blog</text>
-      <text x="1105" y="198" font-size="16" fill="#c4cbd3">About</text>
-
-      <text x="758" y="277" font-size="27" font-weight="bold" fill="#f3f5f6">A place for good ideas</text>
-      <text x="758" y="316" font-size="18" fill="#b7c1cb">A quiet space for writing, thinking,</text>
-      <text x="758" y="344" font-size="18" fill="#b7c1cb">and sharing what matters.</text>
-
-      <rect x="758" y="380" width="415" height="1" fill="#424d56"/>
-      <text x="758" y="417" font-size="14" font-weight="bold" fill="#aeb9c3">LATEST STORIES</text>
-      <text x="758" y="455" font-size="18" fill="#82bfec">Thoughts on building simple things</text>
-      <text x="758" y="486" font-size="18" fill="#82bfec">Notes from the everyday</text>
-      <text x="758" y="517" font-size="18" fill="#82bfec">A better way to tell stories</text>
-    </g>
-  </g>
-  <rect x="714" y="96" width="504" height="449" rx="19" fill="none" stroke="#485461" stroke-width="2"/>
+  <image href="readme-preview-v5.gif" x="554" y="133" width="681" height="384"/>
 </svg>

@@ -51,6 +51,8 @@ All parameters are optional unless your site content depends on them.
 
 Social links live under `[params.social]`: `telegram`, `linkedin`, `github`, and `email`. Schema.org author data lives under `[params.author]`, for example `jobTitle`.
 
+Set `aiTranslatedLang = "en"` when the original articles are in Russian and their English versions are AI-translated. The sparkle appears next to the English option, not the Russian one; the two-language switcher shows only the other language.
+
 Set `backToTop = false` in a page's front matter to disable the control on that page, or under site `[params]` to disable it throughout the site. A page value overrides the site setting.
 
 Set `typography = false` to disable the theme's additional typography pass,

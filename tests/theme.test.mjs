@@ -39,6 +39,7 @@ home = ["HTML", "RSS", "JSON"]
 blog = "/:slug/"
 [params]
 mainSections = ["blog"]
+aiTranslatedLang = "en"
 telegramChannel = "fixture"
 avatar = "images/avatar.svg"
 socialSharing = false
@@ -89,6 +90,10 @@ weight = 1
       const desktop = links.find((link) => link[2] === "desktop");
       assert.ok(mobile[3].includes(label) && !mobile[3].includes("<svg"), "mobile search is text-only");
       assert.ok(desktop[3].includes("<svg"), "desktop search keeps the Octicon");
+      const languageToggle = home.match(/<a\b[^>]*\bclass=(?:"lang-toggle"|lang-toggle)[^>]*>([\s\S]*?)<\/a>/);
+      assert.ok(languageToggle, "the other language is available in the footer");
+      assert.equal(attribute(languageToggle[0], "data-lang"), langPath ? "en" : "ru");
+      assert.equal(languageToggle[1].includes("lang-sparkle"), Boolean(langPath), "AI sparkle is shown only for the configured English translation");
     }
     for (const [langPath, monthLabel, exactLabel] of [["", "February 2001", "2 January 2000"], ["ru/", "февраль 2001", "2 января 2000"]]) {
       const monthlyPost = await readFile(join(output, langPath, "hidden/index.html"), "utf8");
