@@ -1,7 +1,7 @@
 {{- $key := .Page.Params.reading_list -}}
 {{- if not $key -}}{{- errorf "reading-list: set reading_list in %s front matter" .Page.Path -}}{{- end -}}
 {{- $list := partialCached "reading-list-data.html" (dict "page" .Page "key" $key) .Page.Language.Lang $key -}}
-<table class="reading-shelf" data-typography="off">
+<table class="reading-shelf">
   <thead>
     <tr>
       <th scope="col">{{ i18n "reading_book" }}</th>

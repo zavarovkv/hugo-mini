@@ -15,7 +15,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
-- Preserve exact reading-list book titles and authors, including spaced dashes and nested quotes, during automatic typography.
+- Apply the standard prose typography to reading-list titles while keeping their source metadata untouched.
 - Use the bundled asterisk as the default browser and device favicon, preserving custom icon overrides and separate header avatar branding.
 - Update Hugo gallery screenshots with the current asterisk branding, desktop search shortcut and mobile layout; remove obsolete preview files and keep social preview exports outside the theme repository.
 - Mark English as the AI-translated language in the example site and test the footer indicator in both languages.
