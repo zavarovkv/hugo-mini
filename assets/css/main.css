@@ -229,6 +229,51 @@
     }
   }
 
+  /* Goldmark footnotes: unobtrusive editorial references with native links. */
+  article sup:has(> .footnote-ref) {
+    font-size: 0.7em;
+    font-style: italic;
+    vertical-align: middle;
+  }
+
+  article .footnote-ref,
+  article .footnote-ref:link,
+  article .footnote-ref:visited,
+  article .footnote-ref:hover,
+  article .footnote-ref:active,
+  article .footnote-ref:focus-visible {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+    border-bottom: 0;
+  }
+
+  article .footnotes {
+    margin-top: 1.5em;
+    font-size: 0.85em;
+    color: var(--color-secondary);
+  }
+
+  article .footnotes > hr {
+    display: none;
+  }
+
+  article .footnotes li::marker {
+    font-size: 0.7em;
+    font-style: italic;
+  }
+
+  article .footnote-backref,
+  article .footnote-backref:link,
+  article .footnote-backref:visited,
+  article .footnote-backref:hover,
+  article .footnote-backref:focus-visible {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+    border-bottom: 0;
+  }
+
   nav a {
     margin-right: 8px;
   }

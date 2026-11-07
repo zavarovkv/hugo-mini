@@ -16,6 +16,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Style Goldmark footnotes as subtle italic, unlined references with muted source notes and unobtrusive return links; retain native navigation and keyboard focus.
 - Describe build-time typography in the benefits list of each README and link only to same-language rule examples.
 - Make the English and Russian typography guides language-specific, with a short explanation and example for each rule.
 - Apply the standard prose typography to reading-list titles while keeping their source metadata untouched.

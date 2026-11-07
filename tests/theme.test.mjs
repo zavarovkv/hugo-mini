@@ -61,6 +61,8 @@ weight = 1
       `[Russian homepage](${basePath}ru/)\n\n` +
       `[Explicit Russian post](${basePath}ru/shared/?mode=2#intro)\n\n` +
       '{{< callout >}}\n**Highlighted** quotation.\n{{< /callout >}}\n\n' +
+      'Footnotes stay clickable[^source], even when cited again[^source].\n\n' +
+      '[^source]: A source note with a link back to the text.\n\n' +
       '```python {linenos=inline}\n' + code + '```\n\n' +
       '```python {linenos=table}\n' + code + '```\n\n' +
       `![Local](${baseURL}images/pixel.png?v=2 "A title")\n\n![External](https://elsewhere.example/pixel.png)\n\n![Missing](${basePath}images/missing.png)\n`;
@@ -130,9 +132,16 @@ weight = 1
     const post = await readFile(join(output, "ru/shared/index.html"), "utf8");
     assert.match(post, /<blockquote class=(?:"beauty-callout"|beauty-callout)><p><strong>Highlighted<\/strong> quotation\.<\/p><\/blockquote>/,
       "callouts preserve Markdown and render as semantic block quotations");
+    assert.equal([...post.matchAll(/class=(?:"footnote-ref"|footnote-ref)/g)].length, 2,
+      "repeated Goldmark footnote references remain separate clickable links");
+    assert.match(post, /class=(?:"footnotes"|footnotes) role=(?:"doc-endnotes"|doc-endnotes)/,
+      "source notes render in a semantic endnotes list");
+    assert.ok(post.includes("A source note with a link back to the text."));
+    assert.equal([...post.matchAll(/class=(?:"footnote-backref"|footnote-backref)/g)].length, 2,
+      "each citation keeps its own return link");
     const stylesheet = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "rel") === "stylesheet");
     const css = await readFile(join(output, new URL(attribute(stylesheet, "href"), baseURL).pathname.slice(basePath.length)), "utf8");
-    for (const selector of [".beauty-emphasis", ".underline", ".beauty-caption", ".caption", ".beauty-button", ".button"]) {
+    for (const selector of [".beauty-emphasis", ".underline", ".beauty-caption", ".caption", ".beauty-button", ".button", ".footnote-ref", ".footnote-backref"]) {
       assert.ok(css.includes(selector), `${selector} remains available in the bundled foundation`);
     }
     const defaultLink = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "hreflang") === "x-default");

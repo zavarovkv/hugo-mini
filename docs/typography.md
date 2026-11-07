@@ -53,3 +53,15 @@ Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect M
 ## Reading layout
 
 16 px text, up to 720 px wide. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
+
+## Footnotes
+
+Use Hugo's native Markdown footnotes, with no shortcode or extra JavaScript:
+
+```md
+A useful claim[^source] can reference the same note again[^source].
+
+[^source]: A short note naming the source.
+```
+
+Reference numbers appear as small, italic, text-colored superscripts without visible link decoration. The linked notes are smaller and muted, with a return link for each reference. Keyboard focus remains visible; numbering follows the order of first citation.
