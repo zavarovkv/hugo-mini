@@ -25,9 +25,6 @@ ignoreErrors    = ["error-disable-taxonomy"]
   home = ["HTML", "RSS", "JSON", "LLMS"]
 
 [params]
-  favicon    = "images/hugo-mini-favicon.svg"
-  # favicon192     = "images/favicon-192.png"
-  # appleTouchIcon = "images/apple-touch-icon.png"
   authorName = "Jane Doe"  # fictitious example author
   authorURL  = ""          # no real profile in the public demo
 

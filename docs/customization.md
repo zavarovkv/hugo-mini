@@ -38,18 +38,19 @@ The full token list is in [`assets/css/main.css`](../assets/css/main.css).
 
 ## Logo and favicon
 
-The demo uses Hugo Mini's asterisk. Other sites show no default branding. To use the bundled mark:
+The bundled black asterisk is the default browser favicon, with matching Android and iOS icons. It does **not** replace your header avatar or logo.
+
+The demo also uses the asterisk as its header logo. To enable that separately:
 
 ```toml
 [params]
   logo = "images/hugo-mini-logo-light.svg"
   logoDark = "images/hugo-mini-logo-dark.svg"
-  favicon = "images/hugo-mini-favicon.svg"
 ```
 
-Replace those paths with images from your site's `static/` directory to use your own logo and favicon. The header switches `logoDark` with the theme toggle; if omitted, `logo` is used in both modes. `logo` takes precedence over the existing `avatar` / `avatarHover` settings. Remove `logo` to restore the avatar.
+The header switches `logoDark` with the theme toggle; if omitted, `logo` is used in both modes. `logo` takes precedence over `avatar` / `avatarHover`. Remove `logo` to keep your avatar.
 
-The browser favicon also accepts PNG. Device icons remain optional: `favicon192` and `appleTouchIcon`.
+To replace the default favicon, set `favicon` to your own SVG or 32×32 PNG in your site's `static/` directory. Custom favicons do not inherit the theme's device icons; add `favicon192` and `appleTouchIcon` if needed. Set `favicon = false` to disable the bundled icons.
 
 ## Menu icons
 
@@ -69,7 +70,7 @@ Use focused overrides whenever possible:
 
 - `layouts/_partials/custom_head.html` adds site-specific tags to `<head>`.
 - `layouts/_partials/custom_body.html` adds scripts or markup before the closing `</body>` tag.
-- Named blocks in `baseof.html` let a template replace `head`, `favicon`, `header`, `main`, `footer`, or `scripts`. The `favicon` block defaults to the site's configured icons, so standalone project templates can supply their own without duplicate icon links.
+- Named blocks in `baseof.html` let a template replace `head`, `favicon`, `header`, `main`, `footer`, or `scripts`. The `favicon` block defaults to the bundled icons or the site's overrides, so standalone project templates can supply their own without duplicate icon links.
 - Copy a theme template into the matching site path only when the whole template needs to diverge.
 
 For a project-name link in a custom header, use `<a class="brand-link" href="…"><strong>Project name</strong></a>`. It retains the heading color and bold text without an underline, including on hover; keyboard focus remains visible through Beauty.css.

@@ -1,18 +1,26 @@
-{{- /*
-  Favicons are opt-in. The primary icon may be an SVG or a 32x32 PNG.
-
-    [params]
-      favicon        = "images/favicon.svg"        # SVG or 32x32 PNG
-      favicon192     = "images/favicon-192.png"    # 192x192, Android home screen
-      appleTouchIcon = "images/apple-touch-icon.png" # 180x180, iOS home screen
-*/ -}}
-{{- with site.Params.favicon }}
+{{- /* The built-in asterisk favicon is the default; explicit favicon (including false) overrides it. */ -}}
+{{- $custom := isset site.Params "favicon" -}}
+{{- $favicon := "images/hugo-mini-favicon.svg" -}}
+{{- if $custom -}}{{- $favicon = site.Params.favicon -}}{{- end -}}
+{{- with $favicon -}}
   {{- $svg := hasSuffix (lower .) ".svg" -}}
 <link rel="icon" type="{{ if $svg }}image/svg+xml{{ else }}image/png{{ end }}" sizes="{{ if $svg }}any{{ else }}32x32{{ end }}" href="{{ . | absURL }}" />
-{{- end }}
-{{- with site.Params.favicon192 }}
+{{- end -}}
+{{- $favicon192 := "" -}}
+{{- if isset site.Params "favicon192" -}}
+  {{- $favicon192 = site.Params.favicon192 -}}
+{{- else if not $custom -}}
+  {{- $favicon192 = "images/hugo-mini-favicon-192.png" -}}
+{{- end -}}
+{{- with $favicon192 -}}
 <link rel="icon" type="image/png" sizes="192x192" href="{{ . | absURL }}" />
-{{- end }}
-{{- with site.Params.appleTouchIcon }}
+{{- end -}}
+{{- $appleTouchIcon := "" -}}
+{{- if isset site.Params "appletouchicon" -}}
+  {{- $appleTouchIcon = site.Params.appleTouchIcon -}}
+{{- else if not $custom -}}
+  {{- $appleTouchIcon = "images/hugo-mini-apple-touch-icon.png" -}}
+{{- end -}}
+{{- with $appleTouchIcon -}}
 <link rel="apple-touch-icon" sizes="180x180" href="{{ . | absURL }}" />
 {{- end }}
