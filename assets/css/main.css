@@ -258,10 +258,22 @@
     display: none;
   }
 
-  article .footnotes li::marker {
-    content: counter(list-item) " ";
+  article .footnotes > ol > li {
+    position: relative;
+  }
+
+  article .footnotes > ol > li::marker {
+    content: "";
+  }
+
+  article .footnotes > ol > li::before {
+    content: counter(list-item);
+    position: absolute;
+    right: calc(100% + 0.35em);
+    top: -0.2em;
+    font-size: 0.7em;
     font-style: italic;
-    font-variant-position: super;
+    line-height: 1;
   }
 
   article .footnote-backref,
