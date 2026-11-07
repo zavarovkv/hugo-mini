@@ -43,7 +43,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # Content
   newPostDays          = 30   # days before "New" badge disappears
   recentSidebarCount   = 8    # posts in the recent sidebar / mobile bottom block
-  aiTranslatedLang = "ru"   # show AI sparkle icon on this language in the switcher
+  aiTranslatedLang = "en"   # show AI sparkle on English, not Russian
 
   # Telegram (remove to disable comments widget)
   # telegramChannel = "your_channel"
