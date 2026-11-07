@@ -22,6 +22,16 @@ const body = [
   '"A quote" -- three dots...',
   '<p id="numbers">1 000 000 ₽, 16px, 2 ГБ, 10 %, 2026, ISO 9001, B2B, 1 - 2.</p>',
   '<p id="dash">Текст — продолжение. Text — continuation.</p>',
+  '<p id="spaced-hyphen">Слово - продолжение; 1 - 2; по-настоящему.</p>',
+  '<p id="nested-quotes">«Фильм «Звездные войны»» - полный восторг!</p>',
+  '<p id="nested-single">«Фильм &lsquo;Звездные войны&rsquo;» - полный восторг!</p>',
+  '<p id="nested-entities">«Фильм &bdquo;Звездные войны&ldquo;».</p>',
+  '<p id="nested-inline">«Фильм <em>«Звездные войны»</em>» - полный восторг!</p>',
+  '<p id="apostrophe">«История д’Артаньяна» - отличный пример.</p>',
+  '<p id="nested-apostrophe">«Книга &lsquo;O&rsquo;Reilly&rsquo;».</p>',
+  '<p id="short-words">В Москве и на улице у дома, а по дороге к станции.</p>',
+  '<p id="quote-url">https://example.org/«Звездные-войны»</p>',
+  '<p id="disabled-fragment" data-typography="off">«Фильм «Звездные войны»» - текст в 16px.</p>',
   'A native --- em dash.',
   '<p id="technical">10MBps, model16px, B2B, v1.2.3, 2026 100.</p>',
   '<p id="adjacent">10 kg 20 kg;1 000;2 000; model16px 16px; x10 % 10 %</p>',
@@ -65,7 +75,7 @@ weight=3
   }
   const build = () => execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--panicOnWarning"], { stdio: "pipe" });
   const read = async (path) => (await readFile(join(root, "public", path), "utf8")).match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1];
-  const paragraph = (html, id) => html.match(new RegExp(`<p id="${id}">([\\s\\S]*?)<\\/p>`))?.[1];
+  const paragraph = (html, id) => html.match(new RegExp(`<p id="${id}"(?:\\s+[^>]*)?>([\\s\\S]*?)<\\/p>`))?.[1];
   build();
   for (const lang of ["en", "ru", "de"]) {
     const prefix = lang === "en" ? "" : `${lang}/`;
@@ -90,7 +100,22 @@ weight=3
       const dashSpace = lang === "ru" ? "\u00a0" : " ";
       assert.equal(paragraph(html, "dash"), `Текст${dashSpace}— продолжение. Text${dashSpace}— continuation.`);
       assert.ok(html.includes(`A native${dashSpace}&mdash; em dash.`));
-      assert.match(html, /&ldquo;A quote&rdquo; &ndash; three dots&hellip;/, "native Goldmark typography is retained");
+      if (lang === "ru") {
+        assert.match(html, /&laquo;A quote&raquo; &ndash; three dots&hellip;/, "Russian quotation marks are normalized");
+        assert.equal(paragraph(html, "spaced-hyphen"), "Слово\u00a0— продолжение; 1 - 2; по-настоящему.");
+        assert.equal(paragraph(html, "nested-quotes"), "&laquo;Фильм &bdquo;Звездные войны&ldquo;&raquo;\u00a0— полный восторг!");
+        assert.equal(paragraph(html, "nested-single"), "&laquo;Фильм &bdquo;Звездные войны&ldquo;&raquo;\u00a0— полный восторг!");
+        assert.equal(paragraph(html, "nested-entities"), "&laquo;Фильм &bdquo;Звездные войны&ldquo;&raquo;.");
+        assert.equal(paragraph(html, "nested-inline"), "&laquo;Фильм <em>&bdquo;Звездные войны&ldquo;</em>&raquo;\u00a0— полный восторг!");
+        assert.equal(paragraph(html, "apostrophe"), "&laquo;История д’Артаньяна&raquo;\u00a0— отличный пример.");
+        assert.equal(paragraph(html, "nested-apostrophe"), "&laquo;Книга &bdquo;O&rsquo;Reilly&ldquo;&raquo;.");
+        assert.equal(paragraph(html, "short-words"), "В\u00a0Москве и на\u00a0улице у\u00a0дома, а по\u00a0дороге к\u00a0станции.");
+        assert.equal(paragraph(html, "quote-url"), "https://example.org/«Звездные-войны»", "visible URL quotation marks stay intact");
+        assert.equal(paragraph(html, "disabled-fragment"), "«Фильм «Звездные войны»» - текст в 16px.");
+      } else {
+        assert.match(html, /&ldquo;A quote&rdquo; &ndash; three dots&hellip;/, "native Goldmark typography is retained");
+        assert.equal(paragraph(html, "nested-quotes"), "«Фильм «Звездные войны»» - полный восторг!", "English punctuation is not rewritten");
+      }
     }
   }
   await writeFile(configFile, config.replace("[params]", "[params]\ntypography=false"));

@@ -66,7 +66,7 @@ Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Mod
 ## Documentation
 
 - [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md) · [Writing posts](docs/content.md)
-- [Typography](docs/typography.md) · [Customization](docs/customization.md) · [Optional features](docs/advanced-features.md)
+- [Typography](docs/typography.md) ([Русский](docs/typography.ru.md)) · [Customization](docs/customization.md) · [Optional features](docs/advanced-features.md)
 - [Telegram](docs/telegram.md) · [Bundled assets](docs/vendor-assets.md) · [Changelog](CHANGELOG.md)
 
 [Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Contribute](CONTRIBUTING.md) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)

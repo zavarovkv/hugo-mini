@@ -1,0 +1,37 @@
+{{- /* Normalize Russian quote nesting after Goldmark, without touching HTML
+     attributes, protected nodes or visible URLs (filtered by text.html).
+     Double quotes alternate «...» and „...“; inner single quotes can also
+     serve as the second level. An unmatched apostrophe stays unchanged. */ -}}
+{{- $stack := .quoteStack -}}
+{{- $parts := slice -}}
+{{- $tokens := findRE `(?s)&(?:laquo|raquo|ldquo|rdquo|bdquo|lsquo|rsquo);|[«»„“”‘’]|[^&«»„“”‘’]+|&` (string .text) -}}
+{{- range $i, $token := $tokens -}}
+  {{- $mark := . -}}
+  {{- /* &ldquo; can also be the closing mark of an explicit „...“ pair. */ -}}
+  {{- $closesInner := and (eq $mark "&ldquo;") (gt (len $stack) 0) (eq (index $stack (sub (len $stack) 1)) "single") -}}
+  {{- $doubleOpen := and (not $closesInner) (in (slice "&laquo;" "&ldquo;" "«") $mark) -}}
+  {{- $singleOpen := or (in (slice "&bdquo;" "„") $mark) (and (gt (len $stack) 0) (in (slice "&lsquo;" "‘") $mark)) -}}
+  {{- $doubleClose := in (slice "&raquo;" "&rdquo;" "»" "”") $mark -}}
+  {{- $singleClose := or $closesInner (in (slice "&rsquo;" "“" "’") $mark) -}}
+  {{- /* An apostrophe between letters is not a quotation boundary, even
+       inside a quoted title such as ‘O’Reilly’. */ -}}
+  {{- if and $singleClose (in (slice "&rsquo;" "’") $mark) (gt $i 0) (lt (add $i 1) (len $tokens)) -}}
+    {{- $before := index $tokens (sub $i 1) -}}
+    {{- $after := index $tokens (add $i 1) -}}
+    {{- if and (findRE `[\p{L}\p{N}]$` $before) (findRE `^[\p{L}\p{N}]` $after) -}}
+      {{- $singleClose = false -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if or $doubleOpen $singleOpen -}}
+    {{- $stack = $stack | append (cond $doubleOpen "double" "single") -}}
+    {{- $mark = cond (eq (mod (len $stack) 2) 1) "&laquo;" "&bdquo;" -}}
+  {{- else if and (gt (len $stack) 0) (or $doubleClose $singleClose) -}}
+    {{- $top := index $stack (sub (len $stack) 1) -}}
+    {{- if or (and $doubleClose (eq $top "double")) (and $singleClose (eq $top "single")) -}}
+      {{- $mark = cond (eq (mod (len $stack) 2) 1) "&raquo;" "&ldquo;" -}}
+      {{- $stack = first (sub (len $stack) 1) $stack -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $parts = $parts | append $mark -}}
+{{- end -}}
+{{- return (dict "text" (delimit $parts "") "quoteStack" $stack) -}}
