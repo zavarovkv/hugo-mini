@@ -15,6 +15,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Refresh the bilingual README animation with the current asterisk logo, desktop search shortcut, mobile search menu, and both color schemes.
 - Focus both README translations on a minimal personal blog for writers, with clear benefits and a short path to the first post; document the search shortcut in the configuration guide.
 - Keep balanced wrapping for page titles while restoring natural line breaks in article section headings through the shared Beauty.css foundation.
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
