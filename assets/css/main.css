@@ -260,20 +260,16 @@
 
   article .footnotes > ol {
     list-style: none;
+    padding-inline-start: 0;
   }
 
-  article .footnotes > ol > li {
-    position: relative;
-  }
-
-  article .footnotes > ol > li::before {
+  article .footnotes > ol > li > p:first-child::before {
     content: counter(list-item);
-    position: absolute;
-    right: calc(100% + 0.35em);
-    top: -0.2em;
     font-size: 0.7em;
     font-style: italic;
-    line-height: 1;
+    line-height: 0;
+    vertical-align: super;
+    margin-inline-end: 0.35em;
   }
 
   article .footnote-backref,

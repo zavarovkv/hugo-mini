@@ -64,4 +64,4 @@ A useful claim[^source] can reference the same note again[^source].
 [^source]: A short note naming the source.
 ```
 
-Reference numbers appear as small, italic, text-colored superscripts without visible link decoration, both in the article and beside each endnote. The linked notes are smaller and muted, with a return link for each reference. Keyboard focus remains visible; numbering follows the order of first citation.
+Reference numbers appear as small, italic, text-colored superscripts without visible link decoration, both in the article and inline at the start of each endnote. Notes align with the reading column without a list indent, use smaller muted text, and retain return links for each reference. Keyboard focus remains visible; numbering follows the order of first citation.
