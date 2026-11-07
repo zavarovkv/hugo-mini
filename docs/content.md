@@ -46,10 +46,11 @@ including older articles (`2 января 2000` / `2 January 2000`).
 
 ## Typography
 
-Homepages and single-page bodies receive language-aware prose spacing during
-the Hugo build, without changing their Markdown sources. Set `typography = false`
-in front matter to disable this pass for a page. Code and formulas are preserved;
-see [typography](typography.md) for examples and fragment-level control.
+Homepages and single-page bodies receive language-aware prose spacing and
+Russian punctuation rules during the Hugo build, without changing Markdown
+sources. Set `typography = false` in front matter to disable this pass for a page.
+Code and formulas are preserved; see [typography](typography.md)
+([на русском](typography.ru.md)) for rules and fragment-level control.
 
 ## Printing
 

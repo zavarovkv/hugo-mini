@@ -1,89 +1,58 @@
-# Reading and typography
+# Typography
 
-## Reading width
+English | [Русский](typography.ru.md)
 
-The theme uses 16 px reading text and a maximum reading width of `45rem`
-(720 px at the default root size). Content narrows with the viewport; wide
-components such as tables and code retain their own overflow behavior.
+Mini uses Goldmark for Markdown punctuation, build-time rules for prose, and Beauty.css for layout. No browser text-rewriting JavaScript.
 
-Shared type, wrapping, heading rhythm, quotations and links come from the pinned
-Beauty.css foundation. The theme configures `--beauty-reading-width` in its token
-block and owns the page layout and Inter font loading. See
-[customization](customization.md) when changing tokens in a consuming site.
-
-## Build-time processing
-
-Two stages run during an ordinary `hugo` build:
-
-1. Goldmark renders Markdown and applies its configured smart punctuation:
-   quotation marks, ellipses, `--` as an en dash and `---` as an em dash.
-2. The theme processes text nodes in the rendered homepage and single-page body.
-   Its additional spacing rules apply to Russian and English, including regional
-   language codes such as `en-GB`. Other languages pass through unchanged.
-
-There is no extra dependency, network request or browser text-rewriting script.
-Markdown files and translation hashes are never rewritten. Titles, metadata,
-heading IDs, listings and feed content do not receive the additional spacing pass.
-Custom layouts that render `.Content` directly are also unaffected.
+## Rules
 
 | Input | Russian output | English output |
 | --- | --- | --- |
+| `"Фильм 'Звездные войны'"` | `«Фильм „Звездные войны“»` | Goldmark's smart quotes |
+| `«Фильм «Звездные войны»»` | `«Фильм „Звездные войны“»` | unchanged |
+| `«Звездные войны» - классика` | `«Звездные войны» — классика` | unchanged |
+| `в Москве и на улице` | `в Москве и на улице` | unchanged |
 | `1 000 000` | `1 000 000` | `1 000 000` |
 | `3000₽` | `3000 ₽` | `3000 ₽` |
 | `16px` | `16 px` | `16 px` |
-| `2 ГБ` | `2 ГБ` | `2 ГБ` |
 | `10 %` | `10 %` | `10%` |
-| `Text — continuation` | `Text — continuation` | `Text — continuation` |
 
-Existing digit groups use narrow nonbreaking spaces (U+202F). Measurements,
-currencies, Russian percentages and the space before a Russian em dash use
-nonbreaking spaces (U+00A0). Only already spaced em dashes are adjusted.
+- **Quotes:** outer `«...»`, inner `„...“` in Russian; nesting works across inline markup. Apostrophes are preserved.
+- **Dashes:** Goldmark converts `--` → `–`, `---` → `—`; Mini converts spaced `word - word` to an em dash in Russian. `1 - 2` and `по-настоящему` stay intact.
+- **Short words (RU):** `в, к, с, у, о, и, а, на, по, из, от, до, за, во, со, ко, об` join the next word of at least three letters. No long unbreakable chains.
+- **Spaces:** U+202F within grouped numbers; U+00A0 before units, Russian percentages and em dashes, and after short Russian words.
 
-The pass recognizes common metric, time, storage, frequency, power and pixel
-units. It does not infer number ranges, change a single hyphen into a dash,
-regroup unformatted numbers or bind short prepositions. Years and technical
-tokens such as `2026`, `B2B`, `model16px` and `10MBps` stay intact. Rules operate
-within each text node; a number and its unit separated by an HTML tag are not
-joined.
+## Scope and exclusions
 
-## Protected content
+- Applies to Russian and English **homepage and single-page bodies**. Markdown sources, page titles, metadata, listings and feeds are unchanged.
+- Preserves code, formulas, Mermaid, HTML tags and attributes, comments, URLs and paths. No rewriting across HTML tags or guessing ambiguous ranges.
+- Other languages are not processed by Mini's extra pass.
 
-The spacing pass preserves HTML tags and attributes, comments, visible URLs and
-paths, and content inside `pre`, `code`, `kbd`, `samp`, `script`, `style`,
-`textarea`, `svg` and `math`. Escaped HTML stays escaped.
+## Control
 
-TeX inside `\(...\)`, `\[...\]` and `$$...$$` is preserved. On pages with
-`math = true`, `$...$` is protected as well, matching the theme's KaTeX
-delimiters. Mermaid source remains inside a protected code block.
-
-## Disable or limit processing
-
-Disable the theme's spacing pass for one page:
+Disable for one page:
 
 ```toml
 +++
-title = "Literal text"
 typography = false
 +++
 ```
 
-Or disable it site-wide in `hugo.toml`:
+Or site-wide in `hugo.toml`:
 
 ```toml
 [params]
   typography = false
 ```
 
-A page with `typography = true` overrides that site setting. To preserve one
-raw HTML fragment, including nested elements, use:
+A page can override the site setting with `typography = true`. Exclude an HTML fragment and its children:
 
 ```html
-<span data-typography="off">A literal label: 16px, 10 %</span>
+<span data-typography="off">«Фильм «Звездные войны»» - 16px</span>
 ```
 
-Raw HTML requires Goldmark's `renderer.unsafe = true`. These switches control
-only the theme's additional spacing rules. Goldmark's punctuation substitutions
-are configured separately under `markup.goldmark.extensions.typographer`;
-use its settings for language-specific quote characters or disable that
-extension with `disable = true`. Use Markdown code spans or fenced blocks for
-text that must bypass both punctuation and spacing.
+Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect Mini's **extra pass**, not native Goldmark substitutions. To change those, configure [Goldmark Typographer](https://gohugo.io/configuration/markup/#typographer).
+
+## Reading layout
+
+16 px text, up to 720 px wide. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).

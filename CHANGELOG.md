@@ -10,6 +10,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a complete Russian README and language switchers to both README versions; document the requirement to keep every README translation in sync.
 - Add a default-on search shortcut linking to the homepage: a right-aligned footer-style GitHub Octicon on desktop and a text-only mobile menu entry before the final navigation link. It can be hidden with `showSearchButton = false`.
 - Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
+- Normalize nested Russian quotation marks, spaced prose hyphens and short prepositions during the Hugo build, preserving code, URLs and per-page typography opt-outs.
+- Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
 - Focus both README translations on a minimal personal blog for writers, with clear benefits and a short path to the first post; document the search shortcut in the configuration guide.

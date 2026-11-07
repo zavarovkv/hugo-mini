@@ -1,7 +1,9 @@
-{{- /* Goldmark owns smart quotes, ellipses and --/---. This pass only adjusts
-     prose spacing; it never guesses numeric ranges or mathematical operators. */ -}}
+{{- /* Goldmark supplies smart punctuation and --/---. This pass adds
+     conservative Russian nesting, prose dashes and spacing; it never guesses
+     numeric ranges or mathematical operators. */ -}}
 {{- $text := string .text -}}
 {{- $lang := lower (index (split .lang "-") 0) -}}
+{{- $quoteStack := .quoteStack -}}
 {{- if in (slice "ru" "en") $lang -}}
   {{- $space := `[ \t\x{00a0}\x{202f}]` -}}
   {{- $units := `₽|€|\$|°C|°F|кг|мг|г|км|см|мм|м²|м³|м|мл|л|мс|мин|ч|с|КБ|МБ|ГБ|ТБ|кВт|Вт|Гц|МГц|kg|mg|g|km|cm|mm|m²|m³|m|ml|ms|min|KB|MB|GB|TB|kB|kW|W|Hz|MHz|px` -}}
@@ -35,10 +37,19 @@
     {{- end -}}
     {{- $prose = delimit $measurements "" -}}
     {{- if eq $lang "ru" -}}
+      {{- /* Only a spaced, word-like hyphen becomes an em dash. Arithmetic,
+           ranges and compound words are intentionally left alone. */ -}}
+      {{- $prose = replaceRE `([\p{L}\)\]»]|&raquo;|&rdquo;)[ \t]+-[ \t]+([\p{L}])` "$1 — $2" $prose -}}
       {{- $prose = replaceRE `(\S)[ \t\x{00a0}\x{202f}]+(—|&mdash;|&#8212;|&#x2014;)[ \t\x{00a0}\x{202f}]+` "$1\u00a0$2 " $prose -}}
+      {{- /* Bind short Russian function words to a following word, without
+           creating long unbreakable chains or touching punctuation/code. */ -}}
+      {{- $prose = replaceRE `(?i)(^|[ \t\x{00a0}\x{202f}\(\[«„]|&laquo;|&ldquo;|&bdquo;)(в|к|с|у|о|и|а|на|по|из|от|до|за|во|со|ко|об)[ \t]+([\p{L}]{3,})` "$1$2\u00a0$3" $prose -}}
+      {{- $quoted := partial "typography/quotes.html" (dict "text" $prose "quoteStack" $quoteStack) -}}
+      {{- $prose = $quoted.text -}}
+      {{- $quoteStack = $quoted.quoteStack -}}
     {{- end -}}
     {{- $parts = $parts | append $prose (index . 2) -}}
   {{- end -}}
   {{- $text = delimit $parts "" -}}
 {{- end -}}
-{{- return $text -}}
+{{- return (dict "text" $text "quoteStack" $quoteStack) -}}

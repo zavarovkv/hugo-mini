@@ -6,6 +6,7 @@
 {{- $rawChild := "" -}}
 {{- $depth := 0 -}}
 {{- $lang := .lang -}}
+{{- $quoteStack := slice -}}
 {{- $void := slice "area" "base" "br" "col" "embed" "hr" "img" "input" "link" "meta" "param" "source" "track" "wbr" -}}
 {{- $verbatim := slice "pre" "code" "script" "style" "textarea" "kbd" "samp" "svg" "math" -}}
 {{- $raw := slice "script" "style" "textarea" -}}
@@ -36,7 +37,9 @@
       {{- end -}}
     {{- end -}}
   {{- else if or $tag (hasPrefix $token "<!--") (hasPrefix $token "<![CDATA[") (hasPrefix $token `\[`) (hasPrefix $token `\(`) (hasPrefix $token "$$") (and $.math (hasPrefix $token "$") (gt (len $token) 1)) -}}
-    {{- $parts = $parts | append (partial "typography/text.html" (dict "text" $pending "lang" $lang)) $token -}}
+    {{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
+    {{- $parts = $parts | append $prose.text $token -}}
+    {{- $quoteStack = $prose.quoteStack -}}
     {{- $pending = "" -}}
     {{- $skip := in $verbatim $tag -}}
     {{- if and $tag (not $closing) (in (lower $token) "data-typography") -}}
@@ -54,6 +57,11 @@
   {{- else -}}
     {{- $pending = printf "%s%s" $pending $token -}}
   {{- end -}}
+  {{- /* Quotes may span inline markup, but never leak into the next block. */ -}}
+  {{- if and $closing (in (slice "p" "li" "h1" "h2" "h3" "h4" "h5" "h6" "div" "blockquote" "section" "article" "td" "th") $tag) -}}
+    {{- $quoteStack = slice -}}
+  {{- end -}}
 {{- end -}}
-{{- $parts = $parts | append (partial "typography/text.html" (dict "text" $pending "lang" $lang)) -}}
+{{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
+{{- $parts = $parts | append $prose.text -}}
 {{- return (delimit $parts "" | safeHTML) -}}

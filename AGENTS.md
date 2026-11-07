@@ -23,7 +23,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/baseof.html` defines the shared page shell and template blocks.
 - `layouts/home.html`, `list.html`, `single.html`, and `404.html` provide page layouts.
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
-- `layouts/_partials/typography/` applies build-time prose spacing to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; native punctuation stays with Goldmark and visual typography stays with Beauty.css. Document rule or opt-out changes in `docs/typography.md` and exercise `tests/typography.test.mjs`.
+- `layouts/_partials/typography/` applies build-time prose spacing and Russian punctuation rules to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; Goldmark owns its native punctuation and Beauty.css owns visual typography. Document changes in both `docs/typography.md` and `docs/typography.ru.md` and exercise `tests/typography.test.mjs`.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, and links.
 - `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, `column`, `github-stars`, `reading-list` and `wavy-arrow`.
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
@@ -82,6 +82,7 @@ For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 - Keep both READMEs concise and benefit-first; put detailed parameters and technical explanations under `docs/` instead of long README paragraphs.
 - Use absolute HTTPS URLs for images in READMEs: the Hugo Themes gallery also renders `README.md`, and repository-relative image paths break there.
 - In the Russian README, always write `е`/`Е` instead of `ё`/`Ё`, including headings and image descriptions. Keep code examples unchanged.
+- Keep translated documentation in sync with its English counterpart. Russian documentation uses `е` instead of `ё`.
 - Update `CHANGELOG.md` for user-visible changes.
 - Follow `CONTRIBUTING.md` for contribution conventions.
 - `.github/RELEASE_TAG` triggers tag and GitHub release creation on `main`; change it only when a release is explicitly requested.

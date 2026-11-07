@@ -65,10 +65,10 @@ hugo server -D
 
 ## Документация
 
-Руководства на английском:
+Руководства:
 
 - [Установка и языки](docs/configuration.md) · [Публикация сайта](docs/deployment.md) · [Написание статей](docs/content.md)
-- [Типографика](docs/typography.md) · [Настройка темы](docs/customization.md) · [Дополнительные возможности](docs/advanced-features.md)
+- [Типографика](docs/typography.ru.md) ([English](docs/typography.md)) · [Настройка темы](docs/customization.md) · [Дополнительные возможности](docs/advanced-features.md)
 - [Telegram](docs/telegram.md) · [Ресурсы темы](docs/vendor-assets.md) · [История изменений](CHANGELOG.md)
 
 [Сообщить об ошибке](https://github.com/zavarovkv/hugo-mini/issues) · [Участвовать в разработке](CONTRIBUTING.md) · [Поставить звезду на GitHub](https://github.com/zavarovkv/hugo-mini)
