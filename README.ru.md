@@ -12,6 +12,8 @@
 
 Аккуратная типографика на основе [Beauty.css](https://github.com/zavarovkv/beauty-css), удобное чтение на любом экране, светлое и темное оформление. Несколько языков, SEO, RSS и JSON Feed доступны сразу. Для сборки нужен только Hugo: без Node.js и обязательных внешних сервисов.
 
+**Типографика.** Встроенные правила исправляют кавычки, тире и неразрывные пробелы в русском и английском тексте при сборке, не изменяя Markdown. [Правила и примеры](docs/typography.ru.md) · [English](docs/typography.md).
+
 **[Демо](https://hugo-mini-demo.vercel.app/)** · **[Быстрый старт](#быстрый-старт)** · **[Каталог тем Hugo](https://themes.gohugo.io/themes/hugo-mini/)** · **[Документация](#документация)**
 
 [![Hugo Mini — компьютерная и мобильная версии со звездочкой, поиском и светлым и темным оформлением](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
