@@ -20,6 +20,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 
 ### Fixed
+- Keep the optional header logo compact at 26 px without changing user avatar sizes.
 - Use an absolute image URL in both README versions so the animated preview renders in the Hugo Themes gallery.
 - Prevent the mobile navigation links from flashing before JavaScript initializes the menu, while keeping a fallback if the bundle fails or scripting is disabled.
 - Correct outdated CSS variable names in the customization guide and example article; show how to load site overrides after the theme stylesheet.
