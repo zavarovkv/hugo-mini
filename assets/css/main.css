@@ -1105,6 +1105,28 @@
     display: inline;
     border-bottom: none;
   }
+  .project-mark {
+    position: relative;
+    display: inline-block;
+    inline-size: 1.1em;
+    block-size: 1.1em;
+    margin-inline-end: 0.35em;
+    vertical-align: -0.2em;
+  }
+  .project-mark img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+  .project-mark .project-mark-dark { display: none; }
+  [data-theme="dark"] .project-mark.has-dark-mark .project-mark-light { display: none; }
+  [data-theme="dark"] .project-mark.has-dark-mark .project-mark-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .project-mark.has-dark-mark .project-mark-light { display: none; }
+    :root:not([data-theme]) .project-mark.has-dark-mark .project-mark-dark { display: block; }
+  }
   .project-description > :first-child { margin-top: 0.25em; }
   .project-description > p { margin-bottom: 0; }
   .project-description > .beauty-note { margin-top: 0.375rem; }
