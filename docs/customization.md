@@ -36,6 +36,21 @@ theme stylesheet using `layouts/_partials/custom_head.html`:
 
 The full token list is in [`assets/css/main.css`](../assets/css/main.css).
 
+## Logo and favicon
+
+The demo uses Hugo Mini's asterisk. Other sites show no default branding. To use the bundled mark:
+
+```toml
+[params]
+  logo = "images/hugo-mini-logo-light.svg"
+  logoDark = "images/hugo-mini-logo-dark.svg"
+  favicon = "images/hugo-mini-favicon.svg"
+```
+
+Replace those paths with images from your site's `static/` directory to use your own logo and favicon. The header switches `logoDark` with the theme toggle; if omitted, `logo` is used in both modes. `logo` takes precedence over the existing `avatar` / `avatarHover` settings. Remove `logo` to restore the avatar.
+
+The browser favicon also accepts PNG. Device icons remain optional: `favicon192` and `appleTouchIcon`.
+
 ## Menu icons
 
 Set `params.icon` on a menu entry. The theme includes `telegram`; custom icons are Hugo resources at `assets/icons/<name>.svg` in your site.

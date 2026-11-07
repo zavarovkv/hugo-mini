@@ -25,15 +25,17 @@ ignoreErrors    = ["error-disable-taxonomy"]
   home = ["HTML", "RSS", "JSON", "LLMS"]
 
 [params]
-  favicon    = "images/favicon.png"
+  favicon    = "images/hugo-mini-favicon.svg"
   # favicon192     = "images/favicon-192.png"
   # appleTouchIcon = "images/apple-touch-icon.png"
   authorName = "Jane Doe"  # fictitious example author
   authorURL  = ""          # no real profile in the public demo
 
   # Appearance
-  avatar      = "images/avatar.svg"
-  avatarHover = "images/avatar-hover.svg"
+  logo      = "images/hugo-mini-logo-light.svg"
+  logoDark  = "images/hugo-mini-logo-dark.svg"
+  # avatar      = "images/avatar.svg"        # alternative: personal avatar
+  # avatarHover = "images/avatar-hover.svg"   # optional hover/dark variant
 
   # Footer
   copyrightYear = 2024   # start year: renders as "© 2024–CURRENT"

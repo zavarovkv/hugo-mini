@@ -177,14 +177,34 @@ weight = 1
     await access(join(output, imagePath));
 
     const config = await readFile(join(root, "hugo.toml"), "utf8");
-    await writeFile(join(root, "hugo.toml"), config.replace("[params]", "[params]\nlocalizeLinks = false"));
+    await writeFile(join(root, "hugo.toml"), config.replace("[params]", `[params]
+localizeLinks = false
+logo = "images/hugo-mini-logo-light.svg"
+logoDark = "images/hugo-mini-logo-dark.svg"
+favicon = "images/hugo-mini-favicon.svg"`));
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const originalLinks = await readFile(join(output, "ru/shared/index.html"), "utf8");
     assert.ok(originalLinks.includes(`${baseURL}shared/?mode=1#intro`), "localizeLinks=false must preserve the destination");
-    await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true\nshowSearchButton = false"));
+    assert.match(originalLinks, /class=(?:"title-logo-container has-dark-logo"|title-logo-container has-dark-logo)/, "configured logo replaces the avatar");
+    assert.ok(!originalLinks.includes('class="title-avatar-container"'), "avatar stays hidden when a logo is configured");
+    for (const [variant, file] of [["light", "hugo-mini-logo-light.svg"], ["dark", "hugo-mini-logo-dark.svg"]]) {
+      const logo = [...originalLinks.matchAll(/<img\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "class")?.includes(`title-logo-${variant}`));
+      assert.equal(attribute(logo, "src"), `${basePath}images/${file}`);
+      await access(join(output, "images", file));
+    }
+    const svgFavicon = [...originalLinks.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "rel") === "icon");
+    assert.equal(attribute(svgFavicon, "type"), "image/svg+xml");
+    assert.equal(attribute(svgFavicon, "sizes"), "any");
+    assert.equal(attribute(svgFavicon, "href"), `${baseURL}images/hugo-mini-favicon.svg`);
+    await access(join(output, "images/hugo-mini-favicon.svg"));
+
+    await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true\nshowSearchButton = false\nfavicon = \"images/pixel.png\""));
     execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
     const sharingPost = await readFile(join(output, "ru/shared/index.html"), "utf8");
     assert.ok(!sharingPost.includes("search-toggle"), "a site can hide the default search shortcut");
+    const pngFavicon = [...sharingPost.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "rel") === "icon");
+    assert.equal(attribute(pngFavicon, "type"), "image/png", "existing PNG favicons remain supported");
+    assert.equal(attribute(pngFavicon, "sizes"), "32x32");
     const sharingAssets = [...sharingPost.matchAll(/<(?:link|script)\b[^>]*>/g)]
       .map(([tag]) => ({ url: attribute(tag, "src") || attribute(tag, "href"), integrity: attribute(tag, "integrity") }))
       .filter(({ url }) => url?.includes("/likely/"));

@@ -535,7 +535,7 @@
     --beauty-link-decoration: none;
   }
 
-  /* Avatar next to title */
+  /* Optional site logo or avatar next to title */
   .title,
   .title:link,
   .title:visited {
@@ -577,6 +577,33 @@
     width: 45px;
     height: 45px;
     flex-shrink: 0;
+  }
+
+  .title-logo-container {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+  }
+
+  .title-logo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .title-logo-dark {
+    display: none;
+  }
+
+  [data-theme="dark"] .has-dark-logo .title-logo-light {
+    display: none;
+  }
+
+  [data-theme="dark"] .has-dark-logo .title-logo-dark {
+    display: block;
   }
 
 
@@ -822,7 +849,8 @@
       display: contents;
     }
 
-    .title-avatar-container {
+    .title-avatar-container,
+    .title-logo-container {
       grid-column: 1;
       justify-self: start;
       position: relative;
