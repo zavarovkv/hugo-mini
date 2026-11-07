@@ -14,7 +14,7 @@ Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beaut
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
-[![Hugo Mini — desktop and mobile preview cycling between light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v4.gif)](https://hugo-mini-demo.vercel.app/)
+[![Hugo Mini — desktop and mobile preview with the asterisk logo, search, and light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Why Mini?
 

@@ -14,7 +14,7 @@
 
 **[Демо](https://hugo-mini-demo.vercel.app/)** · **[Быстрый старт](#быстрый-старт)** · **[Каталог тем Hugo](https://themes.gohugo.io/themes/hugo-mini/)** · **[Документация](#документация)**
 
-[![Hugo Mini — компьютерная и мобильная версии в светлом и темном оформлении](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v4.gif)](https://hugo-mini-demo.vercel.app/)
+[![Hugo Mini — компьютерная и мобильная версии со звездочкой, поиском и светлым и темным оформлением](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Почему Mini
 
