@@ -12,15 +12,13 @@
 
 Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beauty-css), a calm reading experience on every screen, and light and dark modes. Multilingual support, SEO, and feeds are built in. Just Hugo to build your blog — no Node.js or required external services.
 
-**Typography.** Built-in rules refine quotes, dashes and nonbreaking spaces in English and Russian at build time, without changing Markdown. [Rules & examples](docs/typography.md) · [Русский](docs/typography.ru.md).
-
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
 [![Hugo Mini — desktop and mobile preview with the asterisk logo, search, and light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Why Mini?
 
-- **Focus on writing.** Automatic prose typography and a quiet 720 px text column.
+- **Focus on writing.** A quiet 720 px column, plus automatic quotes, dashes and nonbreaking spaces at build time. Markdown stays intact. [Examples](docs/typography.md).
 - **Stay lightweight.** Responsive layout, with fonts, CSS, and JavaScript served from your site.
 - **Publish out of the box.** Light and dark modes, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
@@ -68,7 +66,7 @@ Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Mod
 ## Documentation
 
 - [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md) · [Writing posts](docs/content.md)
-- [Typography](docs/typography.md) ([Русский](docs/typography.ru.md)) · [Customization](docs/customization.md) · [Optional features](docs/advanced-features.md)
+- [Typography](docs/typography.md) · [Customization](docs/customization.md) · [Optional features](docs/advanced-features.md)
 - [Telegram](docs/telegram.md) · [Bundled assets](docs/vendor-assets.md) · [Changelog](CHANGELOG.md)
 
 [Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Contribute](CONTRIBUTING.md) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)
