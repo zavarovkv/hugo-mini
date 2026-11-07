@@ -46,14 +46,14 @@ weight=2
   }
   const dataset = (added = recent) => `[[items]]
 id="old"
-title="Original book - title"
+title="Original book — title"
 author="Original author"
 year=1969
 read="2021-07"
 rating=8.5
 review="/notes/review"
 [items.translations.en]
-title="English book - title"
+title="English book — title"
 author="English author"
 id="do-not-change-the-canonical-id"
 review="/notes/missing-review"
@@ -94,7 +94,7 @@ for (const basePath of ["/", "/sub/"]) {
       const shelf = await site.read(`${prefix}library/index.html`);
       assert.equal(badges(shelf), 1, "only a recently added book gets New; old and future books do not");
       assert.ok(shelf.includes(`${basePath}${prefix}books/legacy_review/`));
-      assert.ok(shelf.includes(lang === "en" ? "English book - title" : "Original book - title"), "the link uses the localized book title");
+      assert.ok(shelf.includes(lang === "en" ? "English book — title" : "Original book\u00a0— title"), "Russian book titles receive the configured typography without changing source data");
       assert.ok(shelf.includes(lang === "en" ? "English author" : "Original author"));
       assert.ok(shelf.includes('id="book-old"') || shelf.includes("id=book-old"), "translations cannot replace shared metadata");
       assert.ok(shelf.includes(lang === "en" ? "8.5" : "8,5"));
