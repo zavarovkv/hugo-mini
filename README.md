@@ -12,6 +12,8 @@
 
 Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beauty-css), a calm reading experience on every screen, and light and dark modes. Multilingual support, SEO, and feeds are built in. Just Hugo to build your blog — no Node.js or required external services.
 
+**Typography.** Built-in rules refine quotes, dashes and nonbreaking spaces in English and Russian at build time, without changing Markdown. [Rules & examples](docs/typography.md) · [Русский](docs/typography.ru.md).
+
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
 [![Hugo Mini — desktop and mobile preview with the asterisk logo, search, and light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
