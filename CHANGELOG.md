@@ -34,6 +34,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 
 ### Fixed
+- Preserve project logo colors and size on hover; retain click-to-spin behavior and keyboard focus.
 - Keep endnote numbers visible when the first block is a quotation, list or code; attach counters to list items rather than their first paragraphs.
 - Apply 11 pt article text and fixed 22/16 pt heading sizes in print at narrow and wide viewports.
 - Add coordinated light, dark and monochrome print palettes for class-based Chroma output; enable `markup.highlight.noClasses = false` in the example site and document site configuration.
