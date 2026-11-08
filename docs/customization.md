@@ -36,6 +36,10 @@ theme stylesheet using `layouts/_partials/custom_head.html`:
 
 The full token list is in [`assets/css/main.css`](../assets/css/main.css).
 
+Language, theme and desktop search controls share muted text, neutral hover colors,
+borders and keyboard-focus outlines. The theme toggle keeps its sun/moon colors
+and animation; the AI-language sparkle turns yellow on hover or keyboard focus.
+
 ## Logo and favicon
 
 The bundled black asterisk is the default browser favicon, with matching Android and iOS icons. It does **not** replace your header avatar or logo.

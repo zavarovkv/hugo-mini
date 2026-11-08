@@ -30,6 +30,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 
 ### Fixed
+- Unify language, theme and desktop search controls with shared neutral colors, borders, pressed and keyboard-focus states; preserve the theme icon colors and yellow AI-translation sparkle.
 - Place endnote numbers inline with the first paragraph, removing hanging list indentation and absolute positioning for consistent alignment at every screen width.
 - Hide native endnote list markers so Safari does not show double numbers beside the raised reference counters.
 - Raise footnote numbers consistently in article text and endnote lists, keeping native ordered-list semantics and unadorned clickable references.

@@ -1286,32 +1286,43 @@
     gap: 10px;
   }
 
-  /* Language control — compact pill for two languages, native menu for more. */
+  /* Shared outline controls; only the theme icon and AI marker add color. */
   .lang-toggle,
-  .lang-toggle:link,
-  .lang-toggle:visited,
-  .lang-toggle:active {
+  .theme-toggle,
+  .search-toggle-desktop {
     --beauty-link-decoration: none;
     display: grid;
     place-items: center;
     box-sizing: border-box;
-    min-width: 42px;
     height: 28px;
-    padding: 0 9px;
     background: transparent;
     border: 0.5px solid var(--color-control-border);
     border-radius: 9999px;
+    color: var(--color-muted);
+    text-decoration: none;
     cursor: pointer;
     overflow: hidden;
-    transition: border-color 0.2s ease, transform 0.15s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   }
 
-  .lang-toggle:hover {
+  :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):is(:hover, :focus-visible) {
+    color: var(--heading-color);
     border-color: var(--color-control-border-hover);
   }
 
-  .lang-toggle:active {
+  :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):focus-visible {
+    outline: 2px solid var(--heading-color);
+    outline-offset: 3px;
+  }
+
+  :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):active {
     transform: scale(0.95);
+  }
+
+  /* Language control — compact pill for two languages, native menu for more. */
+  .lang-toggle {
+    min-width: 42px;
+    padding: 0 9px;
   }
 
   .lang-label {
@@ -1322,8 +1333,7 @@
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    color: var(--beauty-muted);
-    transition: color 0.2s ease;
+    color: inherit;
     pointer-events: none;
   }
 
@@ -1332,12 +1342,10 @@
     transition: color 1.5s ease;
   }
 
-  .lang-toggle:hover .lang-sparkle {
+  :is(.lang-toggle, .lang-option):is(:hover, :focus-visible) .lang-sparkle {
     color: #F5B700;
     transition: color 0.2s ease;
   }
-
-  .lang-toggle:hover .lang-label { color: var(--heading-color); }
 
   .lang-menu { position: relative; }
   .lang-menu > summary { list-style: none; }
@@ -1360,7 +1368,7 @@
     align-items: center;
     gap: 4px;
     padding: 7px 9px;
-    color: var(--color-primary);
+    color: var(--color-muted);
     font-size: 0.8rem;
     text-decoration: none;
     border-bottom: none;
@@ -1368,39 +1376,22 @@
     white-space: nowrap;
   }
   .lang-option:hover,
-  .lang-option:focus-visible { background: var(--color-divider); }
+  .lang-option:focus-visible {
+    color: var(--heading-color);
+    background: var(--color-divider);
+  }
   .lang-option[aria-current="page"] { color: var(--color-secondary); }
 
-  /* Shared outline icon control for the footer and desktop search. */
+  /* Icon-only geometry; language keeps its wider pill. */
   .theme-toggle,
   .search-toggle-desktop {
-    display: grid;
-    place-items: center;
-    box-sizing: border-box;
     width: 28px;
-    height: 28px;
     padding: 0;
-    background: transparent;
-    border: 0.5px solid var(--color-control-border);
-    border-radius: 50%;
-    color: var(--color-muted);
-    overflow: hidden;
-    transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   }
-
-  .theme-toggle { cursor: pointer; }
 
   .search-toggle-desktop {
     flex: none;
-    text-decoration: none;
   }
-
-  .search-toggle-desktop:hover {
-    color: var(--color-primary);
-    border-color: var(--color-control-border-hover);
-  }
-
-  .search-toggle-desktop:active { transform: scale(0.95); }
 
   .search-toggle-desktop svg {
     display: block;
@@ -1408,17 +1399,12 @@
     height: 16px;
   }
 
-  .theme-toggle:hover {
+  .theme-toggle:is(:hover, :focus-visible) {
     color: #F5B700;
-    border-color: var(--color-control-border-hover);
   }
 
-  [data-theme="dark"] .theme-toggle:hover {
+  [data-theme="dark"] .theme-toggle:is(:hover, :focus-visible) {
     color: #7EB6FF;
-  }
-
-  .theme-toggle:active {
-    transform: scale(0.95);
   }
 
   /* Both icons occupy the same grid cell; swap via rotate + scale */
@@ -1498,10 +1484,7 @@
     .social-icons { gap: 16px; }
     .social-icon svg { width: 20px; height: 20px; }
     .footer-controls { gap: 10px; }
-    .lang-toggle,
-    .lang-toggle:link,
-    .lang-toggle:visited,
-    .lang-toggle:active { min-width: 48px; height: 34px; }
+    .lang-toggle { min-width: 48px; height: 34px; }
     .lang-label { font-size: 0.7rem; }
     .theme-toggle { width: 34px; height: 34px; }
     .theme-toggle svg { width: 20px; height: 20px; }
