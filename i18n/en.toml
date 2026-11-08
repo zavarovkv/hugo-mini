@@ -143,6 +143,9 @@ other = "coming soon"
 [copy_section_link]
 other = "Copy link to this section"
 
+[spin_project_logo]
+other = "Spin the {{ .Name }} logo"
+
 [telegram_reactions]
 other = "Reactions on Telegram"
 

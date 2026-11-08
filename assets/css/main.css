@@ -1105,13 +1105,40 @@
     display: inline;
     border-bottom: none;
   }
+  .project-mark-button {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 1.75em;
+    block-size: 1.75em;
+    min-block-size: 0;
+    margin: -0.325em -0.125em -0.325em -0.325em;
+    padding: 0;
+    vertical-align: -0.25em;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: opacity 150ms ease;
+  }
+  .project-mark-button:disabled {
+    opacity: 1;
+    cursor: default;
+  }
+  .project-mark-button:not(:disabled):hover { opacity: 0.7; }
+  @media (prefers-reduced-motion: reduce) {
+    .project-mark-button { transition: none; }
+  }
+  .project-mark-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+  }
   .project-mark {
     position: relative;
-    display: inline-block;
+    display: block;
     inline-size: 1.1em;
     block-size: 1.1em;
-    margin-inline-end: 0.35em;
-    vertical-align: -0.2em;
   }
   .project-mark img {
     position: absolute;

@@ -96,6 +96,36 @@
     }
   }
 
+  // ── Project marks: a short spin that coasts naturally to a stop ────────
+  ready(function initProjectMarks() {
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    document.querySelectorAll('.project-mark-button').forEach(function (button) {
+      var mark = button.querySelector('.project-mark');
+      if (!mark || typeof mark.animate !== 'function') return;
+      var animation = null;
+
+      button.addEventListener('click', function () {
+        if (reducedMotion.matches || (animation && animation.playState === 'running')) return;
+        animation = mark.animate(
+          [{ transform: 'rotate(0deg)' }, { transform: 'rotate(1440deg)' }],
+          { duration: 2700, easing: 'cubic-bezier(0.15, 0.7, 0.2, 1)' }
+        );
+        animation.onfinish = function () { animation = null; };
+      });
+      function syncMotionPreference() {
+        if (reducedMotion.matches && animation) {
+          animation.cancel();
+          animation = null;
+        }
+        button.disabled = reducedMotion.matches;
+      }
+      if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', syncMotionPreference);
+      else if (reducedMotion.addListener) reducedMotion.addListener(syncMotionPreference);
+      // Without JS or the Web Animations API the mark stays decorative.
+      syncMotionPreference();
+    });
+  });
+
   // ── Mobile menu ────────────────────────────────────────────────────────
   ready(function initMobileMenu() {
     var toggle = document.querySelector('.mobile-menu-toggle');

@@ -73,6 +73,9 @@ weight = 1
     }
     await writeFile(join(root, "content/en/notes/hidden.md"), '+++\ntitle="Hidden note"\nhidden=true\n+++\nText\n');
     await writeFile(join(root, "content/en/about.md"), '+++\ntitle="About"\ncanonicalURL="https://project.example/"\nseoSiteName="Example Project"\nseoSiteURL="https://project.example/"\n+++\nAbout\n');
+    for (const lang of ["en", "ru"]) {
+      await writeFile(join(root, `content/${lang}/_index.md`), `+++\n+++\n{{< project name="Fixture" url="https://example.com/" icon="images/hugo-mini-logo-light.svg" iconDark="images/hugo-mini-logo-dark.svg" >}}\nA sample project.\n{{< /project >}}\n\n{{< project name="Plain" url="https://example.net/" >}}\nA project without a mark.\n{{< /project >}}`);
+    }
     await mkdir(join(root, "content/en/blog/bundle"));
     await writeFile(join(root, "content/en/blog/bundle/pixel.png"), pixel);
     await writeFile(join(root, "content/en/blog/bundle/index.md"), '+++\ntitle="Bundle"\nslug="bundle"\n+++\n![Bundle image](pixel.png)');
@@ -83,6 +86,18 @@ weight = 1
     assert.ok(robots.includes(`Sitemap: ${baseURL}sitemap.xml`), "robots advertises the root multilingual sitemap, including a base path");
     for (const [langPath, label] of [["", "Search"], ["ru/", "Поиск"]]) {
       const home = await readFile(join(output, langPath, "index.html"), "utf8");
+      const markButton = home.match(/<button\b[^>]*\bclass=(?:"project-mark-button"|project-mark-button)[^>]*>[\s\S]*?<\/button>/)?.[0];
+      assert.ok(markButton, "project logos use a separate button, not a nested interactive element in the link");
+      assert.ok(markButton.includes("disabled"), "without JavaScript the logo stays a decorative, unfocusable mark");
+      assert.equal(attribute(markButton, "aria-label"), langPath ? "Покрутить логотип Fixture" : "Spin the Fixture logo");
+      for (const variant of ["light", "dark"]) {
+        assert.ok(markButton.includes(`project-mark-${variant}`), `the ${variant} logo is available`);
+      }
+      const projectLink = home.match(/<a\b[^>]*\bclass=(?:"project-link"|project-link)[^>]*>[\s\S]*?<\/a>/)?.[0];
+      assert.ok(projectLink && projectLink.includes("Fixture") && !projectLink.includes("project-mark"),
+        "project name still links normally, separately from the spinning logo");
+      assert.equal([...home.matchAll(/\bclass=(?:"project-mark-button"|project-mark-button)/g)].length, 1,
+        "projects without logos do not gain animation controls");
       const iconLinks = [...home.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag);
       const browserIcon = iconLinks.find(tag => attribute(tag, "rel") === "icon" && attribute(tag, "sizes") === "any");
       const androidIcon = iconLinks.find(tag => attribute(tag, "rel") === "icon" && attribute(tag, "sizes") === "192x192");

@@ -80,6 +80,41 @@ test('mobile navigation is hidden before the deferred bundle, but restores its f
   assert.ok(!failed.nav.classList.contains('menu-ready'));
 });
 
+test('project logo spins with easing, does not restart mid-spin, and respects reduced motion', () => {
+  const p = page();
+  const animations = [];
+  const mark = element();
+  mark.animate = (frames, options) => {
+    const animation = { playState: 'running', cancel() { this.playState = 'idle'; } };
+    animations.push({ frames, options, animation });
+    return animation;
+  };
+  const button = Object.assign(element(), {
+    disabled: true,
+    querySelector: (selector) => selector === '.project-mark' ? mark : null,
+  });
+  p.document.querySelectorAll = (selector) => selector === '.project-mark-button' ? [button] : [];
+  p.start();
+  assert.equal(button.disabled, false, 'working JavaScript enables the icon control');
+  button.dispatchEvent(new Event('click'));
+  assert.equal(animations.length, 1);
+  assert.deepEqual(Array.from(animations[0].frames, (frame) => frame.transform), ['rotate(0deg)', 'rotate(1440deg)']);
+  assert.equal(animations[0].options.duration, 2700);
+  assert.match(animations[0].options.easing, /^cubic-bezier/);
+  button.dispatchEvent(new Event('click'));
+  assert.equal(animations.length, 1, 'repeated clicks cannot snap the mark back to its start');
+  animations[0].animation.onfinish();
+  button.dispatchEvent(new Event('click'));
+  assert.equal(animations.length, 2, 'a finished spin can be replayed');
+  p.motion.matches = true;
+  p.motion.dispatchEvent(new Event('change'));
+  assert.equal(button.disabled, true, 'reduced motion disables an otherwise inert control');
+  assert.equal(animations[1].animation.playState, 'idle', 'changing preferences cancels ongoing motion');
+  p.motion.matches = false;
+  p.motion.dispatchEvent(new Event('change'));
+  assert.equal(button.disabled, false, 'the control becomes available if motion is enabled again');
+});
+
 test('an invalid saved value does not prevent following the system scheme', () => {
   const p = page({ saved: 'invalid' });
   p.start();

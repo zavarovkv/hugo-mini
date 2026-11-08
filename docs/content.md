@@ -131,7 +131,7 @@ A short introduction to your projects.
 
 ## Projects
 
-Use the `project` shortcode below a section heading. The name links to an external project page; the description accepts Markdown and keeps links at the same weight as the body text. Optionally set `icon` to a local image path and `iconDark` to its dark-mode variant. The decorative mark appears before the project name, inside the same accessible link.
+Use the `project` shortcode below a section heading. The name links to an external project page; the description accepts Markdown and keeps links at the same weight as the body text. Optionally set `icon` to a local image path and `iconDark` to its dark-mode variant. The mark becomes a separate, keyboard-accessible button: clicking it spins the logo a few times and gradually slows to a stop without opening the link. The project name remains a normal link. Motion preferences are respected; without JavaScript, the mark remains decorative.
 
 For a separate secondary source link, put it in a `<p class="beauty-note">` inside the description. Project layout keeps this note close to the preceding paragraph and separates adjacent projects with a larger gap. Its text size and color come from Beauty.css.
 
@@ -141,7 +141,7 @@ A short description. Source code on [GitHub](https://github.com/example/project)
 {{< /project >}}
 
 {{< project name="My other project" url="https://example.com/" icon="images/mark-light.svg" iconDark="images/mark-dark.svg" >}}
-A project with a small mark that matches the selected color scheme.
+A project with a small, clickable mark that matches the selected color scheme.
 {{< /project >}}
 ```
 
