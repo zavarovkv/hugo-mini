@@ -17,6 +17,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Refresh Beauty.css for half-pixel table-header rules on Retina screens, retaining 1 px rules on standard displays and in print.
 - Use Beauty’s shared zero-gap table headers and native 1 px rule; remove the reading-shelf-specific spacing override.
 - Scope header and navigation styling to the page header and `.main-nav`, remove unused color variables, and isolate legacy Beauty aliases in a cached adapter that matches complete selector tokens.
 - Update CI and release checkout to the Node.js 24 action runtime, retaining immutable SHA pins and disabling unnecessary credential persistence.
