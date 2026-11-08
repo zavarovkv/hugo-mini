@@ -38,7 +38,7 @@ lines, logical positioning and text rhythm. Consumers supply the list content
 and surrounding section layout; the component adds no interaction or progress state.
 
 The bundle aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
-Beauty's selectors. This preserves existing theme content without duplicating CSS declarations or
+Beauty's selectors through the cached `beauty-compat.html` partial. It matches complete selector tokens in the pinned generated artifact, leaving longer class names unchanged. This adapter still transforms trusted CSS text; it is not a general CSS parser. Regression tests cover token boundaries and the generated bundle. This preserves existing theme content without duplicating CSS declarations or
 adding Hugo-specific selectors to the independent library. Prefer `.beauty-emphasis`,
 `.beauty-caption`, `.beauty-button` and the semantic `callout` shortcode for new content:
 

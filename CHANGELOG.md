@@ -17,6 +17,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Scope header and navigation styling to the page header and `.main-nav`, remove unused color variables, and isolate legacy Beauty aliases in a cached adapter that matches complete selector tokens.
 - Update CI and release checkout to the Node.js 24 action runtime, retaining immutable SHA pins and disabling unnecessary credential persistence.
 - Style Goldmark footnotes as subtle italic, unlined references with muted source notes and unobtrusive return links; retain native navigation and keyboard focus.
 - Describe build-time typography in the benefits list of each README and link only to same-language rule examples.
@@ -31,13 +32,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 
 ### Fixed
+- Keep endnote numbers visible when the first block is a quotation, list or code; attach counters to list items rather than their first paragraphs.
+- Apply 11 pt article text and fixed 22/16 pt heading sizes in print at narrow and wide viewports.
+- Add coordinated light, dark and monochrome print palettes for class-based Chroma output; enable `markup.highlight.noClasses = false` in the example site and document site configuration.
 - Normalize literal curly quotes and quotations ending in visible URLs without corrupting Russian quote nesting.
 - Keep the desktop search shortcut and header logo out of printed articles.
 - Restore the intended gap after printed page titles by passing two values to `margin-block`.
 - Avoid invalid `role="null"` and `aria-label="null"` attributes when Likely enhances sharing links.
 - Pin new starter sites to v3.5.0, including its Markdown URL-safety fixes; honor an explicit canonical domain and preserve configured baseURL when no deployment URL is supplied.
 - Unify language, theme and desktop search controls with shared neutral colors, borders, pressed and keyboard-focus states; preserve the theme icon colors and yellow AI-translation sparkle.
-- Place endnote numbers inline with the first paragraph, removing hanging list indentation and absolute positioning for consistent alignment at every screen width.
 - Hide native endnote list markers so Safari does not show double numbers beside the raised reference counters.
 - Raise footnote numbers consistently in article text and endnote lists, keeping native ordered-list semantics and unadorned clickable references.
 - Keep the optional header logo compact at 26 px without changing user avatar sizes.

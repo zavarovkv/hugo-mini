@@ -99,12 +99,7 @@
          URL substitutions. Both are delivered as one fingerprinted local file. */ -}}
   {{- $themeCSS := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/theme.css" . -}}
   {{- with resources.Get "css/beauty.css" -}}
-  {{- /* Alias the theme's public helpers without duplicating typography rules
-         or coupling the independent library to Hugo-specific markup. */ -}}
-  {{- $foundation := .Content -}}
-  {{- range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" -}}
-    {{- $foundation = replace $foundation $selector (printf ":is(%s,%s)" $selector $alias) -}}
-  {{- end -}}
+  {{- $foundation := partialCached "beauty-compat.html" .Content (crypto.SHA256 .Content) -}}
   {{- /* FromString caches by target path; content keys keep live vendor refreshes current. */ -}}
   {{- $foundationPath := printf "css/beauty-compatible.%s.css" (crypto.SHA256 $foundation) -}}
   {{- $foundationCSS := resources.FromString $foundationPath $foundation -}}

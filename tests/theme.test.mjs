@@ -161,8 +161,8 @@ weight = 1
     }
     assert.match(css, /article sup:has\(>\.footnote-ref\)\{[^}]*vertical-align:super/, "in-text citation numbers stay raised");
     assert.match(css, /article \.footnotes>ol\{[^}]*list-style:none[^}]*padding-inline-start:0/, "the footnote list has neither default markers nor a hanging indent");
-    assert.match(css, /article \.footnotes>ol>li>p:first-child::before\{[^}]*content:counter\(list-item\)/, "native ordered-list counters sit inline with each first paragraph");
-    assert.match(css, /article \.footnotes>ol>li>p:first-child::before\{[^}]*font-size:\.7em[^}]*vertical-align:super/, "footnote numbers stay italic superscripts without absolute positioning");
+    assert.match(css, /article \.footnotes>ol>li::before\{[^}]*content:counter\(list-item\)/, "native ordered-list counters belong to each note, including non-paragraph content");
+    assert.match(css, /article \.footnotes>ol>li::before\{[^}]*font-size:\.7em[^}]*position:absolute/, "footnote numbers stay small and outside the aligned note content");
     const defaultLink = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "hreflang") === "x-default");
     assert.equal(attribute(defaultLink, "href"), `${baseURL}shared/`, "the default language is independent of its display weight");
     assert.match(post, /class=(?:"tg-views"|tg-views)/, "Telegram data renders without deprecated data APIs");

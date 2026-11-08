@@ -118,3 +118,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
         name       = "Исходный код"
         url        = "https://github.com/zavarovkv/hugo-mini"
         weight     = 3
+
+# Use the theme’s light, dark and print syntax palettes.
+[markup.highlight]
+  noClasses = false

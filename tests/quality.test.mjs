@@ -281,3 +281,68 @@ disableKinds=["taxonomy","term"]
     assert.equal(png.readUInt32BE(20), 630);
   }
 });
+
+test('class-based syntax palettes preserve explicit inline highlighting', async (t) => {
+  const example = await site(t, `baseURL="https://example.org/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[markup.highlight]
+noClasses=false
+`, {
+    'blog/code.md': '+++\ntitle="Code"\ndate=2026-01-01\n+++\n```python {linenos=inline hl_lines=[2]}\n# comment\nprint("hello", 42)\n```\n\n```python {linenos=table}\nx = 1\n```\n\n```python {noClasses=true style=friendly}\nx = 2\n```',
+  });
+  const html = await example.read('blog/code/index.html');
+  assert.match(html, /class=chroma/);
+  assert.match(html, /class=ln/);
+  assert.match(html, /class=lntable/);
+  assert.match(html, /class="line hl"/);
+  assert.match(html, /class=c1/);
+  assert.match(html, /style=[^>]*color:/, 'explicit per-block inline styles remain supported');
+});
+
+test('syntax text and line numbers retain contrast on normal and highlighted lines', async () => {
+  const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
+  const blocks = [...css.matchAll(/(?:^|\n)\s*\.chroma\s*\{([^}]+)\}|\[data-theme="dark"\] \.chroma\s*\{([^}]+)\}/g)];
+  assert.equal(blocks.length, 3, 'light, dark and print palettes are explicit');
+  const luminance = (hex) => {
+    if (hex.length === 3) hex = [...hex].map(c => c + c).join('');
+    return hex.match(/../g).map(v => parseInt(v, 16) / 255)
+      .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+      .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+  };
+  for (const block of blocks) {
+    const colors = Object.fromEntries([...(block[1] || block[2]).matchAll(/--code-([a-z]+):\s*#([a-f0-9]+);/g)].map(m => [m[1], m[2]]));
+    for (const name of ['text', 'muted', 'keyword', 'name', 'string', 'number']) {
+      for (const background of ['background', 'highlight']) {
+        const a = luminance(colors[name]), b = luminance(colors[background]);
+        assert.ok((Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) >= 4.5, `${name} on ${background}: ${JSON.stringify(colors)}`);
+      }
+    }
+  }
+});
+
+test('legacy Beauty aliases match complete tokens and preserve longer class names', async (t) => {
+  const example = await site(t, 'baseURL="https://example.org/"\ntheme="hugo-mini"\ndisableKinds=["taxonomy","term"]', {}, {
+    '_partials/custom_body.html': `{{ $css := ":where(.beauty-caption){color:red}:where(.beauty-caption-extra){color:blue}:where(.beauty-buttonish){color:green}:where(.beauty-button:hover){color:black}" }}<div id="compat-probe" data-css="{{ partial "beauty-compat.html" $css }}"></div>`,
+  });
+  const html = await example.read('index.html');
+  assert.ok(html.includes(':is(.beauty-caption,.caption)'));
+  assert.ok(html.includes(':is(.beauty-button,.button):hover'));
+  assert.ok(html.includes(':where(.beauty-caption-extra)'));
+  assert.ok(html.includes(':where(.beauty-buttonish)'));
+  assert.ok(!html.includes('.caption)-extra'));
+});
+
+
+test('the pinned Beauty aliases retain the previous public styles', async (t) => {
+  const example = await site(t, 'baseURL="https://example.org/"\ntheme="hugo-mini"\ndisableKinds=["taxonomy","term"]', {}, {
+    '_partials/custom_body.html': `{{ with resources.Get "css/beauty.css" }}
+      {{ $old := .Content }}
+      {{ range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" }}
+        {{ $old = replace $old $selector (printf ":is(%s,%s)" $selector $alias) }}
+      {{ end }}
+      <div id="compat-equal">{{ eq $old (partial "beauty-compat.html" .Content) }}</div>
+    {{ end }}`,
+  });
+  assert.match(await example.read('index.html'), /<div id=compat-equal>true<\/div>/);
+});

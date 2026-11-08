@@ -123,3 +123,5 @@ Use `loading-skeleton` on an inline value whose visible content is wrapped in ch
 ## Assets
 
 The theme bundles and fingerprints its CSS and JavaScript with Hugo Pipes. Fonts are self-hosted. Mermaid is the only optional CDN asset; set `params.mermaidSrc = "js/mermaid.min.js"` after placing a local bundle in `static/js/` to avoid that request too.
+
+The former `--link-color`, `--blockquote-color` and `--color-blockquote-border` variables had no consumers and have been removed. Use `--color-primary` for links and the shared `--beauty-quote-text` / `--beauty-quote-border` tokens for quotations; consult the pinned [Beauty foundation](vendor-assets.md) before adding overrides. Header spacing applies to `body > header`, and menu styles to `.main-nav`; an article’s own `header` or `nav` keeps its content styles.

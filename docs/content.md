@@ -58,7 +58,7 @@ Use your browser's Print or Save as PDF command to get a clean, light-on-paper
 version of an article, even when the site is in dark mode. The print layout keeps
 the site name, article title, text, images and publication date; navigation,
 sharing controls, comments and related-post widgets are omitted. Long code blocks
-wrap instead of being clipped. This uses print-only CSS and requires no setting,
+wrap instead of being clipped. Article text is 11 pt, page titles 22 pt and section headings 16 pt regardless of the viewport width. Class-based syntax highlighting prints in monochrome. This uses print-only CSS and requires no setting,
 JavaScript or additional asset.
 
 ## Categories
