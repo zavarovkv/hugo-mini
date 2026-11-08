@@ -24,6 +24,10 @@ Use the official Pages actions or another maintained workflow. The essential seq
 
 Pin third-party actions to immutable commit SHAs and give the workflow only the permissions it needs. The [demo site's workflow](https://github.com/zavarovkv/zavarov.com/blob/main/.github/workflows/gh-pages.yml) is a production example.
 
+The theme's own CI and release workflows use SHA-pinned Node.js 24 actions.
+Checkout credentials are not persisted: builds need read access, while release
+creation uses the job-scoped token explicitly through `gh`.
+
 GitHub Pages serves the root `404.html` for missing paths in every language.
 The theme includes inert translated views in that page and selects the language
 from the requested URL before initializing its controls. This keeps the missing
