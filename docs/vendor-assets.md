@@ -67,8 +67,11 @@ under `assets/fonts/` are separate build inputs for generated share images, not 
 
 Likely's upstream files live under `assets/likely/`. Hugo minifies and fingerprints them only
 for article pages with social sharing enabled. The generated CSS and JavaScript stay local;
-no npm install or CDN is required. Keep upstream sources intact rather than editing their
-generated minified output. Existing theme button markup and disabled counters are unchanged.
+no npm install or CDN is required. Edit the readable asset, never Hugo's generated minified
+output. The local accessibility patch copies `role` and `aria-label` only when the source
+element has those attributes (`hasAttribute`); otherwise Likely would emit the string
+`"null"`. The theme supplies localized names for icon-only sharing links. Retain this patch
+when refreshing upstream unless the new version already includes it. Counters stay disabled.
 
 ## KaTeX
 

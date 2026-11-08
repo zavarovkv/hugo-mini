@@ -32,11 +32,15 @@
     {{- /* Social sharing buttons (on by default; socialSharing = false hides) */}}
     {{ if site.Params.socialSharing | default true }}
     <div class="likely likely-big" data-counters="no" data-url="{{ .Permalink }}" data-title="{{ .Title }}">
-      <div class="telegram"></div>
-      <div class="twitter"></div>
-      <div class="facebook"></div>
-      <div class="vkontakte"></div>
-      <div class="linkedin"></div>
+      {{- range slice
+        (dict "key" "telegram" "name" "Telegram")
+        (dict "key" "twitter" "name" "Twitter")
+        (dict "key" "facebook" "name" "Facebook")
+        (dict "key" "vkontakte" "name" "VK")
+        (dict "key" "linkedin" "name" "LinkedIn")
+      }}
+      <div class="{{ .key }}" aria-label="{{ i18n "share_on" (dict "Name" .name) }}"></div>
+      {{- end }}
     </div>
     {{ end }}
 

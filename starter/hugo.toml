@@ -1,4 +1,4 @@
-baseURL = "https://example.com/"
+baseURL = "/"
 title = "My Mini Blog"
 theme = "hugo-mini"
 enableRobotsTXT = true

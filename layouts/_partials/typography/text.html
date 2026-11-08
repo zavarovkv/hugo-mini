@@ -11,6 +11,7 @@
   {{- /* Keep visible URLs byte-for-byte, including percent escapes. */ -}}
   {{- range findRESubmatch `(?is)(.*?)([A-Za-z][A-Za-z0-9+.-]*://[^\s<]+|mailto:[^\s<]+|tel:[^\s<]+|www\.[^\s<]+|/[^\s<]+|$)` $text -}}
     {{- $prose := index . 1 -}}
+    {{- $url := index . 2 -}}
     {{- /* Existing digit groups only: years and unformatted IDs are not regrouped. */ -}}
     {{- $numbers := slice -}}
     {{- $groups := printf `(?s)(.*?)([\p{L}\p{N}_]+(?:%s[0-9]{3})+(?:[.,][0-9]+)?[\p{L}\p{N}_]*|$)` $space -}}
@@ -57,8 +58,18 @@
       {{- $quoted := partial "typography/quotes.html" (dict "text" $prose "quoteStack" $quoteStack) -}}
       {{- $prose = $quoted.text -}}
       {{- $quoteStack = $quoted.quoteStack -}}
+      {{- /* A URL can end a prose quotation. Consume only trailing closing
+           marks when a quote is already open; keep the URL itself verbatim. */ -}}
+      {{- if gt (len $quoteStack) 0 -}}
+        {{- with findRESubmatch `^(.*?)((?:&raquo;|&rdquo;|&ldquo;|&rsquo;|[»”“’])+[.,!?;:]*)$` $url -}}
+          {{- $match := index . 0 -}}
+          {{- $ending := partial "typography/quotes.html" (dict "text" (index $match 2) "quoteStack" $quoteStack) -}}
+          {{- $url = printf "%s%s" (index $match 1) $ending.text -}}
+          {{- $quoteStack = $ending.quoteStack -}}
+        {{- end -}}
+      {{- end -}}
     {{- end -}}
-    {{- $parts = $parts | append $prose (index . 2) -}}
+    {{- $parts = $parts | append $prose $url -}}
   {{- end -}}
   {{- $text = delimit $parts "" -}}
 {{- end -}}

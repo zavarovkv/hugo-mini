@@ -146,6 +146,9 @@ other = "Скопировать ссылку на раздел"
 [spin_project_logo]
 other = "Покрутить логотип {{ .Name }}"
 
+[share_on]
+other = "Поделиться в {{ .Name }}"
+
 [telegram_reactions]
 other = "Реакции в Telegram"
 

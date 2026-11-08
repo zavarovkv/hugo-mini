@@ -198,6 +198,9 @@ recentSidebarCount=3
   assert.match(html, /<article class=beauty-reading lang=en>/);
   assert.match(html, /<time datetime=2026-01-01 class=post-date>/);
   assert.match(html, /class="?recent-sidebar/);
+  for (const name of ['Telegram', 'Twitter', 'Facebook', 'VK', 'LinkedIn']) {
+    assert.ok(html.includes(`aria-label="Share on ${name}"`), `${name}: icon-only sharing has a localized accessible name`);
+  }
 
   const sheetURL = html.match(/<link rel=stylesheet href=([^\s>]+)/)?.[1];
   assert.ok(sheetURL, 'the print rules use the existing theme stylesheet');
@@ -205,7 +208,7 @@ recentSidebarCount=3
   const print = css.slice(css.lastIndexOf('@media print')).replace(/\s+/g, '');
   assert.ok(print.startsWith('@mediaprint{'), 'theme rules have their own print media block');
   assert.match(print, /:root\[data-theme=dark\].*color-scheme:light/, 'dark-mode prints on white paper');
-  for (const selector of ['.main-nav', 'body>footer', '.likely', '#tg-comments', '.recent-sidebar', '.heading-anchor', '.copy-btn']) {
+  for (const selector of ['.main-nav', '.search-toggle-desktop', '.title-logo-container', 'body>footer', '.likely', '#tg-comments', '.recent-sidebar', '.heading-anchor', '.copy-btn']) {
     assert.ok(print.includes(selector), `${selector} is omitted from paper`);
   }
   assert.match(print, /article\.beauty-reading\{max-inline-size:none/, 'prose can use the paper width');

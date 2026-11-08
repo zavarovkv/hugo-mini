@@ -18,10 +18,10 @@ curl --fail --location --silent --show-error --retry 3 \
 printf '%s  %s\n' "${hugo_sha256}" "${archive}" | sha256sum --check --status
 tar --extract --gzip --file "${archive}" --directory "${temp_dir}" hugo
 
-# Absolute canonical URLs are used when Vercel system variables are enabled.
-# Otherwise the site still works on a new project's generated domain.
-base_url="/"
-if [[ -n "${VERCEL_URL:-}" ]]; then
+# An explicit domain wins over Vercel's generated hostname. Without either,
+# leave baseURL to Hugo's config instead of silently replacing it with '/'.
+base_url="${HUGO_BASEURL:-}"
+if [[ -z "${base_url}" && -n "${VERCEL_URL:-}" ]]; then
   hostname="${VERCEL_URL}"
   if [[ "${VERCEL_ENV:-}" == "production" ]]; then
     hostname="${VERCEL_PROJECT_PRODUCTION_URL:-${VERCEL_URL}}"
@@ -29,5 +29,8 @@ if [[ -n "${VERCEL_URL:-}" ]]; then
   base_url="https://${hostname%/}/"
 fi
 
-"${temp_dir}/hugo" --source "${root_dir}" \
-  --baseURL "${base_url}" --minify --panicOnWarning
+build_args=(--source "${root_dir}" --minify --panicOnWarning)
+if [[ -n "${base_url}" ]]; then
+  build_args+=(--baseURL "${base_url}")
+fi
+"${temp_dir}/hugo" "${build_args[@]}"

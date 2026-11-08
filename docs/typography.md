@@ -1,5 +1,9 @@
 # Typography
 
+Russian quotation nesting accepts both literal curly quotes and HTML entities.
+Quotation marks around a visible URL close the surrounding quotation without
+rewriting the URL or affecting the next quotation.
+
 English | [Русский](typography.ru.md)
 
 Mini uses Goldmark for Markdown punctuation, build-time rules for prose, and Beauty.css for layout. No browser text-rewriting JavaScript.

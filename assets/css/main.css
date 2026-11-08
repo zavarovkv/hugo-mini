@@ -1652,7 +1652,7 @@
       --beauty-surface: #fff;
       --beauty-font-size: 11pt;
       --beauty-h1-size: 22pt;
-      --beauty-h1-margin: 0 0 0.75em;
+      --beauty-h1-margin: 0 0.75em;
     }
 
     html,
@@ -1675,6 +1675,8 @@
     .title-first-name { display: inline; }
 
     .title-avatar-container,
+    .title-logo-container,
+    .search-toggle-desktop,
     .main-nav,
     .mobile-menu-toggle,
     body > footer,

@@ -28,6 +28,10 @@ const body = [
   '<p id="nested-single">«Фильм &lsquo;Звездные войны&rsquo;» - полный восторг!</p>',
   '<p id="nested-entities">«Фильм &bdquo;Звездные войны&ldquo;».</p>',
   '<p id="nested-inline">«Фильм <em>«Звездные войны»</em>» - полный восторг!</p>',
+  '<p id="curly-quotes">“Цитата” и “Другая”.</p>',
+  '<p id="curly-nested">«Название “Книга”» и «Название „Книга“».</p>',
+  '<p id="quoted-url">«https://example.org/» и «Другая».</p>',
+  '<p id="quoted-url-entities">&ldquo;https://example.org/&rdquo; и &ldquo;Другая&rdquo;.</p>',
   '<p id="apostrophe">«История д’Артаньяна» - отличный пример.</p>',
   '<p id="nested-apostrophe">«Книга &lsquo;O&rsquo;Reilly&rsquo;».</p>',
   '<p id="short-words">В Москве и на улице у дома, а по дороге к станции.</p>',
@@ -118,6 +122,10 @@ weight=3
         assert.equal(paragraph(html, "nested-single"), "&laquo;Фильм &bdquo;Звездные войны&ldquo;&raquo;\u00a0— полный восторг!");
         assert.equal(paragraph(html, "nested-entities"), "&laquo;Фильм &bdquo;Звездные войны&ldquo;&raquo;.");
         assert.equal(paragraph(html, "nested-inline"), "&laquo;Фильм <em>&bdquo;Звездные войны&ldquo;</em>&raquo;\u00a0— полный восторг!");
+        assert.equal(paragraph(html, "curly-quotes"), "&laquo;Цитата&raquo; и &laquo;Другая&raquo;.");
+        assert.equal(paragraph(html, "curly-nested"), "&laquo;Название &bdquo;Книга&ldquo;&raquo; и &laquo;Название &bdquo;Книга&ldquo;&raquo;.");
+        assert.equal(paragraph(html, "quoted-url"), "&laquo;https://example.org/&raquo; и &laquo;Другая&raquo;.");
+        assert.equal(paragraph(html, "quoted-url-entities"), "&laquo;https://example.org/&raquo; и &laquo;Другая&raquo;.");
         assert.equal(paragraph(html, "apostrophe"), "&laquo;История д’Артаньяна&raquo;\u00a0— отличный пример.");
         assert.equal(paragraph(html, "nested-apostrophe"), "&laquo;Книга &bdquo;O&rsquo;Reilly&ldquo;&raquo;.");
         assert.equal(paragraph(html, "short-words"), "В\u00a0Москве и\u00a0на\u00a0улице у\u00a0дома, а\u00a0по\u00a0дороге к\u00a0станции.");

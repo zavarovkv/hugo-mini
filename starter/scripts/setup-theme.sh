@@ -2,8 +2,8 @@
 # Install the exact reviewed Hugo Mini release; keep its tag and SHA in sync.
 set -euo pipefail
 
-theme_tag="v3.4.0"
-theme_sha="33ec3a78259fa6c5221fd22f320aefcb1ad2828d"
+theme_tag="v3.5.0"
+theme_sha="5c7f2844904580e70fb78ee778615c651bdc51b4"
 root_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 theme_dir="${root_dir}/themes/hugo-mini"
 

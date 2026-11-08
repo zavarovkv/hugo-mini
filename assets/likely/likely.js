@@ -165,10 +165,10 @@ var LikelyButton = /*#__PURE__*/function () {
       newWidget.className = oldWidget.className;
 
       // Preserve accessibility attributes
-      if (oldWidget.getAttribute('role') !== undefined) {
+      if (oldWidget.hasAttribute('role')) {
         newWidget.setAttribute('role', oldWidget.getAttribute('role'));
       }
-      if (oldWidget.getAttribute('aria-label') !== undefined) {
+      if (oldWidget.hasAttribute('aria-label')) {
         newWidget.setAttribute('aria-label', oldWidget.getAttribute('aria-label'));
       }
       oldWidget.parentNode.replaceChild(newWidget, oldWidget);

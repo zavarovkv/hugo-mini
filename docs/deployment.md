@@ -66,6 +66,7 @@ official release, verifies SHA-256, then builds the site. The generated theme
 and output directories are ignored by Git. Edit the starter's `hugo.toml`,
 homepage, and first post before sharing the site.
 
-For correct absolute canonical URLs, enable Vercel system environment variables
-or set your own domain in `hugo.toml`. The build falls back to site-root
-relative URLs when the Vercel hostname is unavailable.
+For correct absolute canonical URLs, enable Vercel system environment variables.
+An explicit `HUGO_BASEURL` takes precedence over the generated hostname. Without
+either environment setting, the build keeps `baseURL` from `hugo.toml` (the
+starter defaults to site-root relative URLs).

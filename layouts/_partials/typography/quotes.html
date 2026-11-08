@@ -8,11 +8,11 @@
 {{- range $i, $token := $tokens -}}
   {{- $mark := . -}}
   {{- /* &ldquo; can also be the closing mark of an explicit „...“ pair. */ -}}
-  {{- $closesInner := and (eq $mark "&ldquo;") (gt (len $stack) 0) (eq (index $stack (sub (len $stack) 1)) "single") -}}
-  {{- $doubleOpen := and (not $closesInner) (in (slice "&laquo;" "&ldquo;" "«") $mark) -}}
+  {{- $closesInner := and (in (slice "&ldquo;" "“") $mark) (gt (len $stack) 0) (eq (index $stack (sub (len $stack) 1)) "single") -}}
+  {{- $doubleOpen := and (not $closesInner) (in (slice "&laquo;" "&ldquo;" "«" "“") $mark) -}}
   {{- $singleOpen := or (in (slice "&bdquo;" "„") $mark) (and (gt (len $stack) 0) (in (slice "&lsquo;" "‘") $mark)) -}}
   {{- $doubleClose := in (slice "&raquo;" "&rdquo;" "»" "”") $mark -}}
-  {{- $singleClose := or $closesInner (in (slice "&rsquo;" "“" "’") $mark) -}}
+  {{- $singleClose := or $closesInner (in (slice "&rsquo;" "’") $mark) -}}
   {{- /* An apostrophe between letters is not a quotation boundary, even
        inside a quoted title such as ‘O’Reilly’. */ -}}
   {{- if and $singleClose (in (slice "&rsquo;" "’") $mark) (gt $i 0) (lt (add $i 1) (len $tokens)) -}}
