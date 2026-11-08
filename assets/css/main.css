@@ -396,7 +396,6 @@
 
   .reading-shelf {
     --beauty-table-cell-padding: 0.625em 0;
-    --beauty-table-header-gap: 0;
     margin-block-end: var(--section-gap);
     border-collapse: collapse;
     table-layout: fixed;
