@@ -152,6 +152,7 @@
     --beauty-caption-style: italic;
     --beauty-caption-margin: 0.5em 0 1.5rem;
     --beauty-emphasis-color: var(--color-emphasis);
+    --beauty-emphasis-offset: 0.2em;
     --beauty-space: 1.125rem;
     --beauty-background: var(--background-color);
     --beauty-text: var(--text-color);
@@ -916,8 +917,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -1362,7 +1363,7 @@
     gap: 10px;
   }
 
-  /* Shared outline controls; only the theme icon and AI marker add color. */
+  /* Outline controls follow link hover colors; theme and AI accents stay distinct. */
   .lang-toggle,
   .theme-toggle,
   .search-toggle-desktop {
@@ -1382,7 +1383,7 @@
   }
 
   :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):is(:hover, :focus-visible) {
-    color: var(--heading-color);
+    color: var(--color-accent);
     border-color: var(--color-control-border-hover);
   }
 
@@ -1453,7 +1454,7 @@
   }
   .lang-option:hover,
   .lang-option:focus-visible {
-    color: var(--heading-color);
+    color: var(--color-accent);
     background: var(--color-divider);
   }
   .lang-option[aria-current="page"] { color: var(--color-secondary); }

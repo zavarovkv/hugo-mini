@@ -18,6 +18,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Bring wavy emphasis closer to the text with Beauty's `--beauty-emphasis-offset` token, preserving its color and stroke.
+- Match language and search hover/focus colors to ordinary links through `--color-accent`, preserving the theme toggle's colors and yellow AI-language sparkle.
+- Enlarge the mobile menu toggle's touch target to 44 × 44 px while preserving its 24 px icon and shared open/close behavior.
 - Increase mobile blog reading to 19/29 px, with 24 px section headings, matching recent-post links, 15 px attributions and 14 px post metadata; let narrow reading shelves scroll inside a labeled, keyboard-accessible container. Preserve desktop, independent landing and print scales.
 - Use 12 px language labels and compact 11 px green badges with white text on the text baseline; localize the Russian badge to “Нов.” while retaining “New” in English. Map lead paragraphs and table headers to the configured regular/bold font roles.
 - Match the blog header to its reading scale: 16 px desktop identity/navigation, 20 px mobile identity and 18 px mobile menu links, retaining the existing menu structure.

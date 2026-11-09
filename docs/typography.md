@@ -79,6 +79,9 @@ Lead paragraphs inherit the body font weight; table headers use the configured
 heading weight. For interviews, use Markdown section headings for questions and a semantic
 `<p class="beauty-lead">` for a larger paragraph. Native block spacing replaces empty `<br>` elements.
 
+Wavy emphasis uses `--beauty-emphasis-offset: 0.2em` to keep the decoration close to
+the text; Beauty.css owns the underline rendering.
+
 ## Footnotes
 
 Use Hugo's native Markdown footnotes, with no shortcode or extra JavaScript:

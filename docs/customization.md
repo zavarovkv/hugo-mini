@@ -36,9 +36,10 @@ theme stylesheet using `layouts/_partials/custom_head.html`:
 
 The full token list is in [`assets/css/main.css`](../assets/css/main.css).
 
-Language, theme and desktop search controls share muted text, neutral hover colors,
-borders and keyboard-focus outlines. The theme toggle keeps its sun/moon colors
-and animation; the AI-language sparkle turns yellow on hover or keyboard focus.
+Language, theme and desktop search controls share muted resting text, neutral borders
+and keyboard-focus outlines. Language and search use the link hover color
+(`--color-accent`) on hover and keyboard focus. The theme toggle keeps its sun/moon
+colors and animation; the AI-language sparkle turns yellow on hover or keyboard focus.
 
 ## Logo and favicon
 
@@ -85,7 +86,7 @@ Use focused overrides whenever possible:
 
 For a project-name link in a custom header, use `<a class="brand-link" href="…"><strong>Project name</strong></a>`. It retains the heading color and bold text without an underline, including on hover; keyboard focus remains visible through Beauty.css.
 
-To reuse the theme's mobile menu in a custom header, render `{{ partial "menu-toggle.html" . }}` next to `<nav class="main-nav" id="main-navigation">…</nav>`. The shared stylesheet and browser bundle handle the mobile overlay, Escape, link selection, focus leaving the navigation and the desktop breakpoint. The overlay stays hidden during initialization; opening and closing it retain their animation and the underlying scroll position. Without JavaScript the links remain visible. The custom header owns its brand placement and desktop arrangement.
+To reuse the theme's mobile menu in a custom header, render `{{ partial "menu-toggle.html" . }}` next to `<nav class="main-nav" id="main-navigation">…</nav>`. The shared stylesheet and browser bundle handle the mobile overlay, Escape, link selection, focus leaving the navigation and the desktop breakpoint. The toggle has a 44 × 44 px touch target around its 24 px icon. The overlay stays hidden during initialization; opening and closing it retain their animation and the underlying scroll position. Without JavaScript the links remain visible. The custom header owns its brand placement and desktop arrangement.
 
 To suppress icons on an independent page, override the `favicon` block with
 `<link rel="icon" href="data:,">`. An empty block falls back to the base template;
