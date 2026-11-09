@@ -339,17 +339,17 @@ test('legacy Beauty aliases match complete tokens and preserve longer class name
 });
 
 
-test('the pinned Beauty aliases retain the previous public styles', async (t) => {
+test('the pinned Beauty aliases preserve the caption credit modifier', async (t) => {
   const example = await site(t, 'baseURL="https://example.org/"\ntheme="hugo-mini"\ndisableKinds=["taxonomy","term"]', {}, {
     '_partials/custom_body.html': `{{ with resources.Get "css/beauty.css" }}
-      {{ $old := .Content }}
-      {{ range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" ".beauty-footnotes" ".footnotes" ".beauty-footnote-ref" ".footnote-ref" ".beauty-footnote-backref" ".footnote-backref" }}
-        {{ $old = replace $old $selector (printf ":is(%s,%s)" $selector $alias) }}
-      {{ end }}
-      <div id="compat-equal">{{ eq $old (partial "beauty-compat.html" .Content) }}</div>
+      {{ $css := partial "beauty-compat.html" .Content }}
+      <div id="compat-credit">{{ in $css ":is(.beauty-caption,.caption).beauty-caption-credit" }}</div>
+      <div id="compat-corrupted">{{ in $css ":is(.beauty-caption,.caption)-credit" }}</div>
     {{ end }}`,
   });
-  assert.match(await example.read('index.html'), /<div id=compat-equal>true<\/div>/);
+  const html = await example.read('index.html');
+  assert.match(html, /<div id=compat-credit>true<\/div>/);
+  assert.match(html, /<div id=compat-corrupted>false<\/div>/);
 });
 
 

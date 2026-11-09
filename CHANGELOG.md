@@ -23,6 +23,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Keep footnote references from enlarging line boxes; distinguish upright image descriptions from explicit italic source credits with `caption kind="credit"`; use font-independent inline SVG project/archive arrows; reserve classic desktop scrollbar space. Shared editorial styles remain in Beauty.css.
+- Optically align LTR reading H1/H2 through existing Beauty transform tokens. Enable native title hyphenation only at screen widths up to 360 px through new shared Beauty tokens, keeping prose, wider screens and print unchanged.
 - Match the back-to-top label to the header navigation size, preserving its configured weight, primary link color and existing hover treatment.
 - Version local project marks, header logos and favicons with the shared static-asset helper so updated images replace cached copies. Preserve custom query strings, fragments, external URLs and site subpaths.
 - Refine the Hugo Mini asterisk with balanced 5.5-unit strokes on its 64-unit canvas, preserving the original ray directions and colors across light/dark logos and browser/device icons.
@@ -55,6 +57,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 
 ### Fixed
+- Keep desktop menu transitions in place when opening an article from a scrolled page: disable the browser's position/size interpolation while preserving the 300 ms state fade.
 - Align repository stars with their counts rather than the line box, and give the default footer copyright sign a smaller, optically raised position beside the years.
 - Preserve project logo colors and size on hover; retain click-to-spin behavior and keyboard focus.
 - Keep endnote numbers visible when the first block is a quotation, list or code; attach counters to list items rather than their first paragraphs.

@@ -10,7 +10,7 @@ Mini includes shortcodes and CSS classes for content that goes beyond standard M
 
 ## Caption
 
-The `caption` shortcode adds a styled caption — italic, right-aligned, small text. Use it after images or code blocks:
+The `caption` shortcode adds a smaller, upright, start-aligned image description. Use it after images or code blocks:
 
 ```markdown
 ![Photo](/path/to/image.png)
@@ -18,6 +18,14 @@ The `caption` shortcode adds a styled caption — italic, right-aligned, small t
 ```
 
 {{< caption >}}Figure 1 — place an image above this caption{{< /caption >}}
+
+For a short author/source attribution, use `kind="credit"` to select muted italic text aligned to the end:
+
+```markdown
+{{</* caption kind="credit" */>}}Photo: the author{{</* /caption */>}}
+```
+
+{{< caption kind="credit" >}}Photo: the author{{< /caption >}}
 
 ## Plug (Section Divider)
 

@@ -16,7 +16,7 @@ export function layoutContracts(test, expect) {
     expect(markers.every(marker => marker.content.includes('list-item') && marker.position === 'absolute')).toBe(true);
     const ref = page.locator('.footnote-ref').first();
     await expect(ref).toHaveCSS('text-decoration-line', 'none');
-    await expect(ref.locator('..')).toHaveCSS('vertical-align', 'super');
+    await expect(ref.locator('..')).toHaveCSS('vertical-align', 'baseline');
     await ref.focus();
     await expect(ref).toHaveCSS('outline-style', 'solid');
     await ref.click();
@@ -25,6 +25,29 @@ export function layoutContracts(test, expect) {
     await expect(page).toHaveURL(/#fnref:1$/);
     await page.emulateMedia({ media: 'print' });
     await expect(page.locator('.footnotes')).toBeVisible();
+  });
+
+  test('desktop reading columns retain their position when classic scrollbars appear', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/browser-checks/');
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('html')).toHaveCSS('scrollbar-gutter', 'stable');
+    const boxes = await page.evaluate(() => {
+      const root = document.documentElement;
+      const measure = overflow => {
+        root.style.overflowY = overflow;
+        const { x, width } = document.querySelector('main').getBoundingClientRect();
+        return { x, width };
+      };
+      const visible = measure('scroll');
+      const hidden = measure('hidden');
+      root.style.removeProperty('overflow-y');
+      return { visible, hidden };
+    });
+    expect(boxes.hidden.x).toBeCloseTo(boxes.visible.x, 1);
+    expect(boxes.hidden.width).toBeCloseTo(boxes.visible.width, 1);
+    await page.emulateMedia({ media: 'print' });
+    await expect(page.locator('html')).toHaveCSS('scrollbar-gutter', 'auto');
   });
 
   for (const scheme of ['light', 'dark']) {

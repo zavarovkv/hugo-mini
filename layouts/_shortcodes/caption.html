@@ -1,1 +1,5 @@
-<p class="caption beauty-caption">{{ .Inner }}</p>
+{{- $kind := .Get "kind" | default "description" -}}
+{{- if not (in (slice "description" "credit") $kind) -}}
+  {{- errorf "caption: kind must be description or credit (%s)" .Position -}}
+{{- end -}}
+<p class="caption beauty-caption{{ if eq $kind "credit" }} beauty-caption-credit{{ end }}">{{ .Inner }}</p>

@@ -147,8 +147,8 @@
     --beauty-callout-border: 1px solid var(--heading-color);
     --beauty-lead-weight: var(--font-weight-body);
     --beauty-fine-print-size: 0.875rem;
-    --beauty-caption-align: right;
-    --beauty-caption-style: italic;
+    --beauty-caption-align: start;
+    --beauty-caption-style: normal;
     --beauty-caption-margin: 0.5em 0 1.5rem;
     --beauty-emphasis-color: var(--color-emphasis);
     --beauty-emphasis-offset: 0.2em;
@@ -186,6 +186,28 @@
       --beauty-reading-line-height: calc(28 / 18);
       --beauty-h1-size: 2.75rem;
       --beauty-h1-tracking: -0.01em;
+    }
+
+    /* Align visible letter edges without changing the measure or line wraps. */
+    body.reading-layout:dir(ltr) {
+      --beauty-h1-transform: translateX(-0.025em);
+      --beauty-h2-transform: translateX(-0.02em);
+    }
+  }
+
+  /* Reserve classic desktop scrollbars on short pages as well as long ones.
+     Mobile overlays and paper retain their existing viewport geometry. */
+  @media screen and (min-width: 769px) {
+    html {
+      scrollbar-gutter: stable;
+    }
+  }
+
+  /* Dictionary breaks help unusually long title words at the narrowest measure.
+     Wider screens, prose and print retain their existing wrapping. */
+  @media screen and (max-width: 360px) {
+    body.reading-layout {
+      --beauty-h1-hyphens: auto;
     }
   }
   @media screen and (max-width: 768px) {
@@ -886,6 +908,9 @@
     #main-navigation { view-transition-name: main-navigation; }
 
     ::view-transition-group(main-navigation) {
+      /* Fade the states at the destination's position. The UA's group animation
+         would otherwise fly an offscreen menu into view after a scrolled page. */
+      animation-name: none;
       animation-duration: var(--nav-transition-duration);
       animation-timing-function: ease-in-out;
     }

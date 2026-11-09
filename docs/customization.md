@@ -63,7 +63,7 @@ To replace the default favicon, set `favicon` to your own SVG or 32×32 PNG in y
 
 Internal menu labels reserve the width of their bold state, keeping neighboring items in place when the current section changes. The hidden sizing copy does not duplicate the accessible link name; the visible text keeps Beauty's inline underline. Icons retain their desktop/mobile placement.
 
-Above 768 px, browsers with cross-document View Transitions blend the old and new `#main-navigation` states over `--nav-transition-duration` (default `300ms`). Page content updates immediately. This uses ordinary same-origin document navigation, with no client-side router or additional JavaScript. The mobile overlay keeps its existing open/close behavior; reduced-motion preferences and unsupported browsers receive an immediate state change. Selected labels remain bold in every mode.
+Above 768 px, browsers with cross-document View Transitions blend the old and new `#main-navigation` states over `--nav-transition-duration` (default `300ms`). Only opacity changes: the menu stays at the destination page's position and size, including when following a link from a scrolled page. The browser's default group geometry animation is disabled. Page content updates immediately. This uses ordinary same-origin document navigation, with no client-side router or additional JavaScript. The mobile overlay keeps its existing open/close behavior; reduced-motion preferences and unsupported browsers receive an immediate state change. Selected labels remain bold in every mode.
 
 ## Menu icons
 

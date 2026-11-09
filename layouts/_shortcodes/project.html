@@ -11,7 +11,7 @@
     </button>
     {{- end }}
     <a class="project-link" href="{{ .Get "url" }}" target="_blank" rel="noopener noreferrer">
-      <span class="project-name beauty-link-label">{{ .Get "name" }}</span><span class="project-arrow beauty-link-icon" aria-hidden="true">↗</span>
+      <span class="project-name beauty-link-label">{{ .Get "name" }}</span><span class="project-arrow beauty-link-icon" aria-hidden="true">{{ partial "link-arrow.html" "external" }}</span>
     </a>
   </h3>
   <div class="project-description">

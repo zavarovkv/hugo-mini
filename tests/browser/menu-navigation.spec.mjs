@@ -14,6 +14,7 @@ async function observeTransitions(page) {
         ).map(animation => ({
           pseudo: animation.effect?.pseudoElement,
           duration: animation.effect?.getTiming().duration,
+          keyframes: animation.effect?.getKeyframes(),
         }));
       }).catch(error => { window.menuTransition.error = String(error); });
       transition.finished.then(() => { window.menuTransition.finished = true; });
@@ -67,6 +68,39 @@ for (const colorScheme of ['light', 'dark']) {
     await expectSelected(page, 'Articles');
   });
 }
+
+test('desktop menu fades in place after leaving a scrolled page', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 700 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await observeTransitions(page);
+  await page.goto('/browser-checks/');
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    const link = document.createElement('a');
+    link.href = '/blog/middle/';
+    link.id = 'scrolled-article-link';
+    link.textContent = 'Read the article';
+    document.querySelector('main').append(link);
+  });
+  const link = page.locator('#scrolled-article-link');
+  await link.scrollIntoViewIfNeeded();
+  const before = await page.locator('#main-navigation').boundingBox();
+  expect(before.y + before.height).toBeLessThan(0);
+  await link.click();
+  await expect(page).toHaveURL(/\/blog\/middle\/$/);
+  await expect.poll(() => page.evaluate(() => window.menuTransition.finished)).toBe(true);
+  const transition = await page.evaluate(() => window.menuTransition);
+  expect(transition.active).toBe(true);
+  expect(transition.error).toBeUndefined();
+  expect(transition.animations.length).toBeGreaterThan(0);
+  expect(transition.animations.every(animation =>
+    /^::view-transition-(old|new)\(main-navigation\)$/.test(animation.pseudo) &&
+    animation.duration === 300 &&
+    animation.keyframes.every(frame => !('transform' in frame || 'width' in frame || 'height' in frame))
+  )).toBe(true);
+  const after = await page.locator('#main-navigation').boundingBox();
+  expect(after.y).toBeGreaterThanOrEqual(0);
+});
 
 test('reduced motion keeps section navigation immediate', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });

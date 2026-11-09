@@ -84,7 +84,32 @@ heading weight. For interviews, use Markdown section headings for questions and 
 Wavy emphasis uses `--beauty-emphasis-offset: 0.2em` to keep the decoration close to
 the text; Beauty.css owns the underline rendering.
 
+## Heading alignment and narrow titles
+
+On screen, LTR reading layouts optically shift H1 by `-0.025em` and H2 by `-0.02em`
+through Beauty's `--beauty-h1-transform` / `--beauty-h2-transform` tokens. At the default
+44/32 px title sizes this is 1.1/0.8 px to the left. The adjustment aligns visible glyph
+edges without changing the reading column, line width, font size or line height.
+RTL layouts and print retain the unshifted defaults. Set the transform tokens to `none`
+on `body.reading-layout` to disable the adjustment for a different font.
+
+At screen widths up to 360 px, page titles opt into dictionary hyphenation through
+`--beauty-h1-hyphens: auto`. Where a dictionary is available, unusually long words get
+a hyphen instead of an arbitrary, unmarked split. Wider screens keep manual hyphenation
+and balanced title lines. Section headings, paragraphs, menus and article-list links
+retain their existing wrapping. Beauty requests a `10 4 4` word/fragment limit through
+`--beauty-h1-hyphen-limit`; exact break positions and support for limits depend on the
+browser and its dictionaries. The document's `lang` selects the language.
+No soft hyphens or browser scripts rewrite titles, source content, metadata or copied text.
+Set the hyphenation token to `manual` on the reading body to opt out. These visual settings
+are independent of the build-time `typography = false` punctuation option.
+
 ## Footnotes
+
+Reference superscripts use a zero line height and a relative upward offset instead of
+`vertical-align: super`. They retain their italic appearance and native links without
+enlarging the surrounding line box. This is scoped to footnotes; formulas and ordinary
+superscripts/subscripts keep their existing treatment.
 
 Use Hugo's native Markdown footnotes, with no shortcode or extra JavaScript:
 
@@ -97,6 +122,24 @@ A useful claim[^source] can reference the same note again[^source].
 Reference numbers appear as small, italic, text-colored superscripts without visible link decoration, in the article. Each endnote has a hanging number attached to the list item, so it stays visible when the note starts with a quotation, list or code block. Notes align with the reading column without a list indent, use smaller muted text, and retain return links for each reference. Keyboard focus remains visible; numbering follows the order of first citation.
 
 Beauty.css owns these styles through `beauty-footnotes`, `beauty-footnote-ref`, and `beauty-footnote-backref`. The theme's `beauty-compat.html` adapter maps Goldmark's generated classes without duplicating CSS or rewriting article HTML. Size and rhythm use Beauty's `--beauty-footnote-*` tokens. Ordinary list numbers inherit text weight, with a 0.875rem gap (14 px) between items and min(2.5rem, 8%) indentation (40 px in a wide column, 8% in a narrow one); footnotes retain their separate compact rhythm.
+
+## Captions, link arrows and stable columns
+
+Image explanations use upright, start-aligned `beauty-caption` text. Short author/source
+credits opt into `beauty-caption-credit` (the `caption` shortcode's `kind="credit"`),
+which uses muted italic text at the inline end. Both use the same size and close image gap;
+`--beauty-caption-*` controls the shared rhythm. See [caption examples](content.md#shortcodes).
+
+Project and archive links use decorative inline SVG arrows from `link-arrow.html`, with
+matching 1.4-unit strokes on a 16-unit canvas. Beauty's `beauty-link-icon` sizes SVGs to
+`1em` and aligns them by `-0.125em`; `currentColor` follows the link, including hover.
+Only the label is underlined and exposed as the accessible name. The arrows add no
+network requests or focus stops. Ordinary article links and the year-range arrow retain
+their existing treatment.
+
+Above 768 px, screen layouts reserve a stable root scrollbar gutter. Classic scrollbar
+appearance no longer shifts the reading column between short and long pages; overlay
+scrollbars need no reserved space. Mobile menus and print retain their existing geometry.
 
 ## Code and print
 

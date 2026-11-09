@@ -90,7 +90,7 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 
 | Shortcode | Use |
 | --- | --- |
-| `caption` | Caption text below an image |
+| `caption` | Upright, start-aligned image description; `kind="credit"` selects an italic, end-aligned author/source credit |
 | `callout` | Block quotation with Markdown content and the shared Beauty.css treatment |
 | `mermaid` | Diagram source rendered by Mermaid |
 | `plug` | Centered three-asterisk divider |
@@ -102,6 +102,13 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | `reading-list` | Localized book records from a site-owned data file |
 
 Enable KaTeX with `math = true` and Mermaid with `mermaid = true` only on pages that use them. Native Markdown `##` and `###` headings receive copyable anchor links automatically.
+
+Use `{{< caption >}}What the image shows{{< /caption >}}` for an explanation, or
+`{{< caption kind="credit" >}}Photo: the author{{< /caption >}}` for a short attribution.
+The optional `kind` accepts `description` (default) or `credit`; unknown values fail the
+build. Both modes share Beauty's caption size and image gap. The role is explicit,
+never guessed from names or punctuation. Legacy `.caption` markup follows the ordinary
+description treatment; add `beauty-caption-credit` for an attribution.
 
 Heading classes are preserved: `## Projects {.posts-group-title}` uses the same compact typography as category headings on the blog listing while retaining its heading level and anchor link.
 
