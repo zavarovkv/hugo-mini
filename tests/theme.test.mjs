@@ -20,6 +20,11 @@ function attribute(tag, name) {
   return match ? decode(match[1] ?? match[2] ?? match[3]) : undefined;
 }
 
+async function versionedAssetURL(url, file) {
+  const bytes = await readFile(file);
+  return `${url}?v=${createHash("sha256").update(bytes).digest("hex")}`;
+}
+
 for (const basePath of ["/", "/sub/"]) {
   test(`theme outputs remain consistent at ${basePath}`, async (t) => {
     const root = await mkdtemp(join(tmpdir(), "hugo-mini-test-"));
@@ -92,6 +97,9 @@ weight = 1
       assert.equal(attribute(markButton, "aria-label"), langPath ? "Покрутить логотип Fixture" : "Spin the Fixture logo");
       for (const variant of ["light", "dark"]) {
         assert.ok(markButton.includes(`project-mark-${variant}`), `the ${variant} logo is available`);
+        const image = [...markButton.matchAll(/<img\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "class") === `project-mark-${variant}`);
+        const file = `hugo-mini-logo-${variant}.svg`;
+        assert.equal(attribute(image, "src"), await versionedAssetURL(`${basePath}images/${file}`, join(output, "images", file)));
       }
       const projectLink = home.match(/<a\b[^>]*\bclass=(?:"project-link"|project-link)[^>]*>[\s\S]*?<\/a>/)?.[0];
       assert.ok(projectLink && projectLink.includes("Fixture") && !projectLink.includes("project-mark"),
@@ -102,10 +110,10 @@ weight = 1
       const browserIcon = iconLinks.find(tag => attribute(tag, "rel") === "icon" && attribute(tag, "sizes") === "any");
       const androidIcon = iconLinks.find(tag => attribute(tag, "rel") === "icon" && attribute(tag, "sizes") === "192x192");
       const appleIcon = iconLinks.find(tag => attribute(tag, "rel") === "apple-touch-icon");
-      assert.equal(attribute(browserIcon, "href"), `${baseURL}images/hugo-mini-favicon.svg`);
+      assert.equal(attribute(browserIcon, "href"), await versionedAssetURL(`${baseURL}images/hugo-mini-favicon.svg`, join(output, "images/hugo-mini-favicon.svg")));
       assert.equal(attribute(browserIcon, "type"), "image/svg+xml");
-      assert.equal(attribute(androidIcon, "href"), `${baseURL}images/hugo-mini-favicon-192.png`);
-      assert.equal(attribute(appleIcon, "href"), `${baseURL}images/hugo-mini-apple-touch-icon.png`);
+      assert.equal(attribute(androidIcon, "href"), await versionedAssetURL(`${baseURL}images/hugo-mini-favicon-192.png`, join(output, "images/hugo-mini-favicon-192.png")));
+      assert.equal(attribute(appleIcon, "href"), await versionedAssetURL(`${baseURL}images/hugo-mini-apple-touch-icon.png`, join(output, "images/hugo-mini-apple-touch-icon.png")));
       assert.ok(home.includes("title-avatar-container"), "default favicon does not replace the header avatar");
       const links = [...home.matchAll(/(<a\b[^>]*class="search-toggle search-toggle-(mobile|desktop)"[^>]*>)([\s\S]*?)<\/a>/g)];
       assert.equal(links.length, 2, "search is enabled by default on desktop and mobile");
@@ -232,7 +240,7 @@ logoDark = "images/hugo-mini-logo-dark.svg"
     assert.ok(!originalLinks.includes('class="title-avatar-container"'), "avatar stays hidden when a logo is configured");
     for (const [variant, file] of [["light", "hugo-mini-logo-light.svg"], ["dark", "hugo-mini-logo-dark.svg"]]) {
       const logo = [...originalLinks.matchAll(/<img\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "class")?.includes(`title-logo-${variant}`));
-      assert.equal(attribute(logo, "src"), `${basePath}images/${file}`);
+      assert.equal(attribute(logo, "src"), await versionedAssetURL(`${basePath}images/${file}`, join(output, "images", file)));
       assert.equal(attribute(logo, "width"), "26");
       assert.equal(attribute(logo, "height"), "26");
       await access(join(output, "images", file));
@@ -240,7 +248,7 @@ logoDark = "images/hugo-mini-logo-dark.svg"
     const svgFavicon = [...originalLinks.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "rel") === "icon");
     assert.equal(attribute(svgFavicon, "type"), "image/svg+xml");
     assert.equal(attribute(svgFavicon, "sizes"), "any");
-    assert.equal(attribute(svgFavicon, "href"), `${baseURL}images/hugo-mini-favicon.svg`);
+    assert.equal(attribute(svgFavicon, "href"), await versionedAssetURL(`${baseURL}images/hugo-mini-favicon.svg`, join(output, "images/hugo-mini-favicon.svg")));
     await access(join(output, "images/hugo-mini-favicon.svg"));
 
     await writeFile(join(root, "hugo.toml"), config.replace("socialSharing = false", "socialSharing = true\nshowSearchButton = false\nfavicon = \"images/pixel.png\""));
@@ -250,7 +258,7 @@ logoDark = "images/hugo-mini-logo-dark.svg"
     const pngFavicon = [...sharingPost.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find(tag => attribute(tag, "rel") === "icon");
     assert.equal(attribute(pngFavicon, "type"), "image/png", "existing PNG favicons remain supported");
     assert.equal(attribute(pngFavicon, "sizes"), "32x32");
-    assert.equal(attribute(pngFavicon, "href"), `${baseURL}images/pixel.png`);
+    assert.equal(attribute(pngFavicon, "href"), await versionedAssetURL(`${baseURL}images/pixel.png`, join(output, "images/pixel.png")));
     assert.equal([...sharingPost.matchAll(/<link\b[^>]*>/g)].filter(([tag]) => attribute(tag, "rel") === "icon").length, 1, "custom favicon suppresses bundled Android icon");
     assert.ok(!sharingPost.includes("apple-touch-icon"), "custom favicon suppresses bundled Apple icon");
     const sharingAssets = [...sharingPost.matchAll(/<(?:link|script)\b[^>]*>/g)]
@@ -390,6 +398,62 @@ test("local Mermaid upgrades change the entry URL without breaking chunk paths o
     assert.equal((await build("mermaidModuleSrc", src)).src, src);
   }
   assert.equal((await build("mermaidModuleSrc", "js/missing.mjs")).src, "/sub/js/missing.mjs");
+});
+
+test("identity image URLs change with local bytes while preserving custom URL semantics", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "hugo-mini-identity-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const dir of ["themes", "content", "static/images"]) await mkdir(join(root, dir), { recursive: true });
+  await symlink(themeRoot, join(root, "themes/hugo-mini"), "dir");
+  await writeFile(join(root, "hugo.toml"), `baseURL="https://example.org/sub/"
+theme="hugo-mini"
+title="Fixture"
+disableKinds=["taxonomy","term"]
+[params]
+logo="/images/shared.svg?mode=header#symbol"
+logoDark="//cdn.example/dark.svg?version=1#symbol"
+favicon="images/shared.svg?mode=favicon#symbol"
+favicon192="images/device.png"
+`);
+  await writeFile(join(root, "content/_index.md"), `+++\n+++\n{{< project name="Fixture" url="https://example.net/" icon="images/shared.svg?mode=project#symbol" iconDark="images/missing.svg" >}}\nDescription.\n{{< /project >}}`);
+  const svgFile = join(root, "static/images/shared.svg");
+  const pngFile = join(root, "static/images/device.png");
+  async function build() {
+    execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--minify", "--panicOnWarning"], { stdio: "pipe" });
+    const html = await readFile(join(root, "public/index.html"), "utf8");
+    const tags = [...html.matchAll(/<(?:img|link)\b[^>]*>/g)].map(([tag]) => tag);
+    const image = className => attribute(tags.find(tag => attribute(tag, "class")?.split(" ").includes(className)), "src");
+    const icons = tags.filter(tag => attribute(tag, "rel") === "icon");
+    const vectorIcon = icons.find(tag => attribute(tag, "sizes") === "any");
+    assert.equal(attribute(vectorIcon, "type"), "image/svg+xml", "query strings and fragments do not change the favicon media type");
+    return { header: image("title-logo-light"), headerDark: image("title-logo-dark"),
+      project: image("project-mark-light"), projectDark: image("project-mark-dark"),
+      favicon: attribute(vectorIcon, "href"), device: attribute(icons.find(tag => attribute(tag, "sizes") === "192x192"), "href") };
+  }
+  const oldSVG = '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0h8" stroke="black" stroke-width="8"/></svg>';
+  const newSVG = oldSVG.replace('stroke-width="8"', 'stroke-width="4"');
+  await writeFile(svgFile, oldSVG);
+  await writeFile(pngFile, await readFile(join(themeRoot, "static/images/hugo-mini-apple-touch-icon.png")));
+  const before = await build();
+  assert.deepEqual(await build(), before, "unchanged bytes retain reusable cache URLs across builds");
+  await writeFile(svgFile, newSVG);
+  await writeFile(pngFile, await readFile(join(themeRoot, "static/images/hugo-mini-favicon-192.png")));
+  const after = await build();
+  for (const key of ["header", "project", "favicon", "device"]) {
+    assert.notEqual(after[key], before[key], `${key} must bypass a cached previous image after an update`);
+    const url = new URL(after[key], "https://example.org");
+    const file = key === "device" ? pngFile : svgFile;
+    assert.equal(url.pathname, `${key === "header" ? "" : "/sub"}/images/${key === "device" ? "device.png" : "shared.svg"}`);
+    assert.equal(url.searchParams.get("v"), createHash("sha256").update(await readFile(file)).digest("hex"));
+    if (key !== "device") {
+      assert.equal(url.searchParams.get("mode"), key);
+      assert.equal(url.hash, "#symbol");
+    }
+  }
+  assert.equal(after.headerDark, "//cdn.example/dark.svg?version=1#symbol", "external URLs remain untouched");
+  assert.equal(after.projectDark, "/sub/images/missing.svg", "missing resources retain their ordinary URL");
+  assert.equal(after.headerDark, before.headerDark);
+  assert.equal(after.projectDark, before.projectDark);
 });
 
 test("Telegram IDs are discovered in page bundles, only inside front matter", async (t) => {

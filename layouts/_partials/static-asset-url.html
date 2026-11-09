@@ -1,6 +1,6 @@
-{{- /* Version a local static entry without moving it: relative ESM imports
-     must continue resolving beside the original file. External and missing
-     assets retain their configured URLs. */ -}}
+{{- /* Version local static assets without moving them, for both identity images
+     and script entries whose relative imports must keep resolving beside the
+     original file. External and missing assets retain their configured URLs. */ -}}
 {{- $url := . | relURL -}}
 {{- $parsed := urls.Parse . -}}
 {{- if and (not $parsed.Scheme) (not $parsed.Host) -}}

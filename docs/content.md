@@ -144,6 +144,8 @@ A short introduction to your projects.
 
 ## Projects
 
+Local project icons use content-versioned URLs, shared with header logos and favicons, so changing an image refreshes cached copies after a rebuild. External icon URLs retain their original behavior.
+
 Use the `project` shortcode below a section heading. The name links to an external project page; the description accepts Markdown and keeps links at the same weight as the body text. Optionally set `icon` to a local image path and `iconDark` to its dark-mode variant. The mark becomes a separate, keyboard-accessible button: clicking it spins the logo a few times and gradually slows to a stop without opening the link. The project name remains a normal link. Motion preferences are respected; without JavaScript, the mark remains decorative.
 
 For a separate secondary source link, put it in a `<p class="beauty-note">` inside the description. Project layout keeps this note close to the preceding paragraph and separates adjacent projects with a larger gap. Its text size and color come from Beauty.css.

@@ -3,9 +3,9 @@
     {{- with .Get "icon" }}
     <button class="project-mark-button" type="button" disabled aria-label="{{ i18n "spin_project_logo" (dict "Name" ($.Get "name")) }}">
       <span class="project-mark{{ with $.Get "iconDark" }} has-dark-mark{{ end }}" aria-hidden="true">
-        <img class="project-mark-light" src="{{ . | relURL }}" alt="" width="18" height="18" loading="lazy" decoding="async">
+        <img class="project-mark-light" src="{{ partial "static-asset-url.html" . }}" alt="" width="18" height="18" loading="lazy" decoding="async">
         {{- with $.Get "iconDark" }}
-        <img class="project-mark-dark" src="{{ . | relURL }}" alt="" width="18" height="18" loading="lazy" decoding="async">
+        <img class="project-mark-dark" src="{{ partial "static-asset-url.html" . }}" alt="" width="18" height="18" loading="lazy" decoding="async">
         {{- end }}
       </span>
     </button>

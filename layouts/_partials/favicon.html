@@ -3,8 +3,8 @@
 {{- $favicon := "images/hugo-mini-favicon.svg" -}}
 {{- if $custom -}}{{- $favicon = site.Params.favicon -}}{{- end -}}
 {{- with $favicon -}}
-  {{- $svg := hasSuffix (lower .) ".svg" -}}
-<link rel="icon" type="{{ if $svg }}image/svg+xml{{ else }}image/png{{ end }}" sizes="{{ if $svg }}any{{ else }}32x32{{ end }}" href="{{ . | absURL }}" />
+  {{- $svg := hasSuffix (lower (urls.Parse .).Path) ".svg" -}}
+<link rel="icon" type="{{ if $svg }}image/svg+xml{{ else }}image/png{{ end }}" sizes="{{ if $svg }}any{{ else }}32x32{{ end }}" href="{{ partial "static-asset-url.html" . | absURL }}" />
 {{- end -}}
 {{- $favicon192 := "" -}}
 {{- if isset site.Params "favicon192" -}}
@@ -13,7 +13,7 @@
   {{- $favicon192 = "images/hugo-mini-favicon-192.png" -}}
 {{- end -}}
 {{- with $favicon192 -}}
-<link rel="icon" type="image/png" sizes="192x192" href="{{ . | absURL }}" />
+<link rel="icon" type="image/png" sizes="192x192" href="{{ partial "static-asset-url.html" . | absURL }}" />
 {{- end -}}
 {{- $appleTouchIcon := "" -}}
 {{- if isset site.Params "appletouchicon" -}}
@@ -22,5 +22,5 @@
   {{- $appleTouchIcon = "images/hugo-mini-apple-touch-icon.png" -}}
 {{- end -}}
 {{- with $appleTouchIcon -}}
-<link rel="apple-touch-icon" sizes="180x180" href="{{ . | absURL }}" />
+<link rel="apple-touch-icon" sizes="180x180" href="{{ partial "static-asset-url.html" . | absURL }}" />
 {{- end }}
