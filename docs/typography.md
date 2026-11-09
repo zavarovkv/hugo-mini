@@ -94,8 +94,14 @@ A useful claim[^source] can reference the same note again[^source].
 
 Reference numbers appear as small, italic, text-colored superscripts without visible link decoration, in the article. Each endnote has a hanging number attached to the list item, so it stays visible when the note starts with a quotation, list or code block. Notes align with the reading column without a list indent, use smaller muted text, and retain return links for each reference. Keyboard focus remains visible; numbering follows the order of first citation.
 
+Beauty.css owns these styles through `beauty-footnotes`, `beauty-footnote-ref`, and `beauty-footnote-backref`. The theme's `beauty-compat.html` adapter maps Goldmark's generated classes without duplicating CSS or rewriting article HTML. Size and rhythm use Beauty's `--beauty-footnote-*` tokens. Ordinary list numbers inherit text weight, with a 0.875rem gap (14 px) between items and min(2.5rem, 8%) indentation (40 px in a wide column, 8% in a narrow one); footnotes retain their separate compact rhythm.
+
 ## Code and print
 
 Enable `[markup.highlight] noClasses = false` in your site configuration to use the theme’s light and dark syntax palettes. Text and line numbers meet 4.5:1 contrast on normal and highlighted lines. Explicit inline palettes remain a site or per-block choice; the theme does not recolor them. See [configuration](configuration.md#syntax-highlighting).
 
 Printing uses 11 pt article text, 22 pt page titles and 16 pt section headings at every viewport width. Code uses a monochrome palette on paper. Screen typography is unchanged.
+
+Markdown tables retain native table markup inside a labeled, focusable `beauty-scroll` region. Overflow stays local to the table. The theme's print layout uses fixed columns and allows long cell contents to wrap; it does not shrink the article's type. Author-supplied table IDs, classes, alignment and semantic dates remain on the table and cells.
+
+Mermaid prioritizes nearby diagrams and prepares the remaining diagrams after load during idle time. Rendering is serialized and committed atomically; a neutral SVG copy is cached in memory for print. `beforeprint` switches copies synchronously, and `afterprint` restores the active screen theme. If printing starts before preparation finishes, or a module fails to load, the original diagram source remains readable. Native print dialogs cannot await asynchronous downloads. No print button or global `window.print` override is introduced.

@@ -1,0 +1,16 @@
+{{- /* Same public, language-specific collection as recent posts. Pinning does
+     not change chronology; draft previews never become navigation targets. */ -}}
+{{- $posts := where (partialCached "main-pages.html" . .Site.Language.Lang) "Draft" false -}}
+{{- $neighbors := dict -}}
+{{- range $index, $post := $posts -}}
+  {{- if eq $post.RelPermalink $.RelPermalink -}}
+    {{- $neighbors = dict "enabled" true -}}
+    {{- if lt (add $index 1) (len $posts) -}}
+      {{- $neighbors = merge $neighbors (dict "previous" (index $posts (add $index 1)).RelPermalink) -}}
+    {{- end -}}
+    {{- if gt $index 0 -}}
+      {{- $neighbors = merge $neighbors (dict "next" (index $posts (sub $index 1)).RelPermalink) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $neighbors -}}

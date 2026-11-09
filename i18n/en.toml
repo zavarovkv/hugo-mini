@@ -146,6 +146,9 @@ other = "coming soon"
 [copy_section_link]
 other = "Copy link to this section"
 
+[table_scroll_label]
+other = "Table; scroll horizontally if needed"
+
 [spin_project_logo]
 other = "Spin the {{ .Name }} logo"
 

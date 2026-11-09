@@ -146,6 +146,9 @@ other = "скоро появится"
 [copy_section_link]
 other = "Скопировать ссылку на раздел"
 
+[table_scroll_label]
+other = "Таблица; при необходимости прокрутите по горизонтали"
+
 [spin_project_logo]
 other = "Покрутить логотип {{ .Name }}"
 

@@ -5,3 +5,6 @@
 .vercel/
 exampleSite/public/
 exampleSite/resources/_gen/
+node_modules/
+test-results/
+playwright-report/

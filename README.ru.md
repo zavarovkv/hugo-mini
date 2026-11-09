@@ -14,7 +14,7 @@
 
 **[Демо](https://hugo-mini-demo.vercel.app/)** · **[Быстрый старт](#быстрый-старт)** · **[Каталог тем Hugo](https://themes.gohugo.io/themes/hugo-mini/)** · **[Документация](#документация)**
 
-[![Hugo Mini — компьютерная и мобильная версии со звездочкой, поиском и светлым и темным оформлением](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
+[![Hugo Mini — компьютерная и мобильная версии со звездочкой, навигацией и светлым и темным оформлением](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Почему Mini
 
@@ -65,13 +65,12 @@ hugo server -D
 
 ## Документация
 
-- [Шрифты сайта](docs/fonts.md): свое семейство с общей типографикой темы и Beauty.css.
-
-Руководства:
+Начните с [полного обзора возможностей](docs/advanced-features.md): чтение и печать, навигация, компоненты контента, интеграции и расширение темы.
 
 - [Установка и языки](docs/configuration.md) · [Публикация сайта](docs/deployment.md) · [Написание статей](docs/content.md)
-- [Типографика](docs/typography.ru.md) · [Настройка темы](docs/customization.md) · [Дополнительные возможности](docs/advanced-features.md)
-- [Telegram](docs/telegram.md) · [Ресурсы темы](docs/vendor-assets.md) · [История изменений](CHANGELOG.md)
+- [Типографика](docs/typography.ru.md) · [Шрифты сайта](docs/fonts.md) · [Настройка темы](docs/customization.md)
+- [Горячие клавиши статей](docs/content.md#article-keyboard-navigation) · [Telegram](docs/telegram.md)
+- [Ресурсы темы](docs/vendor-assets.md) · [История изменений](CHANGELOG.md)
 
 [Сообщить об ошибке](https://github.com/zavarovkv/hugo-mini/issues) · [Участвовать в разработке](CONTRIBUTING.md) · [Поставить звезду на GitHub](https://github.com/zavarovkv/hugo-mini)
 

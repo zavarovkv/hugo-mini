@@ -7,6 +7,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Navigate between older/newer public articles with Option/Alt + Left/Right, respecting language and chronology, skipping hidden posts and drafts, and stopping at both ends. Preserve text editing and overlay shortcuts without adding visible controls.
+- Add Chromium and WebKit integration checks in CI for tables, print, diagram loading and theme changes; ordinary theme users still need only Hugo.
+- Wrap Markdown tables in labeled, keyboard-focusable Beauty scroll containers and wrap long cell contents on paper, preserving native table semantics and attributes.
+- Prepare offscreen Mermaid diagrams and neutral print copies during idle time. Print switches synchronously, screen theme changes publish complete SVGs atomically, and interrupted downloads retain readable source.
 - Support site-owned font assets through `params.fonts`, with verified face weights, fingerprinted files, selective preloads and default-font page opt-outs. Typography remains in the theme and Beauty.css; proprietary font files are never part of the theme.
 - Support optional light/dark project marks next to names, with a separate accessible button that spins to a stop when clicked; the project name stays linked.
 - Prevent awkward line breaks in Russian compound prepositions, abbreviations, enclitic particles and short three-word groups.
@@ -18,6 +22,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Use Beauty's shared footnote helpers through the Goldmark class adapter, removing duplicated theme typography. Ordinary list numbers now inherit text weight and item spacing is 0.875rem (14 px), with responsive min(2.5rem, 8%) indentation.
 - Refine the inline year-range arrow with a small, smoothly joined oval loop, a finer stroke and a compact open arrowhead, retaining text-relative sizing, alignment and accessible labels.
 - Bring wavy emphasis closer to the text with Beauty's `--beauty-emphasis-offset` token, preserving its color and stroke.
 - Match language and search hover/focus colors to ordinary links through `--color-accent`, preserving the theme toggle's colors and yellow AI-language sparkle.

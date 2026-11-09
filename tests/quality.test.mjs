@@ -200,7 +200,7 @@ recentSidebarCount=3
     'blog/another.md': '+++\ntitle="Another post"\ndate=2025-01-01\n+++\nHello',
   });
   const html = await example.read('blog/post/index.html');
-  assert.match(html, /<article class=beauty-reading lang=en>/);
+  assert.match(html, /<article class=beauty-reading lang=en(?:\s[^>]*)?>/);
   assert.match(html, /<time datetime=2026-01-01 class=post-date>/);
   assert.match(html, /class="?recent-sidebar/);
   for (const name of ['Telegram', 'Twitter', 'Facebook', 'VK', 'LinkedIn']) {
@@ -343,7 +343,7 @@ test('the pinned Beauty aliases retain the previous public styles', async (t) =>
   const example = await site(t, 'baseURL="https://example.org/"\ntheme="hugo-mini"\ndisableKinds=["taxonomy","term"]', {}, {
     '_partials/custom_body.html': `{{ with resources.Get "css/beauty.css" }}
       {{ $old := .Content }}
-      {{ range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" }}
+      {{ range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" ".beauty-footnotes" ".footnotes" ".beauty-footnote-ref" ".footnote-ref" ".beauty-footnote-backref" ".footnote-backref" }}
         {{ $old = replace $old $selector (printf ":is(%s,%s)" $selector $alias) }}
       {{ end }}
       <div id="compat-equal">{{ eq $old (partial "beauty-compat.html" .Content) }}</div>

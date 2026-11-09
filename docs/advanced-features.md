@@ -1,19 +1,52 @@
-# Content components and advanced options
+# Feature index
 
-This page collects the optional Hugo Mini components. The [main README](../README.md) keeps the first-run setup short.
+The complete map of Hugo Mini's public features. [README](../README.md) covers installation; the linked guides contain parameters, markup and limitations.
 
-Add `{{< latest-posts count="3" >}}` to your homepage content to list the three newest articles automatically. Optional `archive` and `archiveLabel` parameters add a link below the list. See [content options](content.md) for details.
+## Reading and navigation
 
-The [`project` shortcode](content.md#projects) displays a linked project name and a short description in the same minimal style. Optional `beauty-note` source links sit close to their description, with a larger gap between projects.
+| Feature | Behavior and reference |
+| --- | --- |
+| Reading layout | 720 px column, 18/28 px desktop and 19/29 px mobile text; responsive headings, links and editorial helpers. [Typography](typography.md) ([Russian](typography.ru.md)) |
+| Fonts | Self-hosted Inter by default; site-owned font families and role weights through an optional [font profile](fonts.md) |
+| Text processing | Build-time quotes, dashes and spacing; page/fragment opt-out; code, URLs, math and source files stay intact. [Rules](typography.md) |
+| Color schemes | System colors without JavaScript; before-paint preference resolution and explicit theme choice; optional cross-subdomain preferences. [Configuration](configuration.md#shared-theme-and-language-preferences) |
+| Mobile menu | Overlay, Escape and focus handling; ordinary links without JavaScript. Shared [header and footer components](customization.md#templates) |
+| Article navigation | Option/Alt + Left/Right selects older/newer public posts in the current language, stops at boundaries and respects editing controls. [Contract](content.md#article-keyboard-navigation) |
+| Heading links | Copyable H2/H3 anchors; mobile tap-to-reveal; `.no-anchor` opt-out. [Content](content.md) |
+| Back to top | Optional left-gutter control on wide screens; page/site opt-out. [Parameters](configuration.md#parameters) |
+| Languages | English/Russian UI, configurable languages and localized menus; translation links fall back to that language's home; optional remembered choice and AI label. [Languages](configuration.md#multilingual-sites) |
+| Search control | Optional magnifier currently links to the homepage; no full-text search implementation. [Parameters](configuration.md#parameters) |
 
-Custom pages can use the [`loading-skeleton` state](customization.md#loading-values) while fetching inline values; it preserves content space and follows the active theme.
+## Articles and components
 
-[Reading lists](content.md#reading-lists) display site-owned book data in a compact two-column table with ordinary blog typography. Titles and authors can be localized while reading dates, ratings and review references remain shared. Recent book additions can update the New badge on both the book and its collection article.
+| Feature | Behavior and reference |
+| --- | --- |
+| Collections | Configurable post sections, translated category labels, pinned posts, New badges and recent sidebar/bottom list; hidden posts retain public URLs and indexing. [Front matter](content.md#front-matter) |
+| Images and links | Local image dimensions, lazy loading and decoding; external Markdown links open safely in a new tab; internal links can select the current-language translation. [Content](content.md) |
+| Lists and footnotes | Inherited marker weight, responsive indentation and item spacing; linked notes with visible numbers even before code, quotations or nested lists. Styles belong to [Beauty.css](vendor-assets.md#beautycss-foundation) |
+| Tables | Keyboard-focusable local scrolling, semantic ISO dates and wrapped print cells; other content keeps the normal reading measure. [Printing](content.md#printing) |
+| Code | Copy control and class-based light/dark/print palettes; requires `markup.highlight.noClasses = false`. [Highlighting](configuration.md#syntax-highlighting) |
+| Math and diagrams | Opt-in self-hosted KaTeX; Mermaid 11/12 with CDN or local script/ESM, theme-aware colors and readable failure fallback. [Configuration](configuration.md), [assets](vendor-assets.md) |
+| Print | Fixed point sizes, light paper palette, wrapped code/tables and simplified page shell. Diagrams prepare neutral copies in the background. [Printing](content.md#printing) |
+| Editorial shortcodes | `caption`, `callout`, `plug` and `mermaid`; ordinary semantic Markdown inside supported blocks. [Usage](content.md#shortcodes) |
+| Homepage components | `latest-posts` with optional archive link; `columns`/`column` stack on mobile. [Latest posts](content.md#latest-articles), [columns](content.md#columns) |
+| Projects | `project` with Markdown description, optional light/dark mark and motion-aware click animation; source links use compact notes. [Projects](content.md#projects) |
+| Public counters | `github-stars` renders saved data; optional build helper preserves counts on API failure, with no browser counter requests. [GitHub stars](content.md#github-stars) |
+| Bookshelf | `reading-list` renders shared site data with localized labels, review links, reading dates and addition-based badges. [Reading lists](content.md#reading-lists) |
+| Decorative arrow | `wavy-arrow` supplies a thin inline SVG curve between dates or other text. [Usage](content.md#wavy-arrow) |
+| Loading values | Optional `loading-skeleton` for unknown inline values only, reserved space, `aria-busy` and reduced-motion support. [Loading values](customization.md#loading-values) |
 
-Add [`github-stars`](content.md#github-stars) inside a description for a GitHub link with a subtle star count, fetched before the build and rendered without browser requests.
+## Publishing and extension
 
-Use [`columns` and `column`](content.md#columns) to place content blocks side by side on desktop and stack them on mobile.
+| Feature | Behavior and reference |
+| --- | --- |
+| Metadata and feeds | Canonical/hreflang, generated 1200×630 share cards, Open Graph/Twitter, JSON-LD, RSS, JSON Feed, sitemap, robots and localized llms.txt. Page identity/noindex overrides are independent of hidden listings. [Content](content.md), [share cards](customization.md#share-cards) |
+| Telegram | Lazy comments and optional build-time reactions/views; missing data degrades gracefully. [Guide](telegram.md) |
+| Sharing and analytics | Optional local Likely controls; Yandex, Google, Plausible and Umami load only when configured. These integrations may contact third parties. [Configuration](configuration.md), [asset ownership](vendor-assets.md) |
+| Identity | Logo/dark variant or avatar/hover frame, favicon overrides or opt-out, SVG menu icons and footer links. [Customization](customization.md) |
+| 404 and console | Localized not-found page, optional animated ASCII Yoda and home-page console art; motion preference respected. [Parameters](configuration.md#parameters) |
+| Template API | Named base blocks; custom head/body/OG hooks; reusable menu and footer; public tokens and site-owned fonts. [Customization](customization.md#templates) |
+| Installation and hosting | Hugo Extended 0.146+, submodule or Go Module; no npm needed for ordinary builds; Vercel starter or any static host. [Setup](configuration.md#installation), [deployment](deployment.md) |
+| Maintenance | Pinned Beauty, Inter, KaTeX and Likely; Node/browser regression checks for maintainers, separate from user builds. [Assets](vendor-assets.md), [contributing](../CONTRIBUTING.md) |
 
-Use [`wavy-arrow`](content.md#wavy-arrow) for a thin inline SVG arrow between dates or other text.
-
-Set [`params.notFoundYoda = true`](configuration.md#parameters) for an illustrated 404 page with a character-scan animation that respects reduced-motion preferences. The decorative figure fits the page without an internal scroll area.
+Current defaults live in [hugo.toml](../hugo.toml); the bilingual [example site](../exampleSite/) provides working content. Changes to public behavior are recorded in [CHANGELOG.md](../CHANGELOG.md).

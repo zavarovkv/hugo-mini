@@ -17,7 +17,7 @@ Dark mode automatically adjusts:
 
 - Text and background colors
 - Link and accent colors
-- Code block highlighting
+- Code block highlighting when `markup.highlight.noClasses = false`
 - Mermaid diagram colors
 - Avatar image (shows hover variant in dark mode)
 
@@ -33,7 +33,7 @@ The blog listing groups articles under category headings: two columns on desktop
 
 ## "New" Badge
 
-Posts newer than a configurable threshold (default 30 days) automatically show a red "New" badge on the blog listing page. Configure the threshold in `config.toml`:
+Posts newer than a configurable threshold (default 30 days) automatically show a green "New" badge on the blog listing page. Configure the threshold in `config.toml`:
 
 ```toml
 [params]
@@ -51,7 +51,7 @@ Mini includes the [Likely](https://github.com/nicothin/likely) social sharing li
 
 ## External Link Behavior
 
-All external links in post content automatically open in a new tab with `rel="noopener noreferrer"`. This is handled by the render hook in `layouts/_markup/render-link.html` — no JavaScript needed.
+External Markdown links in post content automatically open in a new tab with `rel="noopener noreferrer"`. This is handled by the render hook in `layouts/_markup/render-link.html` — no JavaScript needed.
 
 ## Telegram Integration
 
@@ -59,7 +59,7 @@ Mini has two Telegram features that share the same `telegramChannel` + `telegram
 
 ## Multilingual
 
-Mini supports two languages out of the box: English and Russian. The language switcher appears in the footer when a page has a translation. Configure languages in `config.toml`:
+Mini supports two languages out of the box: English and Russian. The footer lists other configured languages and links to the translated page, or that language's homepage when a translation is missing. Configure languages in `config.toml`:
 
 ```toml
 [languages]
@@ -110,7 +110,7 @@ The list excludes the current post and any posts with `hidden = true`. Scroll to
 
 ## Heading Anchor Links
 
-Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, the icon is hidden by default — tap a heading to reveal it, then tap the icon to copy the section URL and scroll smoothly to the heading.
+Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, the icon is hidden by default — tap a heading to reveal it, then tap the icon to copy the section URL and follow the native anchor to the heading.
 
 Implemented via `_markup/render-heading.html` render hook + minimal JS — no extra dependencies. Note: only fires for markdown-parsed headings, not raw HTML `<h2>...</h2>`. Headings also have a small `scroll-margin-top` so navigating to an anchor leaves a gap at the top of the viewport instead of pushing the heading flush against the edge.
 

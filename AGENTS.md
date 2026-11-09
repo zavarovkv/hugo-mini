@@ -24,11 +24,12 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/home.html`, `list.html`, `single.html`, and `404.html` provide page layouts.
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
 - `layouts/_partials/typography/` applies build-time prose spacing and Russian punctuation rules to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; Goldmark owns its native punctuation and Beauty.css owns visual typography. Document changes in both `docs/typography.md` and `docs/typography.ru.md` and exercise `tests/typography.test.mjs`.
-- `layouts/_markup/` contains Goldmark render hooks for headings, images, and links.
+- `layouts/_markup/` contains Goldmark render hooks for headings, images, links, and tables.
 - `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, `column`, `github-stars`, `reading-list` and `wavy-arrow`.
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
   `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
+- Article Option/Alt + Left/Right navigation uses `article-neighbors.html` and the cached current-language `main-pages.html` collection. Left means older, right means newer; hidden posts and drafts are excluded, pinning does not reorder navigation, and boundaries never wrap. Keep the feature invisible and leave editing/overlay keyboard behavior intact.
 - `assets/js/theme-init.js` is the small, testable before-paint exception, inlined before CSS to resolve the saved or system color scheme.
 - `assets/likely/` contains upstream sharing CSS/JS, minified and fingerprinted by Hugo only for pages with sharing enabled.
 - `static/` contains the four used Inter font faces, their license, and KaTeX.
@@ -74,6 +75,7 @@ For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 2. Confirm the build produces non-empty `exampleSite/public/index.html`, `index.json`, `llms.txt`, `sitemap.xml`, `ru/index.json`, and `ru/llms.txt`.
 3. For visual or interaction changes, inspect the affected pages at desktop and mobile widths and test both color schemes when relevant.
 4. For JavaScript helper changes, run `node --check` and exercise the smallest safe representative path. Do not overwrite a consuming site's reaction dataset during an unrelated test.
+5. For layout or Mermaid changes, run `npm ci`, `npx playwright install chromium webkit`, and `npm run test:browser`. This is a maintainer-only toolchain; ordinary Hugo users do not need npm. The isolated browser fixture covers local table overflow, complex footnotes, article shortcuts, print, both color schemes and delayed/failed diagram downloads. Shared assertions can also run against a consuming site's build; see `CONTRIBUTING.md`.
 
 ## Documentation and Releases
 

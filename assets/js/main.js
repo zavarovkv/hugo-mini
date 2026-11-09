@@ -1,6 +1,6 @@
 /*
  * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
- * code-copy buttons, heading anchors, recent-posts sidebar, back-to-top.
+ * code-copy buttons, heading anchors, article shortcuts, recent-posts sidebar, back-to-top.
  *
  * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
  * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
@@ -95,6 +95,30 @@
       fn();
     }
   }
+
+  // ── Article navigation: Option/Alt + arrows, no wrap at either end ────
+  ready(function initArticleNavigation() {
+    var article = document.querySelector('article[data-article-navigation]');
+    if (!article) return;
+    var navigating = false;
+    window.addEventListener('pageshow', function () { navigating = false; });
+    document.addEventListener('keydown', function (e) {
+      if (e.defaultPrevented || !e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.isComposing) return;
+      var direction = e.key === 'ArrowLeft' ? 'previous' : e.key === 'ArrowRight' ? 'next' : '';
+      if (!direction) return;
+      var target = e.target;
+      if (target && (target.isContentEditable || (target.closest && target.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="slider"], [role="spinbutton"]')))) return;
+      if (document.body.classList.contains('menu-open') || document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]:not([hidden])')) return;
+      // Consume the shortcut even at a boundary, where Alt+Left/Right must
+      // not fall through to the browser's unrelated history navigation.
+      e.preventDefault();
+      if (e.repeat || navigating) return;
+      var href = article.getAttribute('data-article-' + direction);
+      if (!href) return;
+      navigating = true;
+      window.location.assign(href);
+    });
+  });
 
   // ── Project marks: a short spin that coasts naturally to a stop ────────
   ready(function initProjectMarks() {
@@ -480,9 +504,8 @@
     sync();
   });
 
-  // Mermaid: load once near the first diagram, then render only diagrams
-  // near the viewport. Serialize renders so theme changes cannot reset a
-  // node while Mermaid is still writing its SVG.
+  // Mermaid: prioritize nearby diagrams, then prepare the rest during idle
+  // time, including a neutral print copy. beforeprint cannot await a download.
   ready(function () {
     var configText = document.body.getAttribute('data-mermaid');
     if (!configText) return;
@@ -491,12 +514,31 @@
       // Keep readable source when JavaScript is disabled or the bundle fails.
       // Only hide it once this loader can restore it on a rendering failure.
       node.style.visibility = 'hidden';
-      return { node: node, source: node.textContent, visible: false, theme: null, failed: false };
+      return { node: node, source: node.textContent, visible: false, cache: {}, displayed: null, failed: false };
     });
     if (!entries.length) return;
     var library;
     var running = false;
     var observer;
+    var background = false;
+    var printing = false;
+
+    function screenTheme() {
+      return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'neutral';
+    }
+
+    function display(entry) {
+      var theme = printing ? 'neutral' : screenTheme();
+      if (entry.cache[theme]) {
+        if (entry.displayed !== theme) entry.node.innerHTML = entry.cache[theme];
+        entry.displayed = theme;
+        entry.node.style.visibility = 'visible';
+      } else if (printing || entry.failed) {
+        entry.node.textContent = entry.source;
+        entry.displayed = null;
+        entry.node.style.visibility = 'visible';
+      }
+    }
 
     function load() {
       if (!library) {
@@ -524,20 +566,39 @@
     }
 
     async function render() {
-      if (running) return;
+      if (running || printing) return;
       running = true;
       try {
         var mermaid = await load();
         mermaid.initialize({ startOnLoad: false });
         if (document.fonts) await document.fonts.ready;
         while (true) {
-          var theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'neutral';
+          if (printing) break;
+          var theme = screenTheme();
           var entry = entries.find(function (item) {
-            return item.visible && !item.failed && item.theme !== theme;
+            return item.visible && !item.failed && !item.cache[theme];
           });
+          if (!entry && background) {
+            theme = 'neutral';
+            entry = entries.find(function (item) { return !item.failed && !item.cache[theme]; });
+            if (!entry) {
+              theme = screenTheme();
+              entry = entries.find(function (item) { return !item.failed && !item.cache[theme]; });
+            }
+          }
           if (!entry) break;
-          entry.node.textContent = entry.source;
-          entry.node.removeAttribute('data-processed');
+          // Render offscreen and publish atomically. A theme change or print
+          // dialog must never capture a half-built SVG or erase the last copy.
+          var stage = document.createElement('div');
+          stage.className = 'mermaid-render-stage';
+          stage.setAttribute('aria-hidden', 'true');
+          stage.inert = true;
+          stage.style.width = entry.node.getBoundingClientRect().width + 'px';
+          var node = document.createElement('pre');
+          node.className = 'mermaid';
+          node.textContent = entry.source;
+          stage.appendChild(node);
+          document.body.appendChild(stage);
           // Keep the established layout and label wrapping across Mermaid 11/12.
           // Mermaid 12 defaults to ELK, neo styling and narrower, fixed-width nodes.
           mermaid.initialize({
@@ -545,20 +606,20 @@
             flowchart: { wrappingWidth: 200, minNodeWidth: 0 }
           });
           try {
-            await mermaid.run({ nodes: [entry.node] });
+            await mermaid.run({ nodes: [node] });
+            entry.cache[theme] = node.innerHTML;
           } catch (error) {
-            entry.node.textContent = entry.source;
             entry.failed = true;
+          } finally {
+            stage.remove();
           }
-          entry.theme = theme;
-          entry.node.style.visibility = 'visible';
+          display(entry);
         }
       } catch (error) {
         // A missing entry/chunk must leave readable source, not a blank block.
         entries.forEach(function (entry) {
-          entry.node.textContent = entry.source;
-          entry.node.style.visibility = 'visible';
           entry.failed = true;
+          display(entry);
         });
         if (observer) observer.disconnect();
       } finally {
@@ -581,8 +642,32 @@
       render();
     }
     new MutationObserver(function () {
-      if (entries.some(function (entry) { return entry.visible && !entry.failed; })) render();
+      entries.forEach(display);
+      if (background || entries.some(function (entry) { return entry.visible && !entry.failed; })) render();
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    function prepareRemaining() {
+      background = true;
+      render();
+    }
+    function scheduleRemaining() {
+      if ('requestIdleCallback' in window) window.requestIdleCallback(prepareRemaining, { timeout: 1000 });
+      else window.setTimeout(prepareRemaining, 0);
+    }
+    if (document.readyState === 'complete') scheduleRemaining();
+    else window.addEventListener('load', scheduleRemaining, { once: true });
+
+    function printMode(active) {
+      printing = active;
+      entries.forEach(display);
+      if (active) prepareRemaining();
+      else render();
+    }
+    window.addEventListener('beforeprint', function () { printMode(true); });
+    window.addEventListener('afterprint', function () { printMode(false); });
+    var printMedia = window.matchMedia('print');
+    if (printMedia.addEventListener) printMedia.addEventListener('change', function (event) { printMode(event.matches); });
+    if (printMedia.matches) printMode(true);
   });
 
   // ── Recent posts: progressively enhance the visible bottom block into a rail ──

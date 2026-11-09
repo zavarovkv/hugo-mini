@@ -117,8 +117,6 @@
     --beauty-line-height: 1.5;
     --beauty-content-line-height: 1.6;
     --beauty-block-start: 0;
-    --beauty-list-indent: 1.5em;
-    --beauty-list-gap: 0.4em;
     --beauty-link-decoration: underline;
     --beauty-link-thickness: 0.5px;
     --beauty-link-offset: 0.1em;
@@ -301,65 +299,6 @@
     }
   }
 
-  /* Goldmark footnotes: unobtrusive editorial references with native links. */
-  article sup:has(> .footnote-ref) {
-    font-size: 0.7em;
-    font-style: italic;
-    vertical-align: super;
-  }
-
-  article .footnote-ref,
-  article .footnote-ref:link,
-  article .footnote-ref:visited,
-  article .footnote-ref:hover,
-  article .footnote-ref:active,
-  article .footnote-ref:focus-visible {
-    color: inherit;
-    font-weight: inherit;
-    text-decoration: none;
-    border-bottom: 0;
-  }
-
-  article .footnotes {
-    margin-top: 1.5em;
-    font-size: 0.85em;
-    color: var(--color-secondary);
-  }
-
-  article .footnotes > hr {
-    display: none;
-  }
-
-  article .footnotes > ol {
-    list-style: none;
-    padding-inline-start: 0;
-  }
-
-  article .footnotes > ol > li {
-    position: relative;
-  }
-
-  article .footnotes > ol > li::before {
-    content: counter(list-item);
-    font-size: 0.7em;
-    font-style: italic;
-    position: absolute;
-    inset-inline-end: calc(100% + 0.35em);
-    inset-block-start: 0.2em;
-    line-height: 1;
-  }
-
-  article .footnote-backref,
-  article .footnote-backref:link,
-  article .footnote-backref:visited,
-  article .footnote-backref:hover,
-  article .footnote-backref:focus-visible {
-    color: inherit;
-    font-weight: inherit;
-    text-decoration: none;
-    border-bottom: 0;
-  }
-
   .main-nav a {
     margin-right: 8px;
   }
@@ -471,6 +410,13 @@
 
   .reading-shelf-scroll {
     margin-block-end: var(--section-gap);
+  }
+
+  .mermaid-render-stage {
+    position: fixed;
+    inset: 0 auto auto -100000px;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .reading-shelf {
@@ -1834,6 +1780,18 @@
     main figure,
     main tr { break-inside: avoid-page; }
     main img { max-height: 240mm; object-fit: contain; }
+
+    .mermaid { visibility: visible !important; }
+    .mermaid-render-stage .mermaid { visibility: hidden !important; }
+
+    /* A paper page has no horizontal scrolling. Wrap long cell contents while
+       keeping native table semantics, column alignment and repeated headers. */
+    .markdown-table-scroll table {
+      table-layout: fixed;
+      width: 100%;
+    }
+    .markdown-table-scroll :is(th, td) { overflow-wrap: anywhere; }
+    .markdown-table-scroll :is(code, time, .beauty-nowrap) { white-space: normal; }
 
     /* Scroll containers cannot scroll on paper. Let wide code wrap instead. */
     .highlight,

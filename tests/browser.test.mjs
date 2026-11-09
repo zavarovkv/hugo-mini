@@ -53,6 +53,57 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
   return { window, document, root, body, toggle, nav, content, system, viewport, art, motion, intervals, scrollCalls, start: () => runInNewContext(main, window) };
 }
 
+function articlePage(attributes = {}) {
+  const p = page();
+  const article = element(attributes);
+  const select = p.document.querySelector;
+  p.document.querySelector = selector => selector === 'article[data-article-navigation]' ? article : select(selector);
+  const visits = [];
+  p.window.location = { assign: href => visits.push(href) };
+  p.start();
+  function key(options = {}, target) {
+    const event = new Event('keydown', { cancelable: true });
+    for (const [name, value] of Object.entries({ key: 'ArrowLeft', altKey: true, ...options })) Object.defineProperty(event, name, { value });
+    if (target) Object.defineProperty(event, 'target', { value: target });
+    p.document.dispatchEvent(event);
+    return event;
+  }
+  return { ...p, visits, key };
+}
+
+test('article shortcuts stop at boundaries, suppress repeats and recover after back navigation', () => {
+  const p = articlePage({ 'data-article-next': '/newer/' });
+  assert.equal(p.key().defaultPrevented, true, 'the boundary must also suppress browser history');
+  assert.deepEqual(p.visits, []);
+  assert.equal(p.key({ key: 'ArrowRight', repeat: true }).defaultPrevented, true);
+  assert.deepEqual(p.visits, []);
+  p.key({ key: 'ArrowRight' });
+  p.key({ key: 'ArrowRight' });
+  assert.deepEqual(p.visits, ['/newer/'], 'one transition per loaded page');
+  p.window.dispatchEvent(new Event('pageshow'));
+  p.key({ key: 'ArrowRight' });
+  assert.deepEqual(p.visits, ['/newer/', '/newer/']);
+  const last = articlePage({ 'data-article-previous': '/older/' });
+  assert.equal(last.key({ key: 'ArrowRight' }).defaultPrevented, true);
+  assert.deepEqual(last.visits, []);
+  last.key();
+  assert.deepEqual(last.visits, ['/older/']);
+});
+
+test('article shortcuts leave editing, other modifiers and active overlays alone', () => {
+  const p = articlePage({ 'data-article-previous': '/older/' });
+  for (const options of [{ altKey: false }, { ctrlKey: true }, { metaKey: true }, { shiftKey: true }, { isComposing: true }, { defaultPrevented: true }, { key: 'ArrowDown' }]) p.key(options);
+  p.key({}, { isContentEditable: true });
+  p.key({}, { closest: () => ({ tagName: 'INPUT' }) });
+  p.body.classList.add('menu-open');
+  assert.equal(p.key().defaultPrevented, false);
+  p.body.classList.remove('menu-open');
+  const select = p.document.querySelector;
+  p.document.querySelector = selector => selector.startsWith('dialog[open]') ? {} : select(selector);
+  assert.equal(p.key().defaultPrevented, false);
+  assert.deepEqual(p.visits, []);
+});
+
 test('first paint resolves a saved or system scheme even with blocked storage', () => {
   for (const [options, expected] of [
     [{ saved: 'light', dark: true }, 'light'], [{ saved: 'dark' }, 'dark'],

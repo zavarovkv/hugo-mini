@@ -74,4 +74,6 @@ mermaid = true
 +++
 ```
 
-The browser renders diagrams near the viewport and adapts their colors to the light or dark theme. Hugo emits the source, not the diagram image. A local ESM bundle is supported; without JavaScript or after a loading failure, the source remains readable.
+The browser prioritizes nearby diagrams, then prepares the remaining diagrams and neutral print copies during idle time. Screen colors follow the light or dark theme. Hugo emits the source, not the diagram image. A local ESM bundle is supported; without JavaScript or after a loading failure, the source remains readable.
+
+Printing uses the prepared copy; if it is not ready, the readable source is printed instead.

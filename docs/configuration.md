@@ -34,7 +34,7 @@ All parameters are optional unless your site content depends on them.
 | `copyrightYear` | Starting year of the footer range | current year |
 | `newPostDays` | Age window for the New badge | `30` |
 | `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
-| `showSearchButton` | Show a search shortcut in navigation (currently opens the homepage); `false` hides it | `true` |
+| `showSearchButton` | Show the magnifier linking to the homepage; full-text search is not implemented; `false` hides it | `true` |
 | `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
 | `preferenceCookieDomain` | Share explicit theme/language preferences with subdomains of this parent host | unset |
@@ -62,7 +62,7 @@ for rules, exclusions and fragment opt-out.
 
 Analytics is opt-in. Set any combination of `yandexMetrikaId`, `googleAnalyticsId`, `plausibleDomain` / `plausibleSrc`, or `umamiWebsiteId` / `umamiSrc`.
 
-For self-hosted modular Mermaid, copy `mermaid.esm.min.mjs` and its `chunks/mermaid.esm.min/` directory from the same pinned npm package to `static/js/mermaid/`, then set `mermaidModuleSrc = "js/mermaid/mermaid.esm.min.mjs"`. Keep their relative paths intact. The classic `mermaidSrc` option and the pinned CDN fallback remain supported. Both modes render diagrams near the viewport and preserve the source if loading fails.
+For self-hosted modular Mermaid, copy `mermaid.esm.min.mjs` and its `chunks/mermaid.esm.min/` directory from the same pinned npm package to `static/js/mermaid/`, then set `mermaidModuleSrc = "js/mermaid/mermaid.esm.min.mjs"`. Keep their relative paths intact. The classic `mermaidSrc` option and the pinned CDN fallback remain supported. Both modes prioritize nearby diagrams, then prepare the remaining diagrams and neutral print copies during idle time. Print uses the cached copy synchronously; before it is ready, or if loading fails, the readable source remains available.
 
 For local entries found under `static/`, the theme appends a content hash to the URL. An upgrade
 therefore bypasses the old browser cache while keeping relative chunk imports intact. This applies

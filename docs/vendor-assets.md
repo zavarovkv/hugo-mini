@@ -16,7 +16,7 @@ node --test tests/vendor-assets.test.mjs
 
 The helper validates the upstream manifest hash and license before writing files. Never patch the
 generated artifact. Beauty owns native text styles, responsive heading sizes, lists, quotations,
-links, code, captions and optional editorial helpers. The theme configures these through
+links, code, tables, forms, footnotes, captions and optional editorial helpers. The theme configures these through
 `--beauty-*` variables; it owns font loading, its public palette, page layout, interactive components
 and KaTeX/Chroma/Likely integration. Do not add parallel native-text rules to `main.css`.
 
@@ -37,7 +37,10 @@ content `div` inside each `li`. Beauty owns the numbered circles, connecting
 lines, logical positioning and text rhythm. Consumers supply the list content
 and surrounding section layout; the component adds no interaction or progress state.
 
-The bundle aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
+The bundle maps Goldmark footnote classes to Beauty's `beauty-footnotes`,
+`beauty-footnote-ref` and `beauty-footnote-backref` styles. Note numbering and spacing remain library-owned, including notes that begin with a quote, list or code block.
+
+The bundle also aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
 Beauty's selectors through the cached `beauty-compat.html` partial. It matches complete selector tokens in the pinned generated artifact, leaving longer class names unchanged. This adapter still transforms trusted CSS text; it is not a general CSS parser. Regression tests cover token boundaries and the generated bundle. This preserves existing theme content without duplicating CSS declarations or
 adding Hugo-specific selectors to the independent library. Prefer `.beauty-emphasis`,
 `.beauty-caption`, `.beauty-button` and the semantic `callout` shortcode for new content:

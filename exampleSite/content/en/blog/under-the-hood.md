@@ -18,7 +18,7 @@ CSS, JavaScript, Inter fonts, KaTeX and sharing assets are served from the site'
 | --- | --- |
 | Shared theme CSS and JavaScript | Every page; minified and fingerprinted by Hugo |
 | KaTeX | Pages with `math = true` |
-| Mermaid | Near diagrams on pages with `mermaid = true` |
+| Mermaid | Nearby diagrams first, then idle preparation of remaining diagrams and print copies on pages with `mermaid = true` |
 | Likely | Posts with social sharing enabled |
 | Telegram comments | Near the comments section, when channel and message ID are configured |
 
@@ -42,6 +42,8 @@ Weights 300 and 600 are preloaded. Other faces load when used. The font license 
 **Links** (`render-link.html`) open external URLs in a new tab with `rel="noopener noreferrer"`. Internal page links resolve to the current language when a translation exists; `localizeLinks = false` disables that behavior.
 
 **Headings** (`render-heading.html`) retain IDs and optional classes. H2 and H3 headings receive a copyable section link unless marked `.no-anchor`.
+
+**Tables** (`render-table.html`) scroll within a keyboard-focusable region, keep validated ISO dates semantic and wrap cells for print.
 
 ## CSS Architecture
 

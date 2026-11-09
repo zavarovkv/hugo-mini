@@ -159,10 +159,10 @@ weight = 1
     for (const selector of [".beauty-emphasis", ".underline", ".beauty-caption", ".caption", ".beauty-button", ".button", ".footnote-ref", ".footnote-backref"]) {
       assert.ok(css.includes(selector), `${selector} remains available in the bundled foundation`);
     }
-    assert.match(css, /article sup:has\(>\.footnote-ref\)\{[^}]*vertical-align:super/, "in-text citation numbers stay raised");
-    assert.match(css, /article \.footnotes>ol\{[^}]*list-style:none[^}]*padding-inline-start:0/, "the footnote list has neither default markers nor a hanging indent");
-    assert.match(css, /article \.footnotes>ol>li::before\{[^}]*content:counter\(list-item\)/, "native ordered-list counters belong to each note, including non-paragraph content");
-    assert.match(css, /article \.footnotes>ol>li::before\{[^}]*font-size:\.7em[^}]*position:absolute/, "footnote numbers stay small and outside the aligned note content");
+    for (const helper of ['beauty-footnotes', 'beauty-footnote-ref', 'beauty-footnote-backref']) {
+      assert.ok(css.includes(helper), `${helper} styles come from the shared foundation`);
+    }
+    assert.ok(css.includes('content:counter(list-item)'), 'note markers remain attached to list items');
     const defaultLink = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "hreflang") === "x-default");
     assert.equal(attribute(defaultLink, "href"), `${baseURL}shared/`, "the default language is independent of its display weight");
     assert.match(post, /class=(?:"tg-views"|tg-views)/, "Telegram data renders without deprecated data APIs");
@@ -340,6 +340,18 @@ weight = 2
     const links = [...list.matchAll(/<a\b[^>]*>/g)].map((m) => attribute(m[0], "href"));
     assert.deepEqual(links, ["latest", "next", "third"].map((slug) => `/sub/${prefix}writing/${slug}/`));
     assert.ok(list.includes(lang === "en" ? "Latest articles" : "Последние статьи"));
+    const chronological = ['old', 'third', 'next', 'latest'];
+    for (const [index, slug] of chronological.entries()) {
+      const post = await readFile(join(output, `writing/${slug}/index.html`), 'utf8');
+      const article = post.match(/<article\b[^>]*>/)[0];
+      assert.ok(article.includes('data-article-navigation'));
+      const path = name => name ? `/sub/${prefix}writing/${name}/` : null;
+      assert.equal(attribute(article, 'data-article-previous') || null, path(chronological[index - 1]));
+      assert.equal(attribute(article, 'data-article-next') || null, path(chronological[index + 1]));
+    }
+    const hidden = await readFile(join(output, 'writing/hidden/index.html'), 'utf8');
+    assert.ok(!hidden.includes('data-article-navigation'), 'unlisted posts do not enter the sequence');
+    assert.ok(!home.includes('data-article-navigation'), 'homepages do not capture navigation shortcuts');
   }
 });
 

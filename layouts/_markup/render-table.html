@@ -1,6 +1,7 @@
 {{- /* Keep Markdown's table structure, attributes and alignment. A cell whose
      entire value is a valid ISO date gets native time semantics; Beauty keeps
      that short value together without making other table cells unbreakable. */ -}}
+<div class="beauty-scroll markdown-table-scroll" tabindex="0" role="region" aria-label="{{ i18n "table_scroll_label" }}">
 <table{{ range $key, $value := .Attributes }}{{ if $value }}{{ printf " %s=%q" $key $value | safeHTMLAttr }}{{ end }}{{ end }}>
   <thead>
     {{ range .THead }}<tr>
@@ -22,3 +23,4 @@
     </tr>{{ end }}
   </tbody>
 </table>
+</div>

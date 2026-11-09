@@ -174,31 +174,31 @@ test('a migrated theme is shared across subdomains and wins over stale local pre
   const blog = page({ state, saved: { theme: 'dark' } });
   assert.equal(blog.theme(), 'dark');
   assert.equal(blog.window.hugoMiniPreferences.get('theme'), 'dark');
-  const council = page({ state, url: 'https://council.example.com/', saved: { theme: 'light' } });
-  assert.equal(council.theme(), 'dark', 'inline initialization must use the shared cookie');
-  assert.equal(council.window.hugoMiniPreferences.get('theme'), 'dark');
+  const companion = page({ state, url: 'https://app.example.com/', saved: { theme: 'light' } });
+  assert.equal(companion.theme(), 'dark', 'inline initialization must use the shared cookie');
+  assert.equal(companion.window.hugoMiniPreferences.get('theme'), 'dark');
   assert.equal(page({ state, url: 'https://unrelated.test/', domain: '' }).theme(), 'light');
 });
 
 test('explicit choices synchronize on focus, page restoration, and return to a visible tab', () => {
   const state = browser();
   const blog = page({ state });
-  const council = page({ state, url: 'https://council.example.com/' });
+  const companion = page({ state, url: 'https://app.example.com/' });
   blog.start();
-  council.start();
+  companion.start();
   blog.toggleTheme();
-  assert.equal(page({ state, url: 'https://council.example.com/' }).theme(), 'dark', 'the click saves synchronously');
-  council.window.dispatchEvent(new Event('focus'));
-  assert.equal(council.theme(), 'dark');
-  council.toggleTheme();
+  assert.equal(page({ state, url: 'https://app.example.com/' }).theme(), 'dark', 'the click saves synchronously');
+  companion.window.dispatchEvent(new Event('focus'));
+  assert.equal(companion.theme(), 'dark');
+  companion.toggleTheme();
   blog.window.dispatchEvent(new Event('pageshow'));
   assert.equal(blog.theme(), 'light');
-  council.visible(false);
+  companion.visible(false);
   blog.toggleTheme();
-  council.visible(false);
-  assert.equal(council.theme(), 'light', 'a hidden page waits until it becomes visible');
-  council.visible(true);
-  assert.equal(council.theme(), 'dark');
+  companion.visible(false);
+  assert.equal(companion.theme(), 'light', 'a hidden page waits until it becomes visible');
+  companion.visible(true);
+  assert.equal(companion.theme(), 'dark');
 });
 
 test('the system scheme remains live without creating an explicit preference', () => {
@@ -220,9 +220,9 @@ test('language clicks save before navigation without changing ordinary link beha
   blog.start();
   assert.equal(blog.toggleLanguage().defaultPrevented, false);
   assert.equal(blog.window.hugoMiniPreferences.get('language'), 'en');
-  const council = page({ state, url: 'https://council.example.com/?campaign=blog#pricing', entry: true });
-  assert.deepEqual(council.replacements, ['https://council.example.com/en/?campaign=blog#pricing']);
-  const translated = page({ state, url: council.replacements[0], entry: true, lang: 'en' });
+  const companion = page({ state, url: 'https://app.example.com/?campaign=blog#pricing', entry: true });
+  assert.deepEqual(companion.replacements, ['https://app.example.com/en/?campaign=blog#pricing']);
+  const translated = page({ state, url: companion.replacements[0], entry: true, lang: 'en' });
   assert.deepEqual(translated.replacements, [], 'the selected entry must not redirect again');
   translated.start();
   translated.toggleLanguage();
@@ -243,7 +243,7 @@ test('direct article links keep their language and never overwrite the saved cho
   const state = browser();
   const entry = page({ state, saved: { language: 'ru' }, entry: true });
   const article = page({
-    state, url: 'https://council.example.com/en/article/', lang: 'en',
+    state, url: 'https://app.example.com/en/article/', lang: 'en',
     alternates: { ru: '/article/', en: '/en/article/' },
   });
   article.start();
@@ -258,10 +258,10 @@ test('restored entry pages follow a language changed in another subdomain', () =
   for (const event of ['focus', 'pageshow', 'visibilitychange']) {
     const state = browser();
     const blog = page({ state, entry: true });
-    const council = page({ state, url: 'https://council.example.com/' });
+    const companion = page({ state, url: 'https://app.example.com/' });
     blog.start();
-    council.start();
-    council.toggleLanguage();
+    companion.start();
+    companion.toggleLanguage();
     if (event === 'visibilitychange') blog.visible(true);
     else blog.window.dispatchEvent(new Event(event));
     assert.deepEqual(blog.replacements, ['https://example.com/en/'], event);
@@ -287,8 +287,8 @@ test('a shared language beats stale local language and legacy language migrates 
   const state = browser();
   const blog = page({ state, saved: { language: 'en' }, entry: true });
   assert.deepEqual(blog.replacements, ['https://example.com/en/']);
-  const council = page({ state, url: 'https://council.example.com/', saved: { language: 'ru' }, entry: true });
-  assert.deepEqual(council.replacements, ['https://council.example.com/en/']);
+  const companion = page({ state, url: 'https://app.example.com/', saved: { language: 'ru' }, entry: true });
+  assert.deepEqual(companion.replacements, ['https://app.example.com/en/']);
 });
 
 test('remember-language opt-out ignores saved language and never stores a language click', () => {
@@ -321,7 +321,7 @@ test('without a valid shared domain settings stay local to their own origin', ()
     assert.equal(p.values.get('theme'), 'dark');
     assert.equal(p.values.get('language'), 'en');
     assert.equal(state.writes.length, 0, `${url} with ${domain || 'no domain'}`);
-    const sibling = page({ state, url: 'https://council.example.com/', domain: '' });
+    const sibling = page({ state, url: 'https://app.example.com/', domain: '' });
     assert.equal(sibling.theme(), 'light');
     assert.deepEqual(sibling.replacements, []);
   }

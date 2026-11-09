@@ -58,8 +58,21 @@ Use your browser's Print or Save as PDF command to get a clean, light-on-paper
 version of an article, even when the site is in dark mode. The print layout keeps
 the site name, article title, text, images and publication date; navigation,
 sharing controls, comments and related-post widgets are omitted. Long code blocks
-wrap instead of being clipped. Article text is 11 pt, page titles 22 pt and section headings 16 pt regardless of the viewport width. Class-based syntax highlighting prints in monochrome. This uses print-only CSS and requires no setting,
-JavaScript or additional asset.
+wrap instead of being clipped. Article text is 11 pt, page titles 22 pt and section headings 16 pt regardless of the viewport width. Class-based syntax highlighting prints in monochrome. The page layout uses print-only CSS and needs no extra setting or asset.
+
+Mermaid rendering still requires JavaScript. The loader prioritizes nearby diagrams, then prepares offscreen diagrams and neutral print copies during idle time. Printing uses cached copies synchronously; if preparation has not finished or a download failed, the diagram source prints instead. Returning from print restores the screen theme.
+
+## Article keyboard navigation
+
+On public articles, Option/Alt + Left opens the previous (older) article and
+Option/Alt + Right opens the next (newer) article. The sequence uses publication
+dates and the current language's `mainSections` collection. Pinning does not
+change its order; hidden posts and draft previews are excluded. At either end,
+the shortcut stops without wrapping or falling through to browser history.
+
+No visible controls or shortcut hints are added. The handler ignores text
+editing, composition, extra modifiers, held-key repeats, open dialogs and the
+mobile menu. Standalone pages and listings retain their normal keyboard behavior.
 
 ## Categories
 

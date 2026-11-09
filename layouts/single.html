@@ -9,10 +9,12 @@
          path-based split would only work for sites that happen to call it
          "blog". */ -}}
   {{- $isPost := in (site.Params.mainSections | default (slice "blog")) .Type -}}
+  {{- $neighbors := dict -}}
+  {{- if $isPost -}}{{- $neighbors = partial "article-neighbors.html" . -}}{{- end -}}
 
   <h1>{{ partial "typography/title.html" . }}</h1>
 
-  <article class="beauty-reading" lang="{{ .Language.Lang }}">
+  <article class="beauty-reading" lang="{{ .Language.Lang }}"{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
     {{ partial "typography/content.html" . }}
   </article>
 

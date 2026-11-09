@@ -31,6 +31,15 @@ jobs:
           hugo-version: ${{ matrix.hugo-version }}
           extended: true
 
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install test dependencies
+        run: npm ci
+
       - name: Build exampleSite
         # --themesDir ../.. tells Hugo to look for the theme one level above
         # the theme repo itself, so `theme = "hugo-mini"` in exampleSite/hugo.toml
@@ -52,6 +61,12 @@ jobs:
 
       - name: Regression tests
         run: node --test tests/*.test.mjs
+
+      - name: Install test browsers
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Browser regression tests
+        run: npm run test:browser
 
       - name: Check the advertised outputs were produced
         # The theme ships templates for a JSON Feed and llms.txt; exampleSite

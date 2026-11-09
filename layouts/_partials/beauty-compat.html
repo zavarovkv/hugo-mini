@@ -2,7 +2,7 @@
      Match complete selector tokens, not prefixes such as .beauty-caption-extra.
      The input is the pinned, generated Beauty artifact, not arbitrary CSS. */ -}}
 {{- $css := . -}}
-{{- range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" -}}
+{{- range $selector, $alias := dict ".beauty-emphasis" ".underline" ".beauty-caption" ".caption" ".beauty-button" ".button" "blockquote.beauty-callout" "q" ".beauty-footnotes" ".footnotes" ".beauty-footnote-ref" ".footnote-ref" ".beauty-footnote-backref" ".footnote-backref" -}}
   {{- $pattern := printf `([(+~,> ])%s([),:+~> .#\[]|$)` (replace $selector "." `\.`) -}}
   {{- $css = replaceRE $pattern (printf `${1}:is(%s,%s)${2}` $selector $alias) $css -}}
 {{- end -}}
