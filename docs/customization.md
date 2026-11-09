@@ -75,7 +75,7 @@ Use focused overrides whenever possible:
 - `layouts/_partials/custom_head.html` adds site-specific tags to `<head>`.
 - `layouts/_partials/custom_body.html` adds scripts or markup before the closing `</body>` tag.
 - The `bodyClass` block selects page-level layout classes. The built-in home, list and single
-  templates use `reading-layout` for the 720 px, 18/28 px reading layout (17/27 px on mobile).
+  templates use `reading-layout` for the 720 px, 18/28 px reading layout (19/29 px on mobile).
   Independent templates can omit this class to retain the default shell scale.
   The reading layout uses 16 px header text, a 20 px mobile identity and 18 px mobile
   menu links, controlled by `--header-text-size`, `--header-title-size-small` and

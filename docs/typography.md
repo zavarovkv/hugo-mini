@@ -56,7 +56,15 @@ Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect M
 
 ## Reading layout
 
-Blog pages use 18 px text with 28 px leading in a column up to 720 px wide; at 768 px and below, text is 17/27 px. Page titles are 44 px on desktop and 32 px on mobile. Navigation retains its compact scale. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
+Blog pages use 18 px text with 28 px leading in a column up to 720 px wide; at 768 px and below, text is 19/29 px. Page titles are 44 px on desktop and 32 px on mobile. Navigation retains its compact scale. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
+
+On mobile, article section headings use 24 px, and the recent-posts block below an
+article follows the same 19/29 px reading scale. Attributions use 15 px and post metadata
+uses 14 px. Proportional notes, image captions and footnotes grow with the article text.
+The reading shelf's date column scales with its font to keep the heading within the table.
+On narrow screens, the table can scroll horizontally inside its keyboard-accessible
+container, keeping a 20em minimum width without widening the page.
+Desktop typography, the 720 px column and print sizes retain their own settings.
 
 Visible page titles and article links use the same language-aware spacing rules as prose.
 Titles are escaped before formatting; metadata, feeds and URLs remain unchanged, and

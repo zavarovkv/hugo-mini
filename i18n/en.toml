@@ -98,6 +98,9 @@ other = "Book"
 [reading_read]
 other = "Read"
 
+[reading_list_label]
+other = "Reading list"
+
 [not_found]
 other = "Page not found. It may have been moved or deleted."
 

@@ -187,6 +187,8 @@ insert `{{< reading-list >}}`. The shortcode renders a two-column table in the
 theme's normal typography, newest reading month first. The first column shows
 each title above its author, publication year and rating; reading months align on the right.
 Long titles and author lists wrap within their column on narrow screens.
+The table retains a 20em minimum width on mobile and scrolls horizontally inside
+a labeled, keyboard-accessible `beauty-scroll` container when needed.
 Rows are separated by whitespace. Both column labels share the theme's heading
 weight and color, with a single rule beneath the header and a section gap after
 the table. The table uses the

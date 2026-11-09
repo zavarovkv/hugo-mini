@@ -182,7 +182,7 @@
       --header-title-size-small: 1.25rem;
       --header-nav-size-small: 1.125rem;
       --beauty-reading-size: 1.125rem;
-      --beauty-reading-size-small: 1.0625rem;
+      --beauty-reading-size-small: 1.1875rem;
       --beauty-reading-line-height: calc(28 / 18);
       --beauty-h1-size: 2.75rem;
       --beauty-h1-tracking: -0.01em;
@@ -190,7 +190,26 @@
   }
   @media screen and (max-width: 768px) {
     body.reading-layout {
-      --beauty-reading-line-height: calc(27 / 17);
+      --beauty-reading-line-height: calc(29 / 19);
+      --beauty-h2-size-small: 1.5rem;
+      --beauty-fine-print-size: 0.9375rem;
+    }
+
+    body.reading-layout .recent-sidebar {
+      font-size: var(--beauty-reading-size-small);
+      line-height: var(--beauty-reading-line-height);
+    }
+
+    body.reading-layout .post-meta-inline {
+      font-size: 0.875rem;
+    }
+
+    body.reading-layout .reading-shelf .reading-date {
+      width: 5.5em;
+    }
+
+    body.reading-layout .reading-shelf {
+      min-inline-size: 20em;
     }
   }
 
@@ -449,9 +468,12 @@
     margin-bottom: 0.5em;
   }
 
+  .reading-shelf-scroll {
+    margin-block-end: var(--section-gap);
+  }
+
   .reading-shelf {
     --beauty-table-cell-padding: 0.625em 0;
-    margin-block-end: var(--section-gap);
     border-collapse: collapse;
     table-layout: fixed;
     font-variant-numeric: normal;
