@@ -18,6 +18,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Refine the inline year-range arrow with a small, smoothly joined oval loop, a finer stroke and a compact open arrowhead, retaining text-relative sizing, alignment and accessible labels.
 - Bring wavy emphasis closer to the text with Beauty's `--beauty-emphasis-offset` token, preserving its color and stroke.
 - Match language and search hover/focus colors to ordinary links through `--color-accent`, preserving the theme toggle's colors and yellow AI-language sparkle.
 - Enlarge the mobile menu toggle's touch target to 44 × 44 px while preserving its 24 px icon and shared open/close behavior.
