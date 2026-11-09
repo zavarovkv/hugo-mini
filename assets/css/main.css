@@ -1605,7 +1605,7 @@
     width: 120px;
     height: 100%;
     padding: 18px 15px 18px 12px;
-    font-size: 0.9rem;
+    font-size: var(--header-text-size);
     font-weight: var(--font-weight-medium);
     color: var(--color-primary);
     text-decoration: none;

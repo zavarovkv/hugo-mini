@@ -22,6 +22,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Match the back-to-top label to the header navigation size, preserving its configured weight, primary link color and existing hover treatment.
 - Version local project marks, header logos and favicons with the shared static-asset helper so updated images replace cached copies. Preserve custom query strings, fragments, external URLs and site subpaths.
 - Refine the Hugo Mini asterisk with balanced 5.5-unit strokes on its 64-unit canvas, preserving the original ray directions and colors across light/dark logos and browser/device icons.
 - Use the shared blog typography on 404 pages, including translated fallback views: 18/19 px text, 44/32 px titles and consistent header controls. Keep ASCII artwork sizing separate.
