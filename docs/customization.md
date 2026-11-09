@@ -43,7 +43,7 @@ colors and animation; the AI-language sparkle turns yellow on hover or keyboard 
 
 ## Logo and favicon
 
-The bundled black asterisk is the default browser favicon, with matching Android and iOS icons. It does **not** replace your header avatar or logo.
+The bundled thin-line black asterisk is the default browser favicon, with matching Android and iOS icons. The light/dark header marks share its geometry: a vertical ray and two diagonals. It does **not** replace your header avatar or logo.
 
 The demo also uses the asterisk as its header logo. To enable that separately:
 
