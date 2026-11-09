@@ -56,6 +56,8 @@ Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect M
 
 ## Reading layout
 
+The 404 page uses this same text, title and header scale in every language; its optional ASCII illustration retains a separate monospace size.
+
 Blog pages use 18 px text with 28 px leading in a column up to 720 px wide; at 768 px and below, text is 19/29 px. Page titles are 44 px on desktop and 32 px on mobile. Navigation retains its compact scale. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
 
 On mobile, article section headings use 24 px, and the recent-posts block below an

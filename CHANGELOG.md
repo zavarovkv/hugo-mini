@@ -22,6 +22,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Use the shared blog typography on 404 pages, including translated fallback views: 18/19 px text, 44/32 px titles and consistent header controls. Keep ASCII artwork sizing separate.
 - Use Beauty's shared footnote helpers through the Goldmark class adapter, removing duplicated theme typography. Ordinary list numbers now inherit text weight and item spacing is 0.875rem (14 px), with responsive min(2.5rem, 8%) indentation.
 - Refine the inline year-range arrow with a small, smoothly joined oval loop, a finer stroke and a compact open arrowhead, retaining text-relative sizing, alignment and accessible labels.
 - Bring wavy emphasis closer to the text with Beauty's `--beauty-emphasis-offset` token, preserving its color and stroke.

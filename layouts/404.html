@@ -1,4 +1,5 @@
 {{ define "title" }}404 | {{ .Site.Title }}{{ end }}
+{{ define "bodyClass" }}reading-layout{{ end }}
 {{ define "main" }}{{ partial "not-found.html" . }}{{ end }}
 {{ define "scripts" }}
   {{- /* Some static hosts serve only the root 404 for every language. Render

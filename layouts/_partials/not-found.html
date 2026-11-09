@@ -6,7 +6,7 @@
   {{- end -}}
 {{- end -}}
 <div class="not-found{{ if $art }} not-found-with-art{{ end }}" data-not-found-prefix="{{ .Site.Home.RelPermalink }}">
-  <div class="not-found-content">
+  <div class="not-found-content beauty-reading">
     <hgroup class="not-found-heading">
       <h1>404</h1>
       <p class="not-found-message">{{ if $art }}{{ i18n "not_found_yoda" | default "The page you seek, here it is not" }}{{ else }}{{ i18n "not_found" | default "Page not found. It may have been moved or deleted." }}{{ end }}</p>

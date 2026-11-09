@@ -44,7 +44,7 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 | Telegram | Lazy comments and optional build-time reactions/views; missing data degrades gracefully. [Guide](telegram.md) |
 | Sharing and analytics | Optional local Likely controls; Yandex, Google, Plausible and Umami load only when configured. These integrations may contact third parties. [Configuration](configuration.md), [asset ownership](vendor-assets.md) |
 | Identity | Logo/dark variant or avatar/hover frame, favicon overrides or opt-out, SVG menu icons and footer links. [Customization](customization.md) |
-| 404 and console | Localized not-found page, optional animated ASCII Yoda and home-page console art; motion preference respected. [Parameters](configuration.md#parameters) |
+| 404 and console | Localized not-found page with the shared blog text/header scale, optional independently sized animated ASCII Yoda and home-page console art; motion preference respected. [Parameters](configuration.md#parameters) |
 | Template API | Named base blocks; custom head/body/OG hooks; reusable menu and footer; public tokens and site-owned fonts. [Customization](customization.md#templates) |
 | Installation and hosting | Hugo Extended 0.146+, submodule or Go Module; no npm needed for ordinary builds; Vercel starter or any static host. [Setup](configuration.md#installation), [deployment](deployment.md) |
 | Maintenance | Pinned Beauty, Inter, KaTeX and Likely; Node/browser regression checks for maintainers, separate from user builds. [Assets](vendor-assets.md), [contributing](../CONTRIBUTING.md) |
