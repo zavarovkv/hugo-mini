@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Blend desktop menu selection over 300 ms with native cross-document View Transitions. Reserve internal labels' bold width to prevent layout shifts; retain ordinary links, mobile overlay behavior and immediate navigation for reduced motion or unsupported browsers.
 - Navigate between older/newer public articles with Option/Alt + Left/Right, respecting language and chronology, skipping hidden posts and drafts, and stopping at both ends. Preserve text editing and overlay shortcuts without adding visible controls.
 - Add Chromium and WebKit integration checks in CI for tables, print, diagram loading and theme changes; ordinary theme users still need only Hugo.
 - Wrap Markdown tables in labeled, keyboard-focusable Beauty scroll containers and wrap long cell contents on paper, preserving native table semantics and attributes.

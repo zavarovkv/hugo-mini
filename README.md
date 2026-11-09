@@ -20,7 +20,7 @@ Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beaut
 
 - **Focus on writing.** A quiet 720 px column, comfortable 19 px mobile reading, subtle footnotes, and automatic quotes, dashes and nonbreaking spaces at build time. Markdown stays intact; the 404 page shares the blog type scale, and articles have a dedicated print layout. [Examples](docs/typography.md).
 - **Stay lightweight.** Responsive layout with an easy-to-tap mobile menu; fonts, CSS, JavaScript and icons are served from your site. Updated local icons get new URLs automatically.
-- **Publish out of the box.** Light and dark modes, a favicon, multiple languages, SEO, RSS, and JSON Feed.
+- **Publish out of the box.** Light and dark modes, smooth menu highlighting, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
 
 ## Quick start

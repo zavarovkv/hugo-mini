@@ -70,6 +70,7 @@
     --header-text-size: 0.9rem;
     --header-title-size-small: 1.2em;
     --header-nav-size-small: 1.1rem;
+    --nav-transition-duration: 300ms;
     --columns-gap: 2em;
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
@@ -854,6 +855,42 @@
     white-space: nowrap;
   }
 
+  /* Reserve each internal label's bold width without duplicating its accessible
+     name. Only the visible text gets Beauty's inline underline. */
+  .main-nav .nav-label[data-label] {
+    display: inline-grid;
+    vertical-align: baseline;
+  }
+
+  .main-nav .nav-label[data-label]::before {
+    content: attr(data-label);
+    grid-area: 1 / 1;
+    font-weight: var(--font-weight-bold);
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .main-nav .nav-label[data-label] > .beauty-link-label {
+    grid-area: 1 / 1;
+    justify-self: center;
+  }
+
+  /* Cross-document transitions blend the desktop menu's regular/bold states.
+     Keep page content immediate; the mobile overlay retains its own lifecycle.
+     Browsers without View Transitions keep ordinary document navigation. */
+  @media screen and (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
+
+    :root { view-transition-name: none; }
+    #main-navigation { view-transition-name: main-navigation; }
+
+    ::view-transition-group(main-navigation) {
+      animation-duration: var(--nav-transition-duration);
+      animation-timing-function: ease-in-out;
+    }
+  }
+
   /* Desktop search stays in the header; mobile gets a text-only menu entry. */
   .search-toggle-mobile { display: none; }
 
@@ -1006,6 +1043,10 @@
       display: block;
       font-size: var(--header-nav-size-small);
       border-bottom: 1px solid var(--color-divider);
+    }
+
+    .main-nav .nav-label[data-label] > .beauty-link-label {
+      justify-self: start;
     }
 
     /* Override the desktop text-decoration underline for icon links —

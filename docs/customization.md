@@ -59,6 +59,12 @@ Local header logos, project marks and favicons include a content hash in their U
 
 To replace the default favicon, set `favicon` to your own SVG or 32×32 PNG in your site's `static/` directory. Custom favicons do not inherit the theme's device icons; add `favicon192` and `appleTouchIcon` if needed. Set `favicon = false` to disable the bundled icons.
 
+## Menu transitions
+
+Internal menu labels reserve the width of their bold state, keeping neighboring items in place when the current section changes. The hidden sizing copy does not duplicate the accessible link name; the visible text keeps Beauty's inline underline. Icons retain their desktop/mobile placement.
+
+Above 768 px, browsers with cross-document View Transitions blend the old and new `#main-navigation` states over `--nav-transition-duration` (default `300ms`). Page content updates immediately. This uses ordinary same-origin document navigation, with no client-side router or additional JavaScript. The mobile overlay keeps its existing open/close behavior; reduced-motion preferences and unsupported browsers receive an immediate state change. Selected labels remain bold in every mode.
+
 ## Menu icons
 
 Set `params.icon` on a menu entry. The theme includes `telegram`; custom icons are Hugo resources at `assets/icons/<name>.svg` in your site.

@@ -44,7 +44,7 @@
   {{- $class := "" -}}
   {{- if $isActive -}}{{- $class = ` class="link-selected" aria-current="page"` -}}{{- end -}}
   {{- if $isExternal -}}{{- $class = ` target="_blank" rel="noopener noreferrer"` -}}{{- end -}}
-  <a href="{{ .URL }}"{{ $class | safeHTMLAttr }}>{{ $icon }}<span class="nav-label beauty-link-label">{{ .Name }}</span></a>
+  <a href="{{ .URL }}"{{ $class | safeHTMLAttr }}>{{ $icon }}<span class="nav-label"{{ if not $isExternal }} data-label="{{ .Name }}"{{ end }}><span class="beauty-link-label">{{ .Name }}</span></span></a>
 {{- end }}
 {{- if and .Site.Params.showSearchButton (le $count 1) -}}
   {{- partial "search-button.html" (dict "variant" "mobile") -}}

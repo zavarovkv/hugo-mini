@@ -23,6 +23,7 @@ try {
   await mkdir(contentDir, { recursive: true });
   await cp(join(theme, 'tests/browser/fixtures/contract.md'), join(contentDir, 'browser-checks.md'));
   if (!source) {
+    await writeFile(join(contentDir, 'about.md'), '+++\ntitle="About & contact"\n+++\nNavigation destination.\n');
     await mkdir(join(contentDir, 'blog'));
     for (const [name, date, extra] of [
       ['first', '2001-01-01', 'pinned=true'], ['middle', '2002-01-01', ''],
@@ -42,6 +43,21 @@ try {
   const overlay = join(root, 'browser.toml');
   await writeFile(overlay, `${source ? '' : 'theme="hugo-mini"\ntitle="Browser checks"\ndisableKinds=["taxonomy","term"]\n'}
 staticDir=[${JSON.stringify(fixtureStatic)}, "static"]
+${source ? '' : `[[menu.main]]
+name="Articles"
+url="/blog/"
+weight=1
+[[menu.main]]
+name="About & contact"
+url="/about/"
+weight=2
+[[menu.main]]
+name="Subscribe"
+url="https://example.org/"
+weight=3
+[menu.main.params]
+icon="telegram"
+`}
 [params]
 mermaidModuleSrc="browser-mermaid/mermaid.esm.min.mjs"
 socialSharing=false
