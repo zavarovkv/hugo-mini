@@ -65,6 +65,8 @@ hugo server -D
 
 ## Документация
 
+- [Шрифты сайта](docs/fonts.md): свое семейство с общей типографикой темы и Beauty.css.
+
 Руководства:
 
 - [Установка и языки](docs/configuration.md) · [Публикация сайта](docs/deployment.md) · [Написание статей](docs/content.md)

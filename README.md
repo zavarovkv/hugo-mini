@@ -65,6 +65,8 @@ Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Mod
 
 ## Documentation
 
+- [Site-owned fonts](docs/fonts.md): bring your own family while keeping typography in the theme and Beauty.css.
+
 - [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md) · [Writing posts](docs/content.md)
 - [Typography](docs/typography.md) · [Customization](docs/customization.md) · [Optional features](docs/advanced-features.md)
 - [Telegram](docs/telegram.md) · [Bundled assets](docs/vendor-assets.md) · [Changelog](CHANGELOG.md)

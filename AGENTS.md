@@ -87,3 +87,7 @@ For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 - Follow `CONTRIBUTING.md` for contribution conventions.
 - `.github/RELEASE_TAG` triggers tag and GitHub release creation on `main`; change it only when a release is explicitly requested.
 - Do not commit generated `exampleSite/public/`, Hugo resource caches, `.DS_Store`, or other ignored build artifacts.
+
+## Site-owned font profiles
+
+`font-profile.html` validates optional `params.fonts` assets and role weights. The theme owns loading and typography; consumers own any licensed files. Keep CSS output keys profile-specific and honor `useDefaultFonts` on independent pages. Never copy proprietary consumer fonts into the theme. See `docs/fonts.md`.

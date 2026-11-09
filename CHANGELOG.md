@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Support site-owned font assets through `params.fonts`, with verified face weights, fingerprinted files, selective preloads and default-font page opt-outs. Typography remains in the theme and Beauty.css; proprietary font files are never part of the theme.
 - Support optional light/dark project marks next to names, with a separate accessible button that spins to a stop when clicked; the project name stays linked.
 - Prevent awkward line breaks in Russian compound prepositions, abbreviations, enclitic particles and short three-word groups.
 - Add the Hugo Mini asterisk as optional light/dark header branding and a black SVG favicon; let sites supply their own logo and support SVG browser favicons alongside PNG.

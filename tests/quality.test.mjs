@@ -11,7 +11,7 @@ const hugoVersion = execFileSync(process.env.HUGO_BIN || 'hugo', ['version'], { 
 const [, major, minor] = hugoVersion.match(/v(\d+)\.(\d+)\./) || [];
 const languageLabelKey = Number(major) > 0 || Number(minor) >= 158 ? 'label' : 'languageName';
 
-async function site(t, config, content, templates = {}) {
+async function site(t, config, content, templates = {}, assets = {}) {
   const root = await mkdtemp(join(tmpdir(), 'hugo-mini-quality-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, 'themes'));
@@ -26,6 +26,11 @@ async function site(t, config, content, templates = {}) {
     const filename = join(root, 'layouts', name);
     await mkdir(dirname(filename), { recursive: true });
     await writeFile(filename, source);
+  }
+  for (const [name, bytes] of Object.entries(assets)) {
+    const filename = join(root, 'assets', name);
+    await mkdir(dirname(filename), { recursive: true });
+    await writeFile(filename, bytes);
   }
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source', root, '--minify', '--panicOnWarning'], { stdio: 'pipe' });
   return {
@@ -345,4 +350,57 @@ test('the pinned Beauty aliases retain the previous public styles', async (t) =>
     {{ end }}`,
   });
   assert.match(await example.read('index.html'), /<div id=compat-equal>true<\/div>/);
+});
+
+
+test('site fonts use fingerprinted assets and keep default-font pages isolated', async (t) => {
+  const regular = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-300.woff2'));
+  const bold = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-600.woff2'));
+  const example = await site(t, `baseURL="https://example.org/sub/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params.fonts]
+family="Site Font"
+[[params.fonts.faces]]
+source="private/regular.woff2"
+weight=400
+preload=true
+[[params.fonts.faces]]
+source="private/bold.woff2"
+weight=700
+preload=true
+`, {
+    'custom.md': '+++\ntitle="Custom"\n+++\nBody text.',
+    'default.md': '+++\ntitle="Default"\nuseDefaultFonts=true\n+++\nBody text.',
+  }, {}, { 'private/regular.woff2': regular, 'private/bold.woff2': bold });
+  const custom = await example.read('custom/index.html');
+  const standard = await example.read('default/index.html');
+  assert.doesNotMatch(custom, /rel=preload[^>]+inter-v20/);
+  assert.match(custom, /href=\/sub\/private\/regular\.[a-f0-9]{64}\.woff2 as=font/);
+  assert.match(standard, /rel=preload[^>]+inter-v20/);
+  assert.doesNotMatch(standard, /private\//);
+  const cssPath = html => html.match(/<link rel=stylesheet href=([^ >]+)/)[1].replace(/^\/sub\//, '');
+  assert.notEqual(cssPath(custom), cssPath(standard), 'font profiles cannot share a cached stylesheet target');
+  const css = await example.read(cssPath(custom));
+  assert.match(css, /font-family:["']?Site Font/i);
+  assert.match(css, /--font-weight-body:400/);
+  assert.match(css, /--font-weight-bold:700/);
+  assert.doesNotMatch(css, /inter-v20/);
+  const defaultCSS = await example.read(cssPath(standard));
+  assert.match(defaultCSS, /--font-weight-body:300/);
+  assert.doesNotMatch(defaultCSS, /Site Font|private\//);
+  const url = custom.match(/href=\/sub\/(private\/regular\.[a-f0-9]{64}\.woff2)/)[1];
+  assert.deepEqual(await example.readBytes(url), regular, 'the font is emitted without conversion');
+});
+
+test('an explicitly configured missing site font fails the build', async (t) => {
+  await assert.rejects(site(t, `baseURL="https://example.org/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params.fonts]
+family="Site Font"
+[[params.fonts.faces]]
+source="private/missing.woff2"
+weight=400
+`, {}), /fonts: missing site asset/);
 });

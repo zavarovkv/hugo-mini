@@ -1,0 +1,36 @@
+{{- /* Site-owned font assets; this theme never includes a consumer's font files.
+     Callers cache by language and useDefaultFonts, and key CSS by this result. */ -}}
+{{- $profile := dict "custom" false "regular" 300 "medium" 500 "bold" 600 "title" 500 -}}
+{{- $config := .Site.Params.fonts -}}
+{{- if and $config (not .Params.useDefaultFonts) -}}
+  {{- if not (and $config.family (findRE `^[\pL\pN _-]+$` $config.family)) -}}
+    {{- errorf "fonts.family must be a plain font family name" -}}
+  {{- end -}}
+  {{- $weights := dict "regular" (int ($config.regularWeight | default 400)) "medium" (int ($config.mediumWeight | default 400)) "bold" (int ($config.boldWeight | default 700)) "title" (int ($config.titleWeight | default 700)) -}}
+  {{- range $role, $weight := $weights -}}
+    {{- if or (lt $weight 1) (gt $weight 1000) -}}{{ errorf "fonts: invalid %s weight %d" $role $weight }}{{- end -}}
+  {{- end -}}
+  {{- $faces := slice -}}
+  {{- $normalWeights := slice -}}
+  {{- range $config.faces -}}
+    {{- $style := .style | default "normal" -}}
+    {{- $weight := int .weight -}}
+    {{- $extension := lower (path.Ext .source) -}}
+    {{- $format := index (dict ".woff2" "woff2" ".woff" "woff" ".otf" "opentype" ".ttf" "truetype") $extension -}}
+    {{- $mime := index (dict ".woff2" "font/woff2" ".woff" "font/woff" ".otf" "font/otf" ".ttf" "font/ttf") $extension -}}
+    {{- if or (not $format) (not (in (slice "normal" "italic") $style)) (lt $weight 1) (gt $weight 1000) -}}
+      {{- errorf "fonts: invalid face %q (use WOFF2/WOFF/OTF/TTF, normal/italic and weight 1–1000)" .source -}}
+    {{- end -}}
+    {{- $asset := resources.Get .source -}}
+    {{- if not $asset -}}{{ errorf "fonts: missing site asset %q; supply licensed files through a private build source" .source }}{{- else -}}
+      {{- $asset = $asset | resources.Fingerprint "sha256" -}}
+      {{- $faces = $faces | append (dict "url" $asset.RelPermalink "style" $style "weight" $weight "format" $format "mime" $mime "preload" (.preload | default false)) -}}
+    {{- end -}}
+    {{- if eq $style "normal" -}}{{ $normalWeights = $normalWeights | append $weight }}{{- end -}}
+  {{- end -}}
+  {{- range $role, $weight := $weights -}}
+    {{- if not (in $normalWeights $weight) -}}{{ errorf "fonts: %s weight %d has no normal face" $role $weight }}{{- end -}}
+  {{- end -}}
+  {{- $profile = merge $weights (dict "custom" true "family" $config.family "faces" $faces) -}}
+{{- end -}}
+{{- return $profile -}}

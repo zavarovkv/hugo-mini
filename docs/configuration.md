@@ -151,3 +151,7 @@ Use the theme’s accessible light, dark and print palettes by enabling CSS clas
 ```
 
 The example site enables this explicitly. If a language has its own `markup` configuration, keep its highlighting settings consistent. `lineNos`, `lineNumbersInTable` and highlighted lines remain supported. An explicit `noClasses = true` (globally or on a code fence) keeps Hugo’s inline palette; its contrast and color-scheme behavior are then owned by that configuration.
+
+## Site fonts
+
+Optional `[params.fonts]` describes a site-owned family and its face assets. See [fonts](fonts.md) for role weights, preload selection and `useDefaultFonts` page opt-outs. The default remains the bundled Inter family.

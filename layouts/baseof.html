@@ -81,8 +81,15 @@
   {{ end }}
   
   <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  {{- $fonts := partialCached "font-profile.html" . .Site.Language.Lang (.Params.useDefaultFonts | default false) -}}
+  {{- if $fonts.custom -}}
+    {{- range $fonts.faces -}}{{- if .preload }}
+  <link rel="preload" href="{{ .url }}" as="font" type="{{ .mime }}" crossorigin>
+    {{- end -}}{{- end -}}
+  {{- else }}
   <link rel="preload" href="{{ "fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-300.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ "fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-600.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  {{- end -}}
   {{- block "favicon" . }}{{ partial "favicon.html" . }}{{ end -}}
   <title>{{- block "title" . }}{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}{{- end }}</title>
 
@@ -97,13 +104,16 @@
   {{- /* Pinned Beauty.css foundation, followed by the theme's own identity and
          components. The foundation is plain CSS; only theme assets need Hugo
          URL substitutions. Both are delivered as one fingerprinted local file. */ -}}
-  {{- $themeCSS := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/theme.css" . -}}
+  {{- $fontKey := crypto.SHA256 (jsonify $fonts) -}}
+  {{- $themePath := printf "css/theme.%s.css" $fontKey -}}
+  {{- $bundlePath := printf "css/main.%s.css" $fontKey -}}
+  {{- $themeCSS := resources.Get "css/main.css" | resources.ExecuteAsTemplate $themePath . -}}
   {{- with resources.Get "css/beauty.css" -}}
   {{- $foundation := partialCached "beauty-compat.html" .Content (crypto.SHA256 .Content) -}}
   {{- /* FromString caches by target path; content keys keep live vendor refreshes current. */ -}}
   {{- $foundationPath := printf "css/beauty-compatible.%s.css" (crypto.SHA256 $foundation) -}}
   {{- $foundationCSS := resources.FromString $foundationPath $foundation -}}
-  {{- $css := slice $foundationCSS $themeCSS | resources.Concat "css/main.css" | resources.Minify | resources.Fingerprint "sha256" -}}
+  {{- $css := slice $foundationCSS $themeCSS | resources.Concat $bundlePath | resources.Minify | resources.Fingerprint "sha256" -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{- else -}}
     {{- errorf "Missing pinned Beauty.css foundation at assets/css/beauty.css. After adding this asset, restart the Hugo server." -}}
