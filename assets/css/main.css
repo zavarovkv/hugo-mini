@@ -1241,16 +1241,20 @@
     white-space: nowrap;
   }
   .github-stars {
-    display: inline-flex;
-    align-items: baseline;
     margin-inline-start: 0.4em;
-    gap: 0.2em;
     color: var(--color-secondary);
     font-size: 0.875em;
     font-weight: var(--font-weight-body);
     font-variant-numeric: tabular-nums;
   }
-  .github-stars svg { width: 1em; height: 1em; flex: none; align-self: center; }
+  .github-stars svg {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-inline-end: 0.2em;
+    /* Align with the digits, independent of the surrounding line height. */
+    vertical-align: -0.125em;
+  }
   .github-repo-link:hover .github-stars { color: var(--color-accent); }
 
   .badge-new {
@@ -1348,6 +1352,10 @@
   .footer-copy {
     margin-top: 10px;
     color: var(--beauty-muted);
+  }
+  .footer-copyright-symbol {
+    font-size: 0.85em;
+    vertical-align: 0.125em;
   }
 
   /* Social icons in footer */

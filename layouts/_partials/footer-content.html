@@ -75,4 +75,4 @@
   </div>
 </div>
 
-<div class="footer-copy">{{ with .copyright }}{{ . }}{{ else }}© {{ with site.Params.copyrightYear }}{{ . }}–{{ end }}{{ now.Format "2006" }}{{ end }}</div>
+<div class="footer-copy">{{ with .copyright }}{{ . }}{{ else }}<span class="footer-copyright-symbol">©</span> {{ with site.Params.copyrightYear }}{{ . }}–{{ end }}{{ now.Format "2006" }}{{ end }}</div>
