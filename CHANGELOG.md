@@ -18,6 +18,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Use 12 px language labels and compact 11 px green badges with white text on the text baseline; localize the Russian badge to “Нов.” while retaining “New” in English. Map lead paragraphs and table headers to the configured regular/bold font roles.
+- Match the blog header to its reading scale: 16 px desktop identity/navigation, 20 px mobile identity and 18 px mobile menu links, retaining the existing menu structure.
+- Refine blog reading typography to 18/28 px in a 720 px column, 17/27 px on mobile, with calmer 44 px desktop titles and readable 14 px attributions/sidebar links. Independent landing shells and print sizing remain separate.
+- Format visible titles and article links with the existing language-aware typography rules, keeping escaped text, metadata, URLs and opt-outs intact.
+- Render validated ISO dates in Markdown table cells as native time elements; use real upright bold for combined emphasis when a custom family lacks bold italic.
 - Refresh Beauty.css for half-pixel table-header rules on Retina screens, retaining 1 px rules on standard displays and in print.
 - Use Beauty’s shared zero-gap table headers and native 1 px rule; remove the reading-shelf-specific spacing override.
 - Scope header and navigation styling to the page header and `.main-nav`, remove unused color variables, and isolate legacy Beauty aliases in a cached adapter that matches complete selector tokens.

@@ -67,6 +67,9 @@
     --font-weight-medium: {{ $fonts.medium }};
     --font-weight-bold: {{ $fonts.bold }};
     --font-weight-title: {{ $fonts.title }};
+    --header-text-size: 0.9rem;
+    --header-title-size-small: 1.2em;
+    --header-nav-size-small: 1.1rem;
     --columns-gap: 2em;
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
@@ -79,6 +82,7 @@
     --text-color: #444;
     --color-muted: #6b737b;
     --color-secondary: #556677;
+    --color-badge-new: #228218;
 
     /* Lines & borders */
     --color-divider: #e5e5e5;
@@ -142,7 +146,8 @@
     --beauty-rule-border: 1px dashed var(--color-rule);
     --beauty-callout-background: var(--color-callout-bg);
     --beauty-callout-border: 1px solid var(--heading-color);
-    --beauty-lead-weight: 200;
+    --beauty-lead-weight: var(--font-weight-body);
+    --beauty-fine-print-size: 0.875rem;
     --beauty-caption-align: right;
     --beauty-caption-style: italic;
     --beauty-caption-margin: 0.5em 0 1.5rem;
@@ -164,7 +169,39 @@
     max-width: var(--width);
     text-align: left;
     box-sizing: content-box;
+{{ if $fonts.custom }}
+    font-synthesis: none;
+{{ end }}
   }
+
+  /* The blog reading layout is opt-in at the template level; independent
+     landings retain the shared shell's default scale. Keep paper sizes separate. */
+  @media screen {
+    body.reading-layout {
+      --header-text-size: 1rem;
+      --header-title-size-small: 1.25rem;
+      --header-nav-size-small: 1.125rem;
+      --beauty-reading-size: 1.125rem;
+      --beauty-reading-size-small: 1.0625rem;
+      --beauty-reading-line-height: calc(28 / 18);
+      --beauty-h1-size: 2.75rem;
+      --beauty-h1-tracking: -0.01em;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    body.reading-layout {
+      --beauty-reading-line-height: calc(27 / 17);
+    }
+  }
+
+{{ if and $fonts.custom (not $fonts.boldItalic) }}
+  /* Preserve semantic emphasis using the real upright bold face when this
+     site's family has no bold italic. Do not manufacture a fourth face. */
+  main :is(strong, b) :is(em, i),
+  main :is(em, i) :is(strong, b) {
+    font-style: normal;
+  }
+{{ end }}
 
   /* Keep all Beauty.css paragraphs naturally wrapped on narrow screens,
      including those outside main articles. Desktop keeps the default 'pretty'. */
@@ -425,7 +462,7 @@
   }
 
   .reading-shelf .reading-date {
-    width: 5.5rem;
+    width: 6rem;
     padding-inline-start: 1rem;
     text-align: end;
     white-space: nowrap;
@@ -438,7 +475,7 @@
 
   @media (max-width: 768px) {
     .reading-shelf .reading-date {
-      width: 4.75rem;
+      width: 5.5rem;
       padding-inline-start: 0.75rem;
     }
   }
@@ -618,7 +655,8 @@
   }
 
   .title .title-text {
-    font-size: 0.9rem;
+    font-size: var(--header-text-size);
+    line-height: 1.5;
     font-weight: var(--font-weight-bold);
     color: var(--color-primary);
   }
@@ -692,7 +730,8 @@
 
 
   .main-nav a {
-    font-size: 0.9rem;
+    font-size: var(--header-text-size);
+    line-height: 1.5;
   }
 
   /* Inline icon on a menu item — set via [menu.main.params] icon = "...".
@@ -778,7 +817,7 @@
     gap: 10px 15px;
     flex-wrap: wrap;
     margin-top: 8px;
-    font-size: 0.75em;
+    font-size: 0.8125rem;
   }
 
   .post-meta-left {
@@ -945,7 +984,7 @@
 
     /* Larger font size for title and navigation on mobile */
     .title .title-text {
-      font-size: 1.2em;
+      font-size: var(--header-title-size-small);
     }
 
     /* Without JavaScript, keep an ordinary navigation row in the document. */
@@ -996,7 +1035,7 @@
       box-sizing: border-box;
       padding: 18px 20px;
       display: block;
-      font-size: 1.1rem;
+      font-size: var(--header-nav-size-small);
       border-bottom: 1px solid var(--color-divider);
     }
 
@@ -1192,15 +1231,18 @@
   .github-repo-link:hover .github-stars { color: var(--color-accent); }
 
   .badge-new {
-    font-size: 0.55em;
+    display: inline-block;
+    font-size: 0.6875rem;
     font-weight: var(--font-weight-bold);
+    line-height: 1.25;
     color: #fff;
-    background-color: var(--color-accent);
-    border-radius: 3px;
+    background-color: var(--color-badge-new);
+    border-radius: 2px;
     padding: 1px 4px;
-    vertical-align: super;
-    margin-left: 3px;
-    letter-spacing: 0.5px;
+    vertical-align: baseline;
+    margin-inline-start: 4px;
+    letter-spacing: normal;
+    white-space: nowrap;
   }
 
   /* Flatten desktop wrappers so mobile category margins collapse uniformly,
@@ -1342,7 +1384,7 @@
     align-items: center;
     gap: 2px;
     font-family: var(--font-main);
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     font-weight: var(--font-weight-bold);
     letter-spacing: 0.5px;
     color: inherit;
@@ -1497,7 +1539,6 @@
     .social-icon svg { width: 20px; height: 20px; }
     .footer-controls { gap: 10px; }
     .lang-toggle { min-width: 48px; height: 34px; }
-    .lang-label { font-size: 0.7rem; }
     .theme-toggle { width: 34px; height: 34px; }
     .theme-toggle svg { width: 20px; height: 20px; }
   }
@@ -1636,9 +1677,9 @@
     margin-top: 0;
     box-sizing: content-box;
     position: absolute;
-    max-width: 160px;
-    font-size: 0.775rem;
-    line-height: 1.45;
+    max-width: 184px;
+    font-size: 0.875rem;
+    line-height: 1.5;
     border-left: 3px solid var(--color-primary);
     padding-left: 16px;
   }

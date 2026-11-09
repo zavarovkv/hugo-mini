@@ -587,7 +587,7 @@
 
   // ── Recent posts: progressively enhance the visible bottom block into a rail ──
   (function () {
-    var MIN_GUTTER = 180;
+    var MIN_GUTTER = 224;
     var GAP = 24;
     var sidebar = document.getElementById('recent-sidebar');
     if (!sidebar) return;

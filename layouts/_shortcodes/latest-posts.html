@@ -7,7 +7,7 @@
   <h2 class="posts-group-title">{{ i18n "latest_posts" }}</h2>
   <ul class="blog-posts">
     {{- range . }}
-    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    <li><a href="{{ .RelPermalink }}">{{ partial "typography/title.html" . }}</a></li>
     {{- end }}
   </ul>
   {{- with $archive }}

@@ -1,5 +1,6 @@
+{{ define "bodyClass" }}reading-layout{{ end }}
 {{ define "main" }}
-<article>
+<article class="beauty-reading">
   {{- /* Posts of the section being listed. Uses .RegularPages — the pages of
          *this* page — rather than a hardcoded section, so /blog, /posts and
          /notes each list their own content. Falls back to the site's main
@@ -28,7 +29,7 @@
     {{- $groups = $groups | append "_untagged" -}}
   {{- end -}}
 
-  <h1>{{ .Title | default (i18n "articles") }}</h1>
+  <h1>{{ if .Title }}{{ partial "typography/title.html" . }}{{ else }}{{ i18n "articles" }}{{ end }}</h1>
 
   {{- $half := math.Ceil (div (len $groups) 2.0) -}}
   <div class="posts-columns">

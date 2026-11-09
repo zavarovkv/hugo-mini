@@ -91,3 +91,5 @@ For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 ## Site-owned font profiles
 
 `font-profile.html` validates optional `params.fonts` assets and role weights. The theme owns loading and typography; consumers own any licensed files. Keep CSS output keys profile-specific and honor `useDefaultFonts` on independent pages. Never copy proprietary consumer fonts into the theme. See `docs/fonts.md`.
+
+Built-in blog templates select `reading-layout` through the `bodyClass` block. Theme tokens configure 18/28 px desktop reading, 17/27 px mobile reading and a 720 px column; independent templates and print retain their own scale. Visible page titles use `typography/title.html`; metadata and URLs must remain unchanged. The table render hook adds native time semantics only for whole, validated ISO-date cells.

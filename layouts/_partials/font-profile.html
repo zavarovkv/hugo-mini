@@ -12,6 +12,7 @@
   {{- end -}}
   {{- $faces := slice -}}
   {{- $normalWeights := slice -}}
+  {{- $boldItalic := false -}}
   {{- range $config.faces -}}
     {{- $style := .style | default "normal" -}}
     {{- $weight := int .weight -}}
@@ -27,10 +28,11 @@
       {{- $faces = $faces | append (dict "url" $asset.RelPermalink "style" $style "weight" $weight "format" $format "mime" $mime "preload" (.preload | default false)) -}}
     {{- end -}}
     {{- if eq $style "normal" -}}{{ $normalWeights = $normalWeights | append $weight }}{{- end -}}
+    {{- if and (eq $style "italic") (eq $weight $weights.bold) -}}{{ $boldItalic = true }}{{- end -}}
   {{- end -}}
   {{- range $role, $weight := $weights -}}
     {{- if not (in $normalWeights $weight) -}}{{ errorf "fonts: %s weight %d has no normal face" $role $weight }}{{- end -}}
   {{- end -}}
-  {{- $profile = merge $weights (dict "custom" true "family" $config.family "faces" $faces) -}}
+  {{- $profile = merge $weights (dict "custom" true "family" $config.family "faces" $faces "boldItalic" $boldItalic) -}}
 {{- end -}}
 {{- return $profile -}}

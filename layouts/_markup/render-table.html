@@ -1,0 +1,24 @@
+{{- /* Keep Markdown's table structure, attributes and alignment. A cell whose
+     entire value is a valid ISO date gets native time semantics; Beauty keeps
+     that short value together without making other table cells unbreakable. */ -}}
+<table{{ range $key, $value := .Attributes }}{{ if $value }}{{ printf " %s=%q" $key $value | safeHTMLAttr }}{{ end }}{{ end }}>
+  <thead>
+    {{ range .THead }}<tr>
+      {{ range . }}<th scope="col"{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</th>{{ end }}
+    </tr>{{ end }}
+  </thead>
+  <tbody>
+    {{ range .TBody }}<tr>
+      {{ range . }}
+        <td{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>
+          {{- $text := strings.TrimSpace (string .Text) -}}
+          {{- $date := false -}}
+          {{- if findRE `^[0-9]{4}-[0-9]{2}-[0-9]{2}$` $text -}}
+            {{- with try (time.AsTime $text) -}}{{- $date = not .Err -}}{{- end -}}
+          {{- end -}}
+          {{- if $date -}}<time datetime="{{ $text }}">{{ $text }}</time>{{- else -}}{{ .Text }}{{- end -}}
+        </td>
+      {{ end }}
+    </tr>{{ end }}
+  </tbody>
+</table>

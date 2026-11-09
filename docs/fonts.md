@@ -46,6 +46,9 @@ and `--font-weight-title`, and bridges these to Beauty's existing typography tok
 Only configured preloads are emitted on custom-font pages. File bytes are unchanged and
 fingerprinted; `font-display: swap` keeps text visible during loading. The theme's Inter
 files may still exist in the output, but custom-font pages do not preload or request them.
+Custom families disable synthetic weight/style. When no italic face matches the bold role,
+nested bold and italic emphasis uses the real upright bold face. Supplying the matching
+bold italic face restores combined emphasis automatically.
 A missing face or source fails the build instead of silently selecting a different family.
 Fonts must be available to Hugo **before** the build, not injected into HTML afterward.
 

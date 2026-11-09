@@ -25,7 +25,7 @@ The first four rules are provided by Goldmark. Mini formats existing number grou
 
 ## Scope and exclusions
 
-- Applies to English **homepage and single-page bodies**. Markdown sources, page titles, metadata, listings and feeds are unchanged.
+- Applies to English **homepage and single-page bodies**, visible page titles and article links. Markdown sources, metadata and feeds are unchanged.
 - Preserves code, formulas, Mermaid, HTML tags and attributes, comments, URLs and paths. No rewriting across HTML tags or guessing ambiguous ranges.
 - Russian uses separate typography rules; languages other than English and Russian are not processed by Mini's extra pass.
 
@@ -56,7 +56,20 @@ Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect M
 
 ## Reading layout
 
-16 px text, up to 720 px wide. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
+Blog pages use 18 px text with 28 px leading in a column up to 720 px wide; at 768 px and below, text is 17/27 px. Page titles are 44 px on desktop and 32 px on mobile. Navigation retains its compact scale. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
+
+Visible page titles and article links use the same language-aware spacing rules as prose.
+Titles are escaped before formatting; metadata, feeds and URLs remain unchanged, and
+`typography = false` also disables title formatting. Whole ISO-date cells in Markdown
+tables receive a native `<time>` element after date validation, so dates stay on one line.
+
+Language labels use 12 px and new-item badges use 11 px, independent of their surrounding
+text size. The compact green badges read “New” in English and “Нов.” in Russian, with
+white bold text on the text baseline and no letter spacing. `--color-badge-new` controls
+their background; the default keeps white text legible in both color schemes.
+Lead paragraphs inherit the body font weight; table headers use the configured
+heading weight. For interviews, use Markdown section headings for questions and a semantic
+`<p class="beauty-lead">` for a larger paragraph. Native block spacing replaces empty `<br>` elements.
 
 ## Footnotes
 

@@ -385,12 +385,61 @@ preload=true
   assert.match(css, /font-family:["']?Site Font/i);
   assert.match(css, /--font-weight-body:400/);
   assert.match(css, /--font-weight-bold:700/);
+  assert.match(css, /font-synthesis:none/);
+  assert.match(css, /main :is\(strong,b\) :is\(em,i\)/, 'missing bold italic uses the real upright bold face');
   assert.doesNotMatch(css, /inter-v20/);
   const defaultCSS = await example.read(cssPath(standard));
   assert.match(defaultCSS, /--font-weight-body:300/);
   assert.doesNotMatch(defaultCSS, /Site Font|private\//);
   const url = custom.match(/href=\/sub\/(private\/regular\.[a-f0-9]{64}\.woff2)/)[1];
   assert.deepEqual(await example.readBytes(url), regular, 'the font is emitted without conversion');
+});
+
+test('visible titles receive typography while metadata and escaped markup stay intact', async (t) => {
+  const title = 'Управление продуктом — это управление маркетингом';
+  const example = await site(t, `baseURL="https://example.org/"
+theme="hugo-mini"
+defaultContentLanguage="ru"
+disableKinds=["taxonomy","term"]
+[outputs]
+home=["HTML","JSON"]
+[params]
+socialSharing=false
+`, {
+    '_index.md': '+++\ntitle="Главная"\n+++\n{{< latest-posts count="7" >}}',
+    'blog/normal.md': `+++\ntitle="${title}"\ndate=2026-01-02\n+++\nТекст.`,
+    'blog/raw.md': `+++\ntitle="Текст — без обработки"\ntypography=false\ndate=2026-01-01\n+++\nТекст.`,
+    'safe.md': '+++\ntitle=\'Заголовок <img src=x onerror=alert(1)> & текст\'\n+++\nТекст.',
+  });
+  const titleHTML = 'Управление продуктом\u00a0— это управление маркетингом';
+  for (const path of ['index.html', 'blog/index.html', 'blog/normal/index.html', 'blog/raw/index.html']) {
+    assert.ok((await example.read(path)).includes(titleHTML), `${path}: visible title is formatted`);
+  }
+  assert.match(await example.read('blog/raw/index.html'), /<h1>Текст — без обработки<\/h1>/);
+  const safe = await example.read('safe/index.html');
+  assert.match(safe, /<h1>Заголовок &lt;img src=x onerror=alert\(1\)(?:&gt;|>) (?:&amp;|&) текст<\/h1>/);
+  assert.doesNotMatch(safe.match(/<main>[\s\S]*?<\/main>/)[0], /<img src=x/);
+  const feed = JSON.parse(await example.read('index.json'));
+  assert.equal(feed.items.find(item => item.url.endsWith('/blog/normal/')).title, title);
+});
+
+test('Markdown table dates stay semantic without changing alignment, code or invalid dates', async (t) => {
+  const example = await site(t, `baseURL="https://example.org/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[markup.goldmark.parser.attribute]
+block=true
+`, {
+    'dates.md': '+++\ntitle="Dates"\n+++\n| ID | Date | Note |\n| :--- | ---: | :---: |\n| value | 2024-02-29 | **Bold** |\n| value | 2023-02-29 | `2024-02-29` |\n| value | 2024-13-01 | [2024-02-29](https://example.org/) |\n{#records .data-table}\n',
+  });
+  const html = await example.read('dates/index.html');
+  assert.match(html, /<table[^>]*id=records/);
+  assert.match(html, /class=data-table/);
+  assert.match(html, /<td style=text-align:right><time datetime=2024-02-29>2024-02-29<\/time><\/td>/);
+  assert.match(html, /<td style=text-align:right>2023-02-29<\/td>/);
+  assert.match(html, /<td style=text-align:right>2024-13-01<\/td>/);
+  assert.match(html, /<code>2024-02-29<\/code>/);
+  assert.match(html, /<td style=text-align:center><strong>Bold<\/strong><\/td>/);
 });
 
 test('an explicitly configured missing site font fails the build', async (t) => {

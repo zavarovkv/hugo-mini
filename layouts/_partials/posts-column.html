@@ -33,7 +33,7 @@
       <ul class="blog-posts">
         {{- range $ordered }}
         {{- $dates := partial "page-dates.html" . -}}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ partial "new-badge.html" $dates.activity }}</li>
+        <li><a href="{{ .RelPermalink }}">{{ partial "typography/title.html" . }}</a>{{ partial "new-badge.html" $dates.activity }}</li>
         {{- end }}
       </ul>
     </div>

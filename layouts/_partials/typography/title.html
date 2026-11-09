@@ -1,0 +1,7 @@
+{{- /* Display text only: escape front matter before applying prose rules.
+     Metadata, feeds, paths and the stored page title remain untouched. */ -}}
+{{- $title := htmlEscape .Title -}}
+{{- if not (eq (.Param "typography") false) -}}
+  {{- $title = partialCached "typography/html.html" (dict "html" $title "lang" .Language.Lang "math" (.Params.math | default false)) .Language.Lang (.Params.math | default false) (crypto.SHA256 $title) -}}
+{{- end -}}
+{{- return ($title | safeHTML) -}}

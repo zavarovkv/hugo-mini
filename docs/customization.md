@@ -74,6 +74,12 @@ Use focused overrides whenever possible:
 
 - `layouts/_partials/custom_head.html` adds site-specific tags to `<head>`.
 - `layouts/_partials/custom_body.html` adds scripts or markup before the closing `</body>` tag.
+- The `bodyClass` block selects page-level layout classes. The built-in home, list and single
+  templates use `reading-layout` for the 720 px, 18/28 px reading layout (17/27 px on mobile).
+  Independent templates can omit this class to retain the default shell scale.
+  The reading layout uses 16 px header text, a 20 px mobile identity and 18 px mobile
+  menu links, controlled by `--header-text-size`, `--header-title-size-small` and
+  `--header-nav-size-small`.
 - Named blocks in `baseof.html` let a template replace `head`, `favicon`, `header`, `main`, `footer`, or `scripts`. The `favicon` block defaults to the bundled icons or the site's overrides, so standalone project templates can supply their own without duplicate icon links.
 - Copy a theme template into the matching site path only when the whole template needs to diverge.
 

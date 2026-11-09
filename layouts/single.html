@@ -1,3 +1,4 @@
+{{ define "bodyClass" }}reading-layout{{ end }}
 {{ define "main" }}
   {{- /* Post extras (meta row, sharing, comments, recent sidebar) apply to
          pages in the site's main section(s); standalone pages like /about get
@@ -9,9 +10,9 @@
          "blog". */ -}}
   {{- $isPost := in (site.Params.mainSections | default (slice "blog")) .Type -}}
 
-  <h1>{{ .Title }}</h1>
+  <h1>{{ partial "typography/title.html" . }}</h1>
 
-  <article{{ if not .Params.reading_list }} class="beauty-reading"{{ end }} lang="{{ .Language.Lang }}">
+  <article class="beauty-reading" lang="{{ .Language.Lang }}">
     {{ partial "typography/content.html" . }}
   </article>
 
@@ -56,7 +57,7 @@
       <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>
       <ul class="blog-posts recent-sidebar-list">
         {{- range . }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        <li><a href="{{ .RelPermalink }}">{{ partial "typography/title.html" . }}</a></li>
         {{- end }}
       </ul>
     </aside>
