@@ -22,6 +22,7 @@ try {
   const contentDir = join(root, source ? 'content/ru' : 'content');
   await mkdir(contentDir, { recursive: true });
   await cp(join(theme, 'tests/browser/fixtures/contract.md'), join(contentDir, 'browser-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/editorial.md'), join(contentDir, 'editorial-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-images.md'), join(contentDir, 'wide-image-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-diagrams.md'), join(contentDir, 'wide-diagram-checks.md'));

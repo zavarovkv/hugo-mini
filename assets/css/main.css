@@ -301,6 +301,24 @@
     color: var(--heading-color);
   }
 
+  /* A hanging quote occupies the usual anchor gutter. Leave it clear; when
+     the viewport has no room for both, keep the anchor after the heading. */
+  @media screen and (min-width: 833px) {
+    :is(h2, h3):has(.beauty-hanging-open) > .heading-anchor {
+      right: calc(100% + 0.65em);
+    }
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 832px) {
+    :is(h2, h3):has(.beauty-hanging-open) > .heading-anchor {
+      position: static;
+      display: inline-block;
+      margin-left: 0.25em;
+      vertical-align: baseline;
+      padding: 0;
+    }
+  }
+
   /* Mobile: inline after heading text, hidden until heading is tapped */
   @media (max-width: 768px) {
     h2:has(> .heading-anchor), h3:has(> .heading-anchor) {
@@ -551,6 +569,7 @@
   /* KaTeX math formulas */
   .katex {
     font-size: 1.1em;
+    font-variant-numeric: normal;
   }
   
   .katex-display {

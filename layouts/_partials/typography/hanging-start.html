@@ -1,0 +1,3 @@
+{{- /* Only a known block start reaches this helper. Keep the real quote in
+     selectable text; Beauty positions its glyph without font measurements. */ -}}
+{{- return (replaceRE `^(\s*)(«|“|‘|&laquo;|&ldquo;|&lsquo;|&#171;|&#8220;|&#8216;)` `$1<span class="beauty-hanging-open">$2</span>` (string .) | safeHTML) -}}

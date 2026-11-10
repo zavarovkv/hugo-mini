@@ -12,9 +12,13 @@
   {{- $neighbors := dict -}}
   {{- if $isPost -}}{{- $neighbors = partial "article-neighbors.html" . -}}{{- end -}}
 
-  <h1>{{ partial "typography/title.html" . }}</h1>
+  {{- $title := partial "typography/title.html" . -}}
+  {{- if and (.Param "hangingQuotes") (not (eq (.Param "typography") false)) -}}
+    {{- $title = partial "typography/hanging-start.html" $title -}}
+  {{- end -}}
+  <h1>{{ $title }}</h1>
 
-  <article class="beauty-reading{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
+  <article class="beauty-reading{{ if .Param "proseNumerals" }} beauty-prose-numerals{{ end }}{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
     {{ partial "typography/content.html" . }}
   </article>
 

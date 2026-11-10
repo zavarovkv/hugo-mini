@@ -7,6 +7,8 @@
 {{- $depth := 0 -}}
 {{- $lang := .lang -}}
 {{- $quoteStack := slice -}}
+{{- $blockquoteDepth := 0 -}}
+{{- $hangingStart := false -}}
 {{- $void := slice "area" "base" "br" "col" "embed" "hr" "img" "input" "link" "meta" "param" "source" "track" "wbr" -}}
 {{- $verbatim := slice "pre" "code" "script" "style" "textarea" "kbd" "samp" "svg" "math" -}}
 {{- $raw := slice "script" "style" "textarea" -}}
@@ -38,7 +40,12 @@
     {{- end -}}
   {{- else if or $tag (hasPrefix $token "<!--") (hasPrefix $token "<![CDATA[") (hasPrefix $token `\[`) (hasPrefix $token `\(`) (hasPrefix $token "$$") (and $.math (hasPrefix $token "$") (gt (len $token) 1)) -}}
     {{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
-    {{- $parts = $parts | append $prose.text $token -}}
+    {{- $text := $prose.text -}}
+    {{- if and $hangingStart (strings.TrimSpace $text) -}}
+      {{- $text = partial "typography/hanging-start.html" $text -}}
+      {{- $hangingStart = false -}}
+    {{- end -}}
+    {{- $parts = $parts | append $text $token -}}
     {{- $quoteStack = $prose.quoteStack -}}
     {{- $pending = "" -}}
     {{- $skip := in $verbatim $tag -}}
@@ -53,6 +60,19 @@
     {{- if and $skip (not $closing) (not $selfClosing) -}}
       {{- $protected = $tag -}}
       {{- $depth = 1 -}}
+      {{- $hangingStart = false -}}
+    {{- else if $tag -}}
+      {{- if eq $tag "blockquote" -}}
+        {{- $blockquoteDepth = add $blockquoteDepth (cond $closing -1 1) -}}
+      {{- end -}}
+      {{- if in (slice "h1" "h2" "h3" "p") $tag -}}
+        {{- $hangingStart = and $.hang (not $closing) (or (ne $tag "p") (gt $blockquoteDepth 0)) -}}
+      {{- else if in (slice "br" "img" "hr" "figure" "table" "ul" "ol" "li") $tag -}}
+        {{- $hangingStart = false -}}
+      {{- end -}}
+    {{- else if not (or (hasPrefix $token "<!--") (hasPrefix $token "<![CDATA[")) -}}
+      {{- /* A visible TeX fragment has already occupied the line start. */ -}}
+      {{- $hangingStart = false -}}
     {{- end -}}
   {{- else -}}
     {{- $pending = printf "%s%s" $pending $token -}}

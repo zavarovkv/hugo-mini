@@ -303,3 +303,12 @@ Reviews are ordinary Markdown articles with the theme's existing templates
 and typography. Content references resolve in the current language and work
 under a base path. A review can use `hidden = true` to stay out of listings
 and feeds while remaining indexable and included in the sitemap.
+
+### Explicit fractions
+
+Use `{{< fraction "1/3" >}}` inline for a real fraction. The shortcode accepts one
+`numerator/denominator` string of nonnegative integers with a nonzero denominator.
+Beauty composes a smaller, raised numerator and a smaller denominator from the same
+font, without requiring fraction glyphs or changing the copied numerator/slash/denominator text. Scores, dates, URLs and formulas
+are not auto-detected. See [typography](typography.md#opening-quotes-numerals-and-fractions)
+for hanging quotes and optional prose figures.

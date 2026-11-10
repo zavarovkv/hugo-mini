@@ -1,0 +1,6 @@
+{{- $value := printf "%v" (.Get 0 | default "") -}}
+{{- if or (ne (len .Params) 1) (not (findRE `^[0-9]+/[1-9][0-9]*$` $value)) -}}
+  {{- errorf "fraction: provide one explicit fraction, for example 1/3, with a nonzero denominator (%s)" .Position -}}
+{{- end -}}
+{{- $parts := split $value "/" -}}
+<span class="beauty-fraction"><span>{{ index $parts 0 }}</span>/<span>{{ index $parts 1 }}</span></span>

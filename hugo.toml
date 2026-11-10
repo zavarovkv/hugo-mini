@@ -8,6 +8,8 @@ min = "0.146.0"
 [params]
   recentSidebarCount = 8
   typography = true
+  hangingQuotes = false
+  proseNumerals = false
   showSearchButton = true
   preferenceCookieDomain = ""
   rememberLanguage = false

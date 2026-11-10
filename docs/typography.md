@@ -104,6 +104,27 @@ No soft hyphens or browser scripts rewrite titles, source content, metadata or c
 Set the hyphenation token to `manual` on the reading body to opt out. These visual settings
 are independent of the build-time `typography = false` punctuation option.
 
+## Opening quotes, numerals and fractions
+
+Enable `hangingQuotes = true` and `proseNumerals = true` in `[params]` or page
+parameters; both are off by default.
+
+- `hangingQuotes` hangs an initial «, “ or ‘ outside H1–H3 headings and blockquote
+  paragraphs. The quote stays in copied text; article listings and metadata stay
+  unchanged. No JavaScript is required; print restores the quote inside the line.
+  Heading anchors leave room for the quote; in narrow viewports they follow the text.
+  `typography = false` and `data-typography="off"` disable processing.
+- `proseNumerals` selects old-style proportional figures in direct article paragraphs
+  and their quotations. Headings, lists, tables, captions and footnote numbers keep
+  their usual figures. Set `proseNumerals = false` on analytical pages;
+  use `<span class="beauty-lining-nums">7/10</span>` for an individual lining value.
+- `{{< fraction "1/3" >}}` styles only an explicit fraction. Dates, scores and URLs
+  containing a slash are never converted automatically. Zero denominators are rejected.
+
+Prose figures use the chosen font's OpenType features, falling back to ordinary
+glyphs when unavailable. Fractions compose smaller digits from the same font without
+changing paragraph leading or copied text. Beauty owns CSS; the theme selects markup.
+
 ## Footnotes
 
 Reference superscripts use a zero line height and a relative upward offset instead of
