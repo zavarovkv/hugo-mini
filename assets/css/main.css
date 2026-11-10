@@ -1283,6 +1283,19 @@
     display: inline;
     border-bottom: none;
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .latest-posts .archive-arrow {
+      transition: transform 0.3s ease-in-out;
+    }
+    .latest-posts .archive-link:focus-visible .archive-arrow {
+      transform: translateX(0.25em);
+    }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .latest-posts .archive-link:hover .archive-arrow {
+      transform: translateX(0.25em);
+    }
+  }
   .project-mark-button {
     display: inline-grid;
     place-items: center;

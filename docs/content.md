@@ -185,7 +185,7 @@ The arrow has a fine rounded stroke that flows through one small, elongated loop
 
 Place `{{< latest-posts count="3" >}}` in your homepage `_index.md` wherever the list belongs. It follows `params.mainSections`, sorts by date, and excludes hidden posts. Hugo also excludes drafts and future posts in normal production builds. Pinned posts retain their date order here; pinning applies only to category listings. With no posts, nothing is rendered.
 
-Set `archive` to the article-listing URL to add a link below the list. `archiveLabel` sets its text (defaults to the localized "Articles" label). The link uses medium weight, matching project names, with the same underline geometry as ordinary content links. Its unlined arrow inherits the link color and keeps the body text's light weight. Article-list links remain light. Internal page URLs resolve to the current language when available.
+Set `archive` to the article-listing URL to add a link below the list. `archiveLabel` sets its text (defaults to the localized "Articles" label). The link uses medium weight, matching project names, with the same underline geometry as ordinary content links. Its fine SVG arrow inherits the link color and moves slightly right on pointer hover or keyboard focus, without shifting the text; reduced motion disables the movement. Article-list links remain light. Internal page URLs resolve to the current language when available.
 
 ```text
 {{< latest-posts count="3" archive="/blog/" archiveLabel="All articles" >}}

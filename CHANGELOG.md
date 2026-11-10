@@ -28,6 +28,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Refine the latest-posts archive arrow with a finer stroke and a 300 ms hover/focus movement, preserving link colors and layout; respect reduced motion and touch input.
 - Darken light-theme body text from `#444` to `#333`.
 - Keep footnote references from enlarging line boxes; distinguish upright image descriptions from explicit italic source credits with `caption kind="credit"`; use font-independent inline SVG project/archive arrows; reserve classic desktop scrollbar space. Shared editorial styles remain in Beauty.css.
 - Optically align LTR reading H1/H2 through existing Beauty transform tokens. Enable native title hyphenation only at screen widths up to 360 px through new shared Beauty tokens, keeping prose, wider screens and print unchanged.

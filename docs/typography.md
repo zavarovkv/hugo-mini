@@ -169,12 +169,17 @@ width and rail constraints. Short examples keep the text measure; remaining over
 scrolls within the block without shrinking or wrapping code on screen. Print retains
 its existing wrapped code layout.
 
-Project and archive links use decorative inline SVG arrows from `link-arrow.html`, with
-matching 1.4-unit strokes on a 16-unit canvas. Beauty's `beauty-link-icon` sizes SVGs to
+Project and archive links use decorative inline SVG arrows from `link-arrow.html`: a
+1.4-unit external arrow and a finer 1-unit forward arrow on a 16-unit canvas.
+Beauty's `beauty-link-icon` sizes SVGs to
 `1em` and aligns them by `-0.125em`; `currentColor` follows the link, including hover.
 Only the label is underlined and exposed as the accessible name. The arrows add no
 network requests or focus stops. Ordinary article links and the year-range arrow retain
 their existing treatment.
+
+The archive arrow moves right by `0.25em` over 300 ms on pointer hover or keyboard focus,
+without shifting the label or surrounding layout. Reduced motion keeps it stationary;
+touch devices do not retain a hover animation. This component motion belongs to Mini.
 
 Above 768 px, screen layouts reserve a stable root scrollbar gutter. Classic scrollbar
 appearance no longer shifts the reading column between short and long pages; overlay

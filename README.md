@@ -20,7 +20,7 @@ Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beaut
 
 - **Focus on writing.** A stable 720 px desktop column, comfortable 19 px mobile reading, optional wide images, diagrams and long code blocks, and careful headings, captions and footnotes. Optional hanging quotes, prose numerals and explicit fractions refine the details. Automatic punctuation keeps Markdown intact; articles have a dedicated print layout. [Typography and examples](docs/typography.md).
 - **Stay lightweight.** Responsive layout with an easy-to-tap mobile menu; fonts, CSS, JavaScript and icons are served from your site. Optional site-owned fonts can pair a separate H1 family with the body face. Updated local icons get new URLs automatically.
-- **Publish out of the box.** Light and dark modes, smooth menu highlighting, a favicon, multiple languages, SEO, RSS, and JSON Feed.
+- **Publish out of the box.** Light and dark modes, smooth menu highlighting and archive-link motion, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
 
 ## Quick start
