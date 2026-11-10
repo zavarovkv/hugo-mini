@@ -8,6 +8,19 @@ categories = ["getting-started"]
 
 Mini includes shortcodes and CSS classes for content that goes beyond standard Markdown.
 
+## Wide images
+
+Choose `wide=true` to let an illustration expand to the right of the text column, up to 960 px.
+The recent-posts sidebar stays in place; an image beside it remains within the text column.
+On mobile and in print, images fit the ordinary column. Local raster dimensions are automatic;
+SVGs and remote images need explicit `width` and `height`.
+
+```text
+{{</* image src="/images/wide-chart.svg" alt="Sample line chart" width=1200 height=600 wide=true caption="A wide illustration with a caption at the reading measure." */>}}
+```
+
+{{< image src="/images/wide-chart.svg" alt="Sample line chart" width=1200 height=600 wide=true caption="A wide illustration with a caption at the reading measure." >}}
+
 ## Caption
 
 The `caption` shortcode adds a smaller, upright, start-aligned image description. Use it after images or code blocks:

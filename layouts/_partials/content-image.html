@@ -1,0 +1,2 @@
+{{- /* Shared native image markup; callers supply verified intrinsic dimensions. */ -}}
+<img src="{{ .src }}" alt="{{ .alt }}" loading="lazy" decoding="async"{{ with .size }} width="{{ .width }}" height="{{ .height }}"{{ end }}{{ with .title }} title="{{ . }}"{{ end }} />

@@ -1,1 +1,14 @@
+{{- $wide := .Get "wide" | default false -}}
+{{- if not (in (slice "true" "false") (printf "%v" $wide)) -}}
+  {{- errorf "mermaid: wide must be true or false (%s)" .Position -}}
+{{- end -}}
+{{- $caption := .Get "caption" -}}
+{{- $figure := or (eq (printf "%v" $wide) "true") $caption -}}
+{{- if $figure }}
+<figure class="article-diagram{{ if eq (printf "%v" $wide) "true" }} article-diagram-wide{{ end }}">
+{{- end }}
 <pre class="mermaid">{{ .Inner }}</pre>
+{{- if $figure }}
+  {{- with $caption }}<figcaption class="beauty-caption">{{ . | markdownify }}</figcaption>{{ end }}
+</figure>
+{{- end }}

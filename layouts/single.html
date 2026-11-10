@@ -14,7 +14,7 @@
 
   <h1>{{ partial "typography/title.html" . }}</h1>
 
-  <article class="beauty-reading" lang="{{ .Language.Lang }}"{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
+  <article class="beauty-reading{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
     {{ partial "typography/content.html" . }}
   </article>
 

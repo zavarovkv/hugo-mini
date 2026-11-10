@@ -22,6 +22,9 @@ try {
   const contentDir = join(root, source ? 'content/ru' : 'content');
   await mkdir(contentDir, { recursive: true });
   await cp(join(theme, 'tests/browser/fixtures/contract.md'), join(contentDir, 'browser-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/wide-images.md'), join(contentDir, 'wide-image-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/wide-diagrams.md'), join(contentDir, 'wide-diagram-checks.md'));
   if (!source) {
     await writeFile(join(contentDir, 'about.md'), '+++\ntitle="About & contact"\n+++\nNavigation destination.\n');
     await mkdir(join(contentDir, 'blog'));
@@ -36,6 +39,7 @@ try {
   const mermaid = dirname(require.resolve('mermaid'));
   const target = join(fixtureStatic, 'browser-mermaid');
   await mkdir(target, { recursive: true });
+  await writeFile(join(fixtureStatic, 'browser-wide.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#b8cbd4"/><path d="M0 0L1200 800M1200 0L0 800" stroke="#345" stroke-width="4"/></svg>');
   await cp(join(mermaid, 'mermaid.esm.min.mjs'), join(target, 'mermaid.esm.min.mjs'));
   await cp(join(mermaid, 'chunks/mermaid.esm.min'), join(target, 'chunks/mermaid.esm.min'), {
     recursive: true, filter: path => !path.endsWith('.map'),

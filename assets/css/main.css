@@ -74,6 +74,8 @@
     --columns-gap: 2em;
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
+    --article-wide-width: 60rem;
+    --article-edge-gap: 24px;
     --wavy-arrow-width: 2.25em;
     --wavy-arrow-height: 1.125em;
 
@@ -346,6 +348,12 @@
 
   .highlight {
     position: relative;
+  }
+
+  /* Chroma's table line-number mode adds a div around the table. Keep its
+     overflow local just like the pre used by ordinary highlighted blocks. */
+  .highlight > div {
+    overflow-x: auto;
   }
 
   .copy-btn {
@@ -626,6 +634,59 @@
   main {
     margin-top: 0;
     padding-top: 0;
+  }
+
+  /* Beauty owns figure/caption type and rhythm. Mini owns the reading geometry.
+     Explicit dimensions cap small sources and reserve space before image load. */
+  .article-image {
+    inline-size: min(100%, var(--image-natural-width));
+    max-inline-size: 100%;
+  }
+
+  .article-image,
+  .article-diagram {
+    --beauty-caption-margin: var(--beauty-caption-gap) 0 0;
+  }
+
+  .article-image > img {
+    display: block;
+    inline-size: 100%;
+  }
+
+  .article-diagram > .mermaid {
+    margin: 0;
+  }
+
+  .article-image > figcaption,
+  .article-diagram > figcaption {
+    max-inline-size: min(100%, var(--beauty-reading-width));
+  }
+
+  @media screen and (min-width: 769px) {
+    article.beauty-reading > .article-image-wide {
+      /* The CSS fallback fits the centered reading shell without JavaScript.
+         Enhancement measures the actual viewport edge and any neighboring rail. */
+      inline-size: min(var(--article-wide-width), var(--image-natural-width), calc(var(--article-available, 50vw + 50%) - var(--article-edge-gap)));
+      max-inline-size: none;
+    }
+
+    article.beauty-reading > .article-diagram-wide,
+    article.beauty-reading.article-wide-code > .code-block.is-wide-code {
+      /* Overflowing examples use the full wide measure, rather than a different
+         width for every line length. The pre retains scrolling beyond the cap. */
+      inline-size: min(var(--article-wide-width), calc(var(--article-available, 50vw + 50%) - var(--article-edge-gap)));
+      max-inline-size: none;
+    }
+
+    article.beauty-reading.article-wide-code > .code-block.is-wide-code {
+      min-inline-size: 100%;
+    }
+
+    article.beauty-reading > .article-image-wide.has-rail-overlap,
+    article.beauty-reading > .article-diagram-wide.has-rail-overlap,
+    article.beauty-reading.article-wide-code > .code-block.is-wide-code.has-rail-overlap {
+      max-inline-size: 100%;
+    }
   }
 
   /* Project identity links keep heading color without editorial underlines. */
@@ -1864,7 +1925,8 @@
     .code-block,
     .beauty-scroll,
     .katex-display,
-    pre { overflow: visible !important; }
+    pre,
+    .highlight > div { overflow: visible !important; }
 
     .chroma,
     [data-theme="dark"] .chroma {

@@ -130,6 +130,20 @@ credits opt into `beauty-caption-credit` (the `caption` shortcode's `kind="credi
 which uses muted italic text at the inline end. Both use the same size and close image gap;
 `--beauty-caption-*` controls the shared rhythm. See [caption examples](content.md#shortcodes).
 
+Opt-in [wide images](content.md#wide-images) keep the paragraph's inline-start edge and use
+free space toward the inline end, up to 960 px and never beyond the source width. The theme
+keeps the recent-posts rail in place and constrains only figures that would intersect it.
+Mobile and print use the ordinary column; captions keep the text measure. Figure and caption
+typography stays in Beauty, while Mini owns width, placement and collision handling.
+
+Diagrams can select the same layout with [`mermaid wide=true`](content.md#wide-diagrams);
+their captions use the same Beauty styling and text measure as image captions.
+
+With [`wideCode = true`](content.md#wide-code-blocks), long code blocks share these
+width and rail constraints. Short examples keep the text measure; remaining overflow
+scrolls within the block without shrinking or wrapping code on screen. Print retains
+its existing wrapped code layout.
+
 Project and archive links use decorative inline SVG arrows from `link-arrow.html`, with
 matching 1.4-unit strokes on a 16-unit canvas. Beauty's `beauty-link-icon` sizes SVGs to
 `1em` and aligns them by `-0.125em`; `currentColor` follows the link, including hover.

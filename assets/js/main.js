@@ -1,6 +1,6 @@
 /*
  * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
- * code-copy buttons, heading anchors, article shortcuts, recent-posts sidebar, back-to-top.
+ * code-copy buttons, heading anchors, article shortcuts, recent-posts sidebar, wide blocks, back-to-top.
  *
  * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
  * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
@@ -702,6 +702,67 @@
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(measure);
     }
+  })();
+
+  // ── Wide blocks: use free inline-end space without moving the sidebar ───
+  (function () {
+    var article = document.querySelector('article.beauty-reading');
+    if (!article) return;
+    var selector = ':scope > .article-image-wide, :scope > .article-diagram-wide';
+    if (article.classList.contains('article-wide-code')) selector += ', :scope > .code-block';
+    var blocks = article.querySelectorAll(selector);
+    if (!blocks.length) return;
+    var sidebar = document.getElementById('recent-sidebar');
+    var mobile = window.matchMedia(MOBILE_QUERY);
+    var print = window.matchMedia('print');
+    var queued = false;
+
+    function measure() {
+      queued = false;
+      if (print.matches) return;
+      blocks.forEach(function (block) {
+        block.classList.remove('has-rail-overlap', 'is-wide-code');
+        block.style.removeProperty('--article-available');
+      });
+      if (mobile.matches) return;
+      var rail = sidebar && sidebar.classList.contains('is-sidebar')
+        ? sidebar.getBoundingClientRect() : null;
+      var rtl = getComputedStyle(article).direction === 'rtl';
+      var viewport = document.documentElement.clientWidth;
+      // Work in document order: constraining an earlier block changes the next
+      // one's vertical position. CSS handles limits, source size and print.
+      blocks.forEach(function (block) {
+        if (block.classList.contains('code-block')) {
+          var overflowing = Array.prototype.some.call(block.querySelectorAll('pre, .highlight > div'), function (scroller) {
+            return scroller.scrollWidth > scroller.clientWidth + 1;
+          });
+          block.classList.toggle('is-wide-code', overflowing);
+        }
+        var rect = block.getBoundingClientRect();
+        block.style.setProperty('--article-available', Math.max(0, rtl ? rect.right : viewport - rect.left) + 'px');
+        rect = block.getBoundingClientRect();
+        if (rail && rect.left < rail.right && rect.right > rail.left && rect.top < rail.bottom && rect.bottom > rail.top) {
+          block.classList.add('has-rail-overlap');
+        }
+      });
+    }
+
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(measure);
+    }
+
+    onResize(schedule);
+    article.addEventListener('load', schedule, true);
+    print.addEventListener('change', schedule);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    if (window.ResizeObserver) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(article);
+      if (sidebar) observer.observe(sidebar);
+    }
+    measure();
   })();
 
   // ── Back to top: click area in the left gutter ──────────────────────────

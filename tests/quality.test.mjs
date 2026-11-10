@@ -11,7 +11,7 @@ const hugoVersion = execFileSync(process.env.HUGO_BIN || 'hugo', ['version'], { 
 const [, major, minor] = hugoVersion.match(/v(\d+)\.(\d+)\./) || [];
 const languageLabelKey = Number(major) > 0 || Number(minor) >= 158 ? 'label' : 'languageName';
 
-async function site(t, config, content, templates = {}, assets = {}) {
+async function site(t, config, content, templates = {}, assets = {}, staticFiles = {}) {
   const root = await mkdtemp(join(tmpdir(), 'hugo-mini-quality-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, 'themes'));
@@ -32,12 +32,53 @@ async function site(t, config, content, templates = {}, assets = {}) {
     await mkdir(dirname(filename), { recursive: true });
     await writeFile(filename, bytes);
   }
+  for (const [name, bytes] of Object.entries(staticFiles)) {
+    const filename = join(root, 'static', name);
+    await mkdir(dirname(filename), { recursive: true });
+    await writeFile(filename, bytes);
+  }
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source', root, '--minify', '--panicOnWarning'], { stdio: 'pipe' });
   return {
     read: (name) => readFile(join(root, 'public', name), 'utf8'),
     readBytes: (name) => readFile(join(root, 'public', name)),
   };
 }
+
+test('image shortcodes share intrinsic dimensions with Markdown and render semantic captions', async (t) => {
+  const pixel = Buffer.from('UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA', 'base64');
+  const example = await site(t, 'baseURL="https://example.org/sub/"\ntheme="hugo-mini"\ndisableKinds=["taxonomy","term"]', {
+    'blog/probe/index.md': `+++\ntitle="Images"\n+++\n
+![Native](/sub/images/pixel.webp)
+
+{{< image src="/sub/images/pixel.webp" alt="Static" wide=true caption="A **description**." >}}
+
+{{< image src="pixel.webp" alt="Bundle" wide="false" >}}
+
+{{< image src="https://elsewhere.example/image.svg" alt="External" width=1200 height=800 wide=true kind="credit" caption="Photo: author" >}}
+`,
+    'blog/probe/pixel.webp': pixel,
+  }, {}, {}, { 'images/pixel.webp': pixel });
+  const html = await example.read('blog/probe/index.html');
+  for (const alt of ['Native', 'Static', 'Bundle']) {
+    assert.match(html, new RegExp(`alt=${alt} loading=lazy decoding=async width=1 height=1`));
+  }
+  assert.match(html, /<figure class="article-image article-image-wide" style=--image-natural-width:1px>/);
+  assert.match(html, /src=\/sub\/blog\/probe\/pixel.webp alt=Bundle/);
+  assert.match(html, /<figcaption class=beauty-caption>A <strong>description<\/strong>\.<\/figcaption>/);
+  assert.match(html, /class="beauty-caption beauty-caption-credit">Photo: author/);
+  assert.doesNotMatch(html, /<p>\s*<figure/);
+});
+
+test('image shortcodes reject missing dimensions and invalid layout options', async (t) => {
+  for (const [params, error] of [
+    ['src="https://example.org/photo.svg" alt="Photo"', /image: provide positive width and height/],
+    ['src="https://example.org/photo.svg" alt="Photo" width=100 height=80 wide="yes"', /image: wide must be true or false/],
+  ]) {
+    await assert.rejects(site(t, 'theme="hugo-mini"\ndisableKinds=["taxonomy","term"]', {
+      '_index.md': `+++\ntitle="Images"\n+++\n{{< image ${params} >}}`,
+    }), error);
+  }
+});
 
 test('Markdown URL safety, plain metadata and valid JSON Feed survive rendering', async (t) => {
   const longText = `${'This is part of a long article. '.repeat(25)}END_MARKER`;

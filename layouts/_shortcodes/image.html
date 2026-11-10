@@ -1,0 +1,29 @@
+{{- $src := .Get "src" -}}
+{{- if not $src -}}{{- errorf "image: src is required (%s)" .Position -}}{{- end -}}
+{{- if not (isset .Params "alt") -}}{{- errorf "image: alt is required; use an empty string for decorative images (%s)" .Position -}}{{- end -}}
+{{- $wide := .Get "wide" | default false -}}
+{{- if not (in (slice "true" "false") (printf "%v" $wide)) -}}
+  {{- errorf "image: wide must be true or false (%s)" .Position -}}
+{{- end -}}
+{{- $kind := .Get "kind" | default "description" -}}
+{{- if not (in (slice "description" "credit") $kind) -}}
+  {{- errorf "image: kind must be description or credit (%s)" .Position -}}
+{{- end -}}
+{{- $size := partial "image-dimensions.html" (dict "Destination" $src "Page" .Page) -}}
+{{- if not $size -}}
+  {{- $width := printf "%v" (.Get "width" | default "") -}}
+  {{- $height := printf "%v" (.Get "height" | default "") -}}
+  {{- if and (findRE `^[1-9][0-9]*$` $width) (findRE `^[1-9][0-9]*$` $height) -}}
+    {{- $size = dict "width" (int $width) "height" (int $height) -}}
+  {{- else -}}
+    {{- errorf "image: provide positive width and height when local raster dimensions cannot be read (%s)" .Position -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Bundle resources use their published URL; static and external paths stay intact. */ -}}
+{{- with .Page.Resources.Get $src -}}{{- $src = .RelPermalink -}}{{- end -}}
+<figure class="article-image{{ if eq (printf "%v" $wide) "true" }} article-image-wide{{ end }}" style="--image-natural-width: {{ $size.width }}px">
+  {{- partial "content-image.html" (dict "src" $src "alt" (.Get "alt") "size" $size) -}}
+  {{- with .Get "caption" -}}
+  <figcaption class="beauty-caption{{ if eq $kind "credit" }} beauty-caption-credit{{ end }}">{{ . | markdownify }}</figcaption>
+  {{- end -}}
+</figure>

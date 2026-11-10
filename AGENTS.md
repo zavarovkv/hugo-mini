@@ -25,7 +25,10 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
 - `layouts/_partials/typography/` applies build-time prose spacing and Russian punctuation rules to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; Goldmark owns its native punctuation and Beauty.css owns visual typography. Document changes in both `docs/typography.md` and `docs/typography.ru.md` and exercise `tests/typography.test.mjs`.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, links, and tables.
-- `layouts/_shortcodes/` contains `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, `column`, `github-stars`, `reading-list` and `wavy-arrow`.
+- `layouts/_shortcodes/` contains `image`, `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `project`, `columns`, `column`, `github-stars`, `reading-list` and `wavy-arrow`.
+- `wideCode = true` in page front matter opts long fenced code blocks into the same geometry as wide images; short examples keep the reading width. Use the shared `--article-wide-width` / `--article-edge-gap` tokens and collision handling, without changing code contents, typography, scrolling or print.
+- `mermaid wide=true` opts individual diagrams into the same wide-figure geometry; optional `caption` uses the same Beauty typography as image captions. Preserve raw-source fallback and the existing SVG theme/print cache.
+- Wide `image` figures preserve the text's inline-start edge and expand toward the inline end up to 960 px. The theme owns geometry and constrains intersecting figures without moving the recent-posts rail; Beauty supplies native image/caption typography. Keep source/viewport limits, mobile, print and no-JavaScript behavior; see `docs/content.md#wide-images`.
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
   `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.

@@ -22,12 +22,14 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 
 | Feature | Behavior and reference |
 | --- | --- |
+| Wide code | Per-page `wideCode = true`: long examples expand up to 960 px; short ones keep the reading measure. Native scrolling, highlighting, copy and print remain intact. [Code layout](content.md#wide-code-blocks) |
+| Images | Semantic `image` figures, automatic local dimensions and optional wide layout up to 960 px, sharing the text edge and preserving the recent-posts rail. [Wide images](content.md#wide-images) |
 | Collections | Configurable post sections, translated category labels, pinned posts, New badges and recent sidebar/bottom list; hidden posts retain public URLs and indexing. [Front matter](content.md#front-matter) |
 | Images and links | Local image dimensions, lazy loading and decoding; external Markdown links open safely in a new tab; internal links can select the current-language translation. [Content](content.md) |
 | Lists and footnotes | Inherited marker weight, responsive indentation and item spacing; linked notes with visible numbers even before code, quotations or nested lists. Styles belong to [Beauty.css](vendor-assets.md#beautycss-foundation) |
 | Tables | Keyboard-focusable local scrolling, semantic ISO dates and wrapped print cells; other content keeps the normal reading measure. [Printing](content.md#printing) |
 | Code | Copy control and class-based light/dark/print palettes; requires `markup.highlight.noClasses = false`. [Highlighting](configuration.md#syntax-highlighting) |
-| Math and diagrams | Opt-in self-hosted KaTeX; Mermaid 11/12 with CDN or local script/ESM, theme-aware colors and readable failure fallback. [Configuration](configuration.md), [assets](vendor-assets.md) |
+| Math and diagrams | Opt-in self-hosted KaTeX; Mermaid 11/12 with CDN or local script/ESM, theme-aware colors, optional wide figures with shared image-caption styling, and readable failure fallback. [Configuration](configuration.md), [assets](vendor-assets.md) |
 | Print | Fixed point sizes, light paper palette, wrapped code/tables and simplified page shell. Diagrams prepare neutral copies in the background. [Printing](content.md#printing) |
 | Editorial shortcodes | `caption`, `callout`, `plug` and `mermaid`; ordinary semantic Markdown inside supported blocks. [Usage](content.md#shortcodes) |
 | Homepage components | `latest-posts` with optional archive link; `columns`/`column` stack on mobile. [Latest posts](content.md#latest-articles), [columns](content.md#columns) |

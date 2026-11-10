@@ -18,7 +18,7 @@ Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beaut
 
 ## Why Mini?
 
-- **Focus on writing.** A stable 720 px desktop column, comfortable 19 px mobile reading, and careful headings, image captions and footnotes. Automatic punctuation keeps Markdown intact; articles have a dedicated print layout. [Typography and examples](docs/typography.md).
+- **Focus on writing.** A stable 720 px desktop column, comfortable 19 px mobile reading, optional wide images, diagrams and long code blocks, and careful headings, captions and footnotes. Automatic punctuation keeps Markdown intact; articles have a dedicated print layout. [Typography and examples](docs/typography.md).
 - **Stay lightweight.** Responsive layout with an easy-to-tap mobile menu; fonts, CSS, JavaScript and icons are served from your site. Updated local icons get new URLs automatically.
 - **Publish out of the box.** Light and dark modes, smooth menu highlighting, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.

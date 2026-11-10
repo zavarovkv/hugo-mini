@@ -7,6 +7,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add opt-in `mermaid wide=true` figures with optional captions styled identically to image captions. Reuse the wide layout and rail constraints, preserving mobile, source fallback, theme changes and print.
+- Add per-page `wideCode = true`: long fenced examples expand up to 960 px using the same geometry and rail constraints as wide images; short examples retain the reading width. Preserve native code scrolling, highlighting, copy controls and print wrapping.
+- Add an opt-in `image` shortcode with semantic captions and a wide layout up to 960 px, aligned with the text's inline-start edge. Cap images at their source/viewport width and avoid the existing recent-posts rail without moving it; retain mobile, print and no-JavaScript layouts.
 - Blend desktop menu selection over 300 ms with native cross-document View Transitions. Reserve internal labels' bold width to prevent layout shifts; retain ordinary links, mobile overlay behavior and immediate navigation for reduced motion or unsupported browsers.
 - Navigate between older/newer public articles with Option/Alt + Left/Right, respecting language and chronology, skipping hidden posts and drafts, and stopping at both ends. Preserve text editing and overlay shortcuts without adding visible controls.
 - Add Chromium and WebKit integration checks in CI for tables, print, diagram loading and theme changes; ordinary theme users still need only Hugo.
@@ -57,6 +60,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
 
 ### Fixed
+- Keep table-style code line numbers inside a local horizontal scroller in class-based and inline highlighting modes, while preserving visible overflow for print.
+- Read local WebP dimensions in regular Hugo builds too; metadata decoding does not require the Extended encoder.
 - Keep desktop menu transitions in place when opening an article from a scrolled page: disable the browser's position/size interpolation while preserving the 300 ms state fade.
 - Align repository stars with their counts rather than the line box, and give the default footer copyright sign a smaller, optically raised position beside the years.
 - Preserve project logo colors and size on hover; retain click-to-spin behavior and keyboard focus.
