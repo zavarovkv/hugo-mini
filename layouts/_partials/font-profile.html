@@ -6,6 +6,14 @@
   {{- if not (and $config.family (findRE `^[\pL\pN _-]+$` $config.family)) -}}
     {{- errorf "fonts.family must be a plain font family name" -}}
   {{- end -}}
+  {{- $titleFamily := $config.family -}}
+  {{- with $config.title -}}
+    {{- if not (and .family (findRE `^[\pL\pN _-]+$` .family)) -}}
+      {{- errorf "fonts.title.family must be a plain font family name" -}}
+    {{- end -}}
+    {{- if eq .family $config.family -}}{{ errorf "fonts.title.family must differ from fonts.family; use fonts.faces for the same family" }}{{- end -}}
+    {{- $titleFamily = .family -}}
+  {{- end -}}
   {{- $weights := dict "regular" (int ($config.regularWeight | default 400)) "medium" (int ($config.mediumWeight | default 400)) "bold" (int ($config.boldWeight | default 700)) "title" (int ($config.titleWeight | default 700)) -}}
   {{- range $role, $weight := $weights -}}
     {{- if or (lt $weight 1) (gt $weight 1000) -}}{{ errorf "fonts: invalid %s weight %d" $role $weight }}{{- end -}}
@@ -16,23 +24,16 @@
   {{- range $config.faces -}}
     {{- $style := .style | default "normal" -}}
     {{- $weight := int .weight -}}
-    {{- $extension := lower (path.Ext .source) -}}
-    {{- $format := index (dict ".woff2" "woff2" ".woff" "woff" ".otf" "opentype" ".ttf" "truetype") $extension -}}
-    {{- $mime := index (dict ".woff2" "font/woff2" ".woff" "font/woff" ".otf" "font/otf" ".ttf" "font/ttf") $extension -}}
-    {{- if or (not $format) (not (in (slice "normal" "italic") $style)) (lt $weight 1) (gt $weight 1000) -}}
-      {{- errorf "fonts: invalid face %q (use WOFF2/WOFF/OTF/TTF, normal/italic and weight 1–1000)" .source -}}
-    {{- end -}}
-    {{- $asset := resources.Get .source -}}
-    {{- if not $asset -}}{{ errorf "fonts: missing site asset %q; supply licensed files through a private build source" .source }}{{- else -}}
-      {{- $asset = $asset | resources.Fingerprint "sha256" -}}
-      {{- $faces = $faces | append (dict "url" $asset.RelPermalink "style" $style "weight" $weight "format" $format "mime" $mime "preload" (.preload | default false)) -}}
-    {{- end -}}
+    {{- $faces = $faces | append (partial "font-face.html" (dict "family" $config.family "source" .source "style" $style "weight" $weight "preload" (.preload | default false))) -}}
     {{- if eq $style "normal" -}}{{ $normalWeights = $normalWeights | append $weight }}{{- end -}}
     {{- if and (eq $style "italic") (eq $weight $weights.bold) -}}{{ $boldItalic = true }}{{- end -}}
   {{- end -}}
-  {{- range $role, $weight := $weights -}}
-    {{- if not (in $normalWeights $weight) -}}{{ errorf "fonts: %s weight %d has no normal face" $role $weight }}{{- end -}}
+  {{- with $config.title -}}
+    {{- $faces = $faces | append (partial "font-face.html" (dict "family" $titleFamily "source" .source "weight" $weights.title "preload" (.preload | default false))) -}}
   {{- end -}}
-  {{- $profile = merge $weights (dict "custom" true "family" $config.family "faces" $faces "boldItalic" $boldItalic) -}}
+  {{- range $role, $weight := $weights -}}
+    {{- if and (not (and (eq $role "title") $config.title)) (not (in $normalWeights $weight)) -}}{{ errorf "fonts: %s weight %d has no normal face" $role $weight }}{{- end -}}
+  {{- end -}}
+  {{- $profile = merge $weights (dict "custom" true "family" $config.family "titleFamily" $titleFamily "faces" $faces "boldItalic" $boldItalic) -}}
 {{- end -}}
 {{- return $profile -}}

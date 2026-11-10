@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Support an optional site-owned H1 face through `params.fonts.title`, with normal desktop letter spacing and compact mobile tracking; preserve body fonts, heading sizes, private asset handling and default-font opt-outs.
 - Add opt-in hanging opening quotes and old-style proportional prose figures, plus an explicit `fraction` shortcode. Preserve source text, technical content, metadata and print margins through shared Beauty helpers; keep heading anchors clear of quotes and viewport edges.
 - Add opt-in `mermaid wide=true` figures with optional captions styled identically to image captions. Reuse the wide layout and rail constraints, preserving mobile, source fallback, theme changes and print.
 - Add per-page `wideCode = true`: long fenced examples expand up to 960 px using the same geometry and rail constraints as wide images; short examples retain the reading width. Preserve native code scrolling, highlighting, copy controls and print wrapping.
@@ -27,6 +28,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Darken light-theme body text from `#444` to `#333`.
 - Keep footnote references from enlarging line boxes; distinguish upright image descriptions from explicit italic source credits with `caption kind="credit"`; use font-independent inline SVG project/archive arrows; reserve classic desktop scrollbar space. Shared editorial styles remain in Beauty.css.
 - Optically align LTR reading H1/H2 through existing Beauty transform tokens. Enable native title hyphenation only at screen widths up to 360 px through new shared Beauty tokens, keeping prose, wider screens and print unchanged.
 - Match the back-to-top label to the header navigation size, preserving its configured weight, primary link color and existing hover treatment.

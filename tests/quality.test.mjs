@@ -436,6 +436,53 @@ preload=true
   assert.deepEqual(await example.readBytes(url), regular, 'the font is emitted without conversion');
 });
 
+test('a separate H1 family uses its own weight and keeps body fonts isolated', async (t) => {
+  const regular = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-300.woff2'));
+  const bold = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-600.woff2'));
+  const title = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-500.woff2'));
+  const config = `baseURL="https://example.org/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params.fonts]
+family="Body Font"
+titleWeight=500
+[[params.fonts.faces]]
+source="private/regular.woff2"
+weight=400
+[[params.fonts.faces]]
+source="private/bold.woff2"
+weight=700
+[params.fonts.title]
+family="Title Font"
+source="private/title.woff2"
+preload=true
+`;
+  const content = {
+    'custom.md': '+++\ntitle="Custom"\n+++\n## Section\n\nBody text.',
+    'default.md': '+++\ntitle="Default"\nuseDefaultFonts=true\n+++\nBody text.',
+  };
+  const assets = {'private/regular.woff2':regular, 'private/bold.woff2':bold, 'private/title.woff2':title};
+  const example = await site(t, config, content, {}, assets);
+  const html = await example.read('custom/index.html');
+  const cssPath = html.match(/<link rel=stylesheet href=([^ >]+)/)[1].slice(1);
+  const css = await example.read(cssPath);
+  assert.match(html, /href=\/private\/title\.[a-f0-9]{64}\.woff2 as=font/);
+  assert.match(css, /@font-face\{font-family:["']?Title Font["']?;font-style:normal;font-weight:500;/i);
+  assert.match(css, /--font-main:["']?Body Font/);
+  assert.match(css, /--font-secondary:["']?Body Font/);
+  assert.match(css, /--font-title:["']?Title Font["']?,\s*var\(--font-main\)/);
+  assert.match(css, /--font-weight-title:500/);
+  assert.match(css, /--beauty-h1-font:[^;]+var\(--font-title\)/);
+  assert.match(css, /--beauty-h2-font:[^;]+var\(--font-main\)/);
+  assert.doesNotMatch(await example.read('default/index.html'), /private\//);
+  const url = html.match(/href=\/(private\/title\.[a-f0-9]{64}\.woff2)/)[1];
+  assert.deepEqual(await example.readBytes(url), title);
+  await assert.rejects(site(t, config, content, {}, {'private/regular.woff2':regular, 'private/bold.woff2':bold}), /fonts: missing site asset/);
+  await assert.rejects(site(t, config.replace('family="Title Font"', 'family="Body Font"'), content, {}, assets), /fonts.title.family must differ/);
+  await assert.rejects(site(t, config.replace('family="Title Font"', 'family="Bad; Font"'), content, {}, assets), /fonts.title.family must be a plain/);
+  await assert.rejects(site(t, config.replace('titleWeight=500', 'titleWeight=500\nboldWeight=500'), content, {}, assets), /fonts: bold weight 500 has no normal face/);
+});
+
 test('visible titles receive typography while metadata and escaped markup stay intact', async (t) => {
   const title = 'Управление продуктом — это управление маркетингом';
   const example = await site(t, `baseURL="https://example.org/"

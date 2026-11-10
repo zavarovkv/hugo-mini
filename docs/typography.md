@@ -86,6 +86,10 @@ the text; Beauty.css owns the underline rendering.
 
 ## Heading alignment and narrow titles
 
+An optional [H1 font profile](fonts.md#a-separate-h1-family) changes the title family
+and weight while keeping this guide's sizes, spacing and the body/list typography.
+Its letter spacing is normal above 768 px and `-0.01em` on mobile.
+
 On screen, LTR reading layouts optically shift H1 by `-0.025em` and H2 by `-0.02em`
 through Beauty's `--beauty-h1-transform` / `--beauty-h2-transform` tokens. At the default
 44/32 px title sizes this is 1.1/0.8 px to the left. The adjustment aligns visible glyph

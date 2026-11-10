@@ -37,11 +37,37 @@ integers from 1 to 1000; styles are `normal` or `italic`. Every configured role 
 an exact normal face. With custom fonts, role defaults are 400/400/700/700; without this
 configuration the existing Inter 300/500/600/500 roles remain unchanged.
 
+## A separate H1 family
+
+An existing custom-font profile can use a second, upright face for H1 only:
+
+```toml
+[params.fonts]
+titleWeight = 500
+
+[params.fonts.title]
+family = "My Title Font"
+source = "private-fonts/title-medium.woff2"
+preload = true
+```
+
+Keep the base profile's `family`, body roles and `faces`; this fragment may be a separate
+Hugo configuration overlay. The title face uses `titleWeight`, must belong to a distinct
+family, and receives the same format validation, fingerprinting and byte preservation.
+The theme selects it through `--font-title` and Beauty's existing H1 token, including in
+print. H2–H6, article-list links, navigation and body text retain the base family. H1 sizes,
+spacing and line height stay theme-owned. The separate H1 family uses normal letter
+spacing above 768 px; mobile retains the reading layout's `-0.01em` tracking.
+`useDefaultFonts` disables both custom families.
+
+## Ownership and delivery
+
 Files and the family/face description belong to the **site**. Font loading, preload hints,
 role tokens and component styles belong to **Hugo Mini**. Native typography belongs to
 **Beauty.css**. Changing the family does not change sizes, line heights, margins or widths.
 The theme maps roles to `--font-weight-body`, `--font-weight-medium`, `--font-weight-bold`
 and `--font-weight-title`, and bridges these to Beauty's existing typography tokens.
+`--font-title` defaults to `--font-main` when a separate H1 face is not configured.
 
 Only configured preloads are emitted on custom-font pages. File bytes are unchanged and
 fingerprinted; `font-display: swap` keeps text visible during loading. The theme's Inter
