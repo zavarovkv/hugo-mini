@@ -1284,16 +1284,23 @@
     border-bottom: none;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .latest-posts .archive-arrow {
+    .latest-posts .archive-arrow,
+    .project-title .project-arrow {
       transition: transform 0.3s ease-in-out;
     }
     .latest-posts .archive-link:focus-visible .archive-arrow {
       transform: translateX(0.25em);
     }
+    .project-title .project-link:focus-visible .project-arrow {
+      transform: translate(0.175em, -0.175em);
+    }
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .latest-posts .archive-link:hover .archive-arrow {
       transform: translateX(0.25em);
+    }
+    .project-title .project-link:hover .project-arrow {
+      transform: translate(0.175em, -0.175em);
     }
   }
   .project-mark-button {

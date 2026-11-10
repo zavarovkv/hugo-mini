@@ -212,6 +212,11 @@ Local project icons use content-versioned URLs, shared with header logos and fav
 
 Use the `project` shortcode below a section heading. The name links to an external project page; the description accepts Markdown and keeps links at the same weight as the body text. Optionally set `icon` to a local image path and `iconDark` to its dark-mode variant. The mark becomes a separate, keyboard-accessible button: clicking it spins the logo a few times and gradually slows to a stop without opening the link. The project name remains a normal link. Motion preferences are respected; without JavaScript, the mark remains decorative.
 
+The name's external-link arrow shares the archive arrow's fine stroke and proportions,
+rotated diagonally. It moves slightly up and right on pointer hover or keyboard focus
+without moving the text; reduced motion keeps it stationary. This CSS effect is independent
+of the optional logo button.
+
 For a separate secondary source link, put it in a `<p class="beauty-note">` inside the description. Project layout keeps this note close to the preceding paragraph and separates adjacent projects with a larger gap. Its text size and color come from Beauty.css.
 
 ```text

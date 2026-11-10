@@ -1,2 +1,2 @@
-{{- /* Font-independent arrows; the forward link uses a lighter, longer stroke. */ -}}
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="{{ if eq . "external" }}1.4{{ else }}1{{ end }}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ if eq . "external" }}<path d="M3 13 13 3M4 3h9v9"/>{{ else }}<path d="M2 8h12M9 3l5 5-5 5"/>{{ end }}</svg>
+{{- /* One geometry and optical weight; external links rotate the same arrow. */ -}}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8h12M9 3l5 5-5 5"{{ if eq . "external" }} transform="rotate(-45 8 8)"{{ end }}/></svg>
