@@ -1,4 +1,4 @@
-{{- /* Same public, language-specific collection as recent posts. Pinning does
+{{- /* Same public, language-specific collection as article listings. Pinning does
      not change chronology; draft previews never become navigation targets. */ -}}
 {{- $posts := where (partialCached "main-pages.html" . .Site.Language.Lang) "Draft" false -}}
 {{- $neighbors := dict -}}

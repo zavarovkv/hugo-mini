@@ -73,7 +73,6 @@ defaultContentLanguage="en"
 disableKinds=["taxonomy","term"]
 [params]
 socialSharing=false
-recentSidebarCount=0
 [markup.goldmark.renderer]
 unsafe=true
 [languages.en]

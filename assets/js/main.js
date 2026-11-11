@@ -1,6 +1,6 @@
 /*
  * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
- * code-copy buttons, heading anchors, article shortcuts, recent-posts sidebar, wide blocks, back-to-top.
+ * code-copy buttons, heading anchors, article shortcuts, wide blocks, side notes, back-to-top.
  *
  * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
  * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
@@ -95,6 +95,29 @@
       fn();
     }
   }
+
+  // Markdown receives this policy at build time; cover authored HTML and
+  // shortcode links here as well, strictly inside opted-in article bodies.
+  ready(function initArticleLinkTargets() {
+    var article = document.querySelector('article[data-article-links-new-tab]');
+    if (!article) return;
+    function apply(link) {
+      if (!link || !(link instanceof HTMLAnchorElement) || link.hasAttribute('download')) return;
+      var href = link.getAttribute('href');
+      if (!href || href.charAt(0) === '#') return;
+      var url;
+      try { url = new URL(href, location.href); } catch (e) { return; }
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      if (url.hash && url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) {
+        link.removeAttribute('target');
+        return;
+      }
+      link.target = '_blank';
+      link.relList.add('noopener', 'noreferrer');
+    }
+    article.querySelectorAll('a[href]').forEach(apply);
+    article.addEventListener('click', function (event) { apply(event.target.closest('a[href]')); });
+  });
 
   // ── Article navigation: Option/Alt + arrows, no wrap at either end ────
   ready(function initArticleNavigation() {
@@ -670,41 +693,7 @@
     if (printMedia.matches) printMode(true);
   });
 
-  // ── Recent posts: progressively enhance the visible bottom block into a rail ──
-  (function () {
-    var MIN_GUTTER = 224;
-    var GAP = 24;
-    var sidebar = document.getElementById('recent-sidebar');
-    if (!sidebar) return;
-
-    function measure() {
-      var rect = document.body.getBoundingClientRect();
-      var gutter = window.innerWidth - rect.right;
-      if (gutter < MIN_GUTTER) {
-        sidebar.classList.remove('is-sidebar');
-        sidebar.style.cssText = '';
-        return;
-      }
-      var h1 = document.querySelector('h1');
-      var topPos = h1
-        ? Math.round(h1.getBoundingClientRect().top + window.pageYOffset)
-        : Math.round(rect.top + window.pageYOffset);
-      sidebar.classList.add('is-sidebar');
-      sidebar.style.top = topPos + 'px';
-      sidebar.style.left = Math.round(rect.left + window.pageXOffset + rect.width + GAP - 16) + 'px';
-      sidebar.style.width = Math.round(gutter - GAP - 16) + 'px';
-    }
-
-    onResize(measure);
-    measure();
-    // The first measure runs against fallback-font metrics; once the web font
-    // swaps in, h1 moves and the sidebar would sit at a stale offset.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(measure);
-    }
-  })();
-
-  // ── Wide blocks: use free inline-end space without moving the sidebar ───
+  // ── Wide blocks: use free inline-end space within the viewport ───
   (function () {
     var article = document.querySelector('article.beauty-reading');
     if (!article) return;
@@ -712,7 +701,6 @@
     if (article.classList.contains('article-wide-code')) selector += ', :scope > .code-block';
     var blocks = article.querySelectorAll(selector);
     if (!blocks.length) return;
-    var sidebar = document.getElementById('recent-sidebar');
     var mobile = window.matchMedia(MOBILE_QUERY);
     var print = window.matchMedia('print');
     var queued = false;
@@ -721,16 +709,13 @@
       queued = false;
       if (print.matches) return;
       blocks.forEach(function (block) {
-        block.classList.remove('has-rail-overlap', 'is-wide-code');
+        block.classList.remove('is-wide-code');
         block.style.removeProperty('--article-available');
       });
       if (mobile.matches) return;
-      var rail = sidebar && sidebar.classList.contains('is-sidebar')
-        ? sidebar.getBoundingClientRect() : null;
       var rtl = getComputedStyle(article).direction === 'rtl';
       var viewport = document.documentElement.clientWidth;
-      // Work in document order: constraining an earlier block changes the next
-      // one's vertical position. CSS handles limits, source size and print.
+      // CSS handles width limits, source size and print.
       blocks.forEach(function (block) {
         if (block.classList.contains('code-block')) {
           var overflowing = Array.prototype.some.call(block.querySelectorAll('pre, .highlight > div'), function (scroller) {
@@ -740,10 +725,6 @@
         }
         var rect = block.getBoundingClientRect();
         block.style.setProperty('--article-available', Math.max(0, rtl ? rect.right : viewport - rect.left) + 'px');
-        rect = block.getBoundingClientRect();
-        if (rail && rect.left < rail.right && rect.right > rail.left && rect.top < rail.bottom && rect.bottom > rail.top) {
-          block.classList.add('has-rail-overlap');
-        }
       });
     }
 
@@ -760,9 +741,102 @@
     if (window.ResizeObserver) {
       var observer = new ResizeObserver(schedule);
       observer.observe(article);
-      if (sidebar) observer.observe(sidebar);
     }
     measure();
+  })();
+
+  // ── Side notes: reuse the original endnotes, only when a desktop gutter fits ──
+  (function () {
+    var article = document.querySelector('article[data-side-notes]');
+    var section = article && article.querySelector(':scope > .footnotes');
+    var list = section && section.querySelector(':scope > ol');
+    if (!list || !list.children.length) return;
+    var entries = Array.prototype.map.call(list.children, function (note) {
+      var reference = Array.prototype.find.call(article.querySelectorAll('.footnote-ref'), function (ref) {
+        try { return decodeURIComponent(ref.hash.slice(1)) === note.id; }
+        catch (e) { return ref.hash.slice(1) === note.id; }
+      });
+      return { note: note, reference: reference };
+    });
+    if (entries.some(function (entry) { return !entry.reference; })) return;
+    var heading = section.previousElementSibling;
+    if (heading && /^H[2-6]$/.test(heading.tagName)) heading.classList.add('side-notes-heading');
+    var print = window.matchMedia('print');
+    var mobile = window.matchMedia(MOBILE_QUERY);
+    var queued = false;
+
+    function measure() {
+      queued = false;
+      article.classList.remove('has-side-notes');
+      article.style.removeProperty('--sidenotes-overflow');
+      if (print.matches || mobile.matches) return;
+      var style = getComputedStyle(article);
+      var gap = parseFloat(style.getPropertyValue('--article-sidenote-gap'));
+      var space = parseFloat(style.getPropertyValue('--article-sidenote-space'));
+      var rect = article.getBoundingClientRect();
+      var rtl = style.direction === 'rtl';
+      var available = (rtl ? rect.left : document.documentElement.clientWidth - rect.right) - gap - space;
+      if (available < parseFloat(style.getPropertyValue('--article-sidenote-min-width'))) return;
+      var width = Math.min(available, parseFloat(style.getPropertyValue('--article-sidenote-max-width')));
+      article.style.setProperty('--sidenote-width', width + 'px');
+      article.classList.add('has-side-notes');
+      var left = rtl ? rect.left - gap - width : rect.right + gap;
+      var right = left + width;
+      var obstacles = Array.prototype.map.call(article.querySelectorAll(':scope > .article-image-wide, :scope > .article-diagram-wide, :scope > .code-block'), function (block) {
+        return block.getBoundingClientRect();
+      }).filter(function (block) { return block.left < right && block.right > left; });
+      var end = 0;
+      entries.forEach(function (entry) {
+        var top = Math.max(end, entry.reference.getBoundingClientRect().top - rect.top);
+        var height = entry.note.getBoundingClientRect().height;
+        obstacles.forEach(function (block) {
+          if (top < block.bottom - rect.top && top + height > block.top - rect.top) {
+            top = block.bottom - rect.top + space;
+          }
+        });
+        entry.note.style.setProperty('--sidenote-top', top + 'px');
+        end = top + height + space;
+      });
+      // Long final notes must not cover the footer.
+      var remaining = end - space - (list.getBoundingClientRect().top - rect.top);
+      article.style.setProperty('--sidenotes-overflow', Math.max(0, remaining) + 'px');
+    }
+
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(measure);
+    }
+    onResize(schedule);
+    article.addEventListener('load', schedule, true);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    print.addEventListener('change', schedule);
+    if (window.ResizeObserver) new ResizeObserver(schedule).observe(article);
+    measure();
+    // Native fragment scrolling may precede both positioning and the font swap.
+    // Settle an initial note link once; never pull a reader back after interaction.
+    var initialHash = location.hash;
+    var targetId = initialHash.slice(1);
+    try { targetId = decodeURIComponent(targetId); } catch (e) { /* Keep literal IDs. */ }
+    var target = document.getElementById(targetId);
+    if (target && entries.some(function (entry) { return entry.note === target; })) {
+      target.scrollIntoView();
+      var cancelled = false;
+      var inputs = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+      function cancelAlignment() { cancelled = true; }
+      inputs.forEach(function (type) { window.addEventListener(type, cancelAlignment, { passive: true }); });
+      var loaded = document.readyState === 'complete' ? Promise.resolve() : new Promise(function (resolve) {
+        window.addEventListener('load', resolve, { once: true });
+      });
+      Promise.all([loaded, document.fonts ? document.fonts.ready : Promise.resolve()]).then(function () {
+        requestAnimationFrame(function () {
+          inputs.forEach(function (type) { window.removeEventListener(type, cancelAlignment); });
+          if (cancelled || location.hash !== initialHash) return;
+          measure();
+          target.scrollIntoView();
+        });
+      });
+    }
   })();
 
   // ── Back to top: click area in the left gutter ──────────────────────────

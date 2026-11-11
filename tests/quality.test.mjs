@@ -222,12 +222,6 @@ test('muted text has readable contrast in both palettes', async () => {
   assert.ok(contrast(colors[1], '1a1a1a') >= 4.5);
 });
 
-test('recent-posts sidebar remains visible until JavaScript places it in the rail', async () => {
-  const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
-  assert.match(css, /\.recent-sidebar\s*\{\s*display:\s*block;/);
-  assert.match(css, /\.recent-sidebar\.is-sidebar\s*\{[^}]*margin-block-start:\s*0\.25rem;/);
-});
-
 test('printing keeps article content and date while removing interface chrome', async (t) => {
   const example = await site(t, `baseURL="https://example.org/"
 title="Paper test"
@@ -235,7 +229,6 @@ theme="hugo-mini"
 disableKinds=["taxonomy","term"]
 [params]
 mainSections=["blog"]
-recentSidebarCount=3
 `, {
     'blog/post.md': '+++\ntitle="Printable post"\ndate=2026-01-01\n+++\n## Section\n\nRead the article.\n\n```text\nA long line of code\n```',
     'blog/another.md': '+++\ntitle="Another post"\ndate=2025-01-01\n+++\nHello',
@@ -243,7 +236,7 @@ recentSidebarCount=3
   const html = await example.read('blog/post/index.html');
   assert.match(html, /<article class=beauty-reading lang=en(?:\s[^>]*)?>/);
   assert.match(html, /<time datetime=2026-01-01 class=post-date>/);
-  assert.match(html, /class="?recent-sidebar/);
+  assert.doesNotMatch(html, /recent-sidebar/);
   for (const name of ['Telegram', 'Twitter', 'Facebook', 'VK', 'LinkedIn']) {
     assert.ok(html.includes(`aria-label="Share on ${name}"`), `${name}: icon-only sharing has a localized accessible name`);
   }
@@ -254,7 +247,7 @@ recentSidebarCount=3
   const print = css.slice(css.lastIndexOf('@media print')).replace(/\s+/g, '');
   assert.ok(print.startsWith('@mediaprint{'), 'theme rules have their own print media block');
   assert.match(print, /:root\[data-theme=dark\].*color-scheme:light/, 'dark-mode prints on white paper');
-  for (const selector of ['.main-nav', '.search-toggle-desktop', '.title-logo-container', 'body>footer', '.likely', '#tg-comments', '.recent-sidebar', '.heading-anchor', '.copy-btn']) {
+  for (const selector of ['.main-nav', '.search-toggle-desktop', '.title-logo-container', 'body>footer', '.likely', '#tg-comments', '.heading-anchor', '.copy-btn']) {
     assert.ok(print.includes(selector), `${selector} is omitted from paper`);
   }
   assert.match(print, /article\.beauty-reading\{max-inline-size:none/, 'prose can use the paper width');
@@ -500,7 +493,7 @@ socialSharing=false
     'safe.md': '+++\ntitle=\'Заголовок <img src=x onerror=alert(1)> & текст\'\n+++\nТекст.',
   });
   const titleHTML = 'Управление продуктом\u00a0— это управление маркетингом';
-  for (const path of ['index.html', 'blog/index.html', 'blog/normal/index.html', 'blog/raw/index.html']) {
+  for (const path of ['index.html', 'blog/index.html', 'blog/normal/index.html']) {
     assert.ok((await example.read(path)).includes(titleHTML), `${path}: visible title is formatted`);
   }
   assert.match(await example.read('blog/raw/index.html'), /<h1>Текст — без обработки<\/h1>/);

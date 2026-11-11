@@ -1,6 +1,6 @@
 export function wideImageContracts(test, expect) {
   for (const colorScheme of ['light', 'dark']) {
-    test(`wide images preserve the text edge, source size and sidebar (${colorScheme})`, async ({ page }) => {
+    test(`wide images preserve the text edge and source/viewport limits (${colorScheme})`, async ({ page }) => {
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.emulateMedia({ colorScheme });
@@ -8,14 +8,8 @@ export function wideImageContracts(test, expect) {
       await page.goto('/wide-image-checks/');
       await page.evaluate(() => document.fonts.ready);
       const figures = page.locator('.article-image');
-      const sidebar = page.locator('#recent-sidebar');
-      await expect(sidebar).toHaveClass(/is-sidebar/);
-      await expect(figures.nth(0)).toHaveClass(/has-rail-overlap/);
+      await expect.poll(() => figures.nth(0).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
       await expect.poll(() => figures.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
-      const railBefore = await sidebar.boundingBox();
-      const plain = await page.addStyleTag({ content: '.article-image-wide { inline-size: min(100%, var(--image-natural-width)) !important; }' });
-      expect(await sidebar.boundingBox()).toEqual(railBefore);
-      await plain.evaluate(e => e.remove());
 
       for (const width of [320, 390, 768, 800, 1024, 1280, 1440, 1920, 2560]) {
         await page.setViewportSize({ width, height: 900 });
@@ -43,14 +37,13 @@ export function wideImageContracts(test, expect) {
       }
 
       await page.setViewportSize({ width: 1440, height: 900 });
-      await expect(figures.nth(0)).toHaveClass(/has-rail-overlap/);
+      await expect.poll(() => figures.nth(0).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
       await expect.poll(() => figures.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
       await figures.nth(1).scrollIntoViewIfNeeded();
       expect(await figures.nth(1).locator('img').evaluate(img => {
         const r = img.getBoundingClientRect();
         return document.elementFromPoint(r.right - 8, Math.max(0, r.top) + 8) === img;
       })).toBe(true);
-      expect(await sidebar.boundingBox()).toMatchObject({ x: railBefore.x, width: railBefore.width, height: railBefore.height });
       await page.setViewportSize({ width: 650, height: 900 });
       await page.emulateMedia({ media: 'print' });
       expect(await figures.evaluateAll(nodes => nodes.every(node => {
@@ -67,10 +60,10 @@ export function wideImageContracts(test, expect) {
       const page = await context.newPage();
       await page.goto('/wide-image-checks/');
       await expect(page.locator('figure')).toHaveCount(4);
-      await expect(page.getByRole('img', { name: 'Wide image below the sidebar' })).toHaveAttribute('width', '1200');
+      await expect(page.getByRole('img', { name: 'Second wide image' })).toHaveAttribute('width', '1200');
       await expect(page.locator('figure').nth(1)).toHaveAccessibleName('A wide image with a caption.');
       expect(await page.locator('figure').nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
-      await expect(page.locator('#recent-sidebar')).not.toHaveClass(/is-sidebar/);
+      await expect(page.locator('#recent-sidebar')).toHaveCount(0);
       await page.setViewportSize({ width: 390, height: 844 });
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     } finally {

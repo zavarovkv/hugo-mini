@@ -7,12 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add opt-in `articleLinksNewTab`: internal and external destinations open in a new tab only from post bodies, preserving in-page anchors, footnote navigation and site navigation.
+- Add opt-in `sideNotes = true`: place native footnotes beside their references in a sufficiently wide desktop gutter, avoid neighboring notes and wide blocks. Preserve the bottom notes block on mobile, narrow windows, print and without JavaScript.
 - Add per-article `dropCap = true`: Beauty shapes a two-line initial in the configured title font; preserve text, print and unsupported-browser fallback. Bind single-letter opening words at build time to preserve their separator when copying in Chromium.
 - Support an optional site-owned H1 face through `params.fonts.title`, with normal desktop letter spacing and compact mobile tracking; preserve body fonts, heading sizes, private asset handling and default-font opt-outs.
-- Add opt-in hanging opening quotes and old-style proportional prose figures, plus an explicit `fraction` shortcode. Preserve source text, technical content, metadata and print margins through shared Beauty helpers; keep heading anchors clear of quotes and viewport edges.
-- Add opt-in `mermaid wide=true` figures with optional captions styled identically to image captions. Reuse the wide layout and rail constraints, preserving mobile, source fallback, theme changes and print.
-- Add per-page `wideCode = true`: long fenced examples expand up to 960 px using the same geometry and rail constraints as wide images; short examples retain the reading width. Preserve native code scrolling, highlighting, copy controls and print wrapping.
-- Add an opt-in `image` shortcode with semantic captions and a wide layout up to 960 px, aligned with the text's inline-start edge. Cap images at their source/viewport width and avoid the existing recent-posts rail without moving it; retain mobile, print and no-JavaScript layouts.
+- Add opt-in hanging opening quotes in headings and ordinary prose (including blockquotes), and old-style proportional prose figures, plus an explicit `fraction` shortcode. Preserve source text, technical content, metadata and print margins through shared Beauty helpers; keep heading anchors clear of quotes and viewport edges.
+- Add opt-in `mermaid wide=true` figures with optional captions styled identically to image captions. Reuse the wide layout and viewport constraints, preserving mobile, source fallback, theme changes and print.
+- Add per-page `wideCode = true`: long fenced examples expand up to 960 px using the same geometry and viewport constraints as wide images; short examples retain the reading width. Preserve native code scrolling, highlighting, copy controls and print wrapping.
+- Add an opt-in `image` shortcode with semantic captions and a wide layout up to 960 px, aligned with the text's inline-start edge. Cap images at their source/viewport width; retain mobile, print and no-JavaScript layouts.
 - Blend desktop menu selection over 300 ms with native cross-document View Transitions. Reserve internal labels' bold width to prevent layout shifts; retain ordinary links, mobile overlay behavior and immediate navigation for reduced motion or unsupported browsers.
 - Navigate between older/newer public articles with Option/Alt + Left/Right, respecting language and chronology, skipping hidden posts and drafts, and stopping at both ends. Preserve text editing and overlay shortcuts without adding visible controls.
 - Add Chromium and WebKit integration checks in CI for tables, print, diagram loading and theme changes; ordinary theme users still need only Hugo.
@@ -28,9 +30,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Normalize nested Russian quotation marks, spaced prose hyphens and short prepositions during the Hugo build, preserving code, URLs and per-page typography opt-outs.
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
+### Removed
+
+- Remove the article recent-posts sidebar and bottom list, including `recentSidebarCount`, its partial, labels, styles and positioning logic. Wide images, diagrams and code now use available viewport space without a sidebar collision constraint; homepage `latest-posts` is unchanged.
+
 ### Changed
-- Tighten the initial's block-end exclusion area by 0.25em so a short descender does not indent a third line; retain glyph size, baseline and short-paragraph containment.
-- Offset the desktop recent-posts rail by 4 px for optical alignment with the page title; retain its mobile position and wide-content collision handling.
+
+- Give footnotes their own screen scale: 15/24 px on desktop and 16/25.6 px on mobile, using the body face and shared muted color through Beauty tokens; print retains inherited leading.
+- Hide return arrows only in desktop side notes; retain them in bottom notes on narrow screens and in print.
+- Raise opt-in article initials by a quarter line while retaining two-line wrapping on desktop and mobile; use Beauty's shared rise token and native browser shaping.
+- Tighten the initial's block-end exclusion area by 0.3em so a short descender does not indent a third line; retain glyph size, baseline and short-paragraph containment.
 - Separate the reading header, H1 and content with 48/32 px desktop gaps and 40/28 px mobile gaps; retain print spacing.
 - Use the configured bold role for project name labels (Inter 600 or the site's custom face), without altering their SVG arrow stroke or appearance.
 - Match project link arrows to the archive arrow's fine stroke and geometry, with a diagonal 300 ms hover/focus movement. Keep labels, logo buttons, touch input and reduced-motion behavior stable.

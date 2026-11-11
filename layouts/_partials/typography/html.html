@@ -7,7 +7,7 @@
 {{- $depth := 0 -}}
 {{- $lang := .lang -}}
 {{- $quoteStack := slice -}}
-{{- $blockquoteDepth := 0 -}}
+{{- $insetDepth := 0 -}}
 {{- $hangingStart := false -}}
 {{- $void := slice "area" "base" "br" "col" "embed" "hr" "img" "input" "link" "meta" "param" "source" "track" "wbr" -}}
 {{- $verbatim := slice "pre" "code" "script" "style" "textarea" "kbd" "samp" "svg" "math" -}}
@@ -62,11 +62,13 @@
       {{- $depth = 1 -}}
       {{- $hangingStart = false -}}
     {{- else if $tag -}}
-      {{- if eq $tag "blockquote" -}}
-        {{- $blockquoteDepth = add $blockquoteDepth (cond $closing -1 1) -}}
+      {{- /* Lists (including footnotes), tables and figures have their own
+           markers or edges; their paragraphs must not hang into that space. */ -}}
+      {{- if in (slice "ul" "ol" "table" "figure" "aside") $tag -}}
+        {{- $insetDepth = add $insetDepth (cond $closing -1 1) -}}
       {{- end -}}
       {{- if in (slice "h1" "h2" "h3" "p") $tag -}}
-        {{- $hangingStart = and $.hang (not $closing) (or (ne $tag "p") (gt $blockquoteDepth 0)) -}}
+        {{- $hangingStart = and $.hang (not $closing) (or (ne $tag "p") (eq $insetDepth 0)) -}}
       {{- else if in (slice "br" "img" "hr" "figure" "table" "ul" "ol" "li") $tag -}}
         {{- $hangingStart = false -}}
       {{- end -}}

@@ -14,8 +14,10 @@ test('editorial helpers preserve text, protected content, metadata and opt-outs'
   await mkdir(join(root, 'content/blog'), {recursive:true});
   await writeFile(join(root, 'hugo.toml'), `theme="hugo-mini"\nbaseURL="https://example.org/"\ndisableKinds=["taxonomy","term"]\n[params]\nhangingQuotes=true\nproseNumerals=true\nsocialSharing=false\n[markup.goldmark.renderer]\nunsafe=true\n`);
   const body = `<h2 id="math-first">\\(x\\) «Later quote»</h2>\n\n## «Heading»\n\n> «A quote in 2021».\n\n> **“Emphasized quote”**\n\n<p id="ordinary">«Ordinary paragraph» in 2021. Date: 10/11/2026. Score: 7/10.</p>\n\n<blockquote data-typography="off"><p>«Literal quotation»</p></blockquote>\n\n<blockquote><p data-typography="off">«Another literal quotation»</p></blockquote>\n\n<pre><code>«Raw code»</code></pre>\n\nA fraction: {{< fraction "1/3" >}}.\n`;
+  const inset = ['<ol><li><p>«List paragraph»</p></li></ol>', '<table><tr><td><p>«Table paragraph»</p></td></tr></table>', '<figure><figcaption><p>«Caption paragraph»</p></figcaption></figure>', '<aside><p>«Aside paragraph»</p></aside>'];
+  const after = '<p id="after-inset">«Prose after nested blocks»</p>';
   for (const [slug,options] of [['enabled',''],['disabled','hangingQuotes=false\nproseNumerals=false'],['verbatim','typography=false']]) {
-    await writeFile(join(root, 'content/blog', slug+'.md'), `+++\ntitle='«Opening»'\n${options}\n+++\n${body}`);
+    await writeFile(join(root, 'content/blog', slug+'.md'), `+++\ntitle='«Opening»'\n${options}\n+++\n${body}\n${inset.join("\n\n")}\n${after}`);
   }
   const build = () => execFileSync(process.env.HUGO_BIN || 'hugo', ['--source',root,'--panicOnWarning'], {stdio:'pipe'});
   build();
@@ -29,7 +31,9 @@ test('editorial helpers preserve text, protected content, metadata and opt-outs'
   assert.doesNotMatch(enabled.match(/<h2 id="math-first">(.*?)<\/h2>/s)[1], /beauty-hanging-open/);
   assert.match(enabled, /<span class="beauty-fraction"><span>1<\/span>\/<span>3<\/span><\/span>/);
   assert.match(enabled, /Date: 10\/11\/2026\. Score: 7\/10/);
-  assert.match(enabled, /<p id="ordinary">«Ordinary paragraph»/);
+  assert.match(enabled, /<p id="ordinary"><span class="beauty-hanging-open">«<\/span>Ordinary paragraph»/);
+  for (const fragment of inset) assert.ok(enabled.includes(fragment), 'inset paragraph alignment is preserved');
+  assert.match(enabled, /<p id="after-inset"><span class="beauty-hanging-open">«<\/span>Prose after/);
   assert.match(enabled, /<blockquote data-typography="off"><p>«Literal quotation»<\/p><\/blockquote>/);
   assert.match(enabled, /<p data-typography="off">«Another literal quotation»<\/p>/);
   assert.match(enabled, /<pre><code>«Raw code»<\/code><\/pre>/);

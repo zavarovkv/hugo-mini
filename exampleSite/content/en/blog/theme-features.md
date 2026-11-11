@@ -95,19 +95,6 @@ pinned = true
 
 No visual marker — order is the only signal, keeping the listing clean.
 
-## Recent Posts Sidebar
-
-Every single post shows a block of the most recent articles — automatically updated, no curation needed. On desktop with enough right-gutter space it appears as an absolute sidebar next to the article (scrolls with the page, Telegram blog style). On mobile it appears as a static block at the bottom of the post.
-
-Configure the number of posts in `config.toml`:
-
-```toml
-[params]
-  recentSidebarCount = 8   # default: 8
-```
-
-The list excludes the current post and any posts with `hidden = true`. Scroll to the bottom of this post to see the mobile version, or widen your browser window to see the sidebar.
-
 ## Heading Anchor Links
 
 Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, the icon is hidden by default — tap a heading to reveal it, then tap the icon to copy the section URL and follow the native anchor to the heading.

@@ -1,5 +1,7 @@
 export function editorialContracts({test, expect}) {
 test('opt-in drop caps use the title face without changing copy, adjacent prose or print', async ({page}) => {
+  await page.goto('/dropcap-checks/');
+  const standard = await page.evaluate(() => CSS.supports('initial-letter:3'));
   for (const colorScheme of ['light', 'dark']) {
     await page.emulateMedia({colorScheme});
     for (const width of [320, 390, 1440]) {
@@ -25,7 +27,7 @@ test('opt-in drop caps use the title face without changing copy, adjacent prose 
           overflow:document.documentElement.scrollWidth > innerWidth,
         };
       });
-      expect(result).toEqual({lines:'2', titleFace:true, bodyColor:true, copy:original, overflow:false});
+      expect(result).toEqual({lines:standard ? '2.25 3' : '2.25 2', titleFace:true, bodyColor:true, copy:original, overflow:false});
       const wrapping = await first.evaluate(p => {
         const text = p.firstChild;
         const range = document.createRange();
@@ -46,6 +48,19 @@ test('opt-in drop caps use the title face without changing copy, adjacent prose 
       expect(wrapping.lines[0].left).toBeGreaterThan(wrapping.left + 10);
       expect(wrapping.lines[1].left).toBeGreaterThan(wrapping.left + 10);
       expect(wrapping.lines[2].left).toBeCloseTo(wrapping.left, 0);
+      // A fractional rise must never push the prose down by a full line.
+      // Standard top alignment leaves prose in place; WebKit reserves the rise.
+      const plainTop = await first.evaluate(p => {
+        p.style.setProperty('--beauty-dropcap-rise', '0');
+        const range = document.createRange();
+        range.setStart(p.firstChild, 1); range.setEnd(p.firstChild, 2);
+        const top = range.getBoundingClientRect().top;
+        p.style.removeProperty('--beauty-dropcap-rise');
+        return top;
+      });
+      const leading = await first.evaluate(p => parseFloat(getComputedStyle(p).lineHeight));
+      expect(wrapping.lines[0].top - plainTop).toBeGreaterThanOrEqual(-1);
+      expect(wrapping.lines[0].top - plainTop).toBeLessThanOrEqual(leading * 0.25 + 1);
       const next = article.locator(':scope > p').nth(1);
       const ordinaryWeight = await next.evaluate(p => getComputedStyle(p).fontWeight);
       expect(await next.evaluate(p => getComputedStyle(p, '::first-letter').fontWeight)).toBe(ordinaryWeight);
@@ -80,7 +95,7 @@ for (const colorScheme of ['light','dark']) test(`editorial helpers preserve cop
     await page.setViewportSize({width,height:900});
     await page.goto('/editorial-checks/');
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.locator('.beauty-hanging-open')).toHaveCount(3);
+    await expect(page.locator('.beauty-hanging-open')).toHaveCount(4);
     await expect(page.locator('h1')).toHaveText('«Кавычки и цифры»');
     await expect(page.locator('#oldstyle')).toHaveCSS('font-variant-numeric','oldstyle-nums proportional-nums');
     await expect(page.locator('#lining')).toHaveCSS('font-variant-numeric','lining-nums');
@@ -91,6 +106,20 @@ for (const colorScheme of ['light','dark']) test(`editorial helpers preserve cop
       await expect(fraction).toHaveText('1/3');
       await expect(fraction).toHaveCSS('font-variant-numeric','lining-nums proportional-nums');
     }
+    const prose = page.locator('#quoted-prose');
+    expect(await prose.evaluate(p => {
+      const quote = p.querySelector('.beauty-hanging-open');
+      const glyph = document.createRange(); glyph.selectNodeContents(quote);
+      const letter = document.createRange(); letter.setStart(quote.nextSibling, 0); letter.setEnd(quote.nextSibling, 1);
+      const edge = p.getBoundingClientRect().left;
+      return glyph.getBoundingClientRect().left >= 0 && glyph.getBoundingClientRect().left < edge &&
+        Math.abs(letter.getBoundingClientRect().left - edge) < 1;
+    })).toBe(true);
+    expect(await prose.evaluate(p => {
+      const range = document.createRange(); range.selectNodeContents(p);
+      getSelection().removeAllRanges(); getSelection().addRange(range);
+      return getSelection().toString();
+    })).toBe(await prose.textContent());
     const quote = page.locator('h1 .beauty-hanging-open');
     expect((await quote.boundingBox()).width).toBe(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

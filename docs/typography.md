@@ -61,17 +61,13 @@ the content. At 768 px and below these gaps are 40 px and 28 px. The spacing is
 shared across reading pages; short and multiline titles follow the same rhythm.
 Print keeps its separate margins.
 
-The desktop recent-posts rail starts 4 px below the H1 line box, aligning its
-small label with the visible title letters. The mobile block keeps its normal
-position after the article; wide content respects the rail's actual bounds.
-
 The 404 page uses this same text, title and header scale in every language; its optional ASCII illustration retains a separate monospace size.
 
 Blog pages use 18 px text with 28 px leading in a column up to 720 px wide; at 768 px and below, text is 19/29 px. Page titles are 44 px on desktop and 32 px on mobile. Navigation retains its compact scale. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
 
-On mobile, article section headings use 24 px, and the recent-posts block below an
-article follows the same 19/29 px reading scale. Attributions use 15 px and post metadata
-uses 14 px. Proportional notes, image captions and footnotes grow with the article text.
+On mobile, article section headings use 24 px, attributions use 15 px and post metadata
+uses 14 px. Proportional notes and image captions grow with the article text. Footnotes use
+15/24 px on desktop and 16/25.6 px on mobile, in the body font and shared muted color.
 The reading shelf's date column scales with its font to keep the heading within the table.
 On narrow screens, the table can scroll horizontally inside its keyboard-accessible
 container, keeping a 20em minimum width without widening the page.
@@ -125,9 +121,10 @@ are independent of the build-time `typography = false` punctuation option.
 Enable `hangingQuotes = true` and `proseNumerals = true` in `[params]` or page
 parameters; both are off by default.
 
-- `hangingQuotes` hangs an initial «, “ or ‘ outside H1–H3 headings and blockquote
-  paragraphs. The quote stays in copied text; article listings and metadata stay
-  unchanged. No JavaScript is required; print restores the quote inside the line.
+- `hangingQuotes` hangs an initial «, “ or ‘ outside H1–H3 headings and ordinary
+  prose paragraphs, including blockquotes. Paragraphs inside lists, footnotes, tables,
+  figures and asides retain their own alignment. The quote stays in copied text;
+  article listings and metadata stay unchanged. No JavaScript is required; print restores the quote inside the line.
   Heading anchors leave room for the quote; in narrow viewports they follow the text.
   `typography = false` and `data-typography="off"` disable processing.
 - `proseNumerals` selects old-style proportional figures in direct article paragraphs
@@ -168,24 +165,60 @@ space so Chromium preserves the word separator when copying. Source text stays u
 
 The initial uses the configured H1 family and its actual title weight, in the body
 text color. Beauty's `beauty-dropcap` helper handles native `::first-letter` shaping:
-two lines on both desktop and mobile. No letter is removed, duplicated or
+two lines of wrapping on both desktop and mobile, with a quarter-line rise above the
+opening line. No letter is removed, duplicated or
 wrapped in a separate element; copied text and accessible reading order stay intact.
 Print and browsers without `initial-letter` support retain ordinary paragraph text.
 The WebKit-prefixed property supports Safari. No JavaScript or additional font is loaded.
 
 Beauty exposes `--beauty-dropcap-font`, `--beauty-dropcap-weight`,
-`--beauty-dropcap-lines`, `--beauty-dropcap-lines-small` and `--beauty-dropcap-gap`.
+`--beauty-dropcap-lines`, `--beauty-dropcap-lines-small`, `--beauty-dropcap-rise` and
+`--beauty-dropcap-gap`.
 The theme maps the font tokens to `--font-title` and `--font-weight-title` and
 sets the desktop line count to two; Beauty's small-screen default is already two.
+The theme sets the rise to `0.25`; use `0` for an ordinary dropped initial.
+Beauty uses top alignment and a line-relative rise for standard CSS, and native
+baseline alignment for prefixed WebKit. This avoids a whole-line prose shift in
+Chromium. Preview the gap below the title; do not add consumer-specific offsets.
 Shared geometry stays in Beauty. Keep any licensed font files in the consuming site.
 
-The theme sets `--beauty-dropcap-margin-block-end: -0.25em` to keep a short
+The theme sets `--beauty-dropcap-margin-block-end: -0.3em` to keep a short
 descender such as Cyrillic Ц from indenting a third line. This adjusts only the
 exclusion area, preserving the letter's size and alignment. Check descender
 clearance when changing fonts or leading; set the token to `0` if a font needs
 more space. Short paragraphs still reserve the initial's full two-line height.
 
+## Article links
+
+Article links can opt into new tabs with `articleLinksNewTab = true` in site or
+page params. This applies only to bodies of posts in `mainSections`, including
+internal destinations. Markdown gets `target="_blank"` and `rel="noopener noreferrer"`
+at build time; the browser also covers authored HTML and shortcode links.
+Same-page anchors, footnote navigation, downloads and non-web schemes retain their
+native behavior. Header navigation, listings and standalone pages
+keep their existing behavior. The option is off by default.
+
 ## Footnotes
+
+### Optional desktop side notes
+
+Set `sideNotes = true` on an article (or in site params) to place its native Markdown
+footnotes beside their first references when the inline-end gutter fits. The reading
+column stays unchanged. Notes use Beauty's existing type, color, counters and links;
+the theme only positions the original list items, without clones or duplicate IDs.
+Nearby notes stack with a gap, move past intersecting wide blocks and reserve space
+before the footer when needed.
+
+Narrow windows, mobile, print and no-JavaScript views retain the endnotes block and its
+heading. An immediately preceding H2–H6 notes heading is hidden only in the side layout.
+Repeated references still point to one note. Keep native links and return links intact.
+Return arrows are hidden in the side layout and visible in the bottom notes block.
+Initial note URLs settle after fonts and images load, unless the reader has already interacted.
+Layout tokens: `--article-sidenote-gap` (40px), `--article-sidenote-min-width` (220px),
+`--article-sidenote-max-width` (260px), `--article-sidenote-space` (24px between notes
+and at the viewport edge). This feature is off by default; preview dense notes first.
+
+### Shared typography
 
 Reference superscripts use a zero line height and a relative upward offset instead of
 `vertical-align: super`. They retain their italic appearance and native links without
@@ -202,7 +235,7 @@ A useful claim[^source] can reference the same note again[^source].
 
 Reference numbers appear as small, italic, text-colored superscripts without visible link decoration, in the article. Each endnote has a hanging number attached to the list item, so it stays visible when the note starts with a quotation, list or code block. Notes align with the reading column without a list indent, use smaller muted text, and retain return links for each reference. Keyboard focus remains visible; numbering follows the order of first citation.
 
-Beauty.css owns these styles through `beauty-footnotes`, `beauty-footnote-ref`, and `beauty-footnote-backref`. The theme's `beauty-compat.html` adapter maps Goldmark's generated classes without duplicating CSS or rewriting article HTML. Size and rhythm use Beauty's `--beauty-footnote-*` tokens. Ordinary list numbers inherit text weight, with a 0.875rem gap (14 px) between items and min(2.5rem, 8%) indentation (40 px in a wide column, 8% in a narrow one); footnotes retain their separate compact rhythm.
+Beauty.css owns these styles through `beauty-footnotes`, `beauty-footnote-ref`, and `beauty-footnote-backref`. The theme's `beauty-compat.html` adapter maps Goldmark's generated classes without duplicating CSS or rewriting article HTML. Size and rhythm use Beauty's `--beauty-footnote-*` tokens, including independent `--beauty-footnote-line-height`. Ordinary list numbers inherit text weight, with a 0.875rem gap (14 px) between items and min(2.5rem, 8%) indentation (40 px in a wide column, 8% in a narrow one); footnotes retain their separate compact rhythm.
 
 ## Captions, link arrows and stable columns
 
@@ -212,16 +245,15 @@ which uses muted italic text at the inline end. Both use the same size and close
 `--beauty-caption-*` controls the shared rhythm. See [caption examples](content.md#shortcodes).
 
 Opt-in [wide images](content.md#wide-images) keep the paragraph's inline-start edge and use
-free space toward the inline end, up to 960 px and never beyond the source width. The theme
-keeps the recent-posts rail in place and constrains only figures that would intersect it.
+free space toward the inline end, up to 960 px and never beyond the source or viewport width.
 Mobile and print use the ordinary column; captions keep the text measure. Figure and caption
-typography stays in Beauty, while Mini owns width, placement and collision handling.
+typography stays in Beauty, while Mini owns width and placement.
 
 Diagrams can select the same layout with [`mermaid wide=true`](content.md#wide-diagrams);
 their captions use the same Beauty styling and text measure as image captions.
 
 With [`wideCode = true`](content.md#wide-code-blocks), long code blocks share these
-width and rail constraints. Short examples keep the text measure; remaining overflow
+width and viewport constraints. Short examples keep the text measure; remaining overflow
 scrolls within the block without shrinking or wrapping code on screen. Print retains
 its existing wrapped code layout.
 

@@ -49,7 +49,6 @@ telegramChannel = "fixture"
 avatar = "images/avatar.svg"
 socialSharing = false
 notFoundYoda = true
-recentSidebarCount = 0
 [languages.en]
 contentDir = "content/en"
 weight = 2

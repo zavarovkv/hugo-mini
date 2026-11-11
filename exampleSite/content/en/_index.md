@@ -8,7 +8,7 @@ Inter fonts, shared CSS and JavaScript, and generated share images are self-host
 
 <h3 class="posts-group-title">Start here</h3>
 
-- [Theme Features](/theme-features/) — dark mode, categories, pinned posts, recent-posts sidebar, and everything else configured from `config.toml`
+- [Theme Features](/theme-features/) — dark mode, categories, pinned posts, and everything else configured from `config.toml`
 - [Hello World](/hello-world/) — the usual first post, kept around as a scaffold
 - [Under the Hood](/under-the-hood/) — how the theme is built: CSS architecture, render hooks, Hugo Pipes
 - [Telegram Integration](/telegram-integration/) — Discussion comments, reactions, and view counts

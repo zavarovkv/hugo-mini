@@ -19,7 +19,7 @@ wideCode = false
 +++
 ```
 
-`pinned` moves a post to the top of its category group. `hidden` removes it from listings, recent posts, RSS, JSON Feed, and `llms.txt`, but the URL remains public and crawlable. Use `draft` for unpublished work. `telegram_post` is the positive numeric ID of a Telegram message, not its URL.
+`pinned` moves a post to the top of its category group. `hidden` removes it from listings, RSS, JSON Feed, and `llms.txt`, but the URL remains public and crawlable. Use `draft` for unpublished work. `telegram_post` is the positive numeric ID of a Telegram message, not its URL.
 
 Set `noindex = true` to exclude an accessible page from search results. This is
 independent of listing visibility. Draft previews and 404 pages also emit
@@ -120,11 +120,9 @@ An ordinary `image` stays within the text column; `wide` accepts only `true` or 
 A wide figure directly inside an article keeps the text's inline-start edge and expands toward
 the inline end above 768 px. Its width is capped by `--article-wide-width` (default `60rem`,
 960 px), the source width and available viewport space, with `--article-edge-gap` (24 px).
-The recent-posts sidebar keeps its existing position and behavior: a figure that would intersect
-it stays within the text column; figures below it can expand. JavaScript only measures these
-constraints, including after resize, font/image loading or other article layout changes.
-Without JavaScript, the CSS fallback still expands images and the existing sidebar stays below
-the article. Mobile, nested figures and print retain the normal column width. Captions remain
+JavaScript measures the available viewport space after resize, font/image loading or other
+article layout changes. Without JavaScript, the CSS fallback still expands images.
+Mobile, nested figures and print retain the normal column width. Captions remain
 at the reading measure; Beauty owns their typography and rhythm.
 
 ### Wide diagrams
@@ -135,8 +133,7 @@ Mermaid source, with the existing `{{< /mermaid >}}` closing tag. `wide` accepts
 usual. Calls without either option keep their original plain `pre` markup.
 
 The optional figure shares the image layout: the text's inline-start edge, up to
-960 px in free space, constrained to the column beside the unchanged recent-posts
-rail. SVGs remain vector images and keep their aspect ratio. Mobile and print fit the
+960 px within the available viewport space. SVGs remain vector images and keep their aspect ratio. Mobile and print fit the
 column; unavailable JavaScript or diagram downloads leave the source readable.
 Captions use the same Beauty class, size, color, alignment and gap as image captions,
 and stay within the text measure. Theme switching and cached print copies are unchanged.
@@ -146,7 +143,7 @@ and stay within the text measure. Theme switching and cached print copies are un
 Set `wideCode = true` in an article's front matter to let long fenced code blocks
 use the same free space as wide images. Short examples retain the text-column width;
 long examples use the full wide measure from `--article-wide-width`
-(default 960 px), limited only by the viewport edge and the unchanged recent-posts rail.
+(default 960 px), limited by the viewport edge.
 Only direct article blocks expand; nested code stays within its container. This is opt-in
 per page.
 
@@ -154,7 +151,7 @@ Keep ordinary fenced Markdown and existing highlighting options. Font size, sour
 line numbers and the copy button stay unchanged. Longer lines still scroll inside the
 code block, including on mobile; screen code never wraps automatically. JavaScript detects
 overflow at the reading width after layout/font changes and selects one of these two widths. Without JavaScript, code stays in the text column with native
-scrolling and the rail stays below the article.
+scrolling.
 Print uses the existing column-width, wrapping code treatment. Geometry belongs to
 Mini; native code typography remains in Beauty.css.
 

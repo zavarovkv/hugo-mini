@@ -4,15 +4,13 @@ type = "blog"
 hidden = true
 +++
 
-A picture beside the recent-posts rail must leave those links in place.
+Wide pictures share the text edge and use the available space to the right.
 
-{{< image src="/browser-wide.svg" alt="Wide image near the sidebar" width=1200 height=800 wide=true caption="A caption stays at the reading measure." >}}
+{{< image src="/browser-wide.svg" alt="First wide image" width=1200 height=800 wide=true caption="A caption stays at the reading measure." >}}
 
-<div style="height:900px" aria-hidden="true"></div>
+A later image follows the same width constraints.
 
-The same image below the rail can use the free space to the right.
-
-{{< image src="/browser-wide.svg" alt="Wide image below the sidebar" width=1200 height=800 wide=true caption="A **wide image** with a caption." >}}
+{{< image src="/browser-wide.svg" alt="Second wide image" width=1200 height=800 wide=true caption="A **wide image** with a caption." >}}
 
 {{< image src="/browser-wide.svg" alt="Small source" width=320 height=213 wide=true >}}
 

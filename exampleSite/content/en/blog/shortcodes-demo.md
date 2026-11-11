@@ -11,7 +11,7 @@ Mini includes shortcodes and CSS classes for content that goes beyond standard M
 ## Wide images
 
 Choose `wide=true` to let an illustration expand to the right of the text column, up to 960 px.
-The recent-posts sidebar stays in place; an image beside it remains within the text column.
+Wide images keep the text edge and expand right within the source and viewport limits.
 On mobile and in print, images fit the ordinary column. Local raster dimensions are automatic;
 SVGs and remote images need explicit `width` and `height`.
 

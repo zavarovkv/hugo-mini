@@ -33,9 +33,10 @@ All parameters are optional unless your site content depends on them.
 | `avatar`, `avatarHover` | Header avatar and hover frame (when `logo` is unset) | unset |
 | `copyrightYear` | Starting year of the footer range | current year |
 | `newPostDays` | Age window for the New badge | `30` |
-| `recentSidebarCount` | Recent articles beside or below a post; `0` disables | `8` |
 | `showSearchButton` | Show the magnifier linking to the homepage; full-text search is not implemented; `false` hides it | `true` |
 | `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
+| `sideNotes` | Put native footnotes in a wide desktop margin; narrow screens, print and no-JavaScript views retain endnotes | `false` |
+| `articleLinksNewTab` | Open internal and external destinations from post bodies in new tabs; preserve same-page anchors and site navigation | `false` |
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
 | `preferenceCookieDomain` | Share explicit theme/language preferences with subdomains of this parent host | unset |
 | `rememberLanguage` | Remember footer language choices and apply them to homepages and pages marked `languagePreferenceEntry = true` | `false` |

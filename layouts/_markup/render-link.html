@@ -1,6 +1,10 @@
 {{- $url := partial "localized-link.html" . -}}
 {{- $isExternal := or (hasPrefix $url "http://") (hasPrefix $url "https://") -}}
-{{- if $isExternal -}}
+{{- $parsed := urls.Parse $url -}}
+{{- $isPost := and .Page.IsPage (in (.Page.Site.Params.mainSections | default (slice "blog")) .Page.Type) -}}
+{{- $samePageAnchor := and $parsed.Fragment (or (hasPrefix $url "#") (eq (index (split $url "#") 0) .Page.RelPermalink)) -}}
+{{- $articleTab := and $isPost (.Page.Param "articleLinksNewTab") $url (not $samePageAnchor) (in (slice "" "http" "https") (lower $parsed.Scheme)) -}}
+{{- if or $isExternal $articleTab -}}
 <a href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }} target="_blank" rel="noopener noreferrer">{{ .Text | safeHTML }}</a>
 {{- else -}}
 <a href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>

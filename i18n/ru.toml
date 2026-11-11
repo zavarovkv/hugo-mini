@@ -7,9 +7,6 @@ other = "Разное"
 [popular]
 other = "Популярное"
 
-[recent_posts]
-other = "Новые статьи"
-
 [latest_posts]
 other = "Последние статьи"
 

@@ -1,6 +1,6 @@
 {{ define "bodyClass" }}reading-layout{{ end }}
 {{ define "main" }}
-  {{- /* Post extras (meta row, sharing, comments, recent sidebar) apply to
+  {{- /* Post extras (meta row, sharing, comments) apply to
          pages in the site's main section(s); standalone pages like /about get
          just the title and body.
 
@@ -18,7 +18,7 @@
   {{- end -}}
   <h1>{{ $title }}</h1>
 
-  <article class="beauty-reading{{ if .Param "proseNumerals" }} beauty-prose-numerals{{ end }}{{ if .Params.dropCap }} beauty-dropcap{{ end }}{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
+  <article class="beauty-reading{{ if .Param "proseNumerals" }} beauty-prose-numerals{{ end }}{{ if .Params.dropCap }} beauty-dropcap{{ end }}{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if .Param "sideNotes" }} data-side-notes{{ end }}{{ if and $isPost (.Param "articleLinksNewTab") }} data-article-links-new-tab{{ end }}{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
     {{ partial "typography/content.html" . }}
   </article>
 
@@ -56,17 +56,5 @@
     <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ .Params.telegram_post }}" data-tg-limit="20"></div>
     {{ end }}
 
-    {{- /* Recent posts — desktop: absolute sidebar in the right gutter (JS);
-           mobile: static block at the bottom (CSS). */}}
-    {{ with partial "recent-posts.html" . }}
-    <aside class="recent-sidebar" id="recent-sidebar">
-      <p class="recent-sidebar-label">{{ i18n "recent_posts" }}</p>
-      <ul class="blog-posts recent-sidebar-list">
-        {{- range . }}
-        <li><a href="{{ .RelPermalink }}">{{ partial "typography/title.html" . }}</a></li>
-        {{- end }}
-      </ul>
-    </aside>
-    {{ end }}
   {{- end }}
 {{ end }}

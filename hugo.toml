@@ -6,7 +6,8 @@ extended = true
 min = "0.146.0"
 
 [params]
-  recentSidebarCount = 8
+  sideNotes = false
+  articleLinksNewTab = false
   typography = true
   hangingQuotes = false
   proseNumerals = false

@@ -9,7 +9,7 @@ export function wideDiagramContracts(test, expect) {
       const figures = page.locator('.article-diagram');
       const diagrams = figures.locator('.mermaid');
       await expect(diagrams.locator('svg')).toHaveCount(2);
-      await expect(figures.first()).toHaveClass(/has-rail-overlap/);
+      await expect.poll(() => figures.first().evaluate(e => e.getBoundingClientRect().width)).toBe(960);
       await expect.poll(() => figures.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
       const captionStyles = await page.locator('figcaption').evaluateAll(nodes => nodes.map(e => {
         const s = getComputedStyle(e);

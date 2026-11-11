@@ -24,6 +24,9 @@ try {
   await cp(join(theme, 'tests/browser/fixtures/contract.md'), join(contentDir, 'browser-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/editorial.md'), join(contentDir, 'editorial-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/dropcap.md'), join(contentDir, 'dropcap-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/side-notes.md'), join(contentDir, 'side-note-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/article-links.md'), join(contentDir, 'article-link-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/page-links.md'), join(contentDir, 'page-link-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/dropcap-word.md'), join(contentDir, 'dropcap-word-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-images.md'), join(contentDir, 'wide-image-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));

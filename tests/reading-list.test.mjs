@@ -26,7 +26,6 @@ disableKinds=["taxonomy","term"]
 [params]
 mainSections=["notes"]
 socialSharing=false
-recentSidebarCount=0
 newPostDays=30
 [outputs]
 home=["HTML","RSS","JSON"]

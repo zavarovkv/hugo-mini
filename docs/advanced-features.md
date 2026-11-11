@@ -6,7 +6,7 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 
 | Feature | Behavior and reference |
 | --- | --- |
-| Reading layout | 720 px column, 18/28 px desktop and 19/29 px mobile text; responsive headings, links and editorial helpers, including per-article drop caps. [Typography](typography.md) ([Russian](typography.ru.md)) |
+| Reading layout | 720 px column, 18/28 px desktop and 19/29 px mobile text; responsive headings, links and editorial helpers, including per-article drop caps and optional desktop side notes. [Typography](typography.md) ([Russian](typography.ru.md)) |
 | Fonts | Self-hosted Inter by default; site-owned font families and role weights through an optional [font profile](fonts.md) |
 | Text processing | Build-time quotes, dashes and spacing; page/fragment opt-out; code, URLs, math and source files stay intact. [Rules](typography.md) |
 | Color schemes | System colors without JavaScript; before-paint preference resolution and explicit theme choice; optional cross-subdomain preferences. [Configuration](configuration.md#shared-theme-and-language-preferences) |
@@ -23,8 +23,8 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 | Feature | Behavior and reference |
 | --- | --- |
 | Wide code | Per-page `wideCode = true`: long examples expand up to 960 px; short ones keep the reading measure. Native scrolling, highlighting, copy and print remain intact. [Code layout](content.md#wide-code-blocks) |
-| Images | Semantic `image` figures, automatic local dimensions and optional wide layout up to 960 px, sharing the text edge and preserving the recent-posts rail. [Wide images](content.md#wide-images) |
-| Collections | Configurable post sections, translated category labels, pinned posts, New badges and recent sidebar/bottom list; hidden posts retain public URLs and indexing. [Front matter](content.md#front-matter) |
+| Images | Semantic `image` figures, automatic local dimensions and optional wide layout up to 960 px, sharing the text edge and respecting source/viewport limits. [Wide images](content.md#wide-images) |
+| Collections | Configurable post sections, translated category labels, pinned posts, New badges; hidden posts retain public URLs and indexing. [Front matter](content.md#front-matter) |
 | Images and links | Local image dimensions, lazy loading and decoding; external Markdown links open safely in a new tab; internal links can select the current-language translation. [Content](content.md) |
 | Lists and footnotes | Inherited marker weight, responsive indentation and item spacing; linked notes with visible numbers even before code, quotations or nested lists. Styles belong to [Beauty.css](vendor-assets.md#beautycss-foundation) |
 | Tables | Keyboard-focusable local scrolling, semantic ISO dates and wrapped print cells; other content keeps the normal reading measure. [Printing](content.md#printing) |

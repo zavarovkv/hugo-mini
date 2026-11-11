@@ -5,14 +5,12 @@ hidden = true
 mermaid = true
 +++
 
-{{< mermaid wide=true caption="A diagram beside the rail." >}}
+{{< mermaid wide=true caption="A wide diagram." >}}
 flowchart LR
   A[Research the project] --> B[Explore possible solutions] --> C[Build a prototype] --> D[Test the result] --> E[Plan the next iteration]
 {{< /mermaid >}}
 
-<div style="height:900px" aria-hidden="true"></div>
-
-{{< mermaid wide=true caption="A diagram below the rail." >}}
+{{< mermaid wide=true caption="A second wide diagram." >}}
 flowchart LR
   A[Research the project] --> B[Explore possible solutions] --> C[Build a prototype] --> D[Test the result] --> E[Plan the next iteration]
 {{< /mermaid >}}

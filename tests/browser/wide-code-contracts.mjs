@@ -1,6 +1,6 @@
 export function wideCodeContracts(test, expect) {
   for (const colorScheme of ['light', 'dark']) {
-    test(`wide code sizes long lines without moving the rail (${colorScheme})`, async ({ page }) => {
+    test(`wide code expands long lines and keeps short examples in the column (${colorScheme})`, async ({ page }) => {
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.emulateMedia({ colorScheme });
@@ -9,14 +9,11 @@ export function wideCodeContracts(test, expect) {
       await page.evaluate(() => document.fonts.ready);
       const article = page.locator('article');
       const blocks = page.locator('article > .code-block');
-      const rail = page.locator('#recent-sidebar');
       await expect(blocks).toHaveCount(4);
-      await expect(blocks.nth(0)).toHaveClass(/has-rail-overlap/);
+      await expect.poll(() => blocks.nth(0).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
       await expect.poll(() => blocks.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
-      const before = await rail.boundingBox();
       const source = await blocks.nth(1).locator('code').textContent();
       await article.evaluate(e => e.classList.remove('article-wide-code'));
-      expect(await rail.boundingBox()).toEqual(before);
       expect(await blocks.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(720);
       await article.evaluate(e => e.classList.add('article-wide-code'));
 
