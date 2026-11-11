@@ -58,6 +58,33 @@ local builds and CI; the Vercel build passes its actual hostname with
 `--baseURL`. The demo shows neutral example content with no author-specific
 Telegram links or analytics.
 
+#### Deployment-owned demo fonts
+
+The public demo uses the maintainer's licensed body, title and quotation families.
+Ordinary clones, CI, the Hugo Themes catalog and the starter still use bundled Inter;
+the licensed assets are not distributed in this repository.
+
+The optional **Production** environment variable `DEMO_FONT_PROFILE` contains JSON:
+`{"fonts": { ... }, "files": [{"source": "private-fonts/body.woff2", "url": "https://your-site.example/body.woff2", "sha256": "<64 lowercase hex characters>"}]}`.
+`fonts` is the complete [`params.fonts` configuration](fonts.md), with one file record
+per distinct `faces[].source`, `title.source` and `quote.source`. Use only assets and
+domains covered by your license. Keep this profile in deployment settings, not in the
+shared example configuration. It is not a binary font bundle or a credential.
+
+The build copies the example site to a temporary directory, downloads the listed
+HTTPS resources with a timeout, rejects redirects, verifies every SHA-256 digest,
+and adds the profile only to that temporary site. Hugo fingerprints and self-hosts
+the original files in the demo output. Browsers make no requests to the source site.
+The temporary profile, source tree and downloaded originals are removed after the
+build; only the generated site is published. Fonts served to visitors are public.
+
+The source URLs must remain available for future builds. For the maintained demo,
+they point to pinned font assets on the maintainer's blog. An unavailable asset or
+checksum mismatch fails the build, preserving the last successful deployment;
+there is no silent fallback to another font. Update URLs and checksums together
+when changing files. Remove `DEMO_FONT_PROFILE` and redeploy to restore Inter;
+the build cleans old output so unused licensed fonts are not carried forward.
+
 ### One-click blog starter on Vercel
 
 For a blog you can customize, use the [Deploy to Vercel button](../starter/README.md).

@@ -47,12 +47,13 @@ contentDir="content/ru"
     nested: '> Outer\n>\n> > Inner.',
     lead: '<p class="beauty-lead">A thesis.</p>',
     framed: '{{< callout >}}\nA framed thesis.\n{{< /callout >}}',
+    framedOff: '{{< callout >}}\nA framed thesis.\n{{< /callout >}}',
     off: '> Unchanged.',
   };
   for (const lang of ['ru','en']) {
     await mkdir(join(root, `content/${lang}/blog`), {recursive:true});
     for (const [name, body] of Object.entries(cases)) {
-      await writeFile(join(root, `content/${lang}/blog/${name}.md`), `+++\ntitle="Fixture"\n${name === 'off' ? 'editorialQuotes=false\n' : ''}+++\n${body}`);
+      await writeFile(join(root, `content/${lang}/blog/${name}.md`), `+++\ntitle="Fixture"\n${['off', 'framedOff'].includes(name) ? 'editorialQuotes=false\n' : ''}+++\n${body}`);
     }
   }
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source',root,'--panicOnWarning'], {stdio:'pipe'});
@@ -94,7 +95,11 @@ contentDir="content/ru"
     assert.doesNotMatch(await read('code'), /beauty-hanging-open/);
     assert.equal(((await read('nested')).match(/beauty-hanging-open/g)||[]).length,1);
     assert.match(await read('lead'), /<p class="beauty-lead">A thesis\.<\/p>/);
-    assert.match(await read('framed'), /class="beauty-callout"/);
+    assert.match(await read('framed'), /class="beauty-quotation quotation-reading"/);
+    assert.match(await read('framed'), /beauty-hanging-open/);
+    assert.doesNotMatch(await read('framed'), /beauty-callout/);
+    assert.match(await read('framedOff'), /class="beauty-callout"/);
+    assert.doesNotMatch(await read('framedOff'), /beauty-quotation|beauty-hanging-open/);
     assert.doesNotMatch(await read('off'), /beauty-quotation|beauty-hanging-open/);
   }
 });

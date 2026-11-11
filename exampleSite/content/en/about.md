@@ -12,8 +12,12 @@ Any standard Markdown and shortcodes work here, just like in blog posts.
 
 {{< plug >}}
 
-{{< callout >}}The best themes are the ones that get out of your way and let the content speak for itself.{{< /callout >}}
-
-<div class="beauty-fine-print">
-Jane Doe, Writer
-</div>
+<figure class="beauty-quotation">
+  <blockquote>
+    <p><span class="beauty-hanging-open">“</span>The best themes are the ones that get out of your way and let the content speak for itself.”</p>
+  </blockquote>
+  <figcaption class="beauty-quotation-attribution">
+    <span aria-hidden="true">—</span>
+    <span>Jane Doe, Writer</span>
+  </figcaption>
+</figure>

@@ -52,7 +52,7 @@ Mini включает шорткоды и CSS-классы для контент
 
 ## Выносные цитаты
 
-Используйте шорткод `callout` для выделенных блочных цитат. Внутри работает Markdown:
+Используйте шорткод `callout` для блочных цитат. Внутри работает Markdown. В демо включен `editorialQuotes = true`, поэтому Markdown-цитаты и callout используют общее оформление:
 
 ```markdown
 {{</* callout */>}}Текст вашей цитаты.{{</* /callout */>}}
@@ -88,8 +88,12 @@ CSS-класс `.button` создает стилизованную кнопку 
 
 {{< plug >}}
 
-{{< callout >}}Простота — высшая форма изощренности.{{< /callout >}}
-
-<div class="beauty-fine-print">
-Леонардо да Винчи
-</div>
+<figure class="beauty-quotation">
+  <blockquote>
+    <p><span class="beauty-hanging-open">«</span>Простота — высшая форма изощренности».</p>
+  </blockquote>
+  <figcaption class="beauty-quotation-attribution">
+    <span aria-hidden="true">—</span>
+    <span>Приписывается Леонардо да Винчи</span>
+  </figcaption>
+</figure>

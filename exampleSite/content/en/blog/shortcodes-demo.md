@@ -52,7 +52,7 @@ The `plug` shortcode inserts a decorative "* * *" divider — useful for separat
 
 ## Pull Quotes
 
-Use the `callout` shortcode for a highlighted block quotation. Its content supports Markdown:
+Use the `callout` shortcode for a block quotation. Its content supports Markdown. This demo enables `editorialQuotes = true`, so Markdown quotes and callouts share the same style:
 
 ```markdown
 {{</* callout */>}}Your pull quote text here.{{</* /callout */>}}
@@ -88,8 +88,12 @@ These elements work well together. Here's a typical pattern for a landing sectio
 
 {{< plug >}}
 
-{{< callout >}}Simplicity is the ultimate sophistication.{{< /callout >}}
-
-<div class="beauty-fine-print">
-Leonardo da Vinci
-</div>
+<figure class="beauty-quotation">
+  <blockquote>
+    <p><span class="beauty-hanging-open">“</span>Simplicity is the ultimate sophistication.”</p>
+  </blockquote>
+  <figcaption class="beauty-quotation-attribution">
+    <span aria-hidden="true">—</span>
+    <span>Attributed to Leonardo da Vinci</span>
+  </figcaption>
+</figure>

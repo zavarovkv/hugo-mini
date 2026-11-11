@@ -14,6 +14,8 @@
 
 **[Демо](https://hugo-mini-demo.vercel.app/)** · **[Быстрый старт](#быстрый-старт)** · **[Каталог тем Hugo](https://themes.gohugo.io/themes/hugo-mini/)** · **[Документация](#документация)**
 
+Демо использует отдельно лицензированные Стори, Сурдин и Мирту. В тему и стартовый шаблон входит Inter; файлы шрифтов демо не включены. [Сборка демо](docs/deployment.md#deployment-owned-demo-fonts).
+
 [![Hugo Mini — компьютерная и мобильная версии со звездочкой, навигацией и светлым и темным оформлением](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Почему Mini

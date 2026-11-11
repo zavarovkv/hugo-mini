@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Build the theme's neutral exampleSite from the repository root on Vercel.
+# Build the theme's bilingual exampleSite from the repository root on Vercel.
 # Keep the Hugo binary and its verified checksum updated together.
 set -euo pipefail
 
@@ -35,6 +35,19 @@ tar --extract --gzip --file "$archive" --directory "$temp_dir" hugo
 mkdir --parents "${temp_dir}/themes"
 ln --symbolic "${PWD}" "${temp_dir}/themes/hugo-mini"
 
+demo_source="${PWD}/exampleSite"
+demo_config="hugo.toml"
+if [[ -n "${DEMO_FONT_PROFILE:-}" ]]; then
+  # Licensed assets belong to this deployment's temporary site, never the theme.
+  demo_source="${temp_dir}/site"
+  mkdir --parents "$demo_source"
+  tar --exclude='./public' --exclude='./resources' --exclude='./.hugo_build.lock' \
+    --create --file=- --directory=exampleSite . | tar --extract --file=- --directory="$demo_source"
+  node scripts/prepare-demo-fonts.mjs "$demo_source"
+  demo_config="hugo.toml,demo-fonts.json"
+fi
+
 "${temp_dir}/hugo" version
-"${temp_dir}/hugo" -s exampleSite --themesDir "${temp_dir}/themes" \
+"${temp_dir}/hugo" -s "$demo_source" --themesDir "${temp_dir}/themes" \
+  --config "$demo_config" --destination "${PWD}/exampleSite/public" --cleanDestinationDir \
   --baseURL "https://${demo_host%/}/" --minify --panicOnWarning

@@ -12,8 +12,12 @@ description = "Пример отдельной страницы в теме Mini
 
 {{< plug >}}
 
-{{< callout >}}Лучшие темы — те, которые не мешают контенту говорить самому за себя.{{< /callout >}}
-
-<div class="beauty-fine-print">
-Jane Doe, автор блога
-</div>
+<figure class="beauty-quotation">
+  <blockquote>
+    <p><span class="beauty-hanging-open">«</span>Лучшие темы — те, которые не мешают контенту говорить самому за себя».</p>
+  </blockquote>
+  <figcaption class="beauty-quotation-attribution">
+    <span aria-hidden="true">—</span>
+    <span>Jane Doe, автор блога</span>
+  </figcaption>
+</figure>

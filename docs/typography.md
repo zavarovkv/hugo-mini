@@ -12,6 +12,11 @@ and emphasis remain semantic HTML; code, tables and nested quotations do not rec
 invented marks. Source Markdown and translation hashes are unchanged. Explicit HTML
 figures retain their authored markup.
 
+The same option applies to the `callout` shortcode. With `editorialQuotes = false`,
+it retains its original shaded treatment. The bilingual example site enables the
+shared style for both Markdown and shortcode quotations; attributed examples use
+semantic figures and captions.
+
 Opening marks inside emphasis, strong text, links and nested inline wrappers are
 recognized without adding another quote pair. Authored hanging-mark spans are
 preserved; attributes and inline code are not rewritten.

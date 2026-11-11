@@ -1,3 +1,8 @@
-<blockquote class="beauty-callout">
-  {{ .Page.RenderString (dict "display" "block") .Inner }}
-</blockquote>
+{{- $body := .Page.RenderString (dict "display" "block") .Inner -}}
+{{- if .Page.Param "editorialQuotes" -}}
+  <figure class="beauty-quotation quotation-reading">
+    <blockquote>{{ partial "typography/quotation-body.html" (dict "html" $body "lang" .Page.Language.Lang) }}</blockquote>
+  </figure>
+{{- else -}}
+  <blockquote class="beauty-callout">{{ $body }}</blockquote>
+{{- end -}}

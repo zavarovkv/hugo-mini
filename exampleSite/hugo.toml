@@ -45,6 +45,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # telegramChannel = "your_channel"
 
   # Features
+  editorialQuotes = true   # shared editorial style for Markdown quotations
   # socialSharing = false   # uncomment to disable Likely sharing buttons
   # consoleYoda   = true    # uncomment to print a built-in Yoda in the browser console
 

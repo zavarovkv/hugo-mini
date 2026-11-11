@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Unify bilingual demo quotations and attributions; apply `editorialQuotes` to `callout` while preserving its original style when disabled.
+- Support a deployment-owned demo font profile with verified HTTPS downloads, temporary source files and self-hosted output; ordinary theme builds and the starter retain Inter.
+
 - Preserve existing quotation marks inside inline formatting and links, including nested wrappers and authored hanging spans.
 - Keep the heading focus outline for Tab navigation while suppressing it for Option/Alt + Up/Down jumps.
 

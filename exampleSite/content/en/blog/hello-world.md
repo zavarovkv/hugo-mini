@@ -57,9 +57,9 @@ Nested lists work too:
 
 ## Blockquotes
 
+Dieter Rams on design:
+
 > Good design is as little design as possible. Less, but better — because it concentrates on the essential aspects, and the products are not burdened with non-essentials.
->
-> — Dieter Rams
 
 ## Code Blocks
 
