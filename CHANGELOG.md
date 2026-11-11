@@ -28,6 +28,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Set project name labels to Semibold (600) without altering their arrow icon weight or appearance.
 - Match project link arrows to the archive arrow's fine stroke and geometry, with a diagonal 300 ms hover/focus movement. Keep labels, logo buttons, touch input and reduced-motion behavior stable.
 - Refine the latest-posts archive arrow with a finer stroke and a 300 ms hover/focus movement, preserving link colors and layout; respect reduced motion and touch input.
 - Darken light-theme body text from `#444` to `#333`.
