@@ -27,11 +27,12 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 | Collections | Configurable post sections, translated category labels, pinned posts, New badges; hidden posts retain public URLs and indexing. [Front matter](content.md#front-matter) |
 | Images and links | Local image dimensions, lazy loading and decoding; external Markdown links open safely in a new tab; internal links can select the current-language translation. [Content](content.md) |
 | Lists and footnotes | Inherited marker weight, responsive indentation and item spacing; linked notes with visible numbers even before code, quotations or nested lists. Styles belong to [Beauty.css](vendor-assets.md#beautycss-foundation) |
+| Quotations | Optional `editorialQuotes` applies the shared figure style to Markdown quotes in every language: 640 px measure, 18/28 px desktop and 19/29 px mobile; explicit testimonials use 20/30 px. Hanging opening marks, shared spacing and right-aligned muted attributions. [Typography](typography.md#quotations-and-attributions) |
 | Tables | Keyboard-focusable local scrolling, semantic ISO dates and wrapped print cells; other content keeps the normal reading measure. [Printing](content.md#printing) |
 | Code | Copy control and class-based light/dark/print palettes; requires `markup.highlight.noClasses = false`. [Highlighting](configuration.md#syntax-highlighting) |
 | Math and diagrams | Opt-in self-hosted KaTeX; Mermaid 11/12 with CDN or local script/ESM, theme-aware colors, optional wide figures with shared image-caption styling, and readable failure fallback. [Configuration](configuration.md), [assets](vendor-assets.md) |
 | Print | Fixed point sizes, light paper palette, wrapped code/tables and simplified page shell. Diagrams prepare neutral copies in the background. [Printing](content.md#printing) |
-| Editorial shortcodes | `caption`, `callout`, `plug` and `mermaid`; ordinary semantic Markdown inside supported blocks. [Usage](content.md#shortcodes) |
+| Editorial shortcodes | `caption`, `callout` (framed or `style="editorial"` without added quotation marks), `plug` and `mermaid`; ordinary semantic Markdown inside supported blocks. [Usage](content.md#shortcodes) |
 | Homepage components | `latest-posts` with optional archive link; `columns`/`column` stack on mobile. [Latest posts](content.md#latest-articles), [columns](content.md#columns) |
 | Projects | `project` with Markdown description, optional light/dark mark and motion-aware click animation; source links use compact notes. [Projects](content.md#projects) |
 | Public counters | `github-stars` renders saved data; optional build helper preserves counts on API failure, with no browser counter requests. [GitHub stars](content.md#github-stars) |

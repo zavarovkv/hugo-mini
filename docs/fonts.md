@@ -63,7 +63,29 @@ The theme selects it through `--font-title` and Beauty's existing H1 token, incl
 print. H2–H6, article-list links, navigation and body text retain the base family. H1 sizes,
 spacing and line height stay theme-owned. The separate H1 family uses normal letter
 spacing above 768 px; mobile retains the reading layout's `-0.01em` tracking.
-`useDefaultFonts` disables both custom families.
+`useDefaultFonts` disables all custom families.
+
+## A separate quotation family
+
+An existing custom-font profile can add an upright face for block quotations:
+
+```toml
+[params.fonts.quote]
+family = "My Quote Font"
+source = "private-fonts/quote-regular.woff2"
+weight = 400
+preload = false
+```
+
+The family must differ from the body and title families. `weight` defaults to 400;
+format validation, fingerprinting and unchanged bytes follow the same loader.
+`--font-quote` and `--font-weight-quote` configure native blockquotes, `callout`,
+legacy block-style `q` and attributed `beauty-quotation` text through Beauty tokens.
+Captions and quotation footers retain the body face. Quoted punctuation inside ordinary
+paragraphs does not select a new font. Without this profile, quotations use the body face.
+Only an upright face is supplied; synthetic weight and style remain disabled. Sizes,
+line heights and spacing stay unchanged. Leave preload off to request the font only
+when it is used. `useDefaultFonts` also disables this face.
 
 ## Ownership and delivery
 

@@ -1,0 +1,31 @@
+{{- /* Keep authored punctuation and inline markup. Add a selectable outer pair
+     only to prose quotations which do not already carry one. Lists can be the
+     last block; code, tables and nested quotations retain their own contents. */ -}}
+{{- $html := strings.TrimSpace (string .html) -}}
+{{- $opening := `^(<p>\s*)(«|“|&laquo;|&ldquo;|&#171;|&#8220;)` -}}
+{{- if findRE $opening $html -}}
+  {{- $html = replaceRE $opening `$1<span class="beauty-hanging-open">$2</span>` $html -}}
+{{- else if and (hasPrefix $html "<p>") (not (findRE `<(?:pre|table|blockquote|figure)\b` $html)) -}}
+  {{- $ru := hasPrefix .lang "ru" -}}
+  {{- $open := cond $ru "«" "“" -}}
+  {{- $close := cond $ru "»" "”" -}}
+  {{- $ending := `((?:</(?:p|li|ol|ul)>\s*)+)$` -}}
+  {{- if findRE $ending $html -}}
+    {{- if $ru -}}
+      {{- /* A sentence's full stop follows the closing Russian quote. Other
+           terminal punctuation stays inside; no extra punctuation is invented. */ -}}
+      {{- $inlineEnd := `((?:</(?:em|strong|a|span|code)>\s*)*)` -}}
+      {{- if findRE (printf `(?:[!?…]|\.{3}|&hellip;|&#8230;)%s%s` $inlineEnd $ending) $html -}}
+        {{- $html = replaceRE $ending (printf "%s$1" $close) $html -}}
+      {{- else if findRE (printf `\.%s%s` $inlineEnd $ending) $html -}}
+        {{- $html = replaceRE (printf `\.%s%s` $inlineEnd $ending) (printf "$1%s.$2" $close) $html -}}
+      {{- else -}}
+        {{- $html = replaceRE $ending (printf "%s$1" $close) $html -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $html = replaceRE $ending (printf "%s$1" $close) $html -}}
+    {{- end -}}
+    {{- $html = replaceRE `^<p>` (printf `<p><span class="beauty-hanging-open">%s</span>` $open) $html -}}
+  {{- end -}}
+{{- end -}}
+{{- return ($html | safeHTML) -}}

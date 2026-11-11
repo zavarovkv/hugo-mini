@@ -6,7 +6,21 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Reduce the editorial callout gutter-rule offset to 12 px on mobile; retain 16 px on desktop.
+
+- Add `callout style="editorial"` for reusable author theses sharing article quotation typography without added quotation marks or a background, with a thin muted gutter rule from Beauty.
+
+- Add opt-in `editorialQuotes` for native Markdown quotations in every language, preserving semantic paragraphs/lists and existing punctuation; share the article quotation style without rewriting content.
+
+- Add a shared 0.08em optical gap after hanging quotation marks through Beauty.
+
 ### Added
+- Add 32 px more footer separation when standalone content ends with a quotation, without changing spacing inside the quotation.
+- Share quotation spacing, 1.4-scale opening marks and end-aligned attributions across testimonials and article quotations; only reading size and leading differ. Apply attribution alignment to native quotation footers as well, leaving image captions unchanged.
+- Add `quotation-reading` for long in-article quotations: inherit reading size and leading, retain shared 24 px top / 32 px bottom spacing, quotation face and 640 px measure while changing only size and leading.
+- Support Beauty's opt-in `beauty-quotation-attribution` signature with an inline em dash and author/source text aligned to the quotation end, a 20 px caption gap and a compact 0.125em dash-to-name gap.
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
+- Style opt-in `beauty-quotation` figures with the configured quotation face at 20/30 px on desktop and mobile, a 640 px maximum measure, hanging selectable punctuation and an inline author name followed by a muted role/source through Beauty.css. Use 24 px top / 32 px bottom spacing and a compact paragraph rhythm; preserve ordinary quotations and print sizing.
 - Add opt-in `articleLinksNewTab`: internal and external destinations open in a new tab only from post bodies, preserving in-page anchors, footnote navigation and site navigation.
 - Add opt-in `sideNotes = true`: place native footnotes beside their references in a sufficiently wide desktop gutter, avoid neighboring notes and wide blocks. Preserve the bottom notes block on mobile, narrow windows, print and without JavaScript.
 - Add per-article `dropCap = true`: Beauty shapes a two-line initial in the configured title font; preserve text, print and unsupported-browser fallback. Bind single-letter opening words at build time to preserve their separator when copying in Chromium.
@@ -36,6 +50,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Changed
 
+- Balance spacing around a `plug` divider before an attributed quotation with a 16 px quotation top margin.
 - Give footnotes their own screen scale: 15/24 px on desktop and 16/25.6 px on mobile, using the body face and shared muted color through Beauty tokens; print retains inherited leading.
 - Hide return arrows only in desktop side notes; retain them in bottom notes on narrow screens and in print.
 - Raise opt-in article initials by a quarter line while retaining two-line wrapping on desktop and mobile; use Beauty's shared rise token and native browser shaping.
@@ -103,6 +118,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [3.5.0] — 2026-11-06
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - Add a Vercel one-click starter with an editable blog, a pinned and verified Hugo Mini release, and reproducible Hugo Extended builds.
 - Add a custom social preview card and its editable vector source for sharing the project.
 
@@ -127,6 +143,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [3.4.0] — 2026-11-06
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - Add a neutral, automatically buildable Vercel demo of the existing bilingual `exampleSite`, with a pinned and SHA-256-verified Hugo Extended binary.
 - Add opt-in shared theme/language preferences for a configured parent domain; remember explicit language choices on homepages and marked landing pages while preserving direct article URLs.
 - Add a reusable `loading-skeleton` state for unknown inline values, with a compact placeholder and reduced-motion support.
@@ -231,6 +248,7 @@ Adds composable homepage blocks, localized reading lists and optional page contr
 - Corrected the documented category translation key and shortcode descriptions.
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - Optional `notFoundYoda` displays the built-in ASCII illustration on a responsive, localized 404 page using the shared theme palette. A character scan animates the silhouette, pauses in hidden tabs, and respects reduced-motion preferences.
 - Generated `robots.txt` advertises the default sitemap URL when `enableRobotsTXT` is enabled.
 - Optional `date_precision = "month"` displays publication dates without an invented day.
@@ -333,6 +351,7 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - `theme.toml`: legacy `min_version` key dropped; `[module.hugoVersion]` in `hugo.toml` is the single source of truth, as the themes gallery documents.
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - `baseof.html` now exposes named blocks for every region — `head`, `header`, `footer`, `scripts` alongside the existing `title` and `main` — so a template can replace one region without copying the whole file. Defaults render the theme's own partials, so existing templates are unaffected.
 - `params.mermaidSrc` overrides where Mermaid is loaded from. Default remains the pinned, SRI-guarded jsDelivr URL; pointing it at a local copy gives a build with no third-party requests at all. A custom src is emitted without `integrity`/`crossorigin`, since the pinned hash only matches the pinned file.
 - Design tokens for lines and borders — `--color-divider`, `--color-blockquote-border`, `--color-control-border`, `--color-control-border-hover` — with dark-mode counterparts. All colour tokens are now declared in one documented block at the top of `assets/css/main.css` and listed in the README.
@@ -374,6 +393,7 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 ## [1.0.1] — 2026-04-19
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - exampleSite build CI (`.github/workflows/test-example-site.yml`) — builds exampleSite on every push and PR via `hugo -s exampleSite --themesDir ../.. --minify`; surfaces as a status badge in the README.
 - README badges: Hugo version, GitHub stars, and CI status alongside existing Release and License.
 - Emoji glyphs on every feature bullet in README for faster visual scan in the theme gallery.
@@ -391,6 +411,7 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 > **Breaking.** `custom_head.html` and `custom_body.html` partials no longer *replace* the theme's CSS/JS — they now *append* after the bundled theme assets, so anything inside them wins the cascade rather than clobbering the theme. See the CSS/JS bundling entry under Changed below.
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - CSS custom properties (`--color-primary`, `--color-accent`, `--color-primary-border`, `--color-accent-border`) for easy color customization
 - `copyrightYear` param — footer start year shown as "© YEAR–NOW"
 - `telegramCTATitle` and `telegramCTADescription` params to customize Telegram CTA text without editing i18n files
@@ -457,6 +478,7 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 ## [0.1.0] — 2026-04-01
 
 ### Added
+- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
 - Initial public release
 - Dark/light mode with system preference detection and localStorage persistence
 - Multilingual support (ru, en) with language toggle in footer

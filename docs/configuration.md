@@ -40,6 +40,7 @@ All parameters are optional unless your site content depends on them.
 | `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
 | `preferenceCookieDomain` | Share explicit theme/language preferences with subdomains of this parent host | unset |
 | `rememberLanguage` | Remember footer language choices and apply them to homepages and pages marked `languagePreferenceEntry = true` | `false` |
+| `editorialQuotes` | Render native Markdown quotations with shared editorial figures and hanging punctuation in all languages; page front matter can override | `false` |
 | `typography` | Apply language-aware prose spacing and Russian punctuation rules at build time; page front matter can override | `true` |
 | `mainSections` | Sections treated as posts | Hugo default |
 | `socialSharing` | Likely sharing buttons on posts | `true` |

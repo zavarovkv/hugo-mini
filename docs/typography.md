@@ -1,5 +1,61 @@
 # Typography
 
+## Quotations and attributions
+
+Set `editorialQuotes = true` in `[params]` (or page parameters) to render native
+Markdown `>` blocks with the shared `beauty-quotation quotation-reading` style in
+all languages. It is off by default; pages can opt out with `editorialQuotes = false`.
+Existing opening marks hang outside the text edge. Prose without marks receives a
+selectable outer pair: `«…»` in Russian and `“…”` otherwise. Terminal punctuation is
+retained (a Russian full stop follows the closing mark). Paragraphs, lists, links
+and emphasis remain semantic HTML; code, tables and nested quotations do not receive
+invented marks. Source Markdown and translation hashes are unchanged. Explicit HTML
+figures retain their authored markup.
+
+For a short author definition or thesis in the body face, use `<p class="beauty-lead">…</p>` instead. It increases the text size without a rule or quotation marks.
+
+For an author's own thesis, use `{{< callout style="editorial" >}}…{{< /callout >}}`.
+It shares the article quotation typography, measure and spacing without adding
+quotation marks or a background. A 1 px muted rule sits 1rem outside the text edge (0.75rem at screen widths up to 768 px)
+through Beauty’s `beauty-quotation-rule` modifier; the reading measure stays unchanged. Plain `callout` retains its framed style.
+
+
+Use `<figure class="beauty-quotation">` with a `blockquote` and an optional
+`figcaption`. All such quotations share the configured quote face, a 640 px
+maximum measure aligned with the reading column, 24 px above, 32 px below and 16 px
+between paragraphs. After a `plug` divider, the top margin is 16 px.
+When standalone content ends with a quotation, footer top padding increases from
+56 to 88 px through `--footer-quotation-gap`; internal quotation spacing stays shared.
+
+Wrap the opening punctuation in `<span class="beauty-hanging-open">«</span>`.
+Mini scales it to 1.4 through Beauty without changing line height and adds a
+shared 0.08em optical gap through `--beauty-hanging-gap`. The closing
+mark stays ordinary; print restores inline punctuation and normal scale.
+
+Standalone testimonials use 20/30 px on desktop and mobile. Add `quotation-reading`
+for article quotations to follow the surrounding reading type: 18/28 px desktop,
+19/29 px mobile. This modifier changes only size and leading; the remaining
+quotation styles are shared. Print retains its existing sizing.
+
+All quotation captions, including native `blockquote footer` and `figcaption`
+after a direct blockquote, align to the quotation's inline end through
+`--beauty-quote-attribution-align: end`. Image and diagram captions retain their
+own alignment. Figure attributions follow the quote by 20 px, use the body face
+and muted color, and wrap within the quote width.
+
+For a signature with a real dash, use `beauty-quotation-attribution` on the caption,
+put the dash in the first span (`aria-hidden="true"`) and the author/source in a
+second span. The dash stays next to the signature, with a 0.125em gap, rather than
+hanging in the page gutter. Names and roles may remain on one line. The optional
+`beauty-quotation-author` span gives the name the main text color; omit it for a
+uniform muted signature. Omit the entire caption when the introduction already
+names the source.
+
+Beauty owns the typography; Mini configures its tokens. An optional
+[quotation font profile](fonts.md#a-separate-quotation-family) selects one face
+for block quotations while captions retain the body family.
+
+
 Russian quotation nesting accepts both literal curly quotes and HTML entities.
 Quotation marks around a visible URL close the surrounding quotation without
 rewriting the URL or affecting the next quotation.

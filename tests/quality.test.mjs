@@ -476,6 +476,50 @@ preload=true
   await assert.rejects(site(t, config.replace('titleWeight=500', 'titleWeight=500\nboldWeight=500'), content, {}, assets), /fonts: bold weight 500 has no normal face/);
 });
 
+test('a quotation face is fingerprinted, optional and isolated from body and default fonts', async (t) => {
+  const bytes = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-300.woff2'));
+  const config = `baseURL="https://example.org/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params.fonts]
+family="Body Font"
+[[params.fonts.faces]]
+source="private/body.woff2"
+weight=400
+[[params.fonts.faces]]
+source="private/bold.woff2"
+weight=700
+[params.fonts.quote]
+family="Quote Font"
+source="private/quote.woff2"
+weight=400
+`;
+  const content = {
+    'custom.md': '+++\ntitle="Custom"\n+++\n> Quotation.',
+    'default.md': '+++\ntitle="Default"\nuseDefaultFonts=true\n+++\n> Quotation.',
+  };
+  const assets = {'private/body.woff2': bytes, 'private/bold.woff2': bytes, 'private/quote.woff2': bytes};
+  const example = await site(t, config, content, {}, assets);
+  const html = await example.read('custom/index.html');
+  const cssPath = html => html.match(/<link rel=stylesheet href=([^ >]+)/)[1].slice(1);
+  const css = await example.read(cssPath(html));
+  assert.match(css, /@font-face\{font-family:["']?Quote Font["']?;font-style:normal;font-weight:400;/i);
+  assert.match(css, /--font-main:["']?Body Font/);
+  assert.match(css, /--font-quote:["']?Quote Font["']?,\s*var\(--font-main\)/);
+  assert.match(css, /--font-weight-quote:400/);
+  assert.match(css, /--beauty-quote-family:var\(--font-quote\)/);
+  assert.doesNotMatch(html, /rel=preload[^>]+quote\./, 'quotes do not force a site-wide preload');
+  const url = css.match(/(?:url\(["']?\/)(private\/quote\.[a-f0-9]{64}\.woff2)/)[1];
+  assert.deepEqual(await example.readBytes(url), bytes);
+  const standard = await example.read(cssPath(await example.read('default/index.html')));
+  assert.doesNotMatch(standard, /Quote Font|private\//);
+  assert.match(standard, /--font-quote:var\(--font-main\)/);
+  await assert.rejects(site(t, config, content, {}, {'private/body.woff2': bytes, 'private/bold.woff2': bytes}), /fonts: missing site asset/);
+  await assert.rejects(site(t, config.replace('family="Quote Font"', 'family="Bad; Font"'), content, {}, assets), /fonts.quote.family must be a plain/);
+  await assert.rejects(site(t, config.replace('family="Quote Font"', 'family="Body Font"'), content, {}, assets), /fonts.quote.family must differ/);
+  await assert.rejects(site(t, config.replace('source="private/quote.woff2"\nweight=400', 'source="private/quote.woff2"\nweight=1001'), content, {}, assets), /fonts: invalid face/);
+});
+
 test('visible titles receive typography while metadata and escaped markup stay intact', async (t) => {
   const title = 'Управление продуктом — это управление маркетингом';
   const example = await site(t, `baseURL="https://example.org/"

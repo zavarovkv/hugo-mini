@@ -1,0 +1,9 @@
+{{- if and (.Page.Param "editorialQuotes") (eq .Type "regular") -}}
+  <figure class="beauty-quotation quotation-reading">
+    <blockquote{{ range $name, $value := .Attributes }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end }}>
+      {{- partial "typography/quotation-body.html" (dict "html" .Text "lang" .Page.Language.Lang) -}}
+    </blockquote>
+  </figure>
+{{- else -}}
+  <blockquote{{ range $name, $value := .Attributes }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end }}>{{ .Text }}</blockquote>
+{{- end -}}

@@ -18,8 +18,9 @@ Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beaut
 
 ## Why Mini?
 
+- **Quotations:** optional `editorialQuotes` gives Markdown quotes the shared editorial style in every language; testimonials use larger text, with right-aligned attributions. `callout style="editorial"` uses the same typography for author theses without added quotation marks.
 - **Focus on writing.** A stable 720 px desktop column, comfortable 19 px mobile reading, optional wide images, diagrams and long code blocks, and careful headings, captions and footnotes, with optional side notes on desktop and new-tab links scoped to article bodies. Optional drop caps, hanging quotes, prose numerals and explicit fractions refine the details. Automatic punctuation keeps Markdown intact; articles have a dedicated print layout. [Typography and examples](docs/typography.md).
-- **Stay lightweight.** Responsive layout with an easy-to-tap mobile menu; fonts, CSS, JavaScript and icons are served from your site. Optional site-owned fonts can pair a separate H1 family with the body face and configure the weights used by text and components. Updated local icons get new URLs automatically.
+- **Stay lightweight.** Responsive layout with an easy-to-tap mobile menu; fonts, CSS, JavaScript and icons are served from your site. Optional site-owned fonts can pair separate H1 and quotation families with the body face and configure the weights used by text and components. Updated local icons get new URLs automatically.
 - **Publish out of the box.** Light and dark modes, smooth menu highlighting and subtle project/archive link arrows, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
 

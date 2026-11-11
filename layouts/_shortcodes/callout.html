@@ -1,3 +1,9 @@
+{{- if eq (.Get "style") "editorial" -}}
+<figure class="beauty-quotation quotation-reading quotation-callout beauty-quotation-rule">
+  <blockquote>{{ .Page.RenderString (dict "display" "block") .Inner }}</blockquote>
+</figure>
+{{- else -}}
 <blockquote class="beauty-callout">
   {{ .Page.RenderString (dict "display" "block") .Inner }}
 </blockquote>
+{{- end -}}

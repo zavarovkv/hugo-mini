@@ -31,9 +31,20 @@
   {{- with $config.title -}}
     {{- $faces = $faces | append (partial "font-face.html" (dict "family" $titleFamily "source" .source "weight" $weights.title "preload" (.preload | default false))) -}}
   {{- end -}}
+  {{- $quoteFamily := $config.family -}}
+  {{- $quoteWeight := $weights.regular -}}
+  {{- with $config.quote -}}
+    {{- if not (and .family (findRE `^[\pL\pN _-]+$` .family)) -}}
+      {{- errorf "fonts.quote.family must be a plain font family name" -}}
+    {{- end -}}
+    {{- if or (eq .family $config.family) (eq .family $titleFamily) -}}{{ errorf "fonts.quote.family must differ from the body and title families" }}{{- end -}}
+    {{- $quoteFamily = .family -}}
+    {{- $quoteWeight = int (.weight | default 400) -}}
+    {{- $faces = $faces | append (partial "font-face.html" (dict "family" $quoteFamily "source" .source "weight" $quoteWeight "preload" (.preload | default false))) -}}
+  {{- end -}}
   {{- range $role, $weight := $weights -}}
     {{- if and (not (and (eq $role "title") $config.title)) (not (in $normalWeights $weight)) -}}{{ errorf "fonts: %s weight %d has no normal face" $role $weight }}{{- end -}}
   {{- end -}}
-  {{- $profile = merge $weights (dict "custom" true "family" $config.family "titleFamily" $titleFamily "faces" $faces "boldItalic" $boldItalic) -}}
+  {{- $profile = merge $weights (dict "custom" true "family" $config.family "titleFamily" $titleFamily "quoteFamily" $quoteFamily "quoteWeight" $quoteWeight "faces" $faces "boldItalic" $boldItalic) -}}
 {{- end -}}
 {{- return $profile -}}

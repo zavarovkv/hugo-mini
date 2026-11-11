@@ -93,7 +93,7 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | --- | --- |
 | `caption` | Upright, start-aligned image description; `kind="credit"` selects an italic, end-aligned author/source credit |
 | `image` | Semantic figure with intrinsic dimensions, an optional caption and opt-in wide layout |
-| `callout` | Block quotation with Markdown content and the shared Beauty.css treatment |
+| `callout` | Markdown highlight; default framed style or `style="editorial"` sharing quotation typography without added quotation marks |
 | `mermaid` | Diagram source rendered by Mermaid; optional `wide=true` and `caption` |
 | `plug` | Centered three-asterisk divider |
 | `latest-posts` | Newest visible posts in the current language; `count="3"` by default |
@@ -314,3 +314,19 @@ Beauty composes a smaller, raised numerator and a smaller denominator from the s
 font, without requiring fraction glyphs or changing the copied numerator/slash/denominator text. Scores, dates, URLs and formulas
 are not auto-detected. See [typography](typography.md#opening-quotes-numerals-and-fractions)
 for hanging quotes and optional prose figures.
+
+### Editorial callouts
+
+Use `{{< callout style="editorial" >}}` for an author's own thesis that should share
+article quotation typography without quotation marks or a background, with a thin muted line in the gutter:
+
+```text
+{{< callout style="editorial" >}}
+A concise conclusion worth highlighting.
+{{< /callout >}}
+```
+
+It uses the same Beauty figure rules as quotations: 640 px measure, 24/32 px outer
+spacing, 18/28 px desktop and 19/29 px mobile. It adds no punctuation or attribution.
+A 1 px muted line sits 1rem outside the text edge (0.75rem at screen widths up to 768 px) (`beauty-quotation-rule`);
+its border and offset are configured by Beauty tokens. The default `{{< callout >}}` remains framed. See [quotation typography](typography.md#quotations-and-attributions).
