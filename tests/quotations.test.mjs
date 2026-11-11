@@ -59,7 +59,8 @@ contentDir="content/ru"
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source',root,'--panicOnWarning'], {stdio:'pipe'});
   for (const lang of ['ru','en']) {
     const read = async name => {
-      const html = await readFile(join(root, `public/${lang === 'en' ? '' : 'ru/'}blog/${name}/index.html`),'utf8');
+      // Hugo lowercases generated URLs; Linux paths are case-sensitive.
+      const html = await readFile(join(root, `public/${lang === 'en' ? '' : 'ru/'}blog/${name.toLowerCase()}/index.html`),'utf8');
       return html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/)[1].replaceAll('&raquo;', '»').replaceAll('&ldquo;', '“').replaceAll('&rdquo;', '”');
     };
     const plain = await read('plain');
