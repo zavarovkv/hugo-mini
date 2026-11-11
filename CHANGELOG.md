@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Preserve existing quotation marks inside inline formatting and links, including nested wrappers and authored hanging spans.
+- Keep the heading focus outline for Tab navigation while suppressing it for Option/Alt + Up/Down jumps.
+
+- Use a thin, elongated upward arrow for the back-to-top control.
+
+- Add opt-in H1/H2 text anchors without icons, Option/Alt + Up/Down navigation, shareable URL fragments, stable section IDs and reduced-motion handling.
+
 - Give enlarged `beauty-lead` statements shared screen spacing of 32 px before and 48 px after, preserving print paragraph spacing.
 
 

@@ -29,7 +29,7 @@
     {{- $groups = $groups | append "_untagged" -}}
   {{- end -}}
 
-  <h1>{{ if .Title }}{{ partial "typography/title.html" . }}{{ else }}{{ i18n "articles" }}{{ end }}</h1>
+  <h1{{ if .Param "headingScroll" }} id="page-title"{{ end }}>{{ if .Title }}{{ partial "typography/title.html" . }}{{ else }}{{ i18n "articles" }}{{ end }}</h1>
 
   {{- $half := math.Ceil (div (len $groups) 2.0) -}}
   <div class="posts-columns">

@@ -15,7 +15,7 @@ export function articleLinkContracts({test, expect}) {
     }
     await expect(article.locator('.footnote-ref')).not.toHaveAttribute('target','_blank');
     await expect(article.locator('.footnote-backref')).not.toHaveAttribute('target','_blank');
-    await expect(article.locator('.heading-anchor')).not.toHaveAttribute('target','_blank');
+    await expect(article.locator('.heading-anchor, .heading-scroll')).not.toHaveAttribute('target','_blank');
     for (const link of await page.locator('header a[href="/blog/"]').all()) {
       await expect(link).not.toHaveAttribute('target','_blank');
     }

@@ -30,6 +30,14 @@ contentDir="content/ru"
     plain: '> First sentence.\n>\n> Second sentence.',
     marked: '> «Готовая цитата».',
     english: '> “Already quoted.”',
+    boldMarked: '> **«Цитата».**',
+    italicMarked: '> *“Already quoted.”*',
+    nestedMarked: '> ***«Цитата».***',
+    linkMarked: '> [«Цитата».](https://other.example/?a=1&b=2)',
+    inlineMarked: '> <span title="a > b"><em>«Цитата».</em></span>',
+    hangingMarked: '> <span class="beauty-hanging-open">«</span>Цитата».',
+    formattedParagraphs: '> **«First paragraph.**\n>\n> *Second paragraph».*',
+    inlineCode: '> `«Code»` is unchanged.',
     question: '> Question?',
     ellipsis: '> Wait...',
     emphasis: '> A **strong ending.**',
@@ -60,6 +68,20 @@ contentDir="content/ru"
     assert.match(plain, lang === 'ru' ? /Second sentence»\.<\/p>/ : /Second sentence.”<\/p>/);
     assert.equal(((await read('marked')).match(/beauty-hanging-open/g)||[]).length,1);
     assert.equal(((await read('english')).match(/beauty-hanging-open/g)||[]).length,1);
+    for (const name of ['boldMarked', 'italicMarked', 'nestedMarked', 'linkMarked', 'inlineMarked', 'hangingMarked', 'formattedParagraphs']) {
+      const html = await read(name);
+      const text = html.replace(/<[^>]*>/g, '').replaceAll('&laquo;', '«');
+      assert.equal((html.match(/beauty-hanging-open/g)||[]).length, 1, name);
+      assert.equal((text.match(/[«“]/g)||[]).length, 1, `${name}: preserve one opening mark`);
+      assert.equal((text.match(/[»”]/g)||[]).length, 1, `${name}: preserve one closing mark`);
+      assert.doesNotMatch(html, /&bdquo;|„/, `${name}: do not invent a nested quotation`);
+    }
+    assert.match(await read('boldMarked'), /<strong><span class="beauty-hanging-open">/);
+    assert.match(await read('italicMarked'), /<em><span class="beauty-hanging-open">/);
+    assert.match(await read('nestedMarked'), /<em><strong><span class="beauty-hanging-open">/);
+    assert.match(await read('linkMarked'), /href="https:\/\/other.example\/\?a=1&amp;b=2"/);
+    assert.match(await read('inlineMarked'), /<span title="a > b"><em><span class="beauty-hanging-open">/);
+    assert.match(await read('inlineCode'), /<code>«Code»<\/code>/);
     assert.match(await read('question'), lang === 'ru' ? /Question\?»/ : /Question\?”/);
     assert.doesNotMatch(await read('ellipsis'), /\.\.»\./);
     assert.match(await read('emphasis'), /<strong>strong ending/);

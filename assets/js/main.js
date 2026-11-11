@@ -444,6 +444,117 @@
     });
   })();
 
+  // ── Optional heading alignment: native text links and section shortcuts ──
+  ready(function initHeadingScroll() {
+    if (document.body.getAttribute('data-heading-scroll') !== 'true') return;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var headings = [];
+    var destination = null;
+    var interactive = 'a, button, input, select, textarea, summary, [contenteditable]';
+
+    function offset(heading) {
+      return parseFloat(getComputedStyle(heading).getPropertyValue('--heading-scroll-offset')) || 24;
+    }
+    function align(heading) {
+      var target = new URL(window.location.href);
+      target.hash = encodeURIComponent(heading.id);
+      if (window.location.hash !== target.hash) window.history.pushState(null, '', target.href);
+      destination = heading;
+      var limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      var top = Math.max(0, Math.min(window.scrollY + heading.getBoundingClientRect().top - offset(heading), limit));
+      window.scrollTo({top: top, behavior: reducedMotion.matches ? 'instant' : 'smooth'});
+      if (Math.abs(window.scrollY - top) <= 2) destination = null;
+    }
+
+    document.querySelectorAll('main h1, main h2').forEach(function (heading, index) {
+      if (heading.closest('.footnotes, .not-beauty') || heading.classList.contains('no-anchor')) return;
+      var anchor = heading.querySelector(':scope > .heading-anchor');
+      if (anchor) anchor.remove();
+      if (!heading.id) {
+        var base = heading.tagName === 'H1' ? 'page-title' : 'section-' + (index + 1);
+        var id = base;
+        var suffix = 2;
+        while (document.getElementById(id)) id = base + '-' + suffix++;
+        heading.id = id;
+      }
+      // Keep authored links and controls intact; never nest anchors.
+      var link = null;
+      var links = [];
+      Array.from(heading.childNodes).forEach(function (node) {
+        if (node.nodeType === 1 && (node.matches(interactive) || node.querySelector(interactive))) { link = null; return; }
+        if (!link && node.nodeType === 3 && !node.textContent.trim()) return;
+        if (!link) {
+          link = document.createElement('a');
+          link.href = '#' + encodeURIComponent(heading.id);
+          link.className = 'heading-scroll';
+          link.title = t('scrollHeading', 'Scroll heading to top');
+          heading.insertBefore(link, node);
+          links.push(link);
+          link.addEventListener('blur', function () { this.classList.remove('heading-shortcut-focus'); });
+        }
+        link.appendChild(node);
+      });
+      if (!links.length) return;
+      heading.classList.add('heading-scrollable');
+      headings.push(heading);
+      heading.addEventListener('keydown', function (event) {
+        if (event.key === ' ' && links.indexOf(event.target) !== -1 && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+          event.preventDefault();
+          event.target.click();
+        }
+      });
+      heading.addEventListener('click', function (event) {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        var control = event.target.closest(interactive);
+        if (control && links.indexOf(control) === -1) return;
+        var selection = window.getSelection();
+        if (selection && !selection.isCollapsed) { event.preventDefault(); return; }
+        event.preventDefault();
+        align(heading);
+      });
+    });
+
+    function cancelDestination() { destination = null; }
+    ['wheel', 'touchstart', 'pointerdown'].forEach(function (type) {
+      window.addEventListener(type, cancelDestination, {passive: true});
+    });
+    window.addEventListener('scroll', function () {
+      if (!destination) return;
+      var top = window.scrollY + destination.getBoundingClientRect().top - offset(destination);
+      var limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      if (Math.abs(window.scrollY - Math.max(0, Math.min(top, limit))) <= 2) destination = null;
+    }, {passive: true});
+    window.addEventListener('popstate', cancelDestination);
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Tab') {
+        document.querySelectorAll('.heading-shortcut-focus').forEach(function (link) { link.classList.remove('heading-shortcut-focus'); });
+      }
+      if (event.defaultPrevented || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing) return;
+      var direction = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
+      if (!direction) return;
+      var target = event.target;
+      if (target && (target.isContentEditable || (target.closest && target.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="slider"], [role="spinbutton"]')))) return;
+      if (document.body.classList.contains('menu-open') || document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]:not([hidden])')) return;
+      event.preventDefault();
+      if (event.repeat) return;
+      var visible = headings.filter(function (heading) { return heading.getClientRects().length > 0; });
+      var next;
+      if (destination && visible.indexOf(destination) !== -1) {
+        next = visible[visible.indexOf(destination) + direction];
+      } else {
+        if (direction < 0) visible.reverse();
+        next = visible.find(function (heading) {
+          return direction * (heading.getBoundingClientRect().top - offset(heading)) > 2;
+        });
+      }
+      if (!next) return;
+      var link = next.querySelector('.heading-scroll');
+      link.classList.add('heading-shortcut-focus');
+      link.focus({preventScroll: true});
+      align(next);
+    });
+  });
+
   // ── Heading anchors: click copies the section URL ───────────────────────
   (function () {
     var FEEDBACK_MS = 1200;
@@ -856,7 +967,7 @@
     var inner = document.createElement('div');
     inner.className = 'back-to-top';
     inner.innerHTML =
-      '<svg class="back-to-top-icon" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5l4-4 4 4"/></svg>';
+      '<svg class="back-to-top-icon" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22V2M3 7l5-5 5 5"/></svg>';
     inner.appendChild(document.createTextNode(label));
 
     wrap.appendChild(inner);

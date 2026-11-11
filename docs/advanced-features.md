@@ -13,7 +13,7 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 | Mobile menu | Overlay, Escape and focus handling; ordinary links without JavaScript. Shared [header and footer components](customization.md#templates) |
 | Menu selection | Stable label widths and a 300 ms desktop opacity blend between normal/bold states, without moving the menu; native links, reduced-motion and browser fallbacks. [Menu transitions](customization.md#menu-transitions) |
 | Article navigation | Option/Alt + Left/Right selects older/newer public posts in the current language, stops at boundaries and respects editing controls. [Contract](content.md#article-keyboard-navigation) |
-| Heading links | Copyable H2/H3 anchors; mobile tap-to-reveal; `.no-anchor` opt-out. [Content](content.md) |
+| Heading links | Copyable H2/H3 anchors; optional `headingScroll` uses H1/H2 text anchors without icons, click-to-align and Option/Alt + Up/Down with URL fragments; default mobile tap-to-reveal; `.no-anchor` opt-out. [Content](content.md) |
 | Back to top | Optional left-gutter control on wide screens; page/site opt-out. [Parameters](configuration.md#parameters) |
 | Languages | English/Russian UI, configurable languages and localized menus; translation links fall back to that language's home; optional remembered choice and AI label. [Languages](configuration.md#multilingual-sites) |
 | Search control | Optional magnifier currently links to the homepage; no full-text search implementation. [Parameters](configuration.md#parameters) |

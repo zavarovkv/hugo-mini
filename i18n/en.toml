@@ -143,6 +143,9 @@ other = "coming soon"
 [copy_section_link]
 other = "Copy link to this section"
 
+[scroll_heading]
+other = "Scroll heading to top"
+
 [table_scroll_label]
 other = "Table; scroll horizontally if needed"
 

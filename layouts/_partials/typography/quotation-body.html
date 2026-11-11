@@ -2,9 +2,21 @@
      only to prose quotations which do not already carry one. Lists can be the
      last block; code, tables and nested quotations retain their own contents. */ -}}
 {{- $html := strings.TrimSpace (string .html) -}}
-{{- $opening := `^(<p>\s*)(«|“|&laquo;|&ldquo;|&#171;|&#8220;)` -}}
+{{- /* Inline wrappers may precede the first visible mark. Treat quoted attribute
+     values atomically, and never look inside code or other protected elements. */ -}}
+{{- $inline := `<(?:em|strong|a|span|b|i|s|del|mark|small|cite|abbr)(?:\s+(?:"[^"]*"|'[^']*'|[^'"<>])*)?>` -}}
+{{- $opening := printf `^(<p>\s*(?:%s\s*)*)(«|“|&laquo;|&ldquo;|&#171;|&#8220;)` $inline -}}
 {{- if findRE $opening $html -}}
-  {{- $html = replaceRE $opening `$1<span class="beauty-hanging-open">$2</span>` $html -}}
+  {{- $prefix := index (index (findRESubmatch $opening $html 1) 0) 1 -}}
+  {{- $alreadyHanging := false -}}
+  {{- range findRESubmatch `([A-Za-z_:][A-Za-z0-9_.:-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?` $prefix -}}
+    {{- if and (eq (lower (index . 1)) "class") (findRE `(?:^|\s)beauty-hanging-open(?:\s|$)` (or (index . 2) (index . 3) (index . 4))) -}}
+      {{- $alreadyHanging = true -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not $alreadyHanging -}}
+    {{- $html = replaceRE $opening `$1<span class="beauty-hanging-open">$2</span>` $html -}}
+  {{- end -}}
 {{- else if and (hasPrefix $html "<p>") (not (findRE `<(?:pre|table|blockquote|figure)\b` $html)) -}}
   {{- $ru := hasPrefix .lang "ru" -}}
   {{- $open := cond $ru "«" "“" -}}

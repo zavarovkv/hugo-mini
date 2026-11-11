@@ -12,6 +12,10 @@ and emphasis remain semantic HTML; code, tables and nested quotations do not rec
 invented marks. Source Markdown and translation hashes are unchanged. Explicit HTML
 figures retain their authored markup.
 
+Opening marks inside emphasis, strong text, links and nested inline wrappers are
+recognized without adding another quote pair. Authored hanging-mark spans are
+preserved; attributes and inline code are not rewritten.
+
 For a short author definition or thesis in the body face, use `<p class="beauty-lead">…</p>` instead. It increases the text size without a rule or quotation marks. Shared screen spacing is 32 px before and 48 px after via `--beauty-lead-margin-block`; print retains ordinary paragraph spacing.
 
 Use `<figure class="beauty-quotation">` with a `blockquote` and an optional
@@ -333,3 +337,30 @@ Printing uses 11 pt article text, 22 pt page titles and 16 pt section headings a
 Markdown tables retain native table markup inside a labeled, focusable `beauty-scroll` region. Overflow stays local to the table. The theme's print layout uses fixed columns and allows long cell contents to wrap; it does not shrink the article's type. Author-supplied table IDs, classes, alignment and semantic dates remain on the table and cells.
 
 Mermaid prioritizes nearby diagrams and prepares the remaining diagrams after load during idle time. Rendering is serialized and committed atomically; a neutral SVG copy is cached in memory for print. `beforeprint` switches copies synchronously, and `afterprint` restores the active screen theme. If printing starts before preparation finishes, or a module fails to load, the original diagram source remains readable. Native print dialogs cannot await asynchronous downloads. No print button or global `window.print` override is introduced.
+
+## Heading scroll controls
+
+Enable `headingScroll = true` in site or page parameters to make H1 and H2 align
+24 px below the viewport top when clicked. The heading text is a native anchor;
+its typography and color stay unchanged, with no additional icon. Tab navigation
+has a visible focus outline; Option/Alt + Up/Down moves focus without an outline.
+Returning to Tab restores the focus indicator. H2 copy icons are replaced; H3
+retains copy-link behavior.
+
+Clicking the heading updates the URL fragment without interrupting smooth scrolling.
+The page title uses `#page-title`; existing section IDs remain stable. Repeated clicks
+on the same target do not add history entries. Copying a link, opening it in another
+tab, reload and back/forward navigation retain native anchor behavior. Tab focuses
+the link; Enter/Space activates it. Authored links and controls are not nested or replaced.
+
+Option/Alt + Down selects the next H1/H2; Up selects the previous heading relative
+to the 24 px reading position. Between sections, Up returns to the current section's
+heading. Navigation stops at both ends, updates the fragment and moves keyboard focus.
+Distinct presses advance even while scrolling is in progress; held-key repeats are
+ignored. Inputs, editable content, modified combinations and open menus/dialogs are
+excluded. Option/Alt + Left/Right continues to navigate between articles.
+
+Selections and modified clicks retain native behavior. Reduced motion disables
+smooth scrolling. Without JavaScript the original headings and H2/H3 links remain.
+Print keeps all heading text. The document end limits alignment near the footer;
+`.no-anchor` headings are not enhanced. There are no new visible shortcut hints.

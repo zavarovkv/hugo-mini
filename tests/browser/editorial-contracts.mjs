@@ -135,8 +135,9 @@ test('heading anchors clear hanging quotes on hover, focus and mobile tap', asyn
     await page.goto('/editorial-checks/');
     await page.evaluate(() => document.fonts.ready);
     const heading = page.locator('h2').first();
-    const anchor = heading.locator('.heading-anchor');
-    if (width <= 768) {
+    const scrollControl = await heading.locator('.heading-scroll').count() > 0;
+    const anchor = heading.locator(scrollControl ? '.heading-scroll' : '.heading-anchor');
+    if (width <= 768 && !scrollControl) {
       await expect(anchor).toBeHidden();
       await heading.click();
       await expect(anchor).toBeVisible();
@@ -148,10 +149,11 @@ test('heading anchors clear hanging quotes on hover, focus and mobile tap', asyn
       const range = document.createRange();
       range.selectNodeContents(h.querySelector('.beauty-hanging-open'));
       const quote = range.getBoundingClientRect();
-      const icon = h.querySelector('.heading-anchor svg').getBoundingClientRect();
-      const link = h.querySelector('.heading-anchor').getBoundingClientRect();
+      const svg = h.querySelector('.heading-anchor svg');
+      const icon = svg ? svg.getBoundingClientRect() : null;
+      const link = h.querySelector('.heading-scroll, .heading-anchor').getBoundingClientRect();
       return {
-        clear: icon.right <= quote.left || icon.left >= quote.right,
+        clear: !icon || icon.right <= quote.left || icon.left >= quote.right,
         withinViewport: link.left >= 0 && link.right <= innerWidth,
         overflow: document.documentElement.scrollWidth > innerWidth,
       };

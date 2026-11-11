@@ -157,6 +157,13 @@ Mini; native code typography remains in Beauty.css.
 
 ### Captions and heading links
 
+With `headingScroll = true`, H1/H2 text becomes the anchor, without an extra icon. Clicking
+the heading aligns it to the viewport top and updates the URL fragment. The page
+title uses `#page-title`; section IDs remain stable and H3 keeps copy links.
+Option/Alt + Up/Down moves between H1/H2, without wrapping or intercepting editing
+controls and open menus/dialogs. Tab focuses a text anchor; Enter/Space activates it.
+See [typography](typography.md#heading-scroll-controls).
+
 Use `{{< caption >}}What the image shows{{< /caption >}}` for an explanation, or
 `{{< caption kind="credit" >}}Photo: the author{{< /caption >}}` for a short attribution.
 The optional `kind` accepts `description` (default) or `credit`; unknown values fail the

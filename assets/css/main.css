@@ -290,6 +290,31 @@
     }
   }
 
+  /* Heading text is the anchor; its typography remains that of the heading. */
+  .heading-scrollable {
+    --heading-scroll-offset: 24px;
+    cursor: pointer;
+    scroll-margin-block-start: var(--heading-scroll-offset);
+  }
+
+  .heading-scrollable > .heading-scroll,
+  .heading-scrollable > .heading-scroll:is(:link, :visited, :hover, :active) {
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-decoration: none;
+    border: 0;
+    background: none;
+    padding: 0;
+  }
+
+  .heading-scroll:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+  }
+
+  .heading-scroll.heading-shortcut-focus:focus-visible { outline: none; }
+
   /* Anchor link next to h2/h3 — click to copy section URL.
      SVG link icon in left margin on desktop, hidden on mobile. */
   h2, h3 {
@@ -1853,8 +1878,9 @@
   }
 
   .back-to-top-icon {
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 24px;
+    vertical-align: middle;
     margin-right: 6px;
     flex-shrink: 0;
   }
