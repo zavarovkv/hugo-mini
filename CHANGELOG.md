@@ -6,9 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
-- Reduce the editorial callout gutter-rule offset to 12 px on mobile; retain 16 px on desktop.
+- Give enlarged `beauty-lead` statements shared screen spacing of 32 px before and 48 px after, preserving print paragraph spacing.
 
-- Add `callout style="editorial"` for reusable author theses sharing article quotation typography without added quotation marks or a background, with a thin muted gutter rule from Beauty.
+
 
 - Add opt-in `editorialQuotes` for native Markdown quotations in every language, preserving semantic paragraphs/lists and existing punctuation; share the article quotation style without rewriting content.
 

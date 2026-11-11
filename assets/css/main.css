@@ -1448,6 +1448,10 @@
 
   /* Long quotations follow the surrounding article's reading scale. */
   @media screen {
+    .beauty-lead {
+      --beauty-lead-margin-block: 2rem 3rem;
+    }
+
     .beauty-quotation {
       --beauty-hanging-scale: 1.4;
       --beauty-hanging-gap: 0.08em;
@@ -1457,12 +1461,6 @@
       --beauty-quotation-size: 1em;
       --beauty-quotation-size-small: 1em;
       --beauty-quotation-font: var(--font-weight-quote) var(--beauty-quotation-size)/var(--beauty-reading-line-height) var(--font-quote);
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    .beauty-quotation-rule {
-      --beauty-quotation-rule-offset: 0.75rem;
     }
   }
 

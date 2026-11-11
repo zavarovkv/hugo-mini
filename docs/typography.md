@@ -12,13 +12,7 @@ and emphasis remain semantic HTML; code, tables and nested quotations do not rec
 invented marks. Source Markdown and translation hashes are unchanged. Explicit HTML
 figures retain their authored markup.
 
-For a short author definition or thesis in the body face, use `<p class="beauty-lead">…</p>` instead. It increases the text size without a rule or quotation marks.
-
-For an author's own thesis, use `{{< callout style="editorial" >}}…{{< /callout >}}`.
-It shares the article quotation typography, measure and spacing without adding
-quotation marks or a background. A 1 px muted rule sits 1rem outside the text edge (0.75rem at screen widths up to 768 px)
-through Beauty’s `beauty-quotation-rule` modifier; the reading measure stays unchanged. Plain `callout` retains its framed style.
-
+For a short author definition or thesis in the body face, use `<p class="beauty-lead">…</p>` instead. It increases the text size without a rule or quotation marks. Shared screen spacing is 32 px before and 48 px after via `--beauty-lead-margin-block`; print retains ordinary paragraph spacing.
 
 Use `<figure class="beauty-quotation">` with a `blockquote` and an optional
 `figcaption`. All such quotations share the configured quote face, a 640 px

@@ -37,7 +37,7 @@ contentDir="content/ru"
     list: '> Steps:\n>\n> 1. First\n> 2. Last',
     code: '> ```js\n> const x = "quoted";\n> ```',
     nested: '> Outer\n>\n> > Inner.',
-    callout: '{{< callout style="editorial" >}}\n**A thesis.**\n{{< /callout >}}',
+    lead: '<p class="beauty-lead">A thesis.</p>',
     framed: '{{< callout >}}\nA framed thesis.\n{{< /callout >}}',
     off: '> Unchanged.',
   };
@@ -71,10 +71,7 @@ contentDir="content/ru"
     assert.equal((list.match(/beauty-hanging-open/g)||[]).length,1);
     assert.doesNotMatch(await read('code'), /beauty-hanging-open/);
     assert.equal(((await read('nested')).match(/beauty-hanging-open/g)||[]).length,1);
-    const callout = await read('callout');
-    assert.match(callout, /quotation-callout/);
-    assert.match(callout, /<strong>A thesis\.<\/strong>/);
-    assert.doesNotMatch(callout, /beauty-hanging-open|beauty-callout/);
+    assert.match(await read('lead'), /<p class="beauty-lead">A thesis\.<\/p>/);
     assert.match(await read('framed'), /class="beauty-callout"/);
     assert.doesNotMatch(await read('off'), /beauty-quotation|beauty-hanging-open/);
   }
