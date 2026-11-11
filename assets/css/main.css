@@ -1285,7 +1285,7 @@
   }
   /* Emphasize only project names; keep the adjacent SVG arrow unchanged. */
   .project-title .project-name {
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
   }
   @media (prefers-reduced-motion: no-preference) {
     .latest-posts .archive-arrow,

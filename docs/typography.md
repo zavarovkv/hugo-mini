@@ -81,6 +81,9 @@ Lead paragraphs inherit the body font weight; table headers use the configured
 heading weight. For interviews, use Markdown section headings for questions and a semantic
 `<p class="beauty-lead">` for a larger paragraph. Native block spacing replaces empty `<br>` elements.
 
+Project names use the configured bold weight (600 for Inter), so custom families select
+their actual bold face. Their SVG arrows retain an independent stroke and animation.
+
 Wavy emphasis uses `--beauty-emphasis-offset: 0.2em` to keep the decoration close to
 the text; Beauty.css owns the underline rendering.
 

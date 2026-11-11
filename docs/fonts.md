@@ -37,6 +37,11 @@ integers from 1 to 1000; styles are `normal` or `italic`. Every configured role 
 an exact normal face. With custom fonts, role defaults are 400/400/700/700; without this
 configuration the existing Inter 300/500/600/500 roles remain unchanged.
 
+Match each face's declared weight and style to its font metadata, not its filename or
+translated marketing label. The loader validates configured roles, not the font's internal
+OpenType tables; declaring a static Bold file as 600 does not create a lighter Semibold.
+Project names use the configured bold role, while their SVG arrows keep their own stroke.
+
 ## A separate H1 family
 
 An existing custom-font profile can use a second, upright face for H1 only:
