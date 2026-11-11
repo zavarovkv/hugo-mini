@@ -6,7 +6,7 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 
 | Feature | Behavior and reference |
 | --- | --- |
-| Reading layout | 720 px column, 18/28 px desktop and 19/29 px mobile text; responsive headings, links and editorial helpers. [Typography](typography.md) ([Russian](typography.ru.md)) |
+| Reading layout | 720 px column, 18/28 px desktop and 19/29 px mobile text; responsive headings, links and editorial helpers, including per-article drop caps. [Typography](typography.md) ([Russian](typography.ru.md)) |
 | Fonts | Self-hosted Inter by default; site-owned font families and role weights through an optional [font profile](fonts.md) |
 | Text processing | Build-time quotes, dashes and spacing; page/fragment opt-out; code, URLs, math and source files stay intact. [Rules](typography.md) |
 | Color schemes | System colors without JavaScript; before-paint preference resolution and explicit theme choice; optional cross-subdomain preferences. [Configuration](configuration.md#shared-theme-and-language-preferences) |

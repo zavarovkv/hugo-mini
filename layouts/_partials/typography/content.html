@@ -5,5 +5,10 @@
   {{- $math := .Params.math | default false -}}
   {{- $hang := .Param "hangingQuotes" | default false -}}
   {{- $html = partialCached "typography/html.html" (dict "html" $html "lang" .Language.Lang "math" $math "hang" $hang) .Language.Lang $math $hang (crypto.SHA256 $html) -}}
+  {{- if .Params.dropCap -}}
+    {{- /* Chromium drops a collapsible space after a single-letter initial
+         when copying. Bind that opening word without changing source prose. */ -}}
+    {{- $html = replaceRE `^(\s*<p>\p{L})[ \t\r\n]+` "${1}&#160;" $html | safeHTML -}}
+  {{- end -}}
 {{- end -}}
 {{- return $html -}}

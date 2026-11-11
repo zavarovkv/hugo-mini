@@ -225,7 +225,7 @@ test('muted text has readable contrast in both palettes', async () => {
 test('recent-posts sidebar remains visible until JavaScript places it in the rail', async () => {
   const css = await readFile(join(theme, 'assets/css/main.css'), 'utf8');
   assert.match(css, /\.recent-sidebar\s*\{\s*display:\s*block;/);
-  assert.match(css, /\.recent-sidebar\.is-sidebar\s*\{\s*margin-top:\s*0;/);
+  assert.match(css, /\.recent-sidebar\.is-sidebar\s*\{[^}]*margin-block-start:\s*0\.25rem;/);
 });
 
 test('printing keeps article content and date while removing interface chrome', async (t) => {

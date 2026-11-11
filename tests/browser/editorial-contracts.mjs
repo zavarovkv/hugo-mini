@@ -1,4 +1,79 @@
 export function editorialContracts({test, expect}) {
+test('opt-in drop caps use the title face without changing copy, adjacent prose or print', async ({page}) => {
+  for (const colorScheme of ['light', 'dark']) {
+    await page.emulateMedia({colorScheme});
+    for (const width of [320, 390, 1440]) {
+      await page.setViewportSize({width, height:900});
+      await page.goto('/dropcap-checks/');
+      await page.evaluate(() => document.fonts.ready);
+      const article = page.locator('article.beauty-dropcap');
+      await expect(article).toHaveCount(1);
+      const first = article.locator(':scope > p').first();
+      const original = await first.textContent();
+      const result = await first.evaluate(p => {
+        const cap = getComputedStyle(p, '::first-letter');
+        const body = getComputedStyle(p);
+        const title = getComputedStyle(document.querySelector('h1'));
+        const range = document.createRange();
+        range.selectNodeContents(p);
+        getSelection().removeAllRanges(); getSelection().addRange(range);
+        return {
+          lines:cap.getPropertyValue('initial-letter') || cap.getPropertyValue('-webkit-initial-letter'),
+          titleFace:cap.fontFamily === title.fontFamily && cap.fontWeight === title.fontWeight,
+          bodyColor:cap.color === body.color,
+          copy:getSelection().toString(),
+          overflow:document.documentElement.scrollWidth > innerWidth,
+        };
+      });
+      expect(result).toEqual({lines:'2', titleFace:true, bodyColor:true, copy:original, overflow:false});
+      const wrapping = await first.evaluate(p => {
+        const text = p.firstChild;
+        const range = document.createRange();
+        const lines = [];
+        // Skip the initial itself; inspect actual text positions, not CSS values.
+        for (let i = 1; i < text.length; i++) {
+          if (/\s/.test(text.textContent[i])) continue;
+          range.setStart(text, i); range.setEnd(text, i + 1);
+          const rect = range.getBoundingClientRect();
+          if (!lines.some(line => Math.abs(line.top - rect.top) < 1)) {
+            lines.push({left:rect.left, top:rect.top});
+          }
+          if (lines.length === 3) break;
+        }
+        return {left:p.getBoundingClientRect().left, lines};
+      });
+      expect(wrapping.lines).toHaveLength(3);
+      expect(wrapping.lines[0].left).toBeGreaterThan(wrapping.left + 10);
+      expect(wrapping.lines[1].left).toBeGreaterThan(wrapping.left + 10);
+      expect(wrapping.lines[2].left).toBeCloseTo(wrapping.left, 0);
+      const next = article.locator(':scope > p').nth(1);
+      const ordinaryWeight = await next.evaluate(p => getComputedStyle(p).fontWeight);
+      expect(await next.evaluate(p => getComputedStyle(p, '::first-letter').fontWeight)).toBe(ordinaryWeight);
+      const firstBox = await first.boundingBox();
+      const nextBox = await next.boundingBox();
+      expect(nextBox.y).toBeGreaterThanOrEqual(firstBox.y + firstBox.height);
+      await page.emulateMedia({media:'print'});
+      expect(await first.evaluate(p => {
+        const s = getComputedStyle(p, '::first-letter');
+        return s.getPropertyValue('initial-letter') || s.getPropertyValue('-webkit-initial-letter');
+      })).toBe('normal');
+      await page.emulateMedia({media:'screen'});
+    }
+  }
+  await page.goto('/editorial-checks/');
+  await expect(page.locator('article.beauty-dropcap')).toHaveCount(0);
+  await page.goto('/dropcap-word-checks/');
+  await page.evaluate(() => document.fonts.ready);
+  const opening = page.locator('article > p').first();
+  const text = await opening.textContent();
+  expect(text).toMatch(/^I\u00a0write/);
+  expect(await opening.evaluate(p => {
+    const range = document.createRange(); range.selectNodeContents(p);
+    getSelection().removeAllRanges(); getSelection().addRange(range);
+    return getSelection().toString();
+  })).toBe(text);
+});
+
 for (const colorScheme of ['light','dark']) test(`editorial helpers preserve copy, margins and number roles (${colorScheme})`, async ({page}) => {
   await page.emulateMedia({colorScheme});
   for (const width of [320,1440]) {

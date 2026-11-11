@@ -53,6 +53,15 @@ const body = [
   '<p id="after">16px &amp; 2 ГБ &lt; 10 %</p>',
 ].join("\n\n");
 
+const dropcapCases = [
+  {slug:"initial-i", options:"dropCap=true", body:"I read and write.\n\nI keep ordinary spacing here.", before:"<p>I read", after:"<p>I&#160;read"},
+  {slug:"initial-a", options:"dropCap=true", body:"A paragraph opens this article.", before:"<p>A paragraph", after:"<p>A&#160;paragraph"},
+  {slug:"initial-default", options:"", body:"I read and write.", before:"<p>I read"},
+  {slug:"initial-disabled", options:"dropCap=true\ntypography=false", body:"I read and write.", before:"<p>I read"},
+  {slug:"initial-heading", options:"dropCap=true", body:"## Introduction\n\nI read and write.", before:"<p>I read"},
+  {slug:"initial-protected", options:"dropCap=true", body:'<p data-typography="off">I read and write.</p>', before:'<p data-typography="off">I read'},
+];
+
 test("build-time typography respects language, protected content and explicit opt-outs", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "mini-typography-"));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -84,6 +93,9 @@ weight=3
     for (const [slug, option] of [["normal", ""], ["disabled", "typography=false"], ["enabled", "typography=true"]]) {
       await writeFile(join(root, `content/${lang}/blog/${slug}.md`), `+++\ntitle="Fixture"\nmath=true\n${option}\n+++\n${body}`);
     }
+    for (const fixture of dropcapCases) {
+      await writeFile(join(root, `content/${lang}/blog/${fixture.slug}.md`), `+++\ntitle="Initial"\n${fixture.options}\n+++\n${fixture.body}`);
+    }
   }
   const build = () => execFileSync(process.env.HUGO_BIN || "hugo", ["--source", root, "--panicOnWarning"], { stdio: "pipe" });
   const read = async (path) => (await readFile(join(root, "public", path), "utf8")).match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1];
@@ -91,6 +103,11 @@ weight=3
   build();
   for (const lang of ["en", "ru", "de"]) {
     const prefix = lang === "en" ? "" : `${lang}/`;
+    for (const fixture of dropcapCases) {
+      const html = await read(`${prefix}blog/${fixture.slug}/index.html`);
+      assert.ok(html.includes(lang !== "de" && fixture.after ? fixture.after : fixture.before), `${lang}: ${fixture.slug}`);
+      if (fixture.slug === "initial-i") assert.ok(html.includes("<p>I keep ordinary spacing here.</p>"), "only the opening word changes");
+    }
     const original = await read(`${prefix}blog/disabled/index.html`);
     assert.equal(paragraph(original, "numbers"), "1 000 000 ₽, 16px, 2 ГБ, 10 %, 2026, ISO 9001, B2B, 1 - 2.");
     for (const path of [`${prefix}index.html`, `${prefix}blog/normal/index.html`]) {
@@ -148,6 +165,7 @@ weight=3
   }
   await writeFile(configFile, config.replace("[params]", "[params]\ntypography=false"));
   build();
+  assert.ok((await read("blog/initial-i/index.html")).includes("<p>I read"), "site typography opt-out preserves the original separator");
   assert.equal(paragraph(await read("blog/normal/index.html"), "numbers"), "1 000 000 ₽, 16px, 2 ГБ, 10 %, 2026, ISO 9001, B2B, 1 - 2.");
   assert.equal(paragraph(await read("ru/blog/normal/index.html"), "compounds"), "из-за, из-под, Из-за, ИЗ-ПОД; переиз-за.", "site opt-out also disables the new Russian rules");
   assert.ok(paragraph(await read("ru/blog/enabled/index.html"), "compounds").includes("из\u2011за"), "page opt-in restores the new Russian rules");

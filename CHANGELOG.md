@@ -7,6 +7,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ## [Unreleased]
 
 ### Added
+- Add per-article `dropCap = true`: Beauty shapes a two-line initial in the configured title font; preserve text, print and unsupported-browser fallback. Bind single-letter opening words at build time to preserve their separator when copying in Chromium.
 - Support an optional site-owned H1 face through `params.fonts.title`, with normal desktop letter spacing and compact mobile tracking; preserve body fonts, heading sizes, private asset handling and default-font opt-outs.
 - Add opt-in hanging opening quotes and old-style proportional prose figures, plus an explicit `fraction` shortcode. Preserve source text, technical content, metadata and print margins through shared Beauty helpers; keep heading anchors clear of quotes and viewport edges.
 - Add opt-in `mermaid wide=true` figures with optional captions styled identically to image captions. Reuse the wide layout and rail constraints, preserving mobile, source fallback, theme changes and print.
@@ -28,6 +29,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Add a bilingual typography guide with rule examples, protected content and opt-outs.
 
 ### Changed
+- Tighten the initial's block-end exclusion area by 0.25em so a short descender does not indent a third line; retain glyph size, baseline and short-paragraph containment.
+- Offset the desktop recent-posts rail by 4 px for optical alignment with the page title; retain its mobile position and wide-content collision handling.
+- Separate the reading header, H1 and content with 48/32 px desktop gaps and 40/28 px mobile gaps; retain print spacing.
 - Use the configured bold role for project name labels (Inter 600 or the site's custom face), without altering their SVG arrow stroke or appearance.
 - Match project link arrows to the archive arrow's fine stroke and geometry, with a diagonal 300 ms hover/focus movement. Keep labels, logo buttons, touch input and reduced-motion behavior stable.
 - Refine the latest-posts archive arrow with a finer stroke and a 300 ms hover/focus movement, preserving link colors and layout; respect reduced motion and touch input.

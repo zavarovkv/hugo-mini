@@ -56,6 +56,15 @@ Raw HTML needs `markup.goldmark.renderer.unsafe = true`. These controls affect M
 
 ## Reading layout
 
+On screen, reading pages leave 48 px between the header and H1, then 32 px before
+the content. At 768 px and below these gaps are 40 px and 28 px. The spacing is
+shared across reading pages; short and multiline titles follow the same rhythm.
+Print keeps its separate margins.
+
+The desktop recent-posts rail starts 4 px below the H1 line box, aligning its
+small label with the visible title letters. The mobile block keeps its normal
+position after the article; wide content respects the rail's actual bounds.
+
 The 404 page uses this same text, title and header scale in every language; its optional ASCII illustration retains a separate monospace size.
 
 Blog pages use 18 px text with 28 px leading in a column up to 720 px wide; at 768 px and below, text is 19/29 px. Page titles are 44 px on desktop and 32 px on mobile. Navigation retains its compact scale. Beauty.css controls headings, line height and wrapping; tables and code scroll independently. See [customization](customization.md).
@@ -131,6 +140,50 @@ parameters; both are off by default.
 Prose figures use the chosen font's OpenType features, falling back to ordinary
 glyphs when unavailable. Fractions compose smaller digits from the same font without
 changing paragraph leading or copied text. Beauty owns CSS; the theme selects markup.
+
+## Article publication credits
+
+Put an existing publication credit after the article's conclusion, before any
+footnotes. Use `<p class="beauty-note">This article was published in
+<a href="https://example.org/article/">Publication name</a>.</p>`.
+Beauty supplies upright regular text at 0.875em in the secondary color; the
+publication name retains normal link styling. Avoid italic or bold wrappers and
+inline font rules. Keep the URL and placement synchronized across translations;
+say "first published" only when that chronology is known. Image credits have
+their own caption treatment described below.
+
+## Drop caps
+
+Set `dropCap = true` in an individual article's front matter to give its opening
+paragraph a drop cap. It is off by default and is not inherited from site params.
+The article must start with an ordinary paragraph: a heading, quotation, list or
+figure before it prevents the treatment. Notes, captions, fine print and paragraphs
+with `data-typography="off"` are excluded. Choose an opening with enough prose to
+wrap around the letter; preview each language separately.
+Opening quotation marks grow with the initial, and a decorated first word can carry
+its underline onto the enlarged letter; prefer plain type for those openings.
+For a one-letter opening word such as English “I” or “A”, the build uses a nonbreaking
+space so Chromium preserves the word separator when copying. Source text stays unchanged;
+`typography = false` disables this spacing adjustment.
+
+The initial uses the configured H1 family and its actual title weight, in the body
+text color. Beauty's `beauty-dropcap` helper handles native `::first-letter` shaping:
+two lines on both desktop and mobile. No letter is removed, duplicated or
+wrapped in a separate element; copied text and accessible reading order stay intact.
+Print and browsers without `initial-letter` support retain ordinary paragraph text.
+The WebKit-prefixed property supports Safari. No JavaScript or additional font is loaded.
+
+Beauty exposes `--beauty-dropcap-font`, `--beauty-dropcap-weight`,
+`--beauty-dropcap-lines`, `--beauty-dropcap-lines-small` and `--beauty-dropcap-gap`.
+The theme maps the font tokens to `--font-title` and `--font-weight-title` and
+sets the desktop line count to two; Beauty's small-screen default is already two.
+Shared geometry stays in Beauty. Keep any licensed font files in the consuming site.
+
+The theme sets `--beauty-dropcap-margin-block-end: -0.25em` to keep a short
+descender such as Cyrillic Ц from indenting a third line. This adjusts only the
+exclusion area, preserving the letter's size and alignment. Check descender
+clearance when changing fonts or leading; set the token to `0` if a font needs
+more space. Short paragraphs still reserve the initial's full two-line height.
 
 ## Footnotes
 
