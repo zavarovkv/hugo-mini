@@ -1,0 +1,25 @@
+{{ define "bodyClass" }}resume-layout{{ end }}
+{{ define "head" }}
+  {{- with resources.Get "css/resume.css" | resources.Minify | resources.Fingerprint "sha256" }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{- end }}
+{{ end }}
+{{ define "title" }}{{ .Title }}{{ with .Params.role }} — {{ . }}{{ end }}{{ end }}
+{{ define "header" }}<!-- Standalone resume: no site header. -->{{ end }}
+{{ define "main" }}
+  <article class="resume beauty-reading" lang="{{ .Language.Lang }}">
+    <header class="resume-header">
+      <div class="resume-identity">
+        <h1 data-heading-reset>{{ partial "typography/title.html" . }}</h1>
+        {{ with .Params.role }}<p class="resume-role">{{ . }}</p>{{ end }}
+      </div>
+      {{ with .Params.contacts }}
+      <ul class="resume-contacts" role="list">
+        {{ range . }}<li>{{ if .url }}<a href="{{ .url | safeURL }}">{{ .label }}</a>{{ else }}{{ .label }}{{ end }}</li>{{ end }}
+      </ul>
+      {{ end }}
+    </header>
+    {{ partial "typography/content.html" . }}
+  </article>
+{{ end }}
+{{ define "footer" }}<!-- Standalone resume: no site footer. -->{{ end }}

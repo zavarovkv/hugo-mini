@@ -1,0 +1,172 @@
+/* An independent CV uses Beauty's native text rules and the selected fonts.
+   Only its document shell, entry metadata and paper geometry live here. */
+body.resume-layout {
+  --resume-ink: #000;
+  --beauty-text: var(--resume-ink);
+  --beauty-heading: var(--resume-ink);
+  --beauty-muted: var(--resume-ink);
+  --beauty-link: var(--resume-ink);
+  --beauty-hover: var(--resume-ink);
+  --beauty-link-decoration-color: currentColor;
+  --beauty-link-decoration-hover: currentColor;
+  --heading-color: var(--resume-ink);
+  --color-secondary: var(--resume-ink);
+  --beauty-reading-size: 1.125rem;
+  --beauty-reading-size-small: 1.125rem;
+  --beauty-reading-line-height: calc(28 / 18);
+  --beauty-space: 0.75em;
+  --beauty-list-gap: 0.4em;
+  --beauty-list-indent: min(1.5em, 8%);
+  --beauty-h1-size: 2.5rem;
+  --beauty-h1-size-small: 2rem;
+  --beauty-h1-margin: 0 0.25rem;
+  --beauty-h2-size: 1.5rem;
+  --beauty-h2-size-small: 1.375rem;
+  --beauty-h2-margin: 3rem 1.375rem;
+  --beauty-h3-margin: 0;
+  --resume-entry-gap: 2.25rem;
+  --resume-results-gap: 1.25em;
+  --resume-product-gap: 2em;
+  --resume-rule-color: var(--heading-color);
+  max-width: var(--beauty-reading-width);
+}
+.resume-layout > header { display: none; }
+.resume-layout > main { margin: 0; padding: 0; }
+.resume-layout > footer { display: none; }
+.resume > h2 { display: flex; align-items: center; gap: 1rem; }
+.resume-section-label { min-inline-size: 0; }
+.resume > h2 > .heading-scroll { min-inline-size: 0; }
+.resume > h2::after {
+  content: "";
+  flex: 1;
+  min-inline-size: 1.5rem;
+  border-block-end: 1px solid var(--resume-rule-color);
+}
+.resume-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem 2rem; margin-block-end: 2rem; }
+.resume-identity { min-inline-size: 0; max-inline-size: 100%; }
+.resume-role { margin: 0; font-size: 1.25em; font-weight: var(--font-weight-bold); }
+.resume-contacts {
+  --beauty-link-weight: var(--font-weight-body);
+  --beauty-link-decoration: none;
+  flex: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+  list-style: none;
+  font-size: 0.875em;
+  text-align: end;
+}
+.resume-contacts li { margin: 0; }
+.resume-entry { --beauty-list-gap: 0.75em; margin-block: 0 var(--resume-entry-gap); }
+.resume-entry-header,
+.resume-list > .resume-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) fit-content(45%);
+  align-items: first baseline;
+  gap: 0.125em 1.5rem;
+}
+.resume-entry-header { margin-block-end: 1em; }
+.resume-entry-heading { min-inline-size: 0; }
+.resume-period { grid-column: 2; grid-row: 1; margin: 0; font-size: 0.875em; text-align: end; }
+.resume-entry-role { grid-column: 1 / -1; grid-row: 2; margin: 0; font-weight: var(--font-weight-body); }
+.resume-meta { grid-column: 1 / -1; margin: 0; font-size: 0.875em; }
+.resume-entry > dl { display: flow-root; }
+.resume-entry > dl > dt { float: inline-start; clear: both; margin-inline-end: 0.35em; }
+.resume-entry > dl > dt::after { content: ":"; }
+.resume-entry > dl > dd { margin: 0 0 0.5em; }
+.resume-entry > dl > dd > p { margin: 0; }
+.resume-entry > dl > dd:last-child { margin-block-end: 0; }
+.resume-entry > p:has(+ ul) { margin-block: var(--resume-results-gap) 0.5em; }
+.resume-entry > ul + p { margin-block-start: var(--resume-product-gap); }
+.resume-entry > :last-child { margin-block-end: 0; }
+.resume-list { padding: 0; list-style: none; }
+.resume-list > .resume-list-item {
+  margin-block: 0 0.75em;
+}
+.resume-list > .resume-list-item:last-child { margin-block-end: 0; }
+.resume-list-label { min-inline-size: 0; margin: 0; }
+.resume-list-subtitle { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: calc(8em / 9); line-height: 1.5; }
+
+@media screen {
+  :root[data-theme="dark"] body.resume-layout { --resume-ink: #fff; }
+  .resume { padding-block-end: 4rem; }
+  .resume-identity {
+    --beauty-h1-margin: 0 0.375rem;
+  }
+  .resume-identity:dir(ltr) {
+    --beauty-h1-transform: translateX(-0.025em);
+  }
+  .resume-role { font-size: 1.125em; line-height: 1.4; }
+  .resume-contacts { line-height: 1.5; }
+  .resume-entry-heading { font-size: 1.25rem; }
+  .resume-entry > dl { font-size: 1rem; line-height: 1.5; }
+  .resume-entry > ul { --beauty-text-wrap: pretty; }
+}
+
+@media screen and (max-width: 600px) {
+  body.resume-layout {
+    --beauty-h1-size-small: clamp(1.75rem, 7.5vw, 2rem);
+    --beauty-h1-tracking: -0.01em;
+  }
+  .resume-header { flex-direction: column; gap: 1rem; margin-block-end: 2rem; }
+  .resume-role { font-size: 1em; }
+  .resume-mobile-paragraph { display: block; margin-block-start: 0.75em; }
+  .resume-contacts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: start;
+    gap: 0.25em 1.5rem;
+    inline-size: 100%;
+    margin: 0;
+    font-size: clamp(0.875rem, 4vw, 0.984375rem);
+    text-align: start;
+    overflow-wrap: anywhere;
+  }
+  .resume-entry-header,
+  .resume-list > .resume-list-item { column-gap: 1rem; }
+}
+
+@media screen and (max-width: 359px) {
+  .resume-entry-header,
+  .resume-list > .resume-list-item { grid-template-columns: minmax(0, 1fr); row-gap: 0.25em; }
+  .resume-period { grid-column: 1; grid-row: auto; text-align: start; }
+  .resume-entry-role,
+  .resume-list-subtitle { grid-row: auto; }
+}
+
+@media screen and (max-width: 360px) {
+  body.resume-layout { padding-inline: 1rem; }
+  .resume-contacts { column-gap: 0.25rem; }
+}
+
+@media screen and (max-width: 319px) {
+  .resume-contacts { grid-template-columns: minmax(0, 1fr); row-gap: 0.25rem; }
+}
+
+@media print {
+  @page resume { size: A4; margin: 16mm; }
+  body.resume-layout {
+    page: resume;
+    max-width: none;
+    --beauty-reading-size: 10.5pt;
+    --beauty-reading-size-small: 10.5pt;
+    --beauty-reading-line-height: 1.4;
+    --beauty-h1-size: 24pt;
+    --beauty-h1-size-small: 24pt;
+    --beauty-h2-size: 14pt;
+    --beauty-h2-size-small: 14pt;
+    --beauty-h2-margin: 22pt 12pt;
+    --beauty-space: 6pt;
+    --beauty-list-gap: 3pt;
+    --resume-entry-gap: 16pt;
+    --resume-results-gap: 10pt;
+    --resume-product-gap: 14pt;
+  }
+  .resume-header { margin-block-end: 14pt; break-inside: avoid-page; }
+  .resume-contacts { margin-block-start: 2pt; }
+  .resume-entry-header { break-inside: avoid-page; break-after: avoid-page; }
+  .resume-entry { --beauty-list-gap: 3.5pt; }
+  .resume-entry > dl > dt { break-after: avoid-page; }
+  .resume-entry p:has(+ ul) { break-after: avoid-page; }
+  .resume-entry li { break-inside: avoid-page; }
+  .resume-list > .resume-list-item { margin-block-end: 6pt; break-inside: avoid-page; }
+}

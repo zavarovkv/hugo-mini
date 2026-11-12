@@ -1,0 +1,15 @@
+{{- $title := .Get "title" -}}
+{{- if not $title -}}{{- errorf "resume-entry requires title (%s)" .Position -}}{{- end -}}
+{{- /* Short ASCII anchors also fit the named destinations in browser PDFs. */ -}}
+{{- $entryID := printf "resume-entry-%d" .Ordinal -}}
+<section class="resume-entry" aria-labelledby="{{ $entryID }}">
+  <header class="resume-entry-header">
+    <h3 class="resume-entry-heading" id="{{ $entryID }}">{{ .Page.RenderString (dict "display" "inline") $title }}</h3>
+    {{ with .Get "role" }}<p class="resume-entry-role">{{ . }}</p>{{ end }}
+    {{ with .Get "period" }}<p class="resume-period">{{ . }}</p>{{ end }}
+    {{ if or (.Get "location") (.Get "url") }}
+    <p class="resume-meta">{{ .Get "location" }}{{ if and (.Get "location") (.Get "url") }}, {{ end }}{{ with .Get "url" }}<a href="{{ . }}">{{ $.Get "site" | default . }}</a>{{ end }}</p>
+    {{ end }}
+  </header>
+  {{ .Page.RenderString (dict "display" "block") .Inner }}
+</section>

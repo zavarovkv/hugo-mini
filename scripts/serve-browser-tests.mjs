@@ -31,6 +31,7 @@ try {
   await cp(join(theme, 'tests/browser/fixtures/wide-images.md'), join(contentDir, 'wide-image-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-diagrams.md'), join(contentDir, 'wide-diagram-checks.md'));
+  await cp(join(theme, 'tests/browser/fixtures/resume.md'), join(contentDir, 'resume-checks.md'));
   if (!source) {
     await writeFile(join(contentDir, 'about.md'), '+++\ntitle="About & contact"\n+++\nNavigation destination.\n');
     await mkdir(join(contentDir, 'blog'));

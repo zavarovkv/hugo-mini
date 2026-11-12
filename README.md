@@ -25,6 +25,7 @@ The live demo uses separately licensed Story, Sourdine and Mirta fonts. The them
 - **Stay lightweight.** Responsive layout with an easy-to-tap mobile menu; fonts, CSS, JavaScript and icons are served from your site. Optional site-owned fonts can pair separate H1 and quotation families with the body face and configure the weights used by text and components. Updated local icons get new URLs automatically.
 - **Publish out of the box.** Light and dark modes, smooth menu highlighting and subtle project/archive link arrows, a favicon, multiple languages, SEO, RSS, and JSON Feed.
 - **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
+- **Share your CV.** A [standalone resume layout](docs/content.md#standalone-resume) combines your site's fonts, clickable headings, compact job context, readable results and dated education, course or mentoring lists. Responsive contacts blend into the text, and the page prints to A4 or PDF without blog navigation.
 
 ## Quick start
 

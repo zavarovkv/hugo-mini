@@ -63,6 +63,138 @@ wrap instead of being clipped. Article text is 11 pt, page titles 22 pt and sect
 
 Mermaid rendering still requires JavaScript. The loader prioritizes nearby diagrams, then prepares offscreen diagrams and neutral print copies during idle time. Printing uses cached copies synchronously; if preparation has not finished or a download failed, the diagram source prints instead. Returning from print restores the screen theme.
 
+## Standalone resume
+
+Set `layout = "resume"` on an ordinary content page to publish a CV without the
+blog header or footer. The layout inherits the site's font profile and uses one
+ink color for all text, links, metadata and rules: black in light mode and print,
+white in dark mode. Hierarchy comes from type size, family and weight; the main
+professional role uses the bold body face. It has no separate visible controls.
+Its screen and print overrides live in `assets/css/resume.css`, minified and
+fingerprinted separately and loaded only by this layout. Beauty still supplies
+native typography; the resume stylesheet configures its tokens and document layout.
+Section headings (`##`) have a 1 px trailing rule in the heading color, centered
+vertically and extending to the end of the reading column, in both screen themes
+and print. Job titles (`h3`) stay plain and use 20 px on screen,
+below the 22–24 px section headings.
+With `headingScroll = true`, section titles, their rules and company names
+reuse the blog's click-to-align behavior, URL fragments and Option/Alt + Up/Down
+navigation, without extra icons or link decoration. Short ASCII entry anchors
+include the shortcode position so repeated company names have distinct targets
+and long organization names do not exceed PDF destination-name limits.
+Clicking the person's name returns to the top and clears the fragment, preserving
+the path and query without reloading. Option/Alt + Up can reach the name too.
+Keyboard navigation reaches every heading even when the last sections cannot
+scroll to the top; manual scrolling resets navigation to the current viewport.
+The back-to-top gutter is always omitted.
+Use the native browser print command (`Cmd+P` / `Ctrl+P`) to print or save a PDF.
+The content, links and printing also work without JavaScript.
+
+```toml
++++
+title = "Alex Example"
+slug = "cv"
+layout = "resume"
+role = "Product Lead"
+headingScroll = true
+[[contacts]]
+label = "alex@example.org"
+url = "mailto:alex@example.org"
++++
+```
+
+Write the introduction and section headings as ordinary Markdown. Within an
+introductory paragraph, `<span class="resume-mobile-paragraph">…</span>` starts a
+new visual paragraph with a 0.75em gap only on screens up to 600 px. Keep a space
+before the span so desktop, print and copied text remain continuous.
+Use Beauty's `beauty-nowrap` for short phrases that must stay together. Use
+`resume-entry` for jobs, with a required `title` and optional
+`period`, `role`, `location`, `url` and `site` (the visible URL label):
+
+```markdown
+## Experience
+
+{{< resume-entry title="Example Company" period="2020 — present" role="Product Lead" >}}
+A service used by many teams.
+
+Objective
+: Help teams find and share useful work.
+
+Team
+: Product managers and engineers across several teams.
+
+**Results**
+
+- Launched an accessible service.
+- Built a product team.
+{{< /resume-entry >}}
+```
+
+The body supports normal Markdown. For education, courses or mentoring records,
+use a marker-free semantic list. An optional `subtitle` places the degree or
+program directly below the institution:
+
+```markdown
+{{< resume-list >}}
+{{< resume-item title="Example University" subtitle="Computer science" period="2010–2015" >}}
+{{< resume-item title="Product Leadership" detail="Example Academy" period="2025" >}}
+{{< resume-item title="Independent consultations" period="2025 — present" >}}
+{{< /resume-list >}}
+```
+
+Each `resume-item` requires `title`; optional `detail` follows after a comma,
+and `period` aligns at the right. Titles and details retain regular body weight
+at 18 px on screen; subtitles use 16 px and span the full row. Dates use the
+smaller metadata scale. Rows stack below 360 px and stay together
+in print, with 6 pt between printed records. Lists preserve native list semantics
+without visible bullets. These records are not headings and add no extra
+heading-navigation stops. For ongoing education, use a consistent status such
+as “2026 — in progress”; reserve “present” for current employment or activities.
+
+Start an experience entry with a plain product description. Optional context
+such as the objective and team uses a native Markdown definition list: the
+compact label/value rows are 16/24 px on screen, while descriptions and results
+keep the 18/28 px reading scale. Labels receive a colon from CSS, so author them
+without punctuation. Use a bold paragraph followed by a normal bullet list for
+results; it gets 1.25em above and 0.5em below. Bullet items have a 0.75em gap
+and indentation up to 1.5em (capped at 8% on narrow screens); print reduces the item gap to 3.5pt.
+Result lists use Beauty's `pretty` wrapping on screen to reduce isolated final
+words where the browser supports it, preserving native markers and spacing.
+Emphasize short outcome metrics selectively, with sentence case and consistent
+terminal punctuation. A product description following a list gets 2em above,
+so multiple products can share one employer without repeating its header.
+Brief earlier roles can stay as ordinary prose. Printing keeps normal text
+sizes with compact 3 pt list gaps and 10/14 pt results/product separation.
+Keep dates as authored text to support partial dates and open-ended periods.
+Each entry groups its bold organization name with a regular-weight role below.
+The smaller period aligns with the name's first baseline at the right edge.
+The role uses the full header width, including on phones. Below 360 px, entries
+stack in reading order: organization, role, period.
+The gap before the entry body is larger than the gaps within its header.
+Optional location and website metadata appear on a separate row; omit them when
+they add no useful context. Print retains the two-column entry header.
+Contacts appear at the upper right. Each requires `label`; omit `url` for plain
+text, or provide a regular URL, `mailto:` or `tel:` link. Contact links retain
+the surrounding color and weight, with no underline or hover decoration; the
+pointer cursor and keyboard focus remain available. At 600 px and below, the
+header uses a responsive 28–32 px name and an 18 px role. The left-aligned contact
+row has two equal-width columns with a 24 px gap, 16 px above and 32 px below.
+At 360 px and below, side padding is 16 px and the column gap is 4 px to give
+contact text more room; longer labels can still wrap. Screen prose uses 18/28 px.
+Below 320 px, contacts stack into a single column.
+Print keeps the name and contacts side by side regardless of the screen width.
+Screen pages end with 64 px of extra space; print has no extra bottom padding.
+
+Section headings have 3rem above and 1.375rem below on screen; print uses 22pt
+above and 12pt below, keeping the rules clearly separated from the preceding block.
+Printing uses a named A4 page with 16 mm margins,
+10.5 pt text, 24 pt name and 14 pt section headings. It always uses a light paper
+palette. Entry headers stay with their text; result
+bullets stay intact, while long jobs can continue on the next page. Choose
+**Save as PDF** and disable browser-added headers/footers for a clean copy.
+Pagination depends on the selected fonts, content and print settings. There is
+no generated PDF download or second content source to synchronize.
+
 ## Article keyboard navigation
 
 On public articles, Option/Alt + Left opens the previous (older) article and

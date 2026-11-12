@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Keep heading shortcuts sequential at the bottom of a page, including short resumes, and reset their position after manual scrolling. Keep resume identities inside their column with enlarged text and expose contact lists and job names to assistive technology.
+- Use shared Beauty paragraph/list wrapping for resume results and consolidate their dated-row layout rules.
+
+- Add a standalone `resume` layout and `resume-entry` shortcode, with responsive contact links styled as ordinary text, thin section rules and a dedicated A4 print layout without blog navigation or visible controls. Its separate stylesheet loads only on resume pages; contacts stack below 320 px and an optional introduction break applies only on mobile.
+- Honor an explicit `backToTop = false`; standalone resumes always omit the back-to-top gutter and can opt into shared heading navigation for sections and company names, with distinct anchors for repeated employers.
+- Give resume experience entries compact definition-list context, separated result lists and spacing between multiple products, while preserving the print reading scale.
+- Add regular-weight dated resume lists with optional program subtitles for education, screen-only bottom spacing and a name link that clears the fragment without reloading. Education records remain outside heading navigation.
+
 - Unify bilingual demo quotations and attributions; apply `editorialQuotes` to `callout` while preserving its original style when disabled.
 - Support a deployment-owned demo font profile with verified HTTPS downloads, temporary source files and self-hosted output; ordinary theme builds and the starter retain Inter.
 

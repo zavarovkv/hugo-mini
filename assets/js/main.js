@@ -450,6 +450,7 @@
     var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     var headings = [];
     var destination = null;
+    var settledScrollY = null;
     var interactive = 'a, button, input, select, textarea, summary, [contenteditable]';
 
     function offset(heading) {
@@ -457,16 +458,17 @@
     }
     function align(heading) {
       var target = new URL(window.location.href);
-      target.hash = encodeURIComponent(heading.id);
+      target.hash = heading.hasAttribute('data-heading-reset') ? '' : encodeURIComponent(heading.id);
       if (window.location.hash !== target.hash) window.history.pushState(null, '', target.href);
       destination = heading;
+      settledScrollY = null;
       var limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
       var top = Math.max(0, Math.min(window.scrollY + heading.getBoundingClientRect().top - offset(heading), limit));
       window.scrollTo({top: top, behavior: reducedMotion.matches ? 'instant' : 'smooth'});
-      if (Math.abs(window.scrollY - top) <= 2) destination = null;
+      if (Math.abs(window.scrollY - top) <= 2) settledScrollY = window.scrollY;
     }
 
-    document.querySelectorAll('main h1, main h2').forEach(function (heading, index) {
+    document.querySelectorAll('main h1, main h2, main .resume-entry-heading').forEach(function (heading, index) {
       if (heading.closest('.footnotes, .not-beauty') || heading.classList.contains('no-anchor')) return;
       var anchor = heading.querySelector(':scope > .heading-anchor');
       if (anchor) anchor.remove();
@@ -485,7 +487,7 @@
         if (!link && node.nodeType === 3 && !node.textContent.trim()) return;
         if (!link) {
           link = document.createElement('a');
-          link.href = '#' + encodeURIComponent(heading.id);
+          link.href = heading.hasAttribute('data-heading-reset') ? window.location.pathname + window.location.search : '#' + encodeURIComponent(heading.id);
           link.className = 'heading-scroll';
           link.title = t('scrollHeading', 'Scroll heading to top');
           heading.insertBefore(link, node);
@@ -514,19 +516,26 @@
       });
     });
 
-    function cancelDestination() { destination = null; }
+    function cancelDestination() { destination = null; settledScrollY = null; }
     ['wheel', 'touchstart', 'pointerdown'].forEach(function (type) {
       window.addEventListener(type, cancelDestination, {passive: true});
     });
     window.addEventListener('scroll', function () {
       if (!destination) return;
+      // Keep the last reached heading for sequential shortcuts at the page ends,
+      // where several headings share the same clamped scroll position.
+      if (settledScrollY !== null) {
+        if (Math.abs(window.scrollY - settledScrollY) > 2) cancelDestination();
+        return;
+      }
       var top = window.scrollY + destination.getBoundingClientRect().top - offset(destination);
       var limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-      if (Math.abs(window.scrollY - Math.max(0, Math.min(top, limit))) <= 2) destination = null;
+      if (Math.abs(window.scrollY - Math.max(0, Math.min(top, limit))) <= 2) settledScrollY = window.scrollY;
     }, {passive: true});
     window.addEventListener('popstate', cancelDestination);
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Tab') {
+        cancelDestination();
         document.querySelectorAll('.heading-shortcut-focus').forEach(function (link) { link.classList.remove('heading-shortcut-focus'); });
       }
       if (event.defaultPrevented || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing) return;
@@ -537,6 +546,8 @@
       if (document.body.classList.contains('menu-open') || document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]:not([hidden])')) return;
       event.preventDefault();
       if (event.repeat) return;
+      // A key can arrive before the browser delivers a pending scroll event.
+      if (settledScrollY !== null && Math.abs(window.scrollY - settledScrollY) > 2) cancelDestination();
       var visible = headings.filter(function (heading) { return heading.getClientRects().length > 0; });
       var next;
       if (destination && visible.indexOf(destination) !== -1) {
