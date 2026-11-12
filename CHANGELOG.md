@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Keep mobile resume roles directly below their company when the date wraps; span the date across both rows without changing desktop or print layout.
+
 - Keep heading shortcuts sequential at the bottom of a page, including short resumes, and reset their position after manual scrolling. Keep resume identities inside their column with enlarged text and expose contact lists and job names to assistive technology.
 - Use shared Beauty paragraph/list wrapping for resume results and consolidate their dated-row layout rules.
 

@@ -168,7 +168,9 @@ sizes with compact 3 pt list gaps and 10/14 pt results/product separation.
 Keep dates as authored text to support partial dates and open-ended periods.
 Each entry groups its bold organization name with a regular-weight role below.
 The smaller period aligns with the name's first baseline at the right edge.
-The role uses the full header width, including on phones. Below 360 px, entries
+On screens from 360 to 600 px, the role stays directly below the company in the
+left column; the date spans both rows at the right, so wrapped dates do not add
+an empty line above the role. Desktop and print retain a full-width role. Below 360 px, entries
 stack in reading order: organization, role, period.
 The gap before the entry body is larger than the gaps within its header.
 Optional location and website metadata appear on a separate row; omit them when

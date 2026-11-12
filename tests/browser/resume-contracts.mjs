@@ -72,6 +72,31 @@ export function resumeContracts(test, expect) {
     await expect(page.locator('link[rel="stylesheet"][href*="/css/resume.min."]')).toHaveCount(0);
   });
 
+  test('wrapped mobile dates do not push the role away from its company', async ({ page }) => {
+    await page.goto('/resume-checks/');
+    await page.evaluate(() => document.fonts.ready);
+    const header = page.locator('.resume-entry-header').first();
+    await header.locator('h3 .heading-scroll').evaluate(node => { node.textContent = 'MegaMarket'; });
+    await header.locator('.resume-entry-role').evaluate(node => { node.textContent = 'Product Manager'; });
+    await header.locator('.resume-period').evaluate(node => { node.textContent = 'апрель\u00a02017 — март\u00a02018'; });
+    for (const width of [360, 390, 430, 600]) {
+      await page.setViewportSize({ width, height: 900 });
+      const company = await header.locator('h3').boundingBox();
+      const role = await header.locator('.resume-entry-role').boundingBox();
+      const period = await header.locator('.resume-period').boundingBox();
+      const bounds = await header.boundingBox();
+      expect(role.y - company.y - company.height).toBeGreaterThanOrEqual(0);
+      expect(role.y - company.y - company.height).toBeLessThanOrEqual(4);
+      expect(role.x).toBeCloseTo(company.x);
+      expect(role.x + role.width).toBeLessThanOrEqual(period.x);
+      expect(period.x + period.width).toBeCloseTo(bounds.x + bounds.width);
+      if (width === 360) {
+        const lineHeight = await header.locator('.resume-period').evaluate(node => parseFloat(getComputedStyle(node).lineHeight));
+        expect(period.height).toBeGreaterThan(lineHeight);
+      }
+    }
+  });
+
   test('resume sections and organizations share alignment and fragment navigation', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/resume-checks/');
