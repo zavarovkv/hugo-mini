@@ -143,13 +143,16 @@ program directly below the institution:
 ```
 
 Each `resume-item` requires `title`; optional `detail` follows after a comma,
-and `period` aligns at the right. Titles and details retain regular body weight
-at 18 px on screen; subtitles use 16 px and span the full row. Dates use the
+and `period` aligns at the right. On screens up to 600 px, the detail moves below
+the title at 16/24 px, without the comma; desktop and print keep it inline.
+Titles and details retain regular body weight, with titles at 18 px on screen;
+subtitles use 16 px and span the full row. Dates use the
 smaller metadata scale. Rows stack below 360 px and stay together
 in print, with 6 pt between printed records. Lists preserve native list semantics
 without visible bullets. These records are not headings and add no extra
-heading-navigation stops. For ongoing education, use a consistent status such
-as “2026 — in progress”; reserve “present” for current employment or activities.
+heading-navigation stops. For an ongoing course, keep the year in `period` and
+put the status in `detail`, for example `detail="Example Academy — in progress"`
+and `period="2026"`. Reserve “present” for current employment or activities.
 
 Start an experience entry with a plain product description. Optional context
 such as the objective and team uses a native Markdown definition list: the
@@ -163,6 +166,12 @@ words where the browser supports it, preserving native markers and spacing.
 Emphasize short outcome metrics selectively, with sentence case and consistent
 terminal punctuation. A product description following a list gets 2em above,
 so multiple products can share one employer without repeating its header.
+To distinguish those products, use native level-four headings such as
+`#### Team workspace {#team-workspace .resume-product-heading}`. They retain
+the bold body scale, with 0.5em below and the existing product gap after a list;
+they add no rules or heading-navigation stops. Use short, unique ASCII IDs
+for reliable browser-PDF destinations. Product headings stay with following
+content in print through Beauty's native heading rules.
 Brief earlier roles can stay as ordinary prose. Printing keeps normal text
 sizes with compact 3 pt list gaps and 10/14 pt results/product separation.
 Keep dates as authored text to support partial dates and open-ended periods.

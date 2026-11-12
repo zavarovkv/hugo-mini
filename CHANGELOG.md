@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Distinguish products within resume jobs with compact subheadings and place course or mentoring details below their titles on mobile, keeping desktop and print records inline.
+
 - Align mobile resume date endpoints vertically inside the right column, while keeping the authored inline range on desktop and in print.
 
 - Keep mobile resume roles directly below their company when the date wraps; span the date across both rows without changing desktop or print layout.
