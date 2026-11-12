@@ -72,13 +72,14 @@ export function resumeContracts(test, expect) {
     await expect(page.locator('link[rel="stylesheet"][href*="/css/resume.min."]')).toHaveCount(0);
   });
 
-  test('wrapped mobile dates do not push the role away from its company', async ({ page }) => {
+  test('mobile date endpoints align vertically without pushing the role away from its company', async ({ page }) => {
     await page.goto('/resume-checks/');
     await page.evaluate(() => document.fonts.ready);
     const header = page.locator('.resume-entry-header').first();
     await header.locator('h3 .heading-scroll').evaluate(node => { node.textContent = 'MegaMarket'; });
     await header.locator('.resume-entry-role').evaluate(node => { node.textContent = 'Product Manager'; });
-    await header.locator('.resume-period').evaluate(node => { node.textContent = 'апрель\u00a02017 — март\u00a02018'; });
+    await header.locator('.resume-period-start').evaluate(node => { node.textContent = 'апрель\u00a02017'; });
+    await header.locator('.resume-period-end').evaluate(node => { node.textContent = 'март\u00a02018'; });
     for (const width of [360, 390, 430, 600]) {
       await page.setViewportSize({ width, height: 900 });
       const company = await header.locator('h3').boundingBox();
@@ -90,11 +91,19 @@ export function resumeContracts(test, expect) {
       expect(role.x).toBeCloseTo(company.x);
       expect(role.x + role.width).toBeLessThanOrEqual(period.x);
       expect(period.x + period.width).toBeCloseTo(bounds.x + bounds.width);
-      if (width === 360) {
-        const lineHeight = await header.locator('.resume-period').evaluate(node => parseFloat(getComputedStyle(node).lineHeight));
-        expect(period.height).toBeGreaterThan(lineHeight);
-      }
+      const start = await header.locator('.resume-period-start').boundingBox();
+      const end = await header.locator('.resume-period-end').boundingBox();
+      expect(end.x).toBeCloseTo(start.x);
+      expect(end.y).toBeGreaterThan(start.y);
+      const lineHeight = await header.locator('.resume-period').evaluate(node => parseFloat(getComputedStyle(node).lineHeight));
+      expect(period.height).toBeCloseTo(lineHeight * 2, 0);
     }
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const start = await header.locator('.resume-period-start').boundingBox();
+    const end = await header.locator('.resume-period-end').boundingBox();
+    expect(end.y).toBeCloseTo(start.y);
+    expect(end.x).toBeGreaterThan(start.x + start.width);
+    await expect(header.locator('.resume-period')).toHaveText(/апрель\s2017\s—\sмарт\s2018/);
   });
 
   test('resume sections and organizations share alignment and fragment navigation', async ({ page }) => {

@@ -129,6 +129,8 @@ body.resume-layout {
   /* A wrapped date shares both text rows instead of stretching the company row. */
   .resume-entry-role { grid-column: 1; }
   .resume-entry-header:has(> .resume-entry-role) > .resume-period { grid-row: 1 / span 2; }
+  .resume-entry-header > .resume-period { justify-self: end; text-align: start; }
+  .resume-period-end { display: block; }
 }
 
 @media screen and (max-width: 359px) {

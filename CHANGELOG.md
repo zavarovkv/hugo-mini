@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Align mobile resume date endpoints vertically inside the right column, while keeping the authored inline range on desktop and in print.
+
 - Keep mobile resume roles directly below their company when the date wraps; span the date across both rows without changing desktop or print layout.
 
 - Keep heading shortcuts sequential at the bottom of a page, including short resumes, and reset their position after manual scrolling. Keep resume identities inside their column with enlarged text and expose contact lists and job names to assistive technology.

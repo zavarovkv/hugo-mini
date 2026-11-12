@@ -170,7 +170,9 @@ Each entry groups its bold organization name with a regular-weight role below.
 The smaller period aligns with the name's first baseline at the right edge.
 On screens from 360 to 600 px, the role stays directly below the company in the
 left column; the date spans both rows at the right, so wrapped dates do not add
-an empty line above the role. Desktop and print retain a full-width role. Below 360 px, entries
+an empty line above the role. Ranges separated by an en or em dash put the end
+date on a second line, with both dates aligned at their start inside the right
+column. Desktop and print keep the authored range inline and retain a full-width role. Below 360 px, entries
 stack in reading order: organization, role, period.
 The gap before the entry body is larger than the gaps within its header.
 Optional location and website metadata appear on a separate row; omit them when
