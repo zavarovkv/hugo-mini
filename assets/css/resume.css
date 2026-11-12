@@ -11,22 +11,23 @@ body.resume-layout {
   --beauty-link-decoration-hover: currentColor;
   --heading-color: var(--resume-ink);
   --color-secondary: var(--resume-ink);
-  --beauty-reading-size: 1.125rem;
-  --beauty-reading-size-small: 1.125rem;
-  --beauty-reading-line-height: calc(28 / 18);
+  --beauty-reading-size: 1.0625rem;
+  --beauty-reading-size-small: 1.0625rem;
+  --beauty-reading-line-height: calc(26 / 17);
   --beauty-space: 0.75em;
   --beauty-list-gap: 0.4em;
-  --beauty-list-indent: min(1.5em, 8%);
+  --beauty-list-indent: min(2em, 10%);
   --beauty-h1-size: 2.5rem;
   --beauty-h1-size-small: 2rem;
   --beauty-h1-margin: 0 0.25rem;
   --beauty-h2-size: 1.5rem;
   --beauty-h2-size-small: 1.375rem;
-  --beauty-h2-margin: 3rem 1.375rem;
-  --beauty-h3-margin: 0;
-  --resume-entry-gap: 2.25rem;
-  --resume-results-gap: 1.25em;
-  --resume-product-gap: 2em;
+  --beauty-h2-margin: 3.5rem 1.5rem;
+  --resume-group-space: calc(var(--beauty-space) / 2);
+  --resume-detail-size: 1rem;
+  --beauty-h3-margin: 0 var(--resume-group-space);
+  --resume-entry-gap: calc(3.5 * var(--beauty-space));
+  --resume-product-gap: calc(2.5 * var(--beauty-space));
   --resume-rule-color: var(--heading-color);
   max-width: var(--beauty-reading-width);
 }
@@ -62,32 +63,39 @@ body.resume-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) fit-content(45%);
   align-items: first baseline;
-  gap: 0.125em 1.5rem;
+  gap: var(--beauty-space) 1.5rem;
 }
-.resume-entry-header { margin-block-end: 1em; }
+.resume-entry-header { margin-block-end: var(--beauty-space); }
+/* Related fields share a compact paragraph rhythm inside the date grid. */
+.resume-text { --beauty-space: var(--resume-group-space); min-inline-size: 0; }
+.resume-text > :last-child { margin-block-end: 0; }
 .resume-entry-heading { min-inline-size: 0; }
 .resume-period { grid-column: 2; grid-row: 1; margin: 0; font-size: 0.875em; text-align: end; }
-.resume-entry-role { grid-column: 1 / -1; grid-row: 2; margin: 0; font-weight: var(--font-weight-body); }
-.resume-meta { grid-column: 1 / -1; margin: 0; font-size: 0.875em; }
+.resume-entry-role { font-weight: var(--font-weight-body); }
+.resume-meta { font-size: 0.875em; }
 .resume-entry > dl { display: flow-root; }
 .resume-entry > dl > dt { float: inline-start; clear: both; margin-inline-end: 0.35em; }
 .resume-entry > dl > dt::after { content: ":"; }
-.resume-entry > dl > dd { margin: 0 0 0.5em; }
-.resume-entry > dl > dd > p { margin: 0; }
+.resume-entry > dl > dd { margin: 0 0 var(--beauty-space); }
+.resume-entry > dl > dd > :last-child { margin-block-end: 0; }
 .resume-entry > dl > dd:last-child { margin-block-end: 0; }
-.resume-entry > p:has(+ ul) { margin-block: var(--resume-results-gap) 0.5em; }
-.resume-product-heading { --beauty-section-heading-wrap: balance; margin-block: 0 0.5em; }
-.resume-entry > ul + :is(p, .resume-product-heading) { margin-block-start: var(--resume-product-gap); }
+.resume-product-heading { --beauty-section-heading-wrap: balance; margin-block: var(--resume-product-gap) var(--beauty-space); }
+.resume-group-heading { font-size: inherit; margin-block: calc(1.5 * var(--beauty-space)) var(--resume-group-space); }
 .resume-entry > :last-child { margin-block-end: 0; }
-.resume-list { padding: 0; list-style: none; }
-.resume-list > .resume-list-item {
-  margin-block: 0 0.75em;
-}
+.resume-list { --beauty-list-gap: calc(1.5 * var(--beauty-space)); padding: 0; list-style: none; }
 .resume-list > .resume-list-item:last-child { margin-block-end: 0; }
-.resume-list-label { min-inline-size: 0; margin: 0; }
-.resume-list-subtitle { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: calc(8em / 9); line-height: 1.5; }
+.resume-list-subtitle { font-size: var(--resume-detail-size); line-height: 1.5; }
+.resume-detail-separator { display: none; }
+
+/* Compact records can read as one line when there is enough room. Stacked
+   records retain native paragraph margins instead of inventing a row gap. */
+@media print, screen and (min-width: 601px) {
+  .resume-text:not(:has(> .resume-list-subtitle)) > :is(.resume-list-label:has(+ .resume-list-detail), .resume-list-detail) { display: inline; }
+  .resume-text:not(:has(> .resume-list-subtitle)) > .resume-list-detail > .resume-detail-separator { display: inline; }
+}
 
 @media screen {
+  body.resume-layout { --beauty-text-wrap: pretty; }
   :root[data-theme="dark"] body.resume-layout { --resume-ink: #fff; }
   .resume { padding-block-end: 4rem; }
   .resume-identity {
@@ -98,9 +106,8 @@ body.resume-layout {
   }
   .resume-role { font-size: 1.125em; line-height: 1.4; }
   .resume-contacts { line-height: 1.5; }
+  .resume-list-label { --beauty-text-wrap: balance; }
   .resume-entry-heading { font-size: 1.25rem; }
-  .resume-entry > dl { font-size: 1rem; line-height: 1.5; }
-  .resume-entry > ul { --beauty-text-wrap: pretty; }
 }
 
 @media screen and (max-width: 600px) {
@@ -110,7 +117,7 @@ body.resume-layout {
   }
   .resume-header { flex-direction: column; gap: 1rem; margin-block-end: 2rem; }
   .resume-role { font-size: 1em; }
-  .resume-mobile-paragraph { display: block; margin-block-start: 0.75em; }
+  .resume-mobile-paragraph { display: block; margin-block-start: var(--beauty-space); }
   .resume-contacts {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -124,24 +131,19 @@ body.resume-layout {
   }
   .resume-entry-header,
   .resume-list > .resume-list-item { column-gap: 1rem; }
-  .resume-list-detail { display: block; font-size: calc(8em / 9); line-height: 1.5; }
-  .resume-detail-separator { display: none; }
+  .resume-list-detail { font-size: var(--resume-detail-size); line-height: 1.5; }
 }
 
 @media screen and (min-width: 360px) and (max-width: 600px) {
-  /* A wrapped date shares both text rows instead of stretching the company row. */
-  .resume-entry-role { grid-column: 1; }
-  .resume-entry-header:has(> .resume-entry-role) > .resume-period { grid-row: 1 / span 2; }
+  /* Text flows independently of the date column. */
   .resume-entry-header > .resume-period { justify-self: end; text-align: start; }
   .resume-period-end { display: block; }
 }
 
 @media screen and (max-width: 359px) {
   .resume-entry-header,
-  .resume-list > .resume-list-item { grid-template-columns: minmax(0, 1fr); row-gap: 0.25em; }
+  .resume-list > .resume-list-item { grid-template-columns: minmax(0, 1fr); }
   .resume-period { grid-column: 1; grid-row: auto; text-align: start; }
-  .resume-entry-role,
-  .resume-list-subtitle { grid-row: auto; }
 }
 
 @media screen and (max-width: 360px) {
@@ -165,12 +167,10 @@ body.resume-layout {
     --beauty-h1-size-small: 24pt;
     --beauty-h2-size: 14pt;
     --beauty-h2-size-small: 14pt;
-    --beauty-h2-margin: 22pt 12pt;
-    --beauty-space: 6pt;
+    --beauty-h2-margin: 24pt 14pt;
+    --beauty-space: 4pt;
     --beauty-list-gap: 3pt;
-    --resume-entry-gap: 16pt;
-    --resume-results-gap: 10pt;
-    --resume-product-gap: 14pt;
+    --resume-detail-size: calc(8em / 9);
   }
   .resume-header { margin-block-end: 14pt; break-inside: avoid-page; }
   .resume-contacts { margin-block-start: 2pt; }
@@ -179,5 +179,6 @@ body.resume-layout {
   .resume-entry > dl > dt { break-after: avoid-page; }
   .resume-entry p:has(+ ul) { break-after: avoid-page; }
   .resume-entry li { break-inside: avoid-page; }
-  .resume-list > .resume-list-item { margin-block-end: 6pt; break-inside: avoid-page; }
+  .resume-entry > :is(ul, ol) > li:nth-last-child(2) { break-after: avoid-page; }
+  .resume-list > .resume-list-item { break-inside: avoid-page; }
 }

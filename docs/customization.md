@@ -36,6 +36,13 @@ theme stylesheet using `layouts/_partials/custom_head.html`:
 
 The full token list is in [`assets/css/main.css`](../assets/css/main.css).
 
+Keyboard focus shares a 2 px dotted outline in `--heading-color`, with a 4 px
+offset controlled by Beauty's `--beauty-focus-offset`. It applies to blog and
+resume links, headings and controls without changing their geometry. Native
+`:focus-visible` controls when it appears; forced-color mode uses a solid
+system `Highlight` outline, and print omits it. Heading shortcuts retain their
+existing outline-free behavior; returning to Tab restores the indicator.
+
 Language, theme and desktop search controls share muted resting text, neutral borders
 and keyboard-focus outlines. Language and search use the link hover color
 (`--color-accent`) on hover and keyboard focus. The theme toggle keeps its sun/moon

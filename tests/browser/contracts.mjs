@@ -18,7 +18,7 @@ export function layoutContracts(test, expect) {
     await expect(ref).toHaveCSS('text-decoration-line', 'none');
     await expect(ref.locator('..')).toHaveCSS('vertical-align', 'baseline');
     await ref.focus();
-    await expect(ref).toHaveCSS('outline-style', 'solid');
+    await expect(ref).toHaveCSS('outline-style', 'dotted');
     await ref.click();
     await expect(page).toHaveURL(/#fn:1$/);
     await page.locator('.footnote-backref').first().click();

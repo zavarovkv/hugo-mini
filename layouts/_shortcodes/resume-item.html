@@ -1,7 +1,10 @@
 {{- $title := .Get "title" -}}
 {{- if not $title -}}{{- errorf "resume-item requires title (%s)" .Position -}}{{- end -}}
 <li class="resume-list-item">
-  <p class="resume-list-label">{{ .Page.RenderString (dict "display" "inline") $title }}{{ with .Get "detail" }}<span class="resume-list-detail"><span class="resume-detail-separator">, </span>{{ $.Page.RenderString (dict "display" "inline") . }}</span>{{ end }}</p>
-  {{ with .Get "subtitle" }}<p class="resume-list-subtitle">{{ $.Page.RenderString (dict "display" "inline") . }}</p>{{ end }}
+  <div class="resume-text">
+    <p class="resume-list-label">{{ .Page.RenderString (dict "display" "inline") $title }}</p>
+    {{- with .Get "detail" }}<p class="resume-list-detail"><span class="resume-detail-separator">, </span>{{ $.Page.RenderString (dict "display" "inline") . }}</p>{{ end }}
+    {{ with .Get "subtitle" }}<p class="resume-list-subtitle">{{ $.Page.RenderString (dict "display" "inline") . }}</p>{{ end }}
+  </div>
   {{ with .Get "period" }}<p class="resume-period">{{ . }}</p>{{ end }}
 </li>

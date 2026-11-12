@@ -140,7 +140,7 @@
     --beauty-link-decoration-hover: var(--color-accent-border);
     --beauty-link-border: 0 solid transparent;
     --beauty-link-border-hover: var(--color-accent-border);
-    --beauty-focus-offset: 2px;
+    --beauty-focus-offset: 4px;
     /* One quotation treatment for Markdown, callouts and legacy quote markup. */
     --beauty-quote-border: var(--beauty-callout-border);
     --beauty-quote-inset: 0;
@@ -290,6 +290,21 @@
     }
   }
 
+  /* One keyboard-focus treatment for content and controls. Beauty supplies
+     the outline width and offset; the theme chooses its ink and line style. */
+  @media screen {
+    :focus-visible {
+      outline-color: var(--heading-color);
+      outline-style: dotted;
+    }
+  }
+  @media screen and (forced-colors: active) {
+    :focus-visible {
+      outline-color: Highlight;
+      outline-style: solid;
+    }
+  }
+
   /* Heading text is the anchor; its typography remains that of the heading. */
   .heading-scrollable {
     --heading-scroll-offset: 24px;
@@ -306,11 +321,6 @@
     border: 0;
     background: none;
     padding: 0;
-  }
-
-  .heading-scroll:focus-visible {
-    outline: 2px solid var(--color-secondary);
-    outline-offset: 2px;
   }
 
   .heading-scroll.heading-shortcut-focus:focus-visible { outline: none; }
@@ -1382,10 +1392,6 @@
     opacity: 1;
     cursor: default;
   }
-  .project-mark-button:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 1px;
-  }
   .project-mark {
     position: relative;
     display: block;
@@ -1594,11 +1600,6 @@
   :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):is(:hover, :focus-visible) {
     color: var(--color-accent);
     border-color: var(--color-control-border-hover);
-  }
-
-  :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):focus-visible {
-    outline: 2px solid var(--heading-color);
-    outline-offset: 3px;
   }
 
   :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):active {
@@ -1921,6 +1922,7 @@
      typographic print rules (widows, heading breaks and wrapped code); these
      overrides only handle theme components and explicit dark-mode colors. */
   @media print {
+    :focus-visible { outline: none; }
     @page { margin: 18mm; }
 
     :root,

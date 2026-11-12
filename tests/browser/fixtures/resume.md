@@ -26,14 +26,14 @@ Objective
 Team
 : Product managers and engineers across several teams.
 
-**Results**
+##### Results {#workspace-results .resume-group-heading}
 
 - Launched an accessible service.
 - Built a team and improved its delivery process.
 
 #### Partner integrations {#partner-integrations .resume-product-heading}
 
-**Results**
+##### Results {#integrations-results .resume-group-heading}
 
 - Connected partners to the service.
 {{< /resume-entry >}}

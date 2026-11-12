@@ -6,6 +6,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Set resume screen text to 17/26 px, with more separation between sections and jobs, and a wider bullet indent. Preserve item-gap ratios, secondary details at 16/24 px and the 10.5 pt paper text size; add space around section headings in print.
+
+- Let resume objectives and team descriptions inherit the body reading size and leading, keeping their labels bold and the print scale unchanged.
+
+- Unify keyboard focus across blog and resume links, headings and controls with a text-colored dotted outline and shared spacing. Preserve solid system outlines in forced-color mode and omit focus decoration in print.
+
+- Balance dated-record titles and apply Beauty's native `pretty` wrapping to resume paragraphs as well as result lists, preserving the print scale.
+
+- Add a shared style for native resume result-group headings, with more space before than after; keep the final two items of each job list together in print.
+
+- Restore native paragraph flow within resume jobs and dated records, independent of the date column. Use the shared Beauty spacing token for paragraphs, a compact rhythm inside related text groups and proportional gaps between records, preserving compact desktop/print details and A4 text sizes.
+
 - Distinguish products within resume jobs with compact subheadings and place course or mentoring details below their titles on mobile, keeping desktop and print records inline.
 
 - Align mobile resume date endpoints vertically inside the right column, while keeping the authored inline range on desktop and in print.

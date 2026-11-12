@@ -105,7 +105,7 @@ url = "mailto:alex@example.org"
 
 Write the introduction and section headings as ordinary Markdown. Within an
 introductory paragraph, `<span class="resume-mobile-paragraph">…</span>` starts a
-new visual paragraph with a 0.75em gap only on screens up to 600 px. Keep a space
+new visual paragraph with the shared paragraph gap only on screens up to 600 px. Keep a space
 before the span so desktop, print and copied text remain continuous.
 Use Beauty's `beauty-nowrap` for short phrases that must stay together. Use
 `resume-entry` for jobs, with a required `title` and optional
@@ -123,7 +123,7 @@ Objective
 Team
 : Product managers and engineers across several teams.
 
-**Results**
+#### Results {#example-results .resume-group-heading}
 
 - Launched an accessible service.
 - Built a product team.
@@ -145,10 +145,10 @@ program directly below the institution:
 Each `resume-item` requires `title`; optional `detail` follows after a comma,
 and `period` aligns at the right. On screens up to 600 px, the detail moves below
 the title at 16/24 px, without the comma; desktop and print keep it inline.
-Titles and details retain regular body weight, with titles at 18 px on screen;
-subtitles use 16 px and span the full row. Dates use the
+Titles and details retain regular body weight, with titles at 17 px on screen;
+subtitles use 16 px and remain in the text column. Dates use the
 smaller metadata scale. Rows stack below 360 px and stay together
-in print, with 6 pt between printed records. Lists preserve native list semantics
+in print. Lists preserve native list semantics
 without visible bullets. These records are not headings and add no extra
 heading-navigation stops. For an ongoing course, keep the year in `period` and
 put the status in `detail`, for example `detail="Example Academy — in progress"`
@@ -156,54 +156,76 @@ and `period="2026"`. Reserve “present” for current employment or activities.
 
 Start an experience entry with a plain product description. Optional context
 such as the objective and team uses a native Markdown definition list: the
-compact label/value rows are 16/24 px on screen, while descriptions and results
-keep the 18/28 px reading scale. Labels receive a colon from CSS, so author them
-without punctuation. Use a bold paragraph followed by a normal bullet list for
-results; it gets 1.25em above and 0.5em below. Bullet items have a 0.75em gap
-and indentation up to 1.5em (capped at 8% on narrow screens); print reduces the item gap to 3.5pt.
-Result lists use Beauty's `pretty` wrapping on screen to reduce isolated final
-words where the browser supports it, preserving native markers and spacing.
-Emphasize short outcome metrics selectively, with sentence case and consistent
-terminal punctuation. A product description following a list gets 2em above,
-so multiple products can share one employer without repeating its header.
-To distinguish those products, use native level-four headings such as
+label/value rows inherit the same 17/26 px screen reading scale as descriptions
+and results. Labels receive a colon from CSS, so author them
+without punctuation. Introduce results with a native heading such as
+`#### Results {#example-results .resume-group-heading}`, followed by a normal
+bullet list. Use level five (`#####`) when nesting results under a level-four
+product heading. The shared group-heading style keeps the body text size and
+places 1.5 paragraph spaces above and half a space below, visually joining the
+heading to its list. These headings add no heading-navigation stops.
+Bullet items keep their 0.75em gap
+and use a wider 2em indentation (34 px on screen, capped at 10% on narrow screens).
+Print uses the same relative indentation with a 3.5pt item gap.
+Screen paragraphs and list items use Beauty's `pretty` wrapping to reduce
+isolated final words where the browser supports it, preserving native markers
+and spacing. Dated-record titles use balanced lines; roles and longer
+qualification/provider paragraphs keep `pretty` wrapping. Use a blank line
+before each definition marker (`:`) when its value should render as a paragraph
+and receive the same wrapping behavior.
+Emphasize short outcome metrics selectively, leaving surrounding explanation
+and long comparisons in regular weight, with sentence case and consistent
+terminal punctuation. Multiple products can share one employer without repeating
+its header. To distinguish those products, use native level-four headings such as
 `#### Team workspace {#team-workspace .resume-product-heading}`. They retain
-the bold body scale, with 0.5em below and the existing product gap after a list;
+the bold body scale, with one paragraph gap below and 2.5 above;
 they add no rules or heading-navigation stops. Use short, unique ASCII IDs
 for reliable browser-PDF destinations. Product headings stay with following
 content in print through Beauty's native heading rules.
-Brief earlier roles can stay as ordinary prose. Printing keeps normal text
-sizes with compact 3 pt list gaps and 10/14 pt results/product separation.
+Brief earlier roles can stay as ordinary prose.
+
+Text within every job or dated record uses normal block flow: company/title,
+role, qualification and stacked details retain Beauty's native paragraph
+margins. Only the outer text/date columns use a grid, so a wrapped date cannot
+stretch the space between text blocks. The shared `--beauty-space` controls
+paragraph separation (0.75em on screen, 4pt in print). Related fields inside
+each text group inherit half that space through `--resume-group-space`;
+dated records use 1.5 times the paragraph space and jobs use 3.5 times it.
+This groups company/role, institution/qualification and course/provider pairs
+consistently. Line height controls wrapping inside a paragraph independently.
+Trim only the final block's outer
+margin at the group boundary, rather than resetting each field's margins.
+Compact title/detail pairs remain inline on desktop and in print; if a record
+also supplies a subtitle, all its fields retain block flow.
+
 Keep dates as authored text to support partial dates and open-ended periods.
 Each entry groups its bold organization name with a regular-weight role below.
 The smaller period aligns with the name's first baseline at the right edge.
-On screens from 360 to 600 px, the role stays directly below the company in the
-left column; the date spans both rows at the right, so wrapped dates do not add
-an empty line above the role. Ranges separated by an en or em dash put the end
+On screens from 360 to 600 px, ranges separated by an en or em dash put the end
 date on a second line, with both dates aligned at their start inside the right
-column. Desktop and print keep the authored range inline and retain a full-width role. Below 360 px, entries
-stack in reading order: organization, role, period.
-The gap before the entry body is larger than the gaps within its header.
-Optional location and website metadata appear on a separate row; omit them when
+column. Desktop and print keep the authored range inline. Below 360 px, entries
+stack in reading order: text group, period.
+Optional location and website metadata form a paragraph in the text group; omit them when
 they add no useful context. Print retains the two-column entry header.
 Contacts appear at the upper right. Each requires `label`; omit `url` for plain
 text, or provide a regular URL, `mailto:` or `tel:` link. Contact links retain
 the surrounding color and weight, with no underline or hover decoration; the
 pointer cursor and keyboard focus remain available. At 600 px and below, the
-header uses a responsive 28–32 px name and an 18 px role. The left-aligned contact
+header uses a responsive 28–32 px name and a 17 px role. The left-aligned contact
 row has two equal-width columns with a 24 px gap, 16 px above and 32 px below.
 At 360 px and below, side padding is 16 px and the column gap is 4 px to give
-contact text more room; longer labels can still wrap. Screen prose uses 18/28 px.
+contact text more room; longer labels can still wrap. Screen prose uses 17/26 px.
 Below 320 px, contacts stack into a single column.
 Print keeps the name and contacts side by side regardless of the screen width.
 Screen pages end with 64 px of extra space; print has no extra bottom padding.
 
-Section headings have 3rem above and 1.375rem below on screen; print uses 22pt
-above and 12pt below, keeping the rules clearly separated from the preceding block.
+Section headings have 3.5rem above and 1.5rem below on screen; print uses 24pt
+above and 14pt below, keeping the rules clearly separated from the preceding block.
 Printing uses a named A4 page with 16 mm margins,
 10.5 pt text, 24 pt name and 14 pt section headings. It always uses a light paper
-palette. Entry headers stay with their text; result
-bullets stay intact, while long jobs can continue on the next page. Choose
+palette. Entry headers and group headings stay with their text; result
+bullets stay intact and the last two items of each job list stay together,
+while long jobs can continue on the next page. Choose
 **Save as PDF** and disable browser-added headers/footers for a clean copy.
 Pagination depends on the selected fonts, content and print settings. There is
 no generated PDF download or second content source to synchronize.

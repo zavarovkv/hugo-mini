@@ -4,15 +4,17 @@
 {{- $entryID := printf "resume-entry-%d" .Ordinal -}}
 <section class="resume-entry" aria-labelledby="{{ $entryID }}">
   <header class="resume-entry-header">
-    <h3 class="resume-entry-heading" id="{{ $entryID }}">{{ .Page.RenderString (dict "display" "inline") $title }}</h3>
-    {{ with .Get "role" }}<p class="resume-entry-role">{{ . }}</p>{{ end }}
+    <div class="resume-text">
+      <h3 class="resume-entry-heading" id="{{ $entryID }}">{{ .Page.RenderString (dict "display" "inline") $title }}</h3>
+      {{ with .Get "role" }}<p class="resume-entry-role">{{ . }}</p>{{ end }}
+      {{ if or (.Get "location") (.Get "url") }}
+      <p class="resume-meta">{{ .Get "location" }}{{ if and (.Get "location") (.Get "url") }}, {{ end }}{{ with .Get "url" }}<a href="{{ . }}">{{ $.Get "site" | default . }}</a>{{ end }}</p>
+      {{ end }}
+    </div>
     {{ with .Get "period" }}
       {{- $period := . -}}
       {{- $range := findRESubmatch `^(.+?)([\s\p{Zs}]*[–—][\s\p{Zs}]*)(.+)$` $period 1 -}}
       <p class="resume-period">{{ with $range }}{{ $parts := index . 0 }}<span class="resume-period-start">{{ index $parts 1 }}</span>{{ index $parts 2 }}<span class="resume-period-end">{{ index $parts 3 }}</span>{{ else }}{{ $period }}{{ end }}</p>
-    {{ end }}
-    {{ if or (.Get "location") (.Get "url") }}
-    <p class="resume-meta">{{ .Get "location" }}{{ if and (.Get "location") (.Get "url") }}, {{ end }}{{ with .Get "url" }}<a href="{{ . }}">{{ $.Get "site" | default . }}</a>{{ end }}</p>
     {{ end }}
   </header>
   {{ .Page.RenderString (dict "display" "block") .Inner }}

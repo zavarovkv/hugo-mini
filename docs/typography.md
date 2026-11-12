@@ -348,9 +348,12 @@ Mermaid prioritizes nearby diagrams and prepares the remaining diagrams after lo
 Enable `headingScroll = true` in site or page parameters to make H1 and H2 align
 24 px below the viewport top when clicked. The heading text is a native anchor;
 its typography and color stay unchanged, with no additional icon. Tab navigation
-has a visible focus outline; Option/Alt + Up/Down moves focus without an outline.
+uses the shared 2 px dotted focus outline in the heading color, offset by 4 px;
+Option/Alt + Up/Down moves focus without an outline.
 Returning to Tab restores the focus indicator. H2 copy icons are replaced; H3
 retains copy-link behavior.
+Blog and resume links and controls use the same indicator. Forced-color mode
+uses a solid system outline; printing omits focus outlines.
 
 Clicking the heading updates the URL fragment without interrupting smooth scrolling.
 The page title uses `#page-title`; existing section IDs remain stable. Repeated clicks

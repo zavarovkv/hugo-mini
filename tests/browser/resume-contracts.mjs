@@ -35,6 +35,19 @@ export function resumeContracts(test, expect) {
       const entry = page.locator('.resume-entry').first();
       await expect(entry.locator('dl dt')).toHaveCount(2);
       await expect(entry.locator('dl dd')).toHaveCount(2);
+      const resultGroups = await entry.locator('.resume-group-heading').evaluateAll(nodes => nodes.map(node => ({
+        level: node.tagName,
+        before: node.getBoundingClientRect().top - node.previousElementSibling.getBoundingClientRect().bottom,
+        after: node.nextElementSibling.getBoundingClientRect().top - node.getBoundingClientRect().bottom,
+        list: node.nextElementSibling.tagName
+      })));
+      expect(resultGroups).toHaveLength(2);
+      for (const group of resultGroups) {
+        expect(group.level).toBe('H5');
+        expect(group.list).toBe('UL');
+        expect(group.after).toBeGreaterThan(0);
+        expect(group.before).toBeGreaterThan(group.after);
+      }
       const company = await entry.locator('h3').boundingBox();
       const role = await entry.locator('.resume-entry-role').boundingBox();
       const period = await entry.locator('.resume-period').boundingBox();
@@ -87,7 +100,8 @@ export function resumeContracts(test, expect) {
       const period = await header.locator('.resume-period').boundingBox();
       const bounds = await header.boundingBox();
       expect(role.y - company.y - company.height).toBeGreaterThanOrEqual(0);
-      expect(role.y - company.y - company.height).toBeLessThanOrEqual(4);
+      const paragraphGap = await header.locator('h3').evaluate(node => parseFloat(getComputedStyle(node).marginBottom));
+      expect(role.y - company.y - company.height).toBeCloseTo(paragraphGap);
       expect(role.x).toBeCloseTo(company.x);
       expect(role.x + role.width).toBeLessThanOrEqual(period.x);
       expect(period.x + period.width).toBeCloseTo(bounds.x + bounds.width);
@@ -104,6 +118,51 @@ export function resumeContracts(test, expect) {
     expect(end.y).toBeCloseTo(start.y);
     expect(end.x).toBeGreaterThan(start.x + start.width);
     await expect(header.locator('.resume-period')).toHaveText(/апрель\s2017\s—\sмарт\s2018/);
+  });
+
+  test('resume text shares native paragraph spacing independently of date columns', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto('/resume-checks/');
+    await page.evaluate(() => document.fonts.ready);
+    const gaps = () => page.locator('.resume-text').evaluateAll(groups => groups.flatMap(group => {
+      const blocks = [...group.children];
+      return blocks.slice(1).map((node, index) => {
+        const previous = blocks[index];
+        return {
+          actual: node.getBoundingClientRect().top - previous.getBoundingClientRect().bottom,
+          expected: parseFloat(getComputedStyle(previous).marginBottom)
+        };
+      });
+    }));
+    const initial = await gaps();
+    expect(initial.length).toBeGreaterThanOrEqual(4); // Job, metadata, education and course detail.
+    for (const gap of initial) {
+      expect(gap.actual).toBeGreaterThan(0);
+      expect(gap.actual).toBeCloseTo(gap.expected, 1);
+    }
+    // Related fields stay closer than independent paragraphs in the job body.
+    const paragraphSpace = await page.locator('.resume-entry > p').first().evaluate(node => parseFloat(getComputedStyle(node).marginBottom));
+    for (const gap of initial) expect(gap.actual).toBeLessThan(paragraphSpace);
+    const course = page.locator('.resume-list-item').filter({ has: page.locator('.resume-list-detail') });
+    const title = course.locator('.resume-list-label');
+    expect(await title.evaluate(node => node.getBoundingClientRect().height / parseFloat(getComputedStyle(node).lineHeight))).toBeGreaterThan(1);
+    const betweenRecords = await course.evaluate(node => node.nextElementSibling.getBoundingClientRect().top - node.getBoundingClientRect().bottom);
+    expect(betweenRecords).toBeGreaterThan(initial.at(-1).actual);
+
+    // A single text-spacing setting must reach every record, even when dates wrap.
+    await page.locator('body').evaluate(node => node.style.setProperty('--beauty-space', '1em'));
+    const expanded = await gaps();
+    for (const [index, gap] of expanded.entries()) {
+      expect(gap.actual).toBeGreaterThan(initial[index].actual);
+      expect(gap.actual).toBeCloseTo(gap.expected, 1);
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await expect(course.locator('.resume-list-detail')).toHaveCSS('display', 'inline');
+    const educationGap = await page.locator('.resume-list-subtitle').evaluate(node => ({
+      actual: node.getBoundingClientRect().top - node.previousElementSibling.getBoundingClientRect().bottom,
+      expected: parseFloat(getComputedStyle(node.previousElementSibling).marginBottom)
+    }));
+    expect(educationGap.actual).toBeCloseTo(educationGap.expected);
   });
 
   test('resume sections and organizations share alignment and fragment navigation', async ({ page }) => {
