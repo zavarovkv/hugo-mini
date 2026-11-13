@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Let the footer's outer margin merge with preceding content spacing instead of adding a second gap. Keep a larger interval after final quotations, and enlarge social icons slightly to 17 px on desktop and 22 px on mobile.
+
 - Enlarge the mobile menu's four-dot square slightly while retaining its dot weight, touch target and animated close transition.
 
 - Let long mobile menu labels wrap and rows retain their content height on short screens or with enlarged text. Remove the inherited desktop link margin that caused hidden horizontal overflow. Remove closing menu links from keyboard navigation immediately, while preserving ordinary desktop and no-JavaScript navigation.

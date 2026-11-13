@@ -81,6 +81,8 @@
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
     --footer-quotation-gap: 5.5rem;
+    --footer-icon-size: 17px;
+    --footer-icon-size-small: 22px;
     --article-wide-width: 60rem;
     --article-edge-gap: 24px;
     --wavy-arrow-width: 2.25em;
@@ -696,19 +698,20 @@
 
   /* Footer */
   body > footer {
-    margin-block-start: 0;
+    /* Adjacent content margins collapse into this gap instead of adding to it. */
+    margin-block-start: var(--section-gap-large);
     border-block-start: 0;
     font-size: 0.875em;
     font-weight: var(--font-weight-body);
     text-align: left;
-    padding: var(--section-gap-large) 0 25px;
+    padding: 0 0 25px;
     color: var(--color-muted);
   }
 
   /* Give a final quotation more space before the site footer. */
   @media screen {
     body > main:has(> article:last-child > .beauty-quotation:last-child) + footer {
-      padding-block-start: var(--footer-quotation-gap);
+      margin-block-start: var(--footer-quotation-gap);
     }
   }
 
@@ -1589,6 +1592,12 @@
     gap: 12px;
   }
 
+  .social-icon svg {
+    display: block;
+    width: var(--footer-icon-size);
+    height: var(--footer-icon-size);
+  }
+
   /* Footer controls: lang + theme toggle grouped on the right */
   .footer-controls {
     display: flex;
@@ -1786,8 +1795,10 @@
   /* Larger touch targets for mobile footer */
   @media (max-width: 768px) {
     .search-toggle-desktop { display: none; }
-    .social-icons { gap: 16px; }
-    .social-icon svg { width: 20px; height: 20px; }
+    .social-icons {
+      --footer-icon-size: var(--footer-icon-size-small);
+      gap: 16px;
+    }
     .footer-controls { gap: 10px; }
     .lang-toggle { min-width: 48px; height: 34px; }
     .theme-toggle { width: 34px; height: 34px; }
