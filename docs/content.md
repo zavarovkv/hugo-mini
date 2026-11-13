@@ -352,6 +352,19 @@ From 2021 {{< wavy-arrow >}} 2025, I taught product management.
 
 The arrow has a fine rounded stroke that flows through one small, elongated loop into a straight tail and a compact open arrowhead. It uses `currentColor`, has no animation, and scales with the text (36px wide at a 16px font size), with its tip aligned to the middle of adjacent numerals. Its screen-reader label defaults to the localized `wavy_arrow_to` string ("to" in English, "по" in Russian); set `label="until"` to override it. The `--wavy-arrow-width` and `--wavy-arrow-height` CSS tokens default to `2.25em` and `1.125em`.
 
+## Homepage introduction
+
+A homepage can begin with a single native Markdown H1. It uses the configured
+title typeface at 28 px on desktop and 24 px on mobile, with a 24 px gap before
+the following text. Homepage paragraphs use a compact 12 px interval. Beauty's
+tokens provide the native type treatment, margins and responsive wrapping.
+
+Compact content modules share three theme tokens: `--content-detail-gap` (8 px)
+for related fields, `--content-item-gap` (12 px) for paragraphs, listing items
+and module heading-to-content gaps, and `--content-group-gap` (24 px) for separate
+projects and the archive link after a list. These are independent of line height
+and the larger section gaps. Ordinary article paragraphs keep their reading rhythm.
+
 ## Latest articles
 
 Place `{{< latest-posts count="3" >}}` in your homepage `_index.md` wherever the list belongs. It follows `params.mainSections`, sorts by date, and excludes hidden posts. Hugo also excludes drafts and future posts in normal production builds. Pinned posts retain their date order here; pinning applies only to category listings. With no posts, nothing is rendered.
@@ -370,10 +383,8 @@ Set `archive` to the article-listing URL to add a link below the list. `archiveL
 Use `columns` to display two equal columns above 768px and a single column on smaller screens. Each direct child block forms a column: `latest-posts` already renders one block, while `column` groups Markdown and nested shortcodes into one block. Spacing after and between stacked blocks uses the same `--section-gap` token as article-listing groups; both layouts share `--columns-gap` horizontally. The larger space before the columns and the footer uses `--section-gap-large`. Content order stays the same for keyboard navigation and screen readers.
 
 Module headings use `posts-group-title`: their gap to the first list or project
-is half the shared paragraph interval. The containing module supplies external
+uses `--content-item-gap`. The containing module supplies external
 spacing, so heading margins do not add extra space at the start of a column.
-The same compact treatment works on H1 or H2: choose the semantic level for the
-page structure while retaining the body typeface, section-title wrapping and size.
 
 ```text
 {{< columns >}}
@@ -397,7 +408,7 @@ rotated diagonally. It moves slightly up and right on pointer hover or keyboard 
 without moving the text; reduced motion keeps it stationary. This CSS effect is independent
 of the optional logo button.
 
-For a separate secondary source link, put it in a `<p class="beauty-note">` inside the description. Project layout keeps this note close to the preceding paragraph and separates adjacent projects with a larger gap. Its text size and color come from Beauty.css.
+For a separate secondary source link, put it in a `<p class="beauty-note">` inside the description. Titles, description paragraphs and notes share the 8 px detail gap; adjacent projects use the 24 px group gap. Descriptions retain native paragraph flow through Beauty's spacing token, including when they contain several paragraphs. Note text size and color come from Beauty.css.
 
 ```text
 {{< project name="My project" url="https://example.com/" >}}

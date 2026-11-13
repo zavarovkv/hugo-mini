@@ -6,7 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
-- Keep compact module titles in the body typeface with section-title wrapping when used as H1, preserving their size and spacing independently of the semantic heading level.
+- Give homepage introductions the configured H1 typeface at 28 px on desktop and 24 px on mobile, with a 24 px gap before the following paragraph through shared Beauty tokens.
+
+- Use a shared compact spacing scale for homepage paragraphs and content modules: 8 px within projects, 12 px between listing items and after module headings, and 24 px between projects and before archive links. Keep multi-paragraph project descriptions in native flow instead of removing their paragraph margins.
 
 - Restore social icons' brand colors on hover in dark mode through Beauty's shared link tokens. Use the same colors for keyboard focus and keep monochrome brands visible on dark backgrounds.
 
