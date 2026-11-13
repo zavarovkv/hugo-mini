@@ -131,6 +131,76 @@ test('mobile section changes preserve the closed overlay and selected label', as
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });
 
+test('long mobile labels remain inside their rows with enlarged text on a short screen', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 320 });
+  await page.goto('/browser-checks/');
+  await page.evaluate(() => document.fonts.ready);
+  await page.locator('#main-navigation .nav-label').evaluateAll(labels => {
+    for (const [index, label] of labels.entries()) {
+      const text = index === 0
+        ? 'Articles about product strategy, research and product team leadership'
+        : index === labels.length - 1 ? 'SubscribeToProductManagementAndLeadershipUpdates' : label.textContent;
+      (label.querySelector('.beauty-link-label') || label).textContent = text;
+      if (label.hasAttribute('data-label')) label.setAttribute('data-label', text);
+    }
+  });
+  await page.locator('.mobile-menu-toggle').click();
+  for (const scale of [100, 200]) {
+    await page.evaluate(scale => { document.documentElement.style.fontSize = scale + '%'; }, scale);
+    const rows = await page.locator('#main-navigation a').evaluateAll(links => links.map(link => {
+      const box = link.getBoundingClientRect();
+      const style = getComputedStyle(link);
+      const range = document.createRange();
+      range.selectNodeContents(link.querySelector('.beauty-link-label'));
+      return {
+        top: box.top, bottom: box.bottom,
+        contained: [...range.getClientRects()].every(rect =>
+          rect.left >= box.left + parseFloat(style.paddingLeft) - 1 &&
+          rect.right <= box.right - parseFloat(style.paddingRight) + 1 &&
+          rect.bottom <= box.bottom - parseFloat(style.paddingBottom) + 1),
+      };
+    }));
+    expect(rows.every(row => row.contained), `labels at ${scale}%`).toBe(true);
+    expect(rows.every((row, index) => index === 0 || row.top >= rows[index - 1].bottom - 1)).toBe(true);
+    expect(await page.locator('#main-navigation').evaluate(nav => nav.scrollWidth <= nav.clientWidth + 1)).toBe(true);
+    await page.locator('#main-navigation a').last().click({ trial: true });
+  }
+});
+
+test('closing mobile links leave the tab order before fading and return on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/browser-checks/');
+  const toggle = page.locator('.mobile-menu-toggle');
+  const nav = page.locator('#main-navigation');
+  await toggle.focus();
+  await page.keyboard.press('Space');
+  await nav.evaluate(async element => {
+    await Promise.all(element.getAnimations().map(animation => animation.finished));
+    // Keep the closing fade observable even on slower CI workers.
+    element.style.transitionDuration = '2s';
+  });
+  await nav.locator('a').first().focus();
+  await expect(nav.locator('a').first()).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(nav).toHaveCSS('visibility', 'visible');
+  await nav.locator('a').first().focus();
+  await expect(toggle).toBeFocused();
+  await page.keyboard.press('Tab');
+  expect(await nav.evaluate(element => element.contains(document.activeElement))).toBe(false);
+
+  await nav.evaluate(element => element.style.removeProperty('transition-duration'));
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(nav).toHaveJSProperty('inert', false);
+  await nav.locator('a').first().focus();
+  await expect(nav.locator('a').first()).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(nav).toBeHidden();
+});
+
 test('section links and stable widths work without JavaScript', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ baseURL, javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } });
   try {
@@ -141,6 +211,11 @@ test('section links and stable widths work without JavaScript', async ({ browser
     await expectSelected(page, 'About & contact');
     const after = await menuGeometry(page);
     expect(after).toEqual(before);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator('.mobile-menu-toggle')).toBeHidden();
+    await expect(page.locator('#main-navigation')).toBeVisible();
+    await page.locator('#main-navigation').getByRole('link', { name: 'Articles', exact: true }).click();
+    await expectSelected(page, 'Articles');
   } finally {
     await context.close();
   }

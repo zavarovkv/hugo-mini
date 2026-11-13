@@ -72,8 +72,11 @@
     --font-weight-title: {{ $fonts.title }};
     --header-text-size: 0.9rem;
     --header-title-size-small: 1.2em;
-    --header-nav-size-small: 1.1rem;
+    --header-nav-size-small: 1.25rem;
+    --header-nav-target-small: 4.5rem;
     --nav-transition-duration: 300ms;
+    --menu-icon-duration: 400ms;
+    --menu-icon-easing: cubic-bezier(0.22, 1, 0.36, 1);
     --columns-gap: 2em;
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
@@ -209,7 +212,6 @@
     body.reading-layout {
       --header-text-size: 1rem;
       --header-title-size-small: 1.25rem;
-      --header-nav-size-small: 1.125rem;
       --beauty-reading-size: 1.125rem;
       --beauty-reading-size-small: 1.1875rem;
       --beauty-reading-line-height: calc(28 / 18);
@@ -413,10 +415,6 @@
     }
   }
 
-  .main-nav a {
-    margin-right: 8px;
-  }
-
   button {
     margin: 0;
     cursor: pointer;
@@ -520,6 +518,7 @@
 
   /* blog post list */
   ul.blog-posts {
+    --beauty-text-wrap: wrap;
     list-style-type: none;
     padding: unset;
   }
@@ -540,7 +539,9 @@
   }
 
   .reading-shelf {
-    --beauty-table-cell-padding: 0.625em 0;
+    /* Keep the gap between records larger than their internal detail gap,
+       with both derived from the shared paragraph rhythm. */
+    --beauty-table-cell-padding: calc(var(--beauty-space) * 0.625) 0;
     border-collapse: collapse;
     table-layout: fixed;
     font-variant-numeric: normal;
@@ -570,7 +571,7 @@
   }
 
   .reading-meta {
-    margin-top: 0.125em;
+    margin-block-start: calc(var(--beauty-space) / 3);
     font-size: 0.875em;
     color: var(--color-secondary);
   }
@@ -873,11 +874,6 @@
   }
 
 
-  .main-nav a {
-    font-size: var(--header-text-size);
-    line-height: 1.5;
-  }
-
   /* Inline icon on a menu item — set via [menu.main.params] icon = "...".
      Desktop: icon before text. Mobile: icon after text, slightly larger.
      No underline on the icon link; plane does a subtle tilt on hover. */
@@ -1026,6 +1022,9 @@
   }
 
   .main-nav a {
+    font-size: var(--header-text-size);
+    line-height: 1.5;
+    margin-inline-end: 8px;
     white-space: nowrap;
   }
 
@@ -1071,10 +1070,10 @@
   /* Desktop search stays in the header; mobile gets a text-only menu entry. */
   .search-toggle-mobile { display: none; }
 
-  /* Mobile menu toggle button (burger) */
+  /* Four round endpoints extend inward into a cross during a quarter turn.
+     The icon remains small inside a full-size touch target. */
   .mobile-menu-toggle {
     display: none;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 44px;
@@ -1084,7 +1083,6 @@
     cursor: pointer;
     padding: 0;
     z-index: 1001;
-    gap: 6px;
   }
 
   /* Icon controls own their geometry; Beauty's text buttons have larger targets. */
@@ -1095,28 +1093,35 @@
     font: revert;
   }
 
-  .mobile-menu-toggle { color: ButtonText; }
+  .mobile-menu-toggle { color: var(--text-color); }
 
-  .mobile-menu-toggle span {
+  .mobile-menu-icon {
     display: block;
     width: 24px;
-    height: 2px;
-    background-color: var(--text-color);
-    border-radius: 2px;
-    transition: all 0.3s ease;
+    height: 24px;
+    flex: none;
     transform-origin: center;
+    transition: transform var(--menu-icon-duration) var(--menu-icon-easing),
+                stroke-width var(--menu-icon-duration) var(--menu-icon-easing);
   }
 
-  .mobile-menu-toggle.active span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+  .mobile-menu-icon path {
+    /* The gap exceeds the path length so WebKit cannot repeat a dot at its end. */
+    stroke-dasharray: 0 2;
+    transition: stroke-dasharray var(--menu-icon-duration) var(--menu-icon-easing);
   }
 
-  .mobile-menu-toggle.active span:nth-child(2) {
-    opacity: 0;
+  .mobile-menu-toggle[aria-expanded="true"] .mobile-menu-icon {
+    transform: rotate(90deg);
+    stroke-width: 1.5;
   }
 
-  .mobile-menu-toggle.active span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+  .mobile-menu-toggle[aria-expanded="true"] .mobile-menu-icon path {
+    stroke-dasharray: 1 2;
+  }
+
+  @media (forced-colors: active) {
+    .mobile-menu-toggle { color: ButtonText; }
   }
 
   /* Mobile styles */
@@ -1190,7 +1195,7 @@
       right: 0;
       bottom: 0;
       background-color: var(--background-color);
-      padding: 80px 0 20px;
+      padding: 96px 0 20px;
       z-index: 1000;
       overflow-x: hidden;
       overflow-y: auto;
@@ -1216,10 +1221,20 @@
     .main-nav a {
       width: 100%;
       box-sizing: border-box;
-      padding: 18px 20px;
+      min-block-size: var(--header-nav-target-small);
+      flex-shrink: 0;
+      margin-inline-end: 0;
+      padding: 20px;
       display: block;
       font-size: var(--header-nav-size-small);
+      white-space: normal;
+      overflow-wrap: anywhere;
       border-bottom: 1px solid var(--color-divider);
+    }
+
+    .main-nav .nav-label {
+      min-inline-size: 0;
+      max-inline-size: 100%;
     }
 
     .main-nav .nav-label[data-label] > .beauty-link-label {
@@ -1233,10 +1248,6 @@
     .main-nav a:has(.nav-icon):visited {
       text-decoration: none;
       border-bottom: 1px solid var(--color-divider);
-    }
-
-    .main-nav a:first-child {
-      border-top: 1px solid var(--color-divider);
     }
 
     /* The search link uses the same typography and spacing as menu links. */
@@ -1287,12 +1298,19 @@
     margin-bottom: var(--section-gap);
   }
 
+  /* Modules own their external spacing; their headings own the internal gap. */
+  .latest-posts { margin-block: var(--section-gap); }
+  .latest-posts > :last-child { margin-block-end: 0; }
+
   .posts-group-title {
     font-size: 1em;
     font-weight: var(--font-weight-bold);
     line-height: inherit;
     transform: none;
-    margin-bottom: 0.4em;
+    margin-block: 0 calc(var(--beauty-space) / 2);
+  }
+  .posts-group-title + :is(.blog-posts, .project-entry) {
+    margin-block-start: 0;
   }
 
   .content-columns {
@@ -1300,7 +1318,7 @@
     gap: var(--section-gap) var(--columns-gap);
     margin-block: var(--section-gap-large) var(--section-gap);
   }
-  .content-columns > * { min-width: 0; }
+  .content-columns > * { min-width: 0; margin-block: 0; }
   .content-columns > * > :first-child { margin-top: 0; }
   .content-columns > * > :last-child { margin-bottom: 0; }
   @media (min-width: 769px) {

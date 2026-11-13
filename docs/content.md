@@ -356,6 +356,9 @@ The arrow has a fine rounded stroke that flows through one small, elongated loop
 
 Place `{{< latest-posts count="3" >}}` in your homepage `_index.md` wherever the list belongs. It follows `params.mainSections`, sorts by date, and excludes hidden posts. Hugo also excludes drafts and future posts in normal production builds. Pinned posts retain their date order here; pinning applies only to category listings. With no posts, nothing is rendered.
 
+Titles in article listings use ordinary line wrapping through Beauty's shared
+token, filling the available column without prose widow prevention.
+
 Set `archive` to the article-listing URL to add a link below the list. `archiveLabel` sets its text (defaults to the localized "Articles" label). The link uses medium weight, matching project names, with the same underline geometry as ordinary content links. Its fine SVG arrow inherits the link color and moves slightly right on pointer hover or keyboard focus, without shifting the text; reduced motion disables the movement. Article-list links remain light. Internal page URLs resolve to the current language when available.
 
 ```text
@@ -365,6 +368,10 @@ Set `archive` to the article-listing URL to add a link below the list. `archiveL
 ## Columns
 
 Use `columns` to display two equal columns above 768px and a single column on smaller screens. Each direct child block forms a column: `latest-posts` already renders one block, while `column` groups Markdown and nested shortcodes into one block. Spacing after and between stacked blocks uses the same `--section-gap` token as article-listing groups; both layouts share `--columns-gap` horizontally. The larger space before the columns and the footer uses `--section-gap-large`. Content order stays the same for keyboard navigation and screen readers.
+
+Module headings use `posts-group-title`: their gap to the first list or project
+is half the shared paragraph interval. The containing module supplies external
+spacing, so heading margins do not add extra space at the start of a column.
 
 ```text
 {{< columns >}}
@@ -444,7 +451,8 @@ each title above its author, publication year and rating; reading months align o
 Long titles and author lists wrap within their column on narrow screens.
 The table retains a 20em minimum width on mobile and scrolls horizontally inside
 a labeled, keyboard-accessible `beauty-scroll` container when needed.
-Rows are separated by whitespace. Both column labels share the theme's heading
+Title-to-metadata spacing follows a third of the shared paragraph interval; the gap
+between records is larger, at 1.25 intervals. Both column labels share the theme's heading
 weight and color, with a single rule beneath the header and a section gap after
 the table. The table uses the
 shared stylesheet, with no extra scripts or network requests.

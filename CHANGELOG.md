@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Let long mobile menu labels wrap and rows retain their content height on short screens or with enlarged text. Remove the inherited desktop link margin that caused hidden horizontal overflow. Remove closing menu links from keyboard navigation immediately, while preserving ordinary desktop and no-JavaScript navigation.
+
+- Give article groups and homepage modules one heading-to-content interval, with external spacing owned by the containing module. Align the first article and project, remove the extra heading margin above the first category, and let listing titles fill the available line naturally instead of applying prose widow prevention.
+
+- Replace the mobile hamburger with four dots that rotate and join into a thin close icon. Keep the 44 px touch target, keyboard disclosure behavior, theme colors and reduced-motion support without additional JavaScript. Increase mobile menu labels to 20 px and link targets to at least 72 px, including search. Separate the header from the first item with more whitespace instead of a top divider.
+
+- Tie reading-shelf spacing to the shared paragraph rhythm: separate book titles from author metadata more clearly while keeping a larger gap between records in both languages and at every screen width.
+
 - Set resume screen text to 17/26 px, with more separation between sections and jobs, and a wider bullet indent. Preserve item-gap ratios, secondary details at 16/24 px and the 10.5 pt paper text size; add space around section headings in print.
 
 - Let resume objectives and team descriptions inherit the body reading size and leading, keeping their labels bold and the print scale unchanged.

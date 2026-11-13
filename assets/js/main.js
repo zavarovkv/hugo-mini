@@ -184,7 +184,9 @@
     function closeMenu() {
       var wasOpen = nav.classList.contains('active');
       nav.classList.remove('active');
-      toggle.classList.remove('active');
+      // Fading links must leave the tab order immediately, before visibility
+      // changes at the end of the CSS transition. Desktop links stay usable.
+      nav.inert = mobileMql.matches;
       toggle.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('menu-open');
       document.documentElement.classList.remove('menu-open');
@@ -198,8 +200,8 @@
       lockedScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
       document.body.style.top = -lockedScrollY + 'px';
       nav.classList.add('menu-animated');
+      nav.inert = false;
       nav.classList.add('active');
-      toggle.classList.add('active');
       toggle.setAttribute('aria-expanded', 'true');
       document.body.classList.add('menu-open');
       document.documentElement.classList.add('menu-open');
@@ -232,11 +234,12 @@
 
     function onBreakpointChange() {
       nav.classList.remove('menu-animated');
-      if (!mobileMql.matches) closeMenu();
+      closeMenu();
     }
     if (mobileMql.addEventListener) mobileMql.addEventListener('change', onBreakpointChange);
     else if (mobileMql.addListener) mobileMql.addListener(onBreakpointChange);
     // Enhance an ordinary visible nav only after its controls are wired.
+    nav.inert = mobileMql.matches;
     nav.classList.add('menu-ready');
     toggle.classList.add('menu-ready');
   });
