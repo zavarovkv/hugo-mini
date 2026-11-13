@@ -62,7 +62,7 @@ The demo also uses the asterisk as its header logo. To enable that separately:
 
 The header switches `logoDark` with the theme toggle; if omitted, `logo` is used in both modes. `logo` takes precedence over `avatar` / `avatarHover`. Remove `logo` to keep your avatar.
 
-Local header logos, project marks and favicons include a content hash in their URL. Updating an image changes its URL at the next build, so returning readers get the new version without clearing their cache. The shared `static-asset-url.html` helper preserves existing query parameters and fragments; external URLs and missing files keep their configured paths.
+Local header logos, both avatar states (`avatar` and `avatarHover`), project marks and favicons include a content hash in their URL. Updating an image changes its URL at the next build, so returning readers get the new version without clearing their cache. The shared `static-asset-url.html` helper preserves existing query parameters and fragments; external URLs and missing files keep their configured paths.
 
 To replace the default favicon, set `favicon` to your own SVG or 32×32 PNG in your site's `static/` directory. Custom favicons do not inherit the theme's device icons; add `favicon192` and `appleTouchIcon` if needed. Set `favicon = false` to disable the bundled icons.
 

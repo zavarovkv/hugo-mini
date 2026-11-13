@@ -10,9 +10,9 @@
     {{- else }}
     {{- with .Site.Params.avatar }}
     <div class="title-avatar-container{{ with $.Site.Params.avatarHover }} has-hover-avatar{{ end }}">
-      <img src="{{ . | relURL }}" alt="{{ $.Site.Params.authorName | default $.Site.Title }}" class="title-avatar title-avatar-default" loading="eager" decoding="sync" width="45" height="45">
+      <img src="{{ partial "static-asset-url.html" . }}" alt="{{ $.Site.Params.authorName | default $.Site.Title }}" class="title-avatar title-avatar-default" loading="eager" decoding="sync" width="45" height="45">
       {{- with $.Site.Params.avatarHover }}
-      <img src="{{ . | relURL }}" alt="" class="title-avatar title-avatar-hover" loading="lazy" decoding="async" width="45" height="45">
+      <img src="{{ partial "static-asset-url.html" . }}" alt="" class="title-avatar title-avatar-hover" loading="lazy" decoding="async" width="45" height="45">
       {{- end }}
     </div>
     {{- end }}
