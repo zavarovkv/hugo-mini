@@ -372,6 +372,8 @@ Use `columns` to display two equal columns above 768px and a single column on sm
 Module headings use `posts-group-title`: their gap to the first list or project
 is half the shared paragraph interval. The containing module supplies external
 spacing, so heading margins do not add extra space at the start of a column.
+The same compact treatment works on H1 or H2: choose the semantic level for the
+page structure while retaining the body typeface, section-title wrapping and size.
 
 ```text
 {{< columns >}}

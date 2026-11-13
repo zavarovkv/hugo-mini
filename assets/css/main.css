@@ -1306,6 +1306,11 @@
   .latest-posts > :last-child { margin-block-end: 0; }
 
   .posts-group-title {
+    /* The compact treatment is independent of the semantic heading level. */
+    --beauty-h1-font: var(--beauty-h2-font);
+    --beauty-h1-tracking: var(--beauty-h2-tracking);
+    --beauty-h1-hyphens: manual;
+    --beauty-heading-wrap: var(--beauty-section-heading-wrap);
     font-size: 1em;
     font-weight: var(--font-weight-bold);
     line-height: inherit;
