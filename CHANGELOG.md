@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Restore social icons' brand colors on hover in dark mode through Beauty's shared link tokens. Use the same colors for keyboard focus and keep monochrome brands visible on dark backgrounds.
+
 - Let the footer's outer margin merge with preceding content spacing instead of adding a second gap. Keep a larger interval after final quotations, and enlarge social icons slightly to 17 px on desktop and 22 px on mobile.
 
 - Enlarge the mobile menu's four-dot square slightly while retaining its dot weight, touch target and animated close transition.

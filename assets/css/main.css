@@ -1759,38 +1759,31 @@
     transform: rotate(-90deg) scale(0);
   }
 
-  .social-icon,
-  .social-icon:link,
-  .social-icon:visited {
-    color: var(--color-muted);
-    border-bottom: none;
+  /* Beauty owns link states; brand classes only select their hover palette. */
+  .social-icon {
+    --beauty-link: var(--color-muted);
+    --beauty-link-decoration: none;
+    --beauty-link-border: 0 solid transparent;
     transition: color 0.2s ease;
   }
 
-  .social-icon:hover {
-    border-bottom: none;
+  .social-icon:focus-visible {
+    color: var(--beauty-hover);
   }
 
-  .social-telegram:hover  { color: #26A5E4; }
-  .social-linkedin:hover  { color: #0A66C2; }
-  .social-github:hover    { color: #333; }
-  .social-x:hover         { color: #000; }
-  .social-youtube:hover   { color: #FF0000; }
-  .social-facebook:hover  { color: #1877F2; }
-  .social-instagram:hover { color: #E4405F; }
-  .social-email:hover     { color: #EA4335; }
-  .social-rss:hover       { color: #FF6600; }
+  .social-telegram  { --beauty-hover: #26A5E4; }
+  .social-linkedin  { --beauty-hover: #0A66C2; }
+  .social-github    { --beauty-hover: #333; }
+  .social-x         { --beauty-hover: #000; }
+  .social-youtube   { --beauty-hover: #FF0000; }
+  .social-facebook  { --beauty-hover: #1877F2; }
+  .social-instagram { --beauty-hover: #E4405F; }
+  .social-email     { --beauty-hover: #EA4335; }
+  .social-rss       { --beauty-hover: #FF6600; }
 
-  /* Dark theme: keep rest state gray, override [data-theme="dark"] a:link inherit.
-     Hover keeps brand colors (GitHub flipped since #333 is invisible on dark bg). */
-  [data-theme="dark"] .social-icon,
-  [data-theme="dark"] .social-icon:link,
-  [data-theme="dark"] .social-icon:visited {
-    color: var(--color-muted);
-    border-bottom: none;
-  }
-  [data-theme="dark"] .social-github:hover    { color: #f0f6fc; }
-  [data-theme="dark"] .social-x:hover         { color: #f0f6fc; }
+  /* Monochrome brands need a light active color against the dark surface. */
+  [data-theme="dark"] .social-github { --beauty-hover: #f0f6fc; }
+  [data-theme="dark"] .social-x      { --beauty-hover: #f0f6fc; }
 
   /* Larger touch targets for mobile footer */
   @media (max-width: 768px) {

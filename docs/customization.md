@@ -131,6 +131,9 @@ editorial quotation uses `--footer-quotation-gap` for a larger interval. Social
 icons use `--footer-icon-size` (17 px), switching to `--footer-icon-size-small`
 (22 px) at mobile widths.
 
+Social links use Beauty's shared link tokens: muted at rest and their brand color
+on hover or keyboard focus. GitHub and X use a light active color in dark mode.
+
 ## Share cards
 
 The theme generates a 1200×630 share card for each page. To customize selected pages, add `layouts/_partials/custom_og_image.html` to your site. It receives the page and must return an image resource or `false` to keep the default:
