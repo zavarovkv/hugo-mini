@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Enlarge the mobile menu's four-dot square slightly while retaining its dot weight, touch target and animated close transition.
+
 - Let long mobile menu labels wrap and rows retain their content height on short screens or with enlarged text. Remove the inherited desktop link margin that caused hidden horizontal overflow. Remove closing menu links from keyboard navigation immediately, while preserving ordinary desktop and no-JavaScript navigation.
 
 - Give article groups and homepage modules one heading-to-content interval, with external spacing owned by the containing module. Align the first article and project, remove the extra heading margin above the first category, and let listing titles fill the available line naturally instead of applying prose widow prevention.
