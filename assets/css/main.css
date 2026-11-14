@@ -1296,6 +1296,9 @@
     --beauty-h1-size-small: 1.5rem;
     --beauty-h1-margin: 0 var(--content-group-gap);
   }
+  @media screen and (min-width: 769px) {
+    .home-content { --section-gap-large: 4rem; }
+  }
 
   /* Posts grouped by tags in 2 columns */
   .posts-columns {

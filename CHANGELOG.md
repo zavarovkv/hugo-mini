@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Give homepage introductions 64 px of space before desktop columns in every language, retaining the 56 px mobile gap and existing paragraph and footer spacing.
+
 - Remove borders from language, theme and desktop search controls, keeping their backgrounds transparent. Preserve existing resting and hover colors, keyboard focus, click areas and animations.
 
 - Give homepage introductions the configured H1 typeface at 28 px on desktop and 24 px on mobile, with a 24 px gap before the following paragraph through shared Beauty tokens.

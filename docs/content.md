@@ -358,6 +358,9 @@ A homepage can begin with a single native Markdown H1. It uses the configured
 title typeface at 28 px on desktop and 24 px on mobile, with a 24 px gap before
 the following text. Homepage paragraphs use a compact 12 px interval. Beauty's
 tokens provide the native type treatment, margins and responsive wrapping.
+On desktop screens above 768 px, homepage columns begin 64 px after the introduction;
+mobile and print retain the shared 56 px section gap. The homepage-scoped token
+applies to every language without changing footer spacing.
 
 Compact content modules share three theme tokens: `--content-detail-gap` (8 px)
 for related fields, `--content-item-gap` (12 px) for paragraphs, listing items
