@@ -24,7 +24,7 @@ The theme includes Inter. The demo's licensed Story, Sourdine and Mirta fonts ar
 - **Ready to publish.** Mobile navigation, dark mode, multiple languages, SEO, RSS and JSON Feed.
 - **More than posts.** [Featured articles](docs/content.md#featured-articles), projects, reading lists and a [printable CV](docs/content.md#standalone-resume).
 - **Optional integrations.** Math, diagrams, Telegram comments, sharing and analytics.
-- **Make it yours.** Custom colors, fonts and logos; core assets load from your own site.
+- **Make it yours.** Custom colors, fonts and logos; article H2 can [share the title font](docs/fonts.md#use-the-title-face-for-article-h2). Core assets load from your own site.
 
 ## Quick start
 

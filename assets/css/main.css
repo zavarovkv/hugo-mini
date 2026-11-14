@@ -234,6 +234,11 @@
     }
   }
 
+  /* Opt-in article sections reuse the title face through Beauty's H2 token. */
+  .article-title-headings {
+    --beauty-h2-font: var(--font-weight-title) var(--beauty-h2-size)/1.25 var(--font-title);
+  }
+
   /* Reserve classic desktop scrollbars on short pages as well as long ones.
      Mobile overlays and paper retain their existing viewport geometry. */
   @media screen and (min-width: 769px) {

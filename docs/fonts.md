@@ -44,7 +44,7 @@ Project names use the configured bold role, while their SVG arrows keep their ow
 
 ## A separate H1 family
 
-An existing custom-font profile can use a second, upright face for H1 only:
+An existing custom-font profile can use a second, upright face for H1:
 
 ```toml
 [params.fonts]
@@ -60,10 +60,28 @@ Keep the base profile's `family`, body roles and `faces`; this fragment may be a
 Hugo configuration overlay. The title face uses `titleWeight`, must belong to a distinct
 family, and receives the same format validation, fingerprinting and byte preservation.
 The theme selects it through `--font-title` and Beauty's existing H1 token, including in
-print. H2–H6, article-list links, navigation and body text retain the base family. H1 sizes,
-spacing and line height stay theme-owned. The separate H1 family uses normal letter
+print. By default, H2–H6, article-list links, navigation and body text retain the base
+family. H1 sizes, spacing and line height stay theme-owned. The separate H1 family uses normal letter
 spacing above 768 px; mobile retains the reading layout's `-0.01em` tracking.
 `useDefaultFonts` disables all custom families.
+
+## Use the title face for article H2
+
+To give section headings inside articles the same family and weight as H1, opt in:
+
+```toml
+[params]
+articleH2UseTitleFont = true
+```
+
+The default is `false`. The setting applies only to H2 inside post bodies in
+`params.mainSections`, using the existing title role even when there is no separate
+title family. H2 sizes, line heights, spacing and colors stay unchanged on screen and
+in print. H3–H6 and homepage, archive and standalone-page headings retain their usual roles.
+This reuses the existing font profile without adding font files or preload hints.
+
+Page front matter can override the site setting with `articleH2UseTitleFont = false`.
+`useDefaultFonts = true` keeps the default typography regardless of this setting.
 
 ## A separate quotation family
 

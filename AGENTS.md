@@ -99,4 +99,6 @@ For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 
 `font-profile.html` validates optional `params.fonts` assets and role weights. The theme owns loading and typography; consumers own any licensed files. Keep CSS output keys profile-specific and honor `useDefaultFonts` on independent pages. Never copy proprietary consumer fonts into the theme. See `docs/fonts.md`.
 
+`articleH2UseTitleFont` is an opt-in top-level parameter for H2 inside post bodies in `mainSections`. Reuse the H1 family and weight through Beauty tokens; preserve H2 geometry and other heading roles, page overrides and `useDefaultFonts`.
+
 Built-in blog templates, including 404, select `reading-layout` through the `bodyClass` block. Theme tokens configure 18/28 px desktop reading, 19/29 px mobile reading and a 720 px column; independent templates and print retain their own scale. Visible page titles use `typography/title.html`; metadata and URLs must remain unchanged. The table render hook adds native time semantics only for whole, validated ISO-date cells.

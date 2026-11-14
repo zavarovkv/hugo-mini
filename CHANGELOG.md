@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Add opt-in `articleH2UseTitleFont` to use the H1 family and weight for H2 inside post bodies. Preserve H2 geometry, other heading roles and default typography; honor page overrides and `useDefaultFonts` without adding font assets.
+
 - Add `featured-posts` for hand-picked homepage articles, ordered by `params.featuredPosts` and resolved within each language. Reuse the latest-article layout and optional archive link, skip duplicates and unavailable or hidden posts, and omit empty selections without changing `latest-posts`.
 
 - Group article metadata and sharing with a 16 px internal gap, separate them from the text and Telegram discussion by 32 px, and remove the comment iframe's inline baseline space. Keep optional widgets and print behavior intact in every language.

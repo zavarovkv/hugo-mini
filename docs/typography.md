@@ -157,6 +157,12 @@ An optional [H1 font profile](fonts.md#a-separate-h1-family) changes the title f
 and weight while keeping this guide's sizes, spacing and the body/list typography.
 Its letter spacing is normal above 768 px and `-0.01em` on mobile.
 
+Set [`articleH2UseTitleFont = true`](fonts.md#use-the-title-face-for-article-h2) in
+`[params]` to use the H1 family and weight for H2 inside article bodies in `mainSections`.
+H2 keeps its existing size, line height, margins and color. H3–H6 and headings on the
+homepage, archives and standalone pages keep their usual roles. The option defaults
+to `false`; page front matter can override it, and `useDefaultFonts` disables it.
+
 On screen, LTR reading layouts optically shift H1 by `-0.025em` and H2 by `-0.02em`
 through Beauty's `--beauty-h1-transform` / `--beauty-h2-transform` tokens. At the default
 44/32 px title sizes this is 1.1/0.8 px to the left. The adjustment aligns visible glyph

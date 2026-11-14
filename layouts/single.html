@@ -18,7 +18,7 @@
   {{- end -}}
   <h1{{ if .Param "headingScroll" }} id="page-title"{{ end }}>{{ $title }}</h1>
 
-  <article class="beauty-reading{{ if .Param "proseNumerals" }} beauty-prose-numerals{{ end }}{{ if .Params.dropCap }} beauty-dropcap{{ end }}{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if .Param "sideNotes" }} data-side-notes{{ end }}{{ if and $isPost (.Param "articleLinksNewTab") }} data-article-links-new-tab{{ end }}{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
+  <article class="beauty-reading{{ if and $isPost (.Param "articleH2UseTitleFont") (not .Params.useDefaultFonts) }} article-title-headings{{ end }}{{ if .Param "proseNumerals" }} beauty-prose-numerals{{ end }}{{ if .Params.dropCap }} beauty-dropcap{{ end }}{{ if .Params.wideCode }} article-wide-code{{ end }}" lang="{{ .Language.Lang }}"{{ if .Param "sideNotes" }} data-side-notes{{ end }}{{ if and $isPost (.Param "articleLinksNewTab") }} data-article-links-new-tab{{ end }}{{ if $neighbors.enabled }} data-article-navigation{{ end }}{{ with $neighbors.previous }} data-article-previous="{{ . }}"{{ end }}{{ with $neighbors.next }} data-article-next="{{ . }}"{{ end }}>
     {{ partial "typography/content.html" . }}
   </article>
 

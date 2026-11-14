@@ -429,13 +429,15 @@ preload=true
   assert.deepEqual(await example.readBytes(url), regular, 'the font is emitted without conversion');
 });
 
-test('a separate H1 family uses its own weight and keeps body fonts isolated', async (t) => {
+test('a separate H1 family keeps body fonts isolated and can opt in article H2', async (t) => {
   const regular = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-300.woff2'));
   const bold = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-600.woff2'));
   const title = await readFile(join(theme, 'static/fonts/inter-v20-cyrillic_cyrillic-ext_latin_latin-ext-500.woff2'));
   const config = `baseURL="https://example.org/"
 theme="hugo-mini"
 disableKinds=["taxonomy","term"]
+[params]
+mainSections=["writing"]
 [params.fonts]
 family="Body Font"
 titleWeight=500
@@ -451,8 +453,12 @@ source="private/title.woff2"
 preload=true
 `;
   const content = {
+    '_index.md': '+++\ntitle="Home"\n+++\n## Home section',
     'custom.md': '+++\ntitle="Custom"\n+++\n## Section\n\nBody text.',
     'default.md': '+++\ntitle="Default"\nuseDefaultFonts=true\n+++\nBody text.',
+    'writing/custom.md': '+++\ntitle="Article"\n+++\n## Section\n\nBody text.\n\n### Subsection',
+    'writing/default.md': '+++\ntitle="Default article"\nuseDefaultFonts=true\n+++\n## Section',
+    'writing/body.md': '+++\ntitle="Body headings"\narticleH2UseTitleFont=false\n+++\n## Section',
   };
   const assets = {'private/regular.woff2':regular, 'private/bold.woff2':bold, 'private/title.woff2':title};
   const example = await site(t, config, content, {}, assets);
@@ -467,9 +473,18 @@ preload=true
   assert.match(css, /--font-weight-title:500/);
   assert.match(css, /--beauty-h1-font:[^;]+var\(--font-title\)/);
   assert.match(css, /--beauty-h2-font:[^;]+var\(--font-main\)/);
+  assert.doesNotMatch(await example.read('writing/custom/index.html'), /article-title-headings/, 'article H2 keeps the body face by default');
   assert.doesNotMatch(await example.read('default/index.html'), /private\//);
   const url = html.match(/href=\/(private\/title\.[a-f0-9]{64}\.woff2)/)[1];
   assert.deepEqual(await example.readBytes(url), title);
+
+  const optedIn = await site(t, config.replace('[params]\n', '[params]\narticleH2UseTitleFont=true\n'), content, {}, assets);
+  assert.match(await optedIn.read('writing/custom/index.html'), /<article\b[^>]*class="[^"]*\barticle-title-headings\b/, 'the configured main section can reuse the title face for H2');
+  for (const path of ['index.html', 'writing/index.html', 'custom/index.html', 'writing/default/index.html', 'writing/body/index.html']) {
+    assert.doesNotMatch(await optedIn.read(path), /article-title-headings/, `${path} keeps the body heading face`);
+  }
+  assert.doesNotMatch(await optedIn.read('writing/default/index.html'), /private\//, 'useDefaultFonts still excludes the custom profile');
+
   await assert.rejects(site(t, config, content, {}, {'private/regular.woff2':regular, 'private/bold.woff2':bold}), /fonts: missing site asset/);
   await assert.rejects(site(t, config.replace('family="Title Font"', 'family="Body Font"'), content, {}, assets), /fonts.title.family must differ/);
   await assert.rejects(site(t, config.replace('family="Title Font"', 'family="Bad; Font"'), content, {}, assets), /fonts.title.family must be a plain/);
