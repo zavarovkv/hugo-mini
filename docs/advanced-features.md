@@ -34,7 +34,7 @@ The complete map of Hugo Mini's public features. [README](../README.md) covers i
 | Print | Fixed point sizes, light paper palette, wrapped code/tables and simplified page shell. Diagrams prepare neutral copies in the background. [Printing](content.md#printing) |
 | Resume | Independent `resume` layout with contacts, dated entries, inherited fonts, mobile layout and A4 printing / saving as PDF through the browser; no blog chrome or visible controls. [Authoring](content.md#standalone-resume) |
 | Editorial shortcodes | `caption`, `callout`, `plug` and `mermaid`; ordinary semantic Markdown inside supported blocks. [Usage](content.md#shortcodes) |
-| Homepage components | `latest-posts` with optional archive link; `columns`/`column` stack on mobile. [Latest posts](content.md#latest-articles), [columns](content.md#columns) |
+| Homepage components | `featured-posts` selects articles in a configured order; `latest-posts` lists recent articles. Both support an optional archive link; `columns`/`column` stack on mobile. [Featured articles](content.md#featured-articles), [latest posts](content.md#latest-articles), [columns](content.md#columns) |
 | Projects | `project` with Markdown description, optional light/dark mark and motion-aware click animation; source links use compact notes. [Projects](content.md#projects) |
 | Public counters | `github-stars` renders saved data; optional build helper preserves counts on API failure, with no browser counter requests. [GitHub stars](content.md#github-stars) |
 | Bookshelf | `reading-list` renders shared site data with localized labels, review links, reading dates and addition-based badges. [Reading lists](content.md#reading-lists) |

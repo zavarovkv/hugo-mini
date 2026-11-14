@@ -273,6 +273,7 @@ Markdown images from page bundles or `static/` receive `width` and `height` auto
 | `mermaid` | Diagram source rendered by Mermaid; optional `wide=true` and `caption` |
 | `plug` | Centered three-asterisk divider |
 | `latest-posts` | Newest visible posts in the current language; `count="3"` by default |
+| `featured-posts` | Hand-picked visible posts in the order set by `params.featuredPosts` |
 | `project` | Linked project name with an external-link arrow, followed by a Markdown description |
 | `github-stars` | Inline GitHub link with an optional, build-time star count |
 | `columns` / `column` | Responsive columns; `column` groups Markdown and shortcodes into one column |
@@ -390,9 +391,49 @@ Set `archive` to the article-listing URL to add a link below the list. `archiveL
 {{< latest-posts count="3" archive="/blog/" archiveLabel="All articles" >}}
 ```
 
+## Featured articles
+
+Use `featured-posts` to introduce readers to selected articles in an explicit order.
+Add their content paths to the existing `[params]` table in your site configuration:
+
+```toml
+[params]
+  featuredPosts = [
+    "/blog/first-steps",
+    "/blog/what-i-learned",
+    "/blog/useful-tools",
+  ]
+```
+
+These are Hugo content paths, not published URLs or slugs. For example,
+`content/en/blog/first-steps.md` uses `/blog/first-steps`, even if its public URL
+is `/en/getting-started/`. Omit the content directory, language directory and
+file extension. The same list resolves within each current language; to choose
+different articles or order for a language, set `featuredPosts` under
+`[languages.<lang>.params]` instead.
+
+Replace `latest-posts` in the homepage `_index.md` with:
+
+```text
+{{< featured-posts archive="/blog/" archiveLabel="All articles" >}}
+```
+
+The list keeps the configured order and includes each article once. Only visible
+posts from `params.mainSections` in the current language are eligible. Missing
+pages, unavailable translations, hidden posts and pages outside those sections
+are skipped; Hugo also excludes drafts and future posts in normal production
+builds. With no available selections, the entire block is omitted, including its
+heading and archive link. It does not fall back to recent posts.
+
+The heading is localized through `featured_posts`: **Featured articles** in English
+and **Избранные статьи** in Russian. Layout and the optional `archive` /
+`archiveLabel` link match `latest-posts`. The configured list controls the number
+of articles, so no `count` is needed. Selecting articles does not change their
+dates, category pinning, feeds or the behavior of `latest-posts`.
+
 ## Columns
 
-Use `columns` to display two equal columns above 768px and a single column on smaller screens. Each direct child block forms a column: `latest-posts` already renders one block, while `column` groups Markdown and nested shortcodes into one block. Spacing after and between stacked blocks uses the same `--section-gap` token as article-listing groups; both layouts share `--columns-gap` horizontally. The larger space before the columns and the footer uses `--section-gap-large`. Content order stays the same for keyboard navigation and screen readers.
+Use `columns` to display two equal columns above 768px and a single column on smaller screens. Each direct child block forms a column: `latest-posts` and `featured-posts` each render one block, while `column` groups Markdown and nested shortcodes into one block. Spacing after and between stacked blocks uses the same `--section-gap` token as article-listing groups; both layouts share `--columns-gap` horizontally. The larger space before the columns and the footer uses `--section-gap-large`. Content order stays the same for keyboard navigation and screen readers.
 
 Module headings use `posts-group-title`: their gap to the first list or project
 uses `--content-item-gap`. The containing module supplies external

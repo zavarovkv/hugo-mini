@@ -1,0 +1,17 @@
+{{- $posts := partialCached "main-pages.html" .Page .Page.Language.Lang -}}
+{{- $featured := slice -}}
+{{- range .Page.Site.Params.featuredPosts -}}
+  {{- with $.Page.Site.GetPage . -}}
+    {{- if and (in $posts .) (not (in $featured .)) -}}
+      {{- $featured = $featured | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- partial "post-list.html" (dict
+  "Page" .Page
+  "Pages" $featured
+  "Class" "featured-posts"
+  "Title" (i18n "featured_posts")
+  "Archive" (.Get "archive")
+  "ArchiveLabel" (.Get "archiveLabel")
+) -}}

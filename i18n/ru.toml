@@ -10,6 +10,9 @@ other = "Популярное"
 [latest_posts]
 other = "Последние статьи"
 
+[featured_posts]
+other = "Избранные статьи"
+
 [home]
 other = "Главная"
 

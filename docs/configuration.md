@@ -44,6 +44,7 @@ All parameters are optional unless your site content depends on them.
 | `editorialQuotes` | Render native Markdown quotations and `callout` with shared editorial figures and hanging punctuation in all languages; page front matter can override | `false` |
 | `typography` | Apply language-aware prose spacing and Russian punctuation rules at build time; page front matter can override | `true` |
 | `mainSections` | Sections treated as posts | Hugo default |
+| `featuredPosts` | Ordered content paths for the `featured-posts` shortcode; resolves within each language, with optional language-specific overrides. [Usage](content.md#featured-articles) | unset |
 | `socialSharing` | Likely sharing buttons on posts | `true` |
 | `telegramChannel` | Telegram comments and reaction source | unset |
 | `mermaidSrc` | Custom Mermaid script, including a local copy | pinned CDN URL |

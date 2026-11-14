@@ -1,18 +1,9 @@
 {{- $count := math.Max 0 (int (.Get "count" | default 3)) | int -}}
-{{- $page := .Page -}}
-{{- $archive := .Get "archive" -}}
-{{- $archiveLabel := .Get "archiveLabel" | default (i18n "articles") -}}
-{{- with first $count (partialCached "main-pages.html" .Page .Page.Language.Lang) -}}
-<section class="latest-posts">
-  <h2 class="posts-group-title">{{ i18n "latest_posts" }}</h2>
-  <ul class="blog-posts">
-    {{- range . }}
-    <li><a href="{{ .RelPermalink }}">{{ partial "typography/title.html" . }}</a></li>
-    {{- end }}
-  </ul>
-  {{- with $archive }}
-  {{- $url := partial "localized-link.html" (dict "Destination" . "Page" $page) }}
-  <p><a class="archive-link" href="{{ $url }}"><span class="archive-label beauty-link-label">{{ $archiveLabel }}</span><span class="archive-arrow beauty-link-icon" aria-hidden="true">{{ partial "link-arrow.html" "forward" }}</span></a></p>
-  {{- end }}
-</section>
-{{- end -}}
+{{- partial "post-list.html" (dict
+  "Page" .Page
+  "Pages" (first $count (partialCached "main-pages.html" .Page .Page.Language.Lang))
+  "Class" "latest-posts"
+  "Title" (i18n "latest_posts")
+  "Archive" (.Get "archive")
+  "ArchiveLabel" (.Get "archiveLabel")
+) -}}

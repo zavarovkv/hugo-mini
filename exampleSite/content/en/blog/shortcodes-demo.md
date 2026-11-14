@@ -8,6 +8,27 @@ categories = ["getting-started"]
 
 Mini includes shortcodes and CSS classes for content that goes beyond standard Markdown.
 
+## Article selections
+
+Use `featured-posts` to introduce readers to selected articles in your chosen order.
+Set their content paths in `hugo.toml`; the same list resolves to each language's titles and URLs:
+
+```toml
+[params]
+featuredPosts = ["/blog/theme-features", "/blog/under-the-hood", "/blog/hello-world"]
+```
+
+Place this shortcode in your homepage `_index.md`:
+
+```text
+{{</* featured-posts archive="/blog/" archiveLabel="All articles" */>}}
+```
+
+{{< featured-posts archive="/blog/" archiveLabel="All articles" >}}
+
+To show recent articles by date instead, use `latest-posts count="3"`.
+Both shortcodes support the same optional archive link.
+
 ## Wide images
 
 Choose `wide=true` to let an illustration expand to the right of the text column, up to 960 px.

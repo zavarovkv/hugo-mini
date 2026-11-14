@@ -38,6 +38,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   copyrightYear = 2024   # start year: renders as "© 2024–CURRENT"
 
   # Content
+  # Curated order for the featured-posts shortcode; use content paths, not slugs.
+  featuredPosts = ["/blog/theme-features", "/blog/under-the-hood", "/blog/hello-world"]
   newPostDays          = 30   # days before "New" badge disappears
   aiTranslatedLang = "en"   # show AI sparkle on English, not Russian
 

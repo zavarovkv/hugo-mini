@@ -10,6 +10,9 @@ other = "Popular"
 [latest_posts]
 other = "Latest articles"
 
+[featured_posts]
+other = "Featured articles"
+
 [home]
 other = "Home"
 

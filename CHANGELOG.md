@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Add `featured-posts` for hand-picked homepage articles, ordered by `params.featuredPosts` and resolved within each language. Reuse the latest-article layout and optional archive link, skip duplicates and unavailable or hidden posts, and omit empty selections without changing `latest-posts`.
+
 - Group article metadata and sharing with a 16 px internal gap, separate them from the text and Telegram discussion by 32 px, and remove the comment iframe's inline baseline space. Keep optional widgets and print behavior intact in every language.
 
 - Give homepage introductions 64 px of space before desktop columns in every language, retaining the 56 px mobile gap and existing paragraph and footer spacing.
