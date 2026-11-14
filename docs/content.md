@@ -173,9 +173,9 @@ bullet list. Use level five (`#####`) when nesting results under a level-four
 product heading. The shared group-heading style keeps the body text size and
 places 1.5 paragraph spaces above and half a space below, visually joining the
 heading to its list. These headings add no heading-navigation stops.
-Bullet items keep their 0.75em gap
+Bullet items use a compact 0.6em gap
 and use a wider 2em indentation (34 px on screen, capped at 10% on narrow screens).
-Print uses the same relative indentation with a 3.5pt item gap.
+Print uses the same relative indentation with a 3pt item gap.
 Screen paragraphs and list items use Beauty's `pretty` wrapping to reduce
 isolated final words where the browser supports it, preserving native markers
 and spacing. Dated-record titles use balanced lines; roles and longer

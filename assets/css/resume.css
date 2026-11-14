@@ -57,7 +57,7 @@ body.resume-layout {
   text-align: end;
 }
 .resume-contacts li { margin: 0; }
-.resume-entry { --beauty-list-gap: 0.75em; margin-block: 0 var(--resume-entry-gap); }
+.resume-entry { --beauty-list-gap: 0.6em; margin-block: 0 var(--resume-entry-gap); }
 .resume-entry-header,
 .resume-list > .resume-list-item {
   display: grid;
@@ -175,7 +175,7 @@ body.resume-layout {
   .resume-header { margin-block-end: 14pt; break-inside: avoid-page; }
   .resume-contacts { margin-block-start: 2pt; }
   .resume-entry-header { break-inside: avoid-page; break-after: avoid-page; }
-  .resume-entry { --beauty-list-gap: 3.5pt; }
+  .resume-entry { --beauty-list-gap: 3pt; }
   .resume-entry > dl > dt { break-after: avoid-page; }
   .resume-entry p:has(+ ul) { break-after: avoid-page; }
   .resume-entry li { break-inside: avoid-page; }
