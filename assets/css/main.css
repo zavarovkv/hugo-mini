@@ -105,7 +105,6 @@
     --color-callout-bg: #fffaf1;
     --color-emphasis: #3bb33b;
     --color-control-border: #ccc;
-    --color-control-border-hover: #999;
     --color-code-bg: transparent;   /* light: inline code has no fill */
 
     /* Bridge the theme's public palette and type settings to Beauty.css. */
@@ -684,7 +683,6 @@
     --color-rule: #333;
     --color-callout-bg: #252018;
     --color-control-border: #333;
-    --color-control-border-hover: #666;
     --color-code-bg: #2a2a2a;
   }
 
@@ -1621,7 +1619,7 @@
     gap: 10px;
   }
 
-  /* Outline controls follow link hover colors; theme and AI accents stay distinct. */
+  /* Quiet icon controls keep their hit areas without drawing a container. */
   .lang-toggle,
   .theme-toggle,
   .search-toggle-desktop {
@@ -1631,18 +1629,18 @@
     box-sizing: border-box;
     height: 28px;
     background: transparent;
-    border: 0.5px solid var(--color-control-border);
+    border: 0;
     border-radius: 9999px;
     color: var(--color-muted);
     text-decoration: none;
     cursor: pointer;
     overflow: hidden;
-    transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    transition: color 0.2s ease, transform 0.15s ease;
   }
 
   :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):is(:hover, :focus-visible) {
     color: var(--color-accent);
-    border-color: var(--color-control-border-hover);
+    background: transparent;
   }
 
   :is(.lang-toggle, .theme-toggle, .search-toggle-desktop):active {

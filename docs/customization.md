@@ -43,10 +43,12 @@ resume links, headings and controls without changing their geometry. Native
 system `Highlight` outline, and print omits it. Heading shortcuts retain their
 existing outline-free behavior; returning to Tab restores the indicator.
 
-Language, theme and desktop search controls share muted resting text, neutral borders
-and keyboard-focus outlines. Language and search use the link hover color
-(`--color-accent`) on hover and keyboard focus. The theme toggle keeps its sun/moon
-colors and animation; the AI-language sparkle turns yellow on hover or keyboard focus.
+Language, theme and desktop search controls have no border or background, including
+on hover. Resting labels use `--color-muted`; language and search use the shared link
+accent (`--color-accent`) on hover and keyboard focus. The theme toggle keeps its
+yellow sun, blue moon and animation; the AI-language sparkle turns yellow. Keyboard
+focus retains the shared outline, including its system-color variant. Control
+dimensions and click areas stay unchanged even though their containers are invisible.
 
 ## Logo and favicon
 
