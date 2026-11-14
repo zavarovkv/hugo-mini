@@ -10,22 +10,21 @@
 
 **A minimal Hugo theme for personal blogs.** Less setup, more writing.
 
-Thoughtful typography powered by [Beauty.css](https://github.com/zavarovkv/beauty-css), a calm reading experience on every screen, and light and dark modes. Multilingual support, SEO, and feeds are built in. Just Hugo to build your blog — no Node.js or required external services.
+Typography by [Beauty.css](https://github.com/zavarovkv/beauty-css). Build with Hugo; no Node.js or required external services.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
-The live demo uses separately licensed Story, Sourdine and Mirta fonts. The theme and starter include Inter; the demo's font files are not included. [Demo build](docs/deployment.md#deployment-owned-demo-fonts).
+The theme includes Inter. The demo's licensed Story, Sourdine and Mirta fonts are not bundled. [Font details](docs/deployment.md#deployment-owned-demo-fonts).
 
 [![Hugo Mini — desktop and mobile preview with the asterisk logo, navigation controls, and light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
 ## Why Mini?
 
-- **Quotations:** optional `editorialQuotes` gives Markdown quotes the shared editorial style in every language; testimonials use larger text, with right-aligned attributions. `beauty-lead` highlights author definitions and theses in the enlarged body face.
-- **Focus on writing.** Optional clickable H1/H2 and Option/Alt + Up/Down move between headings, with shareable section URLs and no extra icons. A stable 720 px desktop column, comfortable 19 px mobile reading, optional wide images, diagrams and long code blocks, and careful headings, captions and footnotes, with optional side notes on desktop and new-tab links scoped to article bodies. Optional drop caps, hanging quotes, prose numerals and explicit fractions refine the details. Automatic punctuation keeps Markdown intact; articles have a dedicated print layout. [Typography and examples](docs/typography.md).
-- **Stay lightweight.** Responsive layout with an easy-to-tap four-dot mobile menu that smoothly turns into a close icon and respects reduced motion; fonts, CSS, JavaScript and icons are served from your site. Optional site-owned fonts can pair separate H1 and quotation families with the body face and configure the weights used by text and components. Updated local icons get new URLs automatically.
-- **Publish out of the box.** Consistent keyboard-focus indicators, light and dark modes, smooth menu highlighting and subtle project/archive link arrows, a favicon, multiple languages, SEO, RSS, and JSON Feed.
-- **Add only what you need.** Customize colors, menus, and your logo; opt into math, diagrams, Telegram comments, sharing, and analytics.
-- **Share your CV.** A [standalone resume layout](docs/content.md#standalone-resume) combines your site's fonts, clickable headings, compact job context, product subheadings, clearly grouped results and mobile-friendly dated education, course or mentoring lists. Compact body text, natural wrapping and roomier section spacing and wider list indents separate related text from distinct records. Responsive contacts blend into the text, and the page prints to A4 or PDF without blog navigation, keeping final result pairs together.
+- **Comfortable reading.** Responsive text, quotations, footnotes and print styles. [Typography examples](docs/typography.md).
+- **Ready to publish.** Mobile navigation, dark mode, multiple languages, SEO, RSS and JSON Feed.
+- **More than posts.** Projects, reading lists and a [printable CV](docs/content.md#standalone-resume).
+- **Optional integrations.** Math, diagrams, Telegram comments, sharing and analytics.
+- **Make it yours.** Custom colors, fonts and logos; core assets load from your own site.
 
 ## Quick start
 
@@ -69,11 +68,11 @@ Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Mod
 
 ## Documentation
 
-Start with the [complete feature index](docs/advanced-features.md): reading and print, navigation, content components, integrations and extension points.
+All features and options: [feature index](docs/advanced-features.md).
 
-- [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md) · [Writing posts](docs/content.md)
-- [Typography](docs/typography.md) · [Site-owned fonts](docs/fonts.md) · [Customization](docs/customization.md)
-- [Article shortcuts](docs/content.md#article-keyboard-navigation) · [Telegram](docs/telegram.md)
+- [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md)
+- [Writing & components](docs/content.md) · [Typography](docs/typography.md)
+- [Customization](docs/customization.md) · [Fonts](docs/fonts.md) · [Telegram](docs/telegram.md)
 - [Bundled assets](docs/vendor-assets.md) · [Changelog](CHANGELOG.md)
 
 [Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Contribute](CONTRIBUTING.md) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)
