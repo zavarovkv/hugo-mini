@@ -83,6 +83,7 @@
     --content-group-gap: 1.5rem;
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
+    --post-footer-gap: 2rem;
     --footer-quotation-gap: 5.5rem;
     --footer-icon-size: 17px;
     --footer-icon-size-small: 22px;
@@ -948,6 +949,19 @@
     }
   }
 
+  /* Related article actions share a compact gap; discussion starts a new group. */
+  .post-footer {
+    margin-block-start: var(--post-footer-gap);
+  }
+  .post-actions {
+    display: grid;
+    gap: calc(var(--post-footer-gap) / 2);
+  }
+  #tg-comments {
+    margin-block-start: var(--post-footer-gap);
+  }
+  #tg-comments > iframe { display: block; }
+
   /* Post meta row: a flex line containing [views + date] on the left
      and [reactions] on the right. All three pieces come from the
      telegram-* partials, so any or all of them may be absent.
@@ -961,7 +975,7 @@
     align-items: center;
     gap: 10px 15px;
     flex-wrap: wrap;
-    margin-top: 8px;
+    margin: 0;
     font-size: 0.8125rem;
   }
 
@@ -1538,9 +1552,10 @@
     --beauty-quotation-margin-block: 1rem 2rem;
   }
 
-.likely {
-    margin-top: 15px;
-    margin-bottom: 15px;
+  .post-actions > .likely {
+    justify-self: start;
+    max-inline-size: 100%;
+    margin: 0;
   }
   .likely a,
   .likely a:link,
@@ -2029,7 +2044,8 @@
     article.beauty-reading { max-inline-size: none; }
 
     /* Keep the publication date as a quiet source note after the article. */
-    .post-meta-inline { margin-top: 1.5rem; font-size: 9pt; }
+    .post-footer { margin-block-start: 1.5rem; }
+    .post-meta-inline { font-size: 9pt; }
     .post-meta-inline .post-date { color: #555; }
 
     main img,

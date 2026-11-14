@@ -24,37 +24,39 @@
 
   {{- if $isPost }}
 
-    {{- /* Post meta row: views + date on the left, Telegram reactions on the
-           right. Each piece renders nothing when its source data is missing,
-           so the row degrades to just the date. */}}
-    <div class="post-meta-inline">
-      <div class="post-meta-left">
-        {{- partial "telegram-views.html" . -}}
-        {{- $dateFormat := cond (eq .Params.date_precision "month") "2006-01" "2006-01-02" -}}
-        <time datetime="{{ .Date.Format $dateFormat }}" class="post-date">{{ partial "format-date.html" . }}</time>
+    <div class="post-footer">
+      <div class="post-actions">
+        {{- /* Missing Telegram data leaves the publication date intact. */}}
+        <div class="post-meta-inline">
+          <div class="post-meta-left">
+            {{- partial "telegram-views.html" . -}}
+            {{- $dateFormat := cond (eq .Params.date_precision "month") "2006-01" "2006-01-02" -}}
+            <time datetime="{{ .Date.Format $dateFormat }}" class="post-date">{{ partial "format-date.html" . }}</time>
+          </div>
+          {{- partial "telegram-reactions.html" . -}}
+        </div>
+
+        {{- /* Social sharing buttons (on by default; socialSharing = false hides) */}}
+        {{ if site.Params.socialSharing | default true }}
+        <div class="likely likely-big" data-counters="no" data-url="{{ .Permalink }}" data-title="{{ .Title }}">
+          {{- range slice
+            (dict "key" "telegram" "name" "Telegram")
+            (dict "key" "twitter" "name" "Twitter")
+            (dict "key" "facebook" "name" "Facebook")
+            (dict "key" "vkontakte" "name" "VK")
+            (dict "key" "linkedin" "name" "LinkedIn")
+          }}
+          <div class="{{ .key }}" aria-label="{{ i18n "share_on" (dict "Name" .name) }}"></div>
+          {{- end }}
+        </div>
+        {{ end }}
       </div>
-      {{- partial "telegram-reactions.html" . -}}
-    </div>
 
-    {{- /* Social sharing buttons (on by default; socialSharing = false hides) */}}
-    {{ if site.Params.socialSharing | default true }}
-    <div class="likely likely-big" data-counters="no" data-url="{{ .Permalink }}" data-title="{{ .Title }}">
-      {{- range slice
-        (dict "key" "telegram" "name" "Telegram")
-        (dict "key" "twitter" "name" "Twitter")
-        (dict "key" "facebook" "name" "Facebook")
-        (dict "key" "vkontakte" "name" "VK")
-        (dict "key" "linkedin" "name" "LinkedIn")
-      }}
-      <div class="{{ .key }}" aria-label="{{ i18n "share_on" (dict "Name" .name) }}"></div>
-      {{- end }}
+      {{- /* Discussion is a separate group; JS keeps the widget theme in sync. */}}
+      {{ if and .Params.telegram_post site.Params.telegramChannel }}
+      <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ .Params.telegram_post }}" data-tg-limit="20"></div>
+      {{ end }}
     </div>
-    {{ end }}
-
-    {{- /* Telegram Discussion comments (built by JS so it can follow the theme) */}}
-    {{ if and .Params.telegram_post site.Params.telegramChannel }}
-    <div id="tg-comments" data-tg-discussion="{{ site.Params.telegramChannel }}/{{ .Params.telegram_post }}" data-tg-limit="20"></div>
-    {{ end }}
 
   {{- end }}
 {{ end }}

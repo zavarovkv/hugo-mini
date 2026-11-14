@@ -63,6 +63,15 @@ wrap instead of being clipped. Article text is 11 pt, page titles 22 pt and sect
 
 Mermaid rendering still requires JavaScript. The loader prioritizes nearby diagrams, then prepares offscreen diagrams and neutral print copies during idle time. Printing uses cached copies synchronously; if preparation has not finished or a download failed, the diagram source prints instead. Returning from print restores the screen theme.
 
+## Article ending
+
+Post metadata and sharing form one group, separated from the article by
+`--post-footer-gap` (32 px). The internal gap is half that value (16 px);
+Telegram discussion uses the full gap again. Missing sharing or comments leave
+no empty group. The same layout serves every language and screen width.
+Telegram owns the typography inside its iframe. Print keeps only the date,
+24 px after the article; standalone pages have no post footer.
+
 ## Standalone resume
 
 Set `layout = "resume"` on an ordinary content page to publish a CV without the
