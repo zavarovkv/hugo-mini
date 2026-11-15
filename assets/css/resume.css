@@ -112,11 +112,10 @@ body.resume-layout {
 
 @media screen and (max-width: 600px) {
   body.resume-layout {
-    --beauty-h1-size-small: clamp(1.75rem, 7.5vw, 2rem);
+    --beauty-h1-size-small: clamp(2rem, 8.5vw, 2.25rem);
     --beauty-h1-tracking: -0.01em;
   }
   .resume-header { flex-direction: column; gap: 1rem; margin-block-end: 2rem; }
-  .resume-role { font-size: 1em; }
   .resume-mobile-paragraph { display: block; margin-block-start: var(--beauty-space); }
   .resume-contacts {
     display: grid;

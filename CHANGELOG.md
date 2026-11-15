@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Enlarge the mobile resume name to 32–36 px and retain the 1.125em professional role size on small screens.
+
 - Tighten resume result-list spacing to 0.6em on screen and 3pt in print through Beauty's list token.
 
 - Add opt-in `articleH2UseTitleFont` to use the H1 family and weight for H2 inside post bodies. Preserve H2 geometry, other heading roles and default typography; honor page overrides and `useDefaultFonts` without adding font assets.

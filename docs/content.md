@@ -78,7 +78,9 @@ Set `layout = "resume"` on an ordinary content page to publish a CV without the
 blog header or footer. The layout inherits the site's font profile and uses one
 ink color for all text, links, metadata and rules: black in light mode and print,
 white in dark mode. Hierarchy comes from type size, family and weight; the main
-professional role uses the bold body face. It has no separate visible controls.
+professional role uses the bold body face. On screens up to 600 px, the name
+scales from 32 to 36 px; the role retains its 1.125em screen size (19.125 px
+with the default 17 px reading scale). It has no separate visible controls.
 Its screen and print overrides live in `assets/css/resume.css`, minified and
 fingerprinted separately and loaded only by this layout. Beauty still supplies
 native typography; the resume stylesheet configures its tokens and document layout.
