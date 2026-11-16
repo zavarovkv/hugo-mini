@@ -20,6 +20,28 @@ Then set `theme = "hugo-mini"` in `hugo.toml`. Alternatively, use a Hugo Module:
 
 The `/v3` suffix is required by Go Modules for every 3.x release. It is not used when installing the theme as a Git submodule.
 
+## Updating
+
+Review the [changelog](../CHANGELOG.md) before updating. From your site's root,
+with local theme changes committed, use the command for your installation:
+
+**Git submodule** — update to the latest commit on the tracked branch:
+
+```bash
+git submodule update --remote --merge themes/hugo-mini
+```
+
+**Hugo Module** — update within the current major version:
+
+```bash
+hugo mod get -u github.com/zavarovkv/hugo-mini/v3
+hugo mod tidy
+```
+
+Preview your site with `hugo server`, then run `hugo --minify`. Commit the
+updated submodule pointer or `go.mod` / `go.sum` in your site repository.
+The Vercel starter pins a release separately; follow its [update instructions](../starter/README.md#updates).
+
 ## Parameters
 
 All parameters are optional unless your site content depends on them.

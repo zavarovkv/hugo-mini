@@ -8,74 +8,68 @@
   <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
 </p>
 
-**A minimal Hugo theme for personal blogs.** Less setup, more writing.
+**A minimal Hugo theme for personal blogs, essays and notes.**
 
-Typography by [Beauty.css](https://github.com/zavarovkv/beauty-css). Build with Hugo; no Node.js or required external services.
+Build with Hugo. Core fonts, styles and scripts are served from your own site.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
-The theme includes Inter. The demo's licensed Story, Sourdine and Mirta fonts are not bundled. [Font details](docs/deployment.md#deployment-owned-demo-fonts).
-
 [![Hugo Mini — desktop and mobile preview with the asterisk logo, navigation controls, and light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
-## Why Mini?
+Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and Mirta fonts. [Font details](docs/deployment.md#deployment-owned-demo-fonts).
 
-- **Comfortable reading.** Responsive text, quotations, footnotes and print styles. [Typography examples](docs/typography.md).
-- **Ready to publish.** Mobile navigation, dark mode, multiple languages, SEO, RSS and JSON Feed.
-- **More than posts.** [Featured articles](docs/content.md#featured-articles), projects, reading lists and a [printable CV](docs/content.md#standalone-resume).
-- **Optional integrations.** Math, diagrams, Telegram comments, sharing and analytics.
-- **Make it yours.** Custom colors, fonts and logos; article H2 can [share the title font](docs/fonts.md#use-the-title-face-for-article-h2). Core assets load from your own site.
+## Features
+
+- **Typography for reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css), quotations, footnotes, optional margin notes and print styles. [See examples](docs/typography.md).
+- **Easy navigation.** Mobile menus, light/dark mode and keyboard shortcuts. Multilingual sites with English and Russian UI included.
+- **Rich articles.** Code highlighting and copying, KaTeX formulas, Mermaid diagrams and wide images.
+- **Ready to share.** SEO metadata, generated social preview images, RSS, JSON Feed and sitemap.
+- **Beyond the blog.** Homepage blocks, featured posts, projects, reading lists and a [printable CV](docs/content.md#standalone-resume).
+- **Your own style.** Custom colors, fonts and logos. Optional Telegram comments, sharing buttons and analytics.
 
 ## Quick start
 
-**Deploy to Vercel in one click:**
+Requires **[Hugo Extended 0.146+](https://gohugo.io/installation/)** and **Git**. No Node.js needed for ordinary builds.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
-
-[Starter files](starter/) · [Setup guide](starter/README.md)
-
-**Run locally** with Hugo Extended 0.146 or newer:
+Create a blog with a sample homepage, About page and first post:
 
 ```bash
 hugo new site myblog
 cd myblog
 git init
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
+cp themes/hugo-mini/starter/hugo.toml hugo.toml
+cp -R themes/hugo-mini/starter/content/. content/
+hugo server
 ```
 
-Replace the generated `hugo.toml` with:
+Open `http://localhost:1313/`. Set your title and author in `hugo.toml`; replace the sample pages in `content/`.
 
-```toml
-baseURL = "https://example.com/"
-title = "My Blog"
-theme = "hugo-mini"
-
-[[menu.main]]
-  name = "Blog"
-  url = "/blog/"
-  weight = 1
-```
-
-Create your first post and start the server:
+Stop the server with `Ctrl+C`, then create a post and preview drafts:
 
 ```bash
-hugo new content blog/_index.md
-hugo new content blog/hello-world.md
+hugo new content blog/my-first-post.md
 hugo server -D
 ```
 
-Open `http://localhost:1313/`. See the [example site](exampleSite/) or [Hugo Modules setup](docs/configuration.md#installation).
+To publish, stop the server, set your `baseURL`, change the post's `draft` to `false`, run `hugo --minify` and deploy `public/` to a static host. [Deployment guide](docs/deployment.md).
+
+**Prefer Vercel?** Deploy the [starter](starter/README.md) into your own repository:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
+
+Existing site or Hugo Modules? See [installation](docs/configuration.md#installation). For later changes, follow the [update guide](docs/configuration.md#updating).
 
 ## Documentation
 
 All features and options: [feature index](docs/advanced-features.md).
 
-- [Setup & languages](docs/configuration.md) · [Deployment](docs/deployment.md)
+- [Configuration & languages](docs/configuration.md) · [Example site](exampleSite/)
 - [Writing & components](docs/content.md) · [Typography](docs/typography.md)
 - [Customization](docs/customization.md) · [Fonts](docs/fonts.md) · [Telegram](docs/telegram.md)
 - [Bundled assets](docs/vendor-assets.md) · [Changelog](CHANGELOG.md)
 
-[Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Contribute](CONTRIBUTING.md) · [Star on GitHub](https://github.com/zavarovkv/hugo-mini)
+[Report an issue](https://github.com/zavarovkv/hugo-mini/issues) · [Contribute](CONTRIBUTING.md)
 
 ## License
 

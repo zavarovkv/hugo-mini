@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+- Refresh both READMEs with a starter-based local setup, publishing steps and an installation-specific update guide.
+
 - Enlarge the mobile resume name to 32–36 px and retain the 1.125em professional role size on small screens.
 
 - Tighten resume result-list spacing to 0.6em on screen and 3pt in print through Beauty's list token.
