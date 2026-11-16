@@ -87,6 +87,27 @@ The typography authoring guides and visual references also have EN/RU pairs; upd
 each pair together. Other guides are in English. Russian documentation uses `е` / `Е`
 in place of the dotted variants.
 
+### README preview
+
+The animation uses screenshots of the deployed demo, composed into a paced loop.
+To regenerate it, install the development dependencies, Playwright Chromium and
+ImageMagick 7 (`magick` on your path), then run from the theme root:
+
+```bash
+node scripts/render-readme-preview.mjs
+```
+
+The script prints the temporary directory containing captures, scene previews and
+frames. Only the final GIF goes in `images/`; licensed font files are never copied.
+Use `--url http://127.0.0.1:1313/` to capture a local demo instead. For composition
+changes, reuse a printed directory with `--work-dir <directory> --reuse-captures`;
+`--stills-only` renders the four scenes without encoding the animation.
+
+Review the text, mobile menu and loop boundary. When replacing the preview, use a
+new versioned filename with `--output images/readme-preview-v7.gif` and update both
+READMEs' absolute image URLs and alt text.
+The default public demo uses the separately licensed fonts described below the image.
+
 ### Documentation conventions
 
 - Keep READMEs brief; route readers through [the documentation home](docs/README.md).

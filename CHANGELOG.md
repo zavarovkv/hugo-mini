@@ -35,6 +35,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Changed
 
+- **README preview:** refresh the real demo captures with lighter frames, soft shadows and paced light/dark transitions in a seamless loop. Add a repeatable capture/composition script for maintainers.
 - **Documentation:** add a task-oriented entry point and separate guides for media, homepages, resumes and demo maintenance. Split bilingual typography instructions from visual references; shorten dense sections, preserve old anchors and document missing module/feed setup steps.
 - **Reading scale:** use a 720 px column, 18/28 px desktop and 19/29 px mobile text, 44/32 px H1 and consistent 48/32 px desktop versus 40/28 px mobile title gaps. Apply the same scale to 404 pages while retaining separate ASCII/print sizing.
 - **Headings and prose:** retain balanced page titles and natural section-title wrapping; add LTR optical alignment and dictionary hyphenation up to 360 px. Format visible titles/article links without changing metadata or URLs. Darken light body text to `#333`.
