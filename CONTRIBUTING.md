@@ -90,7 +90,8 @@ in place of the dotted variants.
 ### README preview
 
 The animation pairs dark desktop and light mobile screenshots of the deployed demo
-on a transparent canvas, without decorative frames, shadows or labels.
+in slim browser and iPhone frames on a transparent canvas. The phone's status bar
+and home indicator sit outside the captured page so they do not cover its content.
 To regenerate it, install the development dependencies, Playwright Chromium and
 ImageMagick 7 (`magick` on your path), then run from the theme root:
 
@@ -106,7 +107,7 @@ changes, reuse a printed directory with `--work-dir <directory> --reuse-captures
 
 Review the text, mobile menu, loop boundary and transparency on light and dark backgrounds.
 When replacing the preview, use a new versioned filename with
-`--output images/readme-preview-v8.gif` and update both
+`--output images/readme-preview-v9.gif` and update both
 READMEs' absolute image URLs and alt text.
 The default public demo uses the separately licensed fonts described below the image.
 

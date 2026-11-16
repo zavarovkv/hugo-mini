@@ -14,7 +14,7 @@ Build with Hugo. Core fonts, styles and scripts are served from your own site.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
-[![Hugo Mini — dark desktop and light mobile views on a transparent background](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v7.gif)](https://hugo-mini-demo.vercel.app/)
+[![Hugo Mini — a dark browser window and light iPhone view on a transparent background](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v8.gif)](https://hugo-mini-demo.vercel.app/)
 
 Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and Mirta fonts. [Font details](docs/demo.md#deployment-owned-demo-fonts).
 

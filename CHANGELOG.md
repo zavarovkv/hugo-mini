@@ -35,7 +35,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Changed
 
-- **README preview:** pair dark desktop and light mobile views on a transparent canvas, without decorative frames, shadows or labels. Keep a seamless page/menu loop and a repeatable capture script for maintainers.
+- **README preview:** pair dark desktop and light mobile views in slim browser and iPhone frames on a transparent canvas. Keep a seamless page/menu loop and a repeatable capture script for maintainers.
 - **Documentation:** add a task-oriented entry point and separate guides for media, homepages, resumes and demo maintenance. Split bilingual typography instructions from visual references; shorten dense sections, preserve old anchors and document missing module/feed setup steps.
 - **Reading scale:** use a 720 px column, 18/28 px desktop and 19/29 px mobile text, 44/32 px H1 and consistent 48/32 px desktop versus 40/28 px mobile title gaps. Apply the same scale to 404 pages while retaining separate ASCII/print sizing.
 - **Headings and prose:** retain balanced page titles and natural section-title wrapping; add LTR optical alignment and dictionary hyphenation up to 360 px. Format visible titles/article links without changing metadata or URLs. Darken light body text to `#333`.
