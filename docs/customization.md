@@ -1,60 +1,66 @@
 # Customization
 
-Keep site-specific overrides in the site's own `assets/` and `layouts/` directories. Hugo resolves them before theme files.
+[Documentation](README.md) · [Fonts](fonts.md) · [Visual reference](typography-reference.md)
+
+Keep site-specific files in your site's `assets/` and `layouts/`; Hugo resolves them
+before theme files. Prefer tokens and extension hooks to copying entire templates.
+
+[Colors](#colors) · [Identity](#logo-and-favicon) · [Menus](#menu-icons) · [Templates](#templates) · [Share cards](#share-cards)
 
 ## Colors
 
-Override design tokens in your site's CSS instead of copying the theme stylesheet:
+1. Create `assets/css/custom.css` in your site:
 
-```css
-:root {
-  --text-color: #202124;
-  --color-primary: #1769aa;
-  --color-primary-border: rgba(23, 105, 170, 0.35);
-  --background-color: #ffffff;
-  --color-divider: #e5e7eb;
-  --color-control-border: #d1d5db;
-}
+   ```css
+   :root {
+     --text-color: #202124;
+     --color-primary: #1769aa;
+     --color-primary-border: rgba(23, 105, 170, 0.35);
+     --background-color: #ffffff;
+     --color-divider: #e5e7eb;
+     --color-control-border: #d1d5db;
+   }
 
-:root[data-theme="dark"] {
-  --text-color: #e5e7eb;
-  --color-primary: #7dd3fc;
-  --color-primary-border: rgba(125, 211, 252, 0.35);
-  --background-color: #111827;
-}
-```
+   :root[data-theme="dark"] {
+     --text-color: #e5e7eb;
+     --color-primary: #7dd3fc;
+     --color-primary-border: rgba(125, 211, 252, 0.35);
+     --background-color: #111827;
+   }
+   ```
 
-Place the CSS in your site's `assets/css/custom.css` and load it **after** the
-theme stylesheet using `layouts/_partials/custom_head.html`:
+2. Load it after the theme stylesheet from `layouts/_partials/custom_head.html`:
 
-```go-html-template
-{{ with resources.Get "css/custom.css" }}
-  {{ $css := . | minify | fingerprint "sha256" }}
-  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
-{{ end }}
-```
+   ```go-html-template
+   {{ with resources.Get "css/custom.css" }}
+     {{ $css := . | minify | fingerprint "sha256" }}
+     <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+   {{ end }}
+   ```
 
-The full token list is in [`assets/css/main.css`](../assets/css/main.css).
+3. Preview both color schemes and keyboard focus.
 
-Keyboard focus shares a 2 px dotted outline in `--heading-color`, with a 4 px
-offset controlled by Beauty's `--beauty-focus-offset`. It applies to blog and
-resume links, headings and controls without changing their geometry. Native
-`:focus-visible` controls when it appears; forced-color mode uses a solid
-system `Highlight` outline, and print omits it. Heading shortcuts retain their
-existing outline-free behavior; returning to Tab restores the indicator.
+Public tokens live in [`assets/css/main.css`](../assets/css/main.css).
+Shared native typography belongs to [Beauty.css](vendor-assets.md#beautycss-foundation).
 
-Language, theme and desktop search controls have no border or background, including
-on hover. Resting labels use `--color-muted`; language and search use the shared link
-accent (`--color-accent`) on hover and keyboard focus. The theme toggle keeps its
-yellow sun, blue moon and animation; the AI-language sparkle turns yellow. Keyboard
-focus retains the shared outline, including its system-color variant. Control
-dimensions and click areas stay unchanged even though their containers are invisible.
+### Focus and controls
+
+| Element | Default treatment |
+| --- | --- |
+| Keyboard focus | 2 px dotted `--heading-color` outline; 4 px `--beauty-focus-offset` |
+| Forced-color mode | Solid system `Highlight` outline |
+| Heading shortcuts / print | No outline; returning to Tab restores keyboard focus indication |
+| Language, theme, desktop search | No container border/background, including on hover |
+| Resting labels | `--color-muted`; language/search use `--color-accent` on hover/focus |
+| Theme / AI icons | Yellow sun, blue moon, yellow active sparkle |
+
+Native `:focus-visible` controls focus display. Invisible control containers retain
+their click areas; these styles do not change geometry.
 
 ## Logo and favicon
 
-The bundled thin-line black asterisk is the default browser favicon, with matching Android and iOS icons. The light/dark header marks share its geometry: a vertical ray and two diagonals. It does **not** replace your header avatar or logo.
-
-The demo also uses the asterisk as its header logo. To enable that separately:
+The bundled asterisk is the default favicon, with Android and iOS icons. It does
+not replace a header avatar. To use the same mark in the header:
 
 ```toml
 [params]
@@ -62,21 +68,35 @@ The demo also uses the asterisk as its header logo. To enable that separately:
   logoDark = "images/hugo-mini-logo-dark.svg"
 ```
 
-The header switches `logoDark` with the theme toggle; if omitted, `logo` is used in both modes. `logo` takes precedence over `avatar` / `avatarHover`. Remove `logo` to keep your avatar.
+| Option | Behavior |
+| --- | --- |
+| `logoDark` omitted | Use `logo` in both modes. |
+| `logo` configured | Takes precedence over `avatar` / `avatarHover`; remove it to use an avatar. |
+| Custom `favicon` | SVG or 32×32 PNG in `static/`; add your own `favicon192` and `appleTouchIcon` if needed. |
+| `favicon = false` | Disable bundled icons. |
 
-Local header logos, both avatar states (`avatar` and `avatarHover`), project marks and favicons include a content hash in their URL. Updating an image changes its URL at the next build, so returning readers get the new version without clearing their cache. The shared `static-asset-url.html` helper preserves existing query parameters and fragments; external URLs and missing files keep their configured paths.
-
-To replace the default favicon, set `favicon` to your own SVG or 32×32 PNG in your site's `static/` directory. Custom favicons do not inherit the theme's device icons; add `favicon192` and `appleTouchIcon` if needed. Set `favicon = false` to disable the bundled icons.
+Local logos, avatar states, project marks and favicons receive content-versioned URLs
+so a rebuild refreshes cached images. Existing query parameters and fragments are
+preserved. External URLs and missing files retain their configured paths.
 
 ## Menu transitions
 
-Internal menu labels reserve the width of their bold state, keeping neighboring items in place when the current section changes. The hidden sizing copy does not duplicate the accessible link name; the visible text keeps Beauty's inline underline. Icons retain their desktop/mobile placement.
+Internal labels reserve their bold width so section changes do not move neighboring
+items. Hidden sizing copies do not duplicate accessible names; selected labels
+remain bold and visible text keeps Beauty's underline.
 
-Above 768 px, browsers with cross-document View Transitions blend the old and new `#main-navigation` states over `--nav-transition-duration` (default `300ms`). Only opacity changes: the menu stays at the destination page's position and size, including when following a link from a scrolled page. The browser's default group geometry animation is disabled. Page content updates immediately. This uses ordinary same-origin document navigation, with no client-side router or additional JavaScript. The mobile overlay keeps its existing open/close behavior; reduced-motion preferences and unsupported browsers receive an immediate state change. Selected labels remain bold in every mode.
+Above 768 px, browsers with cross-document View Transitions blend menu opacity over
+`--nav-transition-duration` (300 ms). Position and size come from the destination
+page; content updates immediately. This uses native same-origin navigation, without
+a router or extra JavaScript.
+
+Mobile keeps its overlay behavior. Reduced motion and unsupported browsers receive
+an immediate state change; icons keep their desktop/mobile placement.
 
 ## Menu icons
 
-Set `params.icon` on a menu entry. The theme includes `telegram`; custom icons are Hugo resources at `assets/icons/<name>.svg` in your site.
+Mini includes `telegram`. For your own icon, add `assets/icons/<name>.svg` and
+reference its name in the menu entry:
 
 ```toml
 [[menu.main]]
@@ -88,31 +108,45 @@ Set `params.icon` on a menu entry. The theme includes `telegram`; custom icons a
 
 ## Templates
 
-Use focused overrides whenever possible:
+| Extension point | Use |
+| --- | --- |
+| `layouts/_partials/custom_head.html` | Add tags to `<head>` after the theme stylesheet. |
+| `layouts/_partials/custom_body.html` | Add markup/scripts before `</body>`. |
+| `bodyClass` block | Select page layout classes; built-in home/list/single/404 use `reading-layout`. |
+| `baseof.html` blocks | Replace `head`, `favicon`, `header`, `main`, `footer` or `scripts`. |
+| Matching site template path | Override the whole template only when it must diverge. |
 
-- `layouts/_partials/custom_head.html` adds site-specific tags to `<head>`.
-- `layouts/_partials/custom_body.html` adds scripts or markup before the closing `</body>` tag.
-- The `bodyClass` block selects page-level layout classes. The built-in home, list, single and 404
-  templates use `reading-layout` for the 720 px, 18/28 px reading layout (19/29 px on mobile).
-  Independent templates can omit this class to retain the default shell scale.
-  The 404 text uses `beauty-reading`; its optional ASCII illustration keeps its own monospace size.
-  The reading layout uses 16 px header text, a 20 px mobile identity and 20 px mobile
-  menu links, controlled by `--header-text-size`, `--header-title-size-small` and
-  `--header-nav-size-small`.
-- Named blocks in `baseof.html` let a template replace `head`, `favicon`, `header`, `main`, `footer`, or `scripts`. The `favicon` block defaults to the bundled icons or the site's overrides, so standalone project templates can supply their own without duplicate icon links.
-- Copy a theme template into the matching site path only when the whole template needs to diverge.
+`reading-layout` selects the [blog reading scale](typography-reference.md#reading-layout).
+Independent templates can omit it. The 404 page uses `beauty-reading`, while its
+optional ASCII illustration keeps its own monospace scale.
 
-For a project-name link in a custom header, use `<a class="brand-link" href="…"><strong>Project name</strong></a>`. It retains the heading color and bold text without an underline, including on hover; keyboard focus remains visible through Beauty.css.
+### Custom header
 
-To reuse the theme's mobile menu in a custom header, render `{{ partial "menu-toggle.html" . }}` next to `<nav class="main-nav" id="main-navigation">…</nav>`. The shared stylesheet and browser bundle handle the mobile overlay, Escape, link selection, focus leaving the navigation and the desktop breakpoint. The toggle has a 44 × 44 px touch target around its 24 px icon. The overlay stays hidden during initialization; opening and closing it retain their animation and the underlying scroll position. Without JavaScript the links remain visible. The custom header owns its brand placement and desktop arrangement.
+Use `<a class="brand-link" href="…"><strong>Project name</strong></a>` for a bold
+brand link without an underline. Keyboard focus remains visible.
 
-To suppress icons on an independent page, override the `favicon` block with
-`<link rel="icon" href="data:,">`. An empty block falls back to the base template;
-the explicit empty icon also avoids an implicit browser request for `/favicon.ico`.
+For the shared mobile menu, render `{{ partial "menu-toggle.html" . }}` next to
+`<nav class="main-nav" id="main-navigation">…</nav>`. Your template owns brand
+placement and desktop arrangement; Mini supplies the overlay behavior.
+
+| Header element | Default |
+| --- | --- |
+| Text | `--header-text-size`: 16 px |
+| Mobile identity | `--header-title-size-small`: 20 px |
+| Mobile links | `--header-nav-size-small`: 20 px |
+| Menu toggle | 44×44 px target around a 24 px icon |
+
+The menu handles Escape, link selection, focus leaving navigation and the desktop
+breakpoint. It stays hidden during initialization, preserves scroll position and
+animates opening/closing. Without JavaScript, links remain visible.
+
+### Custom favicon block
+
+Use `<link rel="icon" href="data:,">` inside the `favicon` block to suppress icons
+on an independent page. An empty block falls back to the base template; the explicit
+empty icon also avoids an implicit `/favicon.ico` request.
 
 ### Footer links on custom pages
-
-Reuse `footer-content.html` inside a `footer` block to change the links while keeping the theme's icons, language switcher and color-scheme control:
 
 ```go-html-template
 {{ define "footer" }}
@@ -125,20 +159,26 @@ Reuse `footer-content.html` inside a `footer` block to change the links while ke
 {{ end }}
 ```
 
-Pass `rss = true` in the dictionary to include the current language's feed. Omitted labels use the platform names; omitted copyright uses the standard year range. The default `footer.html` passes `params.social` and enables RSS, preserving the regular blog footer.
+| Dictionary option | Default |
+| --- | --- |
+| `rss = true` | Include the current language's feed when requested. |
+| `labels` omitted | Platform names |
+| `copyright` omitted | Standard year range |
 
-The footer uses an outer `--section-gap-large` margin, which collapses with the
-preceding content's margin in normal block flow rather than adding to it. A final
-editorial quotation uses `--footer-quotation-gap` for a larger interval. Social
-icons use `--footer-icon-size` (17 px), switching to `--footer-icon-size-small`
-(22 px) at mobile widths.
+The default footer passes `params.social` and enables RSS. Reusing the partial keeps
+icons, language switching and color-scheme control.
 
-Social links use Beauty's shared link tokens: muted at rest and their brand color
-on hover or keyboard focus. GitHub and X use a light active color in dark mode.
+The outer `--section-gap-large` margin collapses with preceding block margins;
+a final quotation uses `--footer-quotation-gap`. Social icons use
+`--footer-icon-size` (17 px), or `--footer-icon-size-small` (22 px) on mobile.
+Links are muted at rest and use brand colors on hover/focus; GitHub and X use a
+light active color in dark mode.
 
 ## Share cards
 
-The theme generates a 1200×630 share card for each page. To customize selected pages, add `layouts/_partials/custom_og_image.html` to your site. It receives the page and must return an image resource or `false` to keep the default:
+Mini generates a 1200×630 card per page. To override selected pages, create
+`layouts/_partials/custom_og_image.html`; it receives the page and must return
+an image resource or `false` for the default:
 
 ```go-html-template
 {{- $image := false -}}
@@ -148,14 +188,27 @@ The theme generates a 1200×630 share card for each page. To customize selected 
 {{- return $image -}}
 ```
 
-In this example, `shareImage = "images/event-card.png"` resolves to `assets/images/event-card.png`. The hook may also compose an image with Hugo's image filters. Open Graph, Twitter Cards, and JSON-LD share its URL and dimensions. Image metadata includes the page title as alternative text.
+Here, `shareImage = "images/event-card.png"` resolves to `assets/images/event-card.png`.
+The hook can also use Hugo image filters. Open Graph, Twitter Cards and JSON-LD
+share the result's URL/dimensions; the page title supplies alternative text.
 
 ## Loading values
 
-Use `loading-skeleton` on an inline value whose visible content is wrapped in child elements. It preserves that content's space and covers it with a compact, theme-aware placeholder. Set `aria-busy="true"` during the request; remove both the class and the attribute on success or failure. Keep known values available without JavaScript and during refreshes; use the placeholder only when no value is known. It pulses gently and disables animation for reduced-motion preferences.
+Use `loading-skeleton` only when an inline value is unknown:
+
+1. Wrap visible placeholder content in a child element to reserve its space.
+2. Add the class and `aria-busy="true"` during the request.
+3. Remove both on success **or failure**.
+
+Keep known values visible during refresh and without JavaScript. The theme-aware
+placeholder pulses gently; reduced-motion preferences disable animation.
 
 ## Assets
 
-The theme bundles and fingerprints its CSS and JavaScript with Hugo Pipes. Fonts are self-hosted. Mermaid is the only optional CDN asset; set `params.mermaidSrc = "js/mermaid.min.js"` after placing a local bundle in `static/js/` to avoid that request too.
+Hugo Pipes bundles and fingerprints CSS/JavaScript. Fonts are self-hosted;
+[Mermaid](media.md#choose-how-to-load-mermaid) is the optional CDN exception.
 
-The former `--link-color`, `--blockquote-color` and `--color-blockquote-border` variables had no consumers and have been removed. Use `--color-primary` for links and the shared `--beauty-quote-text` / `--beauty-quote-border` tokens for quotations; consult the pinned [Beauty foundation](vendor-assets.md) before adding overrides. Header spacing applies to `body > header`, and menu styles to `.main-nav`; an article’s own `header` or `nav` keeps its content styles.
+Removed tokens `--link-color`, `--blockquote-color` and `--color-blockquote-border`
+had no consumers. Use `--color-primary` for links and `--beauty-quote-text` /
+`--beauty-quote-border` for quotations. Header/menu selectors target `body > header`
+and `.main-nav`, leaving article headers and navigation in their content styles.

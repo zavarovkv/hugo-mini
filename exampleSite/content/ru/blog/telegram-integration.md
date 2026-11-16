@@ -62,11 +62,9 @@ Paid-реакции звездами (`⭐`) сохраняются. Custom prem
 }
 ```
 
-В `.gitignore` — сгенерированный файл, не нужно версионировать, он пересчитывается на каждом билде:
-
-```
-/data/telegram_reactions.json
-```
+Сохраните `data/telegram_reactions.json` в репозитории или восстановите из кеша CI
+до запроса. Тогда скрипт сможет оставить предыдущие счетчики при сбое. Если файл
+добавлен в `.gitignore`, настройте другой способ восстановления.
 
 Вызов скрипта в CI перед `hugo --minify`:
 
@@ -88,7 +86,7 @@ Paid-реакции звездами (`⭐`) сохраняются. Custom prem
 node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs \
   --channel my_channel \
   --content-dir content/en/posts \
-  --output data/tg.json
+  --output data/telegram_reactions.json
 ```
 
 Также учитывает env var `TELEGRAM_CHANNEL`.

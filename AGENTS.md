@@ -23,14 +23,14 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `layouts/baseof.html` defines the shared page shell and template blocks.
 - `layouts/home.html`, `list.html`, `single.html`, and `404.html` provide page layouts.
 - `layouts/_partials/` contains reusable UI, SEO, structured-data, Open Graph, Telegram, and customization-hook partials.
-- `layouts/_partials/typography/` applies build-time prose spacing and Russian punctuation rules to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; Goldmark owns its native punctuation and Beauty.css owns visual typography. Document changes in both `docs/typography.md` and `docs/typography.ru.md` and exercise `tests/typography.test.mjs`.
+- `layouts/_partials/typography/` applies build-time prose spacing and Russian punctuation rules to rendered page bodies. Keep sources, metadata, URLs, HTML attributes, code, diagrams and formulas intact; Goldmark owns its native punctuation and Beauty.css owns visual typography. Document changes in both `docs/typography.md` and `docs/typography.ru.md` (plus their `typography-reference` companions for visual contracts) and exercise `tests/typography.test.mjs`.
 - `layouts/_markup/` contains Goldmark render hooks for headings, images, links, and tables.
 - `layouts/_shortcodes/` contains `image`, `caption`, `callout`, `mermaid`, `plug`, `latest-posts`, `featured-posts`, `project`, `columns`, `column`, `github-stars`, `reading-list` and `wavy-arrow`.
 - `wideCode = true` in page front matter opts long fenced code blocks into the same geometry as wide images; short examples keep the reading width. Use the shared `--article-wide-width` / `--article-edge-gap` tokens, without changing code contents, typography, scrolling or print.
 - Optional `hangingQuotes` and `proseNumerals` select Beauty editorial helpers; `fraction` accepts explicit fractions only. Keep source text, metadata, technical spans and print margins intact; document both languages in the typography guides.
 - Per-page `dropCap` selects Beauty's first-paragraph initial; title family/weight are mapped through shared tokens. Keep it opt-in, preserve native text, mobile/print fallbacks and short-paragraph containment. Publication credits reuse `beauty-note`, after the conclusion and before footnotes.
 - `mermaid wide=true` opts individual diagrams into the same wide-figure geometry; optional `caption` uses the same Beauty typography as image captions. Preserve raw-source fallback and the existing SVG theme/print cache.
-- Wide `image` figures preserve the text's inline-start edge and expand toward the inline end up to 960 px. The theme owns geometry and respects source/viewport limits; Beauty supplies native image/caption typography. Keep source/viewport limits, mobile, print and no-JavaScript behavior; see `docs/content.md#wide-images`.
+- Wide `image` figures preserve the text's inline-start edge and expand toward the inline end up to 960 px. The theme owns geometry and respects source/viewport limits; Beauty supplies native image/caption typography. Keep source/viewport limits, mobile, print and no-JavaScript behavior; see `docs/media.md#wide-images`.
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
   `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
@@ -66,7 +66,7 @@ Layouts use Hugo's current template system introduced in 0.146.0: page templates
 
 ## Configuration and Compatibility
 
-Public configuration is documented in `README.md` and defaults live in `hugo.toml`. Treat documented params, front-matter fields, shortcodes, partial hooks, generated output formats, and i18n keys as the theme's public API. Changes should remain backward-compatible where practical; document intentional breaking changes.
+Documentation starts at `docs/README.md`; public configuration is documented in `docs/configuration.md` and defaults live in `hugo.toml`. Treat documented params, front-matter fields, shortcodes, partial hooks, generated output formats, and i18n keys as the theme's public API. Changes should remain backward-compatible where practical; document intentional breaking changes.
 
 The empty `custom_head.html` and `custom_body.html` partials are supported extension hooks for consuming sites. Do not put site-specific markup into them.
 

@@ -1,103 +1,102 @@
 # Self-hosted upstream assets
 
+[Documentation](README.md) · [Contributing](../CONTRIBUTING.md)
+
+**Audience: theme maintainers.** Ordinary Hugo builds use committed assets without
+npm or network downloads. Optional consumer-owned Mermaid and counter helpers have
+separate requirements.
+
+| Asset | Location / source of truth |
+| --- | --- |
+| Beauty.css | `assets/css/beauty.css`, `vendor/beauty-css.json` and adjacent license |
+| Inter | `static/fonts/` and its SIL Open Font License; share-card inputs in `assets/fonts/` |
+| Likely | Readable upstream sources in `assets/likely/` |
+| KaTeX | `static/katex/`, manifest `vendor/katex.json` |
+| Mermaid | Consumer-owned script/package; theme test version in `package.json` |
+
 ## Beauty.css foundation
 
-The plain CSS foundation is vendored from [Beauty.css](https://github.com/zavarovkv/beauty-css).
-`vendor/beauty-css.json` pins the upstream commit, version and SHA-256; the MIT license is retained
-beside it. `baseof.html` bundles this layer before the theme's own stylesheet into one fingerprinted
-local file. Ordinary Hugo builds need neither Node, npm, a network request nor a recursive submodule.
-
-To update the foundation, pass a reviewed full upstream commit SHA:
+From the **theme root**, use a reviewed full upstream commit SHA:
 
 ```sh
 node scripts/vendor-beauty.mjs <40-character-commit-sha>
 node --test tests/vendor-assets.test.mjs
 ```
 
-The helper validates the upstream manifest hash and license before writing files. Never patch the
-generated artifact. Beauty owns native text styles, responsive heading sizes, lists, quotations,
-links, code, tables, forms, footnotes, captions and optional editorial helpers. The theme configures these through
-`--beauty-*` variables; it owns font loading, its public palette, page layout, interactive components
-and KaTeX/Chroma/Likely integration. Do not add parallel native-text rules to `main.css`.
+The helper verifies the [upstream](https://github.com/zavarovkv/beauty-css) manifest
+hash and MIT license before writing. Do not patch generated CSS. Build the example
+site and check a consuming blog before committing. `baseof.html` places the foundation
+before theme CSS in one local fingerprinted stylesheet.
 
-The optional `beauty-reading` treatment supplies the reading measure and responsive type size for
-home and article content. The theme selects it in markup and configures heading/spacing tokens;
-compact tables keep their ordinary UI text size. Compound links use `beauty-link-label` and
-`beauty-link-icon`, so plain links, project names and archive navigation share native underline
-geometry. Reading-month cells use `time`; short editorial values may use `beauty-nowrap`.
-All these style rules live in Beauty, with no client-side text rewriting or extra dependency.
+### Ownership and compatibility
 
-Numeric summaries can use Beauty's `beauty-stat-value` and `beauty-stat-label`
-helpers on semantic values and labels. The library owns responsive sizing,
-tabular numerals and muted labels; consumers own grid arrangement and spacing.
-`--beauty-stat-size` allows an explicit size when the surrounding layout needs it.
+| Beauty.css owns | Mini owns |
+| --- | --- |
+| Native text, headings, lists, quotes, links, code, tables, forms, notes, captions and editorial helpers | Font loading, palette, page geometry, UI and KaTeX/Chroma/Likely integration |
 
-Connected workflows can use `ol.beauty-steps` with a `beauty-step-marker` and a
-content `div` inside each `li`. Beauty owns the numbered circles, connecting
-lines, logical positioning and text rhythm. Consumers supply the list content
-and surrounding section layout; the component adds no interaction or progress state.
+Mini configures `--beauty-*` values instead of adding parallel native-text rules.
+Frequently used library helpers:
 
-The bundle maps Goldmark footnote classes to Beauty's `beauty-footnotes`,
-`beauty-footnote-ref` and `beauty-footnote-backref` styles. Note numbering and spacing remain library-owned, including notes that begin with a quote, list or code block.
+| Helper | Use |
+| --- | --- |
+| `beauty-reading` | Responsive reading measure/type; compact UI tables retain their own scale |
+| `beauty-link-label`, `beauty-link-icon` | Shared compound-link underline and icon geometry |
+| `beauty-nowrap` | Keep short editorial values together; reading dates use semantic `time` |
+| `beauty-stat-value`, `beauty-stat-label` | Responsive tabular-number summaries; optional `--beauty-stat-size` |
+| `ol.beauty-steps` | Connected numbered steps: each `li` contains a `beauty-step-marker` and content `div` |
 
-The bundle also aliases the public `.underline`, `.caption`, `.button` and block `<q>` treatments to
-Beauty's selectors through the cached `beauty-compat.html` partial. It matches complete selector tokens in the pinned generated artifact, leaving longer class names unchanged. This adapter still transforms trusted CSS text; it is not a general CSS parser. Regression tests cover token boundaries and the generated bundle. This preserves existing theme content without duplicating CSS declarations or
-adding Hugo-specific selectors to the independent library. Prefer `.beauty-emphasis`,
-`.beauty-caption`, `.beauty-button` and the semantic `callout` shortcode for new content:
+Consumers own surrounding grids and spacing. These helpers add no interaction,
+progress state or client-side text rewriting.
 
-```text
-{{< callout >}}
-Markdown, including **emphasis** and links, works inside this block quotation.
-{{< /callout >}}
-```
+The cached `beauty-compat.html` adapter maps Goldmark footnotes and legacy
+`.underline`, `.caption`, `.button` and block `<q>` to library selectors. It matches
+complete selector tokens in trusted pinned CSS; it is not a general CSS parser.
+Tests cover token boundaries and the generated bundle.
 
-Check the example site and a consuming blog before committing an update. For joint local
-development, build an explicitly unreleased `-dev` library version and run:
+For new content, use `beauty-emphasis`, `beauty-caption`, `beauty-button` and semantic
+[quotations](typography.md#quotations-and-attributions) rather than legacy aliases.
+
+### Joint local development
+
+Build an explicitly unreleased `-dev` Beauty version, then run:
 
 ```sh
 node scripts/vendor-beauty.mjs --local ../beauty-css
 ```
 
-This verifies the same manifest and license, and records `source: "local-development"` with no
-upstream revision. Before releasing the theme, publish the reviewed library changes and replace
-the development snapshot with a full upstream commit using the normal command above.
+The same manifest/license checks apply. The snapshot records
+`source: "local-development"` without an upstream revision. **Before releasing Mini**,
+publish the reviewed library changes and replace this snapshot with a full upstream
+commit through the normal helper.
 
 ## Inter and sharing controls
 
-`static/fonts/` contains the four Inter faces declared by the theme: normal 300, 500 and 600,
-plus italic 300. Their SIL Open Font License is retained in the same directory. The TTF files
-under `assets/fonts/` are separate build inputs for generated share images, not browser downloads.
+Inter ships four browser faces: normal 300/500/600 and italic 300. TTF files in
+`assets/fonts/` are share-image build inputs, not browser downloads. Retain the licenses.
 
-Likely's upstream files live under `assets/likely/`. Hugo minifies and fingerprints them only
-for article pages with social sharing enabled. The generated CSS and JavaScript stay local;
-no npm install or CDN is required. Edit the readable asset, never Hugo's generated minified
-output. The local accessibility patch copies `role` and `aria-label` only when the source
-element has those attributes (`hasAttribute`); otherwise Likely would emit the string
-`"null"`. The theme supplies localized names for icon-only sharing links. Retain this patch
-when refreshing upstream unless the new version already includes it. Counters stay disabled.
+Hugo minifies/fingerprints Likely only on posts with sharing enabled. Its CSS/JS
+remain local and counters stay disabled. Edit readable assets, never generated output.
+
+When updating Likely, retain the accessibility patch unless upstream includes it:
+copy `role` and `aria-label` only when `hasAttribute` is true. Otherwise enhancement
+emits the literal string `"null"`. Mini provides localized names for icon-only links.
 
 ## KaTeX
 
-KaTeX is committed under `static/katex/` so consuming sites do not need npm or a CDN to render formulas. The current bundle is **0.18.2**, with the inherited-option security fix, matching JavaScript, CSS, auto-render, all font formats, and the upstream MIT license. Its CSS and script URLs include their content hashes to invalidate cached copies when an asset changes.
+The committed **0.18.2** bundle includes matching JavaScript, CSS, auto-render,
+all font formats and the MIT license. Content-hashed URLs invalidate old assets.
+`vendor/katex.json` records npm tarball integrity and every copied file's SHA-256.
 
-`vendor/katex.json` records the npm tarball URL/integrity and SHA-256 of every copied file. These files are outside a consuming site's package-lock and npm audit; review upstream [security advisories](https://github.com/KaTeX/KaTeX/security/advisories) when updating them.
-
-The 2026-10-28 compatibility check verified the fix for low-severity
+These files sit outside a consuming site's lockfile and `npm audit`; review
+[upstream security advisories](https://github.com/KaTeX/KaTeX/security/advisories)
+when updating. The current bundle fixes
 [GHSA-238p-pmpm-9mq7](https://github.com/KaTeX/KaTeX/security/advisories/GHSA-238p-pmpm-9mq7).
-The regression test checks that prototype pollution cannot enable trusted rendering, while an explicit
-trusted choice still works. Across Chromium, Firefox and WebKit, 444 before/after formula comparisons
-in the blog and example site preserved pixels, dimensions and MathML; mathematical Mermaid 11 labels
-also remain compatible with this stylesheet.
+The regression test rejects inherited trust from prototype pollution while allowing
+an explicit trusted choice.
 
-Mermaid is a separate consumer-owned dependency and may bundle another KaTeX copy. The tested
-Mermaid 12.2.0 upgrade clears npm's advisory but changes layout, styling and label-width defaults.
-The theme explicitly keeps Dagre/classic with `flowchart.wrappingWidth: 200` and
-`flowchart.minNodeWidth: 0`; classic styling alone does not preserve geometry. Consumers should
-compare their own diagrams when upgrading. See [configuration](configuration.md) for browser and
-Node.js requirements. The pinned CDN fallback remains on Mermaid 11; upgrading a self-hosted
-package is separate from updating the theme's standalone KaTeX bundle.
+### Reproduce the pinned bundle
 
-To reproduce the current bundle, install the pinned package into a temporary directory, then run the maintainer script from the theme root:
+From the theme root:
 
 ```bash
 npm install --prefix /tmp/mini-katex --ignore-scripts --save-exact katex@0.18.2 --registry https://registry.npmjs.org
@@ -105,4 +104,31 @@ node scripts/vendor-katex.mjs /tmp/mini-katex/node_modules/katex
 node --test tests/vendor-assets.test.mjs
 ```
 
-The script checks the version and all asset checksums before copying. For an upgrade, review the release, verify the package through npm's integrity check, update the manifest from that package, and replace the complete asset set. Build the example site's math page and check representative inline/block formulas before committing. Node is needed only for theme maintenance and optional data scripts, not for ordinary Hugo builds.
+The script checks the version and asset hashes before copying.
+
+### Upgrade KaTeX
+
+1. Review the upstream release and advisories.
+2. Verify the npm package's integrity and update the manifest from that package.
+3. Replace the complete asset set, including fonts and license.
+4. Build the example math page and compare representative inline/block formulas.
+
+The 2026-10-28 verification compared 444 before/after formulas across Chromium,
+Firefox and WebKit, preserving pixels, dimensions and MathML. Mermaid 11 math labels
+also remained compatible. This historical check does not replace validation of a new upgrade.
+
+## Mermaid
+
+Mermaid is a separate consumer-owned dependency and can bundle its own KaTeX.
+Upgrading it does not update Mini's standalone KaTeX bundle.
+
+The theme's browser tests pin Mermaid **12.2.0**; the optional CDN fallback remains
+on Mermaid 11. See [delivery configuration](media.md#choose-how-to-load-mermaid)
+for classic/ESM paths and Node/browser requirements.
+
+When upgrading a self-hosted package:
+
+1. Keep the ESM entry and chunks from the same version.
+2. Retain explicit Dagre/classic, `flowchart.wrappingWidth = 200` and `flowchart.minNodeWidth = 0`; classic styling alone does not preserve geometry.
+3. Compare real diagrams, including animated edges, modern shapes and mathematical labels.
+4. Run [browser checks](../CONTRIBUTING.md#browser-checks) for themes, print and delayed/failed downloads.

@@ -144,4 +144,4 @@ On wide screens, hovering the left margin reveals a "Go up" label. Clicking anyw
 
 ## Mobile Navigation
 
-On narrow screens, the navigation collapses into a full-screen overlay menu with a hamburger toggle. The overlay initializes hidden, closes on Escape, link selection or focus leaving it, and returns to desktop navigation at the breakpoint. Without JavaScript, ordinary navigation links stay visible.
+On narrow screens, the navigation collapses into a full-screen overlay menu with an animated four-dot toggle. The overlay initializes hidden, closes on Escape, link selection or focus leaving it, and returns to desktop navigation at the breakpoint. Without JavaScript, ordinary navigation links stay visible.

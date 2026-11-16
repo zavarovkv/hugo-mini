@@ -2,188 +2,66 @@
 
 All notable changes to the Mini Hugo theme are documented here.
 
+[Unreleased](#unreleased) · [Latest recorded release](#350--2026-11-06) · [GitHub releases](https://github.com/zavarovkv/hugo-mini/releases)
+
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-- Refresh both READMEs with a starter-based local setup, publishing steps and an installation-specific update guide.
-
-- Enlarge the mobile resume name to 32–36 px and retain the 1.125em professional role size on small screens.
-
-- Tighten resume result-list spacing to 0.6em on screen and 3pt in print through Beauty's list token.
-
-- Add opt-in `articleH2UseTitleFont` to use the H1 family and weight for H2 inside post bodies. Preserve H2 geometry, other heading roles and default typography; honor page overrides and `useDefaultFonts` without adding font assets.
-
-- Add `featured-posts` for hand-picked homepage articles, ordered by `params.featuredPosts` and resolved within each language. Reuse the latest-article layout and optional archive link, skip duplicates and unavailable or hidden posts, and omit empty selections without changing `latest-posts`.
-
-- Group article metadata and sharing with a 16 px internal gap, separate them from the text and Telegram discussion by 32 px, and remove the comment iframe's inline baseline space. Keep optional widgets and print behavior intact in every language.
-
-- Give homepage introductions 64 px of space before desktop columns in every language, retaining the 56 px mobile gap and existing paragraph and footer spacing.
-
-- Remove borders from language, theme and desktop search controls, keeping their backgrounds transparent. Preserve existing resting and hover colors, keyboard focus, click areas and animations.
-
-- Give homepage introductions the configured H1 typeface at 28 px on desktop and 24 px on mobile, with a 24 px gap before the following paragraph through shared Beauty tokens.
-
-- Use a shared compact spacing scale for homepage paragraphs and content modules: 8 px within projects, 12 px between listing items and after module headings, and 24 px between projects and before archive links. Keep multi-paragraph project descriptions in native flow instead of removing their paragraph margins.
-
-- Restore social icons' brand colors on hover in dark mode through Beauty's shared link tokens. Use the same colors for keyboard focus and keep monochrome brands visible on dark backgrounds.
-
-- Let the footer's outer margin merge with preceding content spacing instead of adding a second gap. Keep a larger interval after final quotations, and enlarge social icons slightly to 17 px on desktop and 22 px on mobile.
-
-- Enlarge the mobile menu's four-dot square slightly while retaining its dot weight, touch target and animated close transition.
-
-- Let long mobile menu labels wrap and rows retain their content height on short screens or with enlarged text. Remove the inherited desktop link margin that caused hidden horizontal overflow. Remove closing menu links from keyboard navigation immediately, while preserving ordinary desktop and no-JavaScript navigation.
-
-- Give article groups and homepage modules one heading-to-content interval, with external spacing owned by the containing module. Align the first article and project, remove the extra heading margin above the first category, and let listing titles fill the available line naturally instead of applying prose widow prevention.
-
-- Replace the mobile hamburger with four dots that rotate and join into a thin close icon. Keep the 44 px touch target, keyboard disclosure behavior, theme colors and reduced-motion support without additional JavaScript. Increase mobile menu labels to 20 px and link targets to at least 72 px, including search. Separate the header from the first item with more whitespace instead of a top divider.
-
-- Tie reading-shelf spacing to the shared paragraph rhythm: separate book titles from author metadata more clearly while keeping a larger gap between records in both languages and at every screen width.
-
-- Set resume screen text to 17/26 px, with more separation between sections and jobs, and a wider bullet indent. Preserve item-gap ratios, secondary details at 16/24 px and the 10.5 pt paper text size; add space around section headings in print.
-
-- Let resume objectives and team descriptions inherit the body reading size and leading, keeping their labels bold and the print scale unchanged.
-
-- Unify keyboard focus across blog and resume links, headings and controls with a text-colored dotted outline and shared spacing. Preserve solid system outlines in forced-color mode and omit focus decoration in print.
-
-- Balance dated-record titles and apply Beauty's native `pretty` wrapping to resume paragraphs as well as result lists, preserving the print scale.
-
-- Add a shared style for native resume result-group headings, with more space before than after; keep the final two items of each job list together in print.
-
-- Restore native paragraph flow within resume jobs and dated records, independent of the date column. Use the shared Beauty spacing token for paragraphs, a compact rhythm inside related text groups and proportional gaps between records, preserving compact desktop/print details and A4 text sizes.
-
-- Distinguish products within resume jobs with compact subheadings and place course or mentoring details below their titles on mobile, keeping desktop and print records inline.
-
-- Align mobile resume date endpoints vertically inside the right column, while keeping the authored inline range on desktop and in print.
-
-- Keep mobile resume roles directly below their company when the date wraps; span the date across both rows without changing desktop or print layout.
-
-- Keep heading shortcuts sequential at the bottom of a page, including short resumes, and reset their position after manual scrolling. Keep resume identities inside their column with enlarged text and expose contact lists and job names to assistive technology.
-- Use shared Beauty paragraph/list wrapping for resume results and consolidate their dated-row layout rules.
-
-- Add a standalone `resume` layout and `resume-entry` shortcode, with responsive contact links styled as ordinary text, thin section rules and a dedicated A4 print layout without blog navigation or visible controls. Its separate stylesheet loads only on resume pages; contacts stack below 320 px and an optional introduction break applies only on mobile.
-- Honor an explicit `backToTop = false`; standalone resumes always omit the back-to-top gutter and can opt into shared heading navigation for sections and company names, with distinct anchors for repeated employers.
-- Give resume experience entries compact definition-list context, separated result lists and spacing between multiple products, while preserving the print reading scale.
-- Add regular-weight dated resume lists with optional program subtitles for education, screen-only bottom spacing and a name link that clears the fragment without reloading. Education records remain outside heading navigation.
-
-- Unify bilingual demo quotations and attributions; apply `editorialQuotes` to `callout` while preserving its original style when disabled.
-- Support a deployment-owned demo font profile with verified HTTPS downloads, temporary source files and self-hosted output; ordinary theme builds and the starter retain Inter.
-
-- Preserve existing quotation marks inside inline formatting and links, including nested wrappers and authored hanging spans.
-- Keep the heading focus outline for Tab navigation while suppressing it for Option/Alt + Up/Down jumps.
-
-- Use a thin, elongated upward arrow for the back-to-top control.
-
-- Add opt-in H1/H2 text anchors without icons, Option/Alt + Up/Down navigation, shareable URL fragments, stable section IDs and reduced-motion handling.
-
-- Give enlarged `beauty-lead` statements shared screen spacing of 32 px before and 48 px after, preserving print paragraph spacing.
-
-
-
-- Add opt-in `editorialQuotes` for native Markdown quotations in every language, preserving semantic paragraphs/lists and existing punctuation; share the article quotation style without rewriting content.
-
-- Add a shared 0.08em optical gap after hanging quotation marks through Beauty.
+Changes below are grouped by user-visible behavior. For setup and current defaults,
+see the [documentation](docs/README.md); released entries below remain historical records.
 
 ### Added
-- Add 32 px more footer separation when standalone content ends with a quotation, without changing spacing inside the quotation.
-- Share quotation spacing, 1.4-scale opening marks and end-aligned attributions across testimonials and article quotations; only reading size and leading differ. Apply attribution alignment to native quotation footers as well, leaving image captions unchanged.
-- Add `quotation-reading` for long in-article quotations: inherit reading size and leading, retain shared 24 px top / 32 px bottom spacing, quotation face and 640 px measure while changing only size and leading.
-- Support Beauty's opt-in `beauty-quotation-attribution` signature with an inline em dash and author/source text aligned to the quotation end, a 20 px caption gap and a compact 0.125em dash-to-name gap.
-- Support a site-owned upright quotation face through `params.fonts.quote` for Markdown, callouts, legacy block quotes and attributed quotations, preserving body-font captions, default-font opt-outs and private file handling.
-- Style opt-in `beauty-quotation` figures with the configured quotation face at 20/30 px on desktop and mobile, a 640 px maximum measure, hanging selectable punctuation and an inline author name followed by a muted role/source through Beauty.css. Use 24 px top / 32 px bottom spacing and a compact paragraph rhythm; preserve ordinary quotations and print sizing.
-- Add opt-in `articleLinksNewTab`: internal and external destinations open in a new tab only from post bodies, preserving in-page anchors, footnote navigation and site navigation.
-- Add opt-in `sideNotes = true`: place native footnotes beside their references in a sufficiently wide desktop gutter, avoid neighboring notes and wide blocks. Preserve the bottom notes block on mobile, narrow windows, print and without JavaScript.
-- Add per-article `dropCap = true`: Beauty shapes a two-line initial in the configured title font; preserve text, print and unsupported-browser fallback. Bind single-letter opening words at build time to preserve their separator when copying in Chromium.
-- Support an optional site-owned H1 face through `params.fonts.title`, with normal desktop letter spacing and compact mobile tracking; preserve body fonts, heading sizes, private asset handling and default-font opt-outs.
-- Add opt-in hanging opening quotes in headings and ordinary prose (including blockquotes), and old-style proportional prose figures, plus an explicit `fraction` shortcode. Preserve source text, technical content, metadata and print margins through shared Beauty helpers; keep heading anchors clear of quotes and viewport edges.
-- Add opt-in `mermaid wide=true` figures with optional captions styled identically to image captions. Reuse the wide layout and viewport constraints, preserving mobile, source fallback, theme changes and print.
-- Add per-page `wideCode = true`: long fenced examples expand up to 960 px using the same geometry and viewport constraints as wide images; short examples retain the reading width. Preserve native code scrolling, highlighting, copy controls and print wrapping.
-- Add an opt-in `image` shortcode with semantic captions and a wide layout up to 960 px, aligned with the text's inline-start edge. Cap images at their source/viewport width; retain mobile, print and no-JavaScript layouts.
-- Blend desktop menu selection over 300 ms with native cross-document View Transitions. Reserve internal labels' bold width to prevent layout shifts; retain ordinary links, mobile overlay behavior and immediate navigation for reduced motion or unsupported browsers.
-- Navigate between older/newer public articles with Option/Alt + Left/Right, respecting language and chronology, skipping hidden posts and drafts, and stopping at both ends. Preserve text editing and overlay shortcuts without adding visible controls.
-- Add Chromium and WebKit integration checks in CI for tables, print, diagram loading and theme changes; ordinary theme users still need only Hugo.
-- Wrap Markdown tables in labeled, keyboard-focusable Beauty scroll containers and wrap long cell contents on paper, preserving native table semantics and attributes.
-- Prepare offscreen Mermaid diagrams and neutral print copies during idle time. Print switches synchronously, screen theme changes publish complete SVGs atomically, and interrupted downloads retain readable source.
-- Support site-owned font assets through `params.fonts`, with verified face weights, fingerprinted files, selective preloads and default-font page opt-outs. Typography remains in the theme and Beauty.css; proprietary font files are never part of the theme.
-- Support optional light/dark project marks next to names, with a separate accessible button that spins to a stop when clicked; the project name stays linked.
-- Prevent awkward line breaks in Russian compound prepositions, abbreviations, enclitic particles and short three-word groups.
-- Add the Hugo Mini asterisk as optional light/dark header branding and a black SVG favicon; let sites supply their own logo and support SVG browser favicons alongside PNG.
-- Add a complete Russian README and language switchers to both README versions; document the requirement to keep every README translation in sync.
-- Add a default-on search shortcut linking to the homepage: a right-aligned footer-style GitHub Octicon on desktop and a text-only mobile menu entry before the final navigation link. It can be hidden with `showSearchButton = false`.
-- Print-friendly article layout with paper-safe colors in both themes, unobstructed code and images, and no navigation, sharing, comments or other page controls.
-- Normalize nested Russian quotation marks, spaced prose hyphens and short prepositions during the Hugo build, preserving code, URLs and per-page typography opt-outs.
-- Add a bilingual typography guide with rule examples, protected content and opt-outs.
+
+- **Resume pages:** standalone `resume` layout with contacts, experience entries, product/result headings and dated education/activity lists. Responsive columns, inherited fonts, one-color hierarchy and A4 browser printing share one Markdown source. See [Resumes](docs/resume.md).
+- **Featured articles:** `featured-posts` follows ordered `params.featuredPosts` content paths per language, skips duplicates/unavailable/hidden posts and omits empty blocks. It reuses the recent-post layout and archive link without affecting dates, feeds or pinning.
+- **Editorial quotations:** opt-in `editorialQuotes` styles native Markdown and `callout` with semantic figures, selectable hanging marks, reading-size quotations and end-aligned attributions. Existing inline marks and explicit figures remain intact; author statements use `beauty-lead`.
+- **Reading options:** per-article drop caps, optional hanging opening quotes and old-style prose figures, plus the explicit `fraction` shortcode. Sources, copied text, technical content and print fallbacks remain intact.
+- **Margin notes:** opt-in `sideNotes` places original footnotes beside references, avoids wide blocks and keeps endnotes on narrow screens, in print and without JavaScript.
+- **Heading navigation:** opt-in `headingScroll` makes H1/H2 text clickable, aligns it below the viewport and supports Option/Alt + Up/Down with stable URL fragments. H3 retains copy links.
+- **Article navigation:** Option/Alt + Left/Right opens older/newer public articles in the current language, respects editing/overlays and stops at boundaries.
+- **Article links:** opt-in `articleLinksNewTab` includes internal post-body destinations while preserving local anchors, footnotes and site navigation.
+- **Wide content:** semantic `image` figures, `mermaid wide=true` captions and per-page `wideCode` share an optional 960 px measure with viewport limits, mobile/print layouts and source fallbacks.
+- **Font profiles:** site-owned body, H1 and quotation faces with validated weights, fingerprints, selective preloads and `useDefaultFonts` opt-outs; `articleH2UseTitleFont` optionally extends the H1 role to article H2.
+- **Project marks and identity:** optional light/dark project icons with accessible click-to-spin behavior; bundled asterisk header marks and browser/device favicons support site overrides.
+- **Homepage magnifier:** optional `showSearchButton` links to the homepage; it does not implement full-text search.
+- **Demo fonts:** optional deployment-owned profile with verified HTTPS downloads and temporary build inputs. Ordinary clones, the catalog, CI and starter retain Inter.
+- **Browser checks:** Chromium/WebKit fixtures cover tables, complex notes, keyboard navigation, diagram themes/failures and synchronous printing at the supported Hugo versions.
 
 ### Removed
 
-- Remove the article recent-posts sidebar and bottom list, including `recentSidebarCount`, its partial, labels, styles and positioning logic. Wide images, diagrams and code now use available viewport space without a sidebar collision constraint; homepage `latest-posts` is unchanged.
+- Remove the article recent-posts sidebar/bottom list, `recentSidebarCount` and related assets. Wide content can use that space; homepage `latest-posts` is unchanged.
+- Remove unused `--link-color`, `--blockquote-color` and `--color-blockquote-border`. See [replacement tokens](docs/customization.md#assets).
 
 ### Changed
 
-- Balance spacing around a `plug` divider before an attributed quotation with a 16 px quotation top margin.
-- Give footnotes their own screen scale: 15/24 px on desktop and 16/25.6 px on mobile, using the body face and shared muted color through Beauty tokens; print retains inherited leading.
-- Hide return arrows only in desktop side notes; retain them in bottom notes on narrow screens and in print.
-- Raise opt-in article initials by a quarter line while retaining two-line wrapping on desktop and mobile; use Beauty's shared rise token and native browser shaping.
-- Tighten the initial's block-end exclusion area by 0.3em so a short descender does not indent a third line; retain glyph size, baseline and short-paragraph containment.
-- Separate the reading header, H1 and content with 48/32 px desktop gaps and 40/28 px mobile gaps; retain print spacing.
-- Use the configured bold role for project name labels (Inter 600 or the site's custom face), without altering their SVG arrow stroke or appearance.
-- Match project link arrows to the archive arrow's fine stroke and geometry, with a diagonal 300 ms hover/focus movement. Keep labels, logo buttons, touch input and reduced-motion behavior stable.
-- Refine the latest-posts archive arrow with a finer stroke and a 300 ms hover/focus movement, preserving link colors and layout; respect reduced motion and touch input.
-- Darken light-theme body text from `#444` to `#333`.
-- Keep footnote references from enlarging line boxes; distinguish upright image descriptions from explicit italic source credits with `caption kind="credit"`; use font-independent inline SVG project/archive arrows; reserve classic desktop scrollbar space. Shared editorial styles remain in Beauty.css.
-- Optically align LTR reading H1/H2 through existing Beauty transform tokens. Enable native title hyphenation only at screen widths up to 360 px through new shared Beauty tokens, keeping prose, wider screens and print unchanged.
-- Match the back-to-top label to the header navigation size, preserving its configured weight, primary link color and existing hover treatment.
-- Version local project marks, header logos and favicons with the shared static-asset helper so updated images replace cached copies. Preserve custom query strings, fragments, external URLs and site subpaths.
-- Refine the Hugo Mini asterisk with balanced 5.5-unit strokes on its 64-unit canvas, preserving the original ray directions and colors across light/dark logos and browser/device icons.
-- Use the shared blog typography on 404 pages, including translated fallback views: 18/19 px text, 44/32 px titles and consistent header controls. Keep ASCII artwork sizing separate.
-- Use Beauty's shared footnote helpers through the Goldmark class adapter, removing duplicated theme typography. Ordinary list numbers now inherit text weight and item spacing is 0.875rem (14 px), with responsive min(2.5rem, 8%) indentation.
-- Refine the inline year-range arrow with a small, smoothly joined oval loop, a finer stroke and a compact open arrowhead, retaining text-relative sizing, alignment and accessible labels.
-- Bring wavy emphasis closer to the text with Beauty's `--beauty-emphasis-offset` token, preserving its color and stroke.
-- Match language and search hover/focus colors to ordinary links through `--color-accent`, preserving the theme toggle's colors and yellow AI-language sparkle.
-- Enlarge the mobile menu toggle's touch target to 44 × 44 px while preserving its 24 px icon and shared open/close behavior.
-- Increase mobile blog reading to 19/29 px, with 24 px section headings, matching recent-post links, 15 px attributions and 14 px post metadata; let narrow reading shelves scroll inside a labeled, keyboard-accessible container. Preserve desktop, independent landing and print scales.
-- Use 12 px language labels and compact 11 px green badges with white text on the text baseline; localize the Russian badge to “Нов.” while retaining “New” in English. Map lead paragraphs and table headers to the configured regular/bold font roles.
-- Match the blog header to its reading scale: 16 px desktop identity/navigation, 20 px mobile identity and 18 px mobile menu links, retaining the existing menu structure.
-- Refine blog reading typography to 18/28 px in a 720 px column, 19/29 px on mobile, with calmer 44 px desktop titles and readable 14 px attributions/sidebar links. Independent landing shells and print sizing remain separate.
-- Format visible titles and article links with the existing language-aware typography rules, keeping escaped text, metadata, URLs and opt-outs intact.
-- Render validated ISO dates in Markdown table cells as native time elements; use real upright bold for combined emphasis when a custom family lacks bold italic.
-- Refresh Beauty.css for half-pixel table-header rules on Retina screens, retaining 1 px rules on standard displays and in print.
-- Use Beauty’s shared zero-gap table headers and native 1 px rule; remove the reading-shelf-specific spacing override.
-- Scope header and navigation styling to the page header and `.main-nav`, remove unused color variables, and isolate legacy Beauty aliases in a cached adapter that matches complete selector tokens.
-- Update CI and release checkout to the Node.js 24 action runtime, retaining immutable SHA pins and disabling unnecessary credential persistence.
-- Style Goldmark footnotes as subtle italic, unlined references with muted source notes and unobtrusive return links; retain native navigation and keyboard focus.
-- Describe build-time typography in the benefits list of each README and link only to same-language rule examples.
-- Make the English and Russian typography guides language-specific, with a short explanation and example for each rule.
-- Apply the standard prose typography to reading-list titles while keeping their source metadata untouched.
-- Use the bundled asterisk as the default browser and device favicon, preserving custom icon overrides and separate header avatar branding.
-- Update Hugo gallery screenshots with the current asterisk branding, desktop search shortcut and mobile layout; remove obsolete preview files and keep social preview exports outside the theme repository.
-- Mark English as the AI-translated language in the example site and test the footer indicator in both languages.
-- Refresh the bilingual README animation with the current asterisk logo, desktop search shortcut, mobile search menu, and both color schemes.
-- Focus both README translations on a minimal personal blog for writers, with clear benefits and a short path to the first post; document the search shortcut in the configuration guide.
-- Keep balanced wrapping for page titles while restoring natural line breaks in article section headings through the shared Beauty.css foundation.
-- Use Beauty.css's shared table-header rhythm and thin text-colored rule in reading lists, removing duplicate table-header styles from the theme.
+- **Documentation:** add a task-oriented entry point and separate guides for media, homepages, resumes and demo maintenance. Split bilingual typography instructions from visual references; shorten dense sections, preserve old anchors and document missing module/feed setup steps.
+- **Reading scale:** use a 720 px column, 18/28 px desktop and 19/29 px mobile text, 44/32 px H1 and consistent 48/32 px desktop versus 40/28 px mobile title gaps. Apply the same scale to 404 pages while retaining separate ASCII/print sizing.
+- **Headings and prose:** retain balanced page titles and natural section-title wrapping; add LTR optical alignment and dictionary hyphenation up to 360 px. Format visible titles/article links without changing metadata or URLs. Darken light body text to `#333`.
+- **Editorial rhythm:** share quotation measure, spacing, opening-mark scale and attribution treatment; enlarge the footer gap after a final quotation. Give author statements 32/48 px screen spacing and drop caps two-line wrapping with a quarter-line rise and descender clearance.
+- **Notes, lists and tables:** use Beauty's shared typography and compatibility adapter. Footnotes have independent 15/24 px desktop and 16/25.6 px mobile scale; ordinary lists use 14 px gaps and responsive indentation. Keep table-header rhythm, semantic ISO dates and local keyboard-accessible scrolling.
+- **Homepage modules:** use the title face for the introduction, 64 px before desktop columns, and shared 8/12/24 px detail/item/group gaps. Align module headings, retain native paragraph flow and let list titles wrap naturally.
+- **Reading shelves:** tie record spacing to paragraph rhythm, retain a 20em locally scrolling mobile table and apply prose typography without changing metadata.
+- **Links and arrows:** use the actual bold role for project names, shared fine SVG archive/project arrows and motion-aware 300 ms hover/focus movement. Refine the inline date-range arrow and bring wavy emphasis closer to text.
+- **Mobile navigation:** replace the hamburger with an animated four-dot control, keep a 44 px touch target and use 20 px menu labels with generous rows. Support wrapped labels and enlarged text without horizontal overflow.
+- **Controls and footer:** unify dotted keyboard focus and forced-color fallbacks; remove control borders/backgrounds, preserve icon/accent colors and restore brand hover/focus colors in dark mode. Footer margins collapse in normal flow; social icons use 17/22 px desktop/mobile sizes.
+- **Compact metadata:** use 12 px language labels and 11 px green New/Нов. badges. Group post metadata/sharing at 16 px, separated from the article and comments by 32 px; missing widgets leave no empty gaps.
+- **Resume refinements:** use 17/26 px screen text, compact 0.6em bullet gaps, 32–36 px mobile names and the 1.125em role. Keep paragraph flow independent of date grids, mobile detail/date wrapping, section spacing and 10.5 pt A4 text.
+- **Asset/layout isolation:** content-version local logos, avatars, project marks and favicons; reserve desktop scrollbar space. Scope header/menu rules and legacy Beauty aliases without duplicating native styles.
+- **CI and starter:** use SHA-pinned Node.js 24 actions without persisted checkout credentials. Pin the starter to v3.5.0 and honor explicit canonical domains or configured baseURL.
+- **Onboarding:** keep brief synchronized EN/RU READMEs, absolute gallery images, current light/dark previews and starter-based local setup. Mark the demo's English option as AI-translated.
 
 ### Fixed
-- Keep table-style code line numbers inside a local horizontal scroller in class-based and inline highlighting modes, while preserving visible overflow for print.
-- Read local WebP dimensions in regular Hugo builds too; metadata decoding does not require the Extended encoder.
-- Keep desktop menu transitions in place when opening an article from a scrolled page: disable the browser's position/size interpolation while preserving the 300 ms state fade.
-- Align repository stars with their counts rather than the line box, and give the default footer copyright sign a smaller, optically raised position beside the years.
-- Preserve project logo colors and size on hover; retain click-to-spin behavior and keyboard focus.
-- Keep endnote numbers visible when the first block is a quotation, list or code; attach counters to list items rather than their first paragraphs.
-- Apply 11 pt article text and fixed 22/16 pt heading sizes in print at narrow and wide viewports.
-- Add coordinated light, dark and monochrome print palettes for class-based Chroma output; enable `markup.highlight.noClasses = false` in the example site and document site configuration.
-- Normalize literal curly quotes and quotations ending in visible URLs without corrupting Russian quote nesting.
-- Keep the desktop search shortcut and header logo out of printed articles.
-- Restore the intended gap after printed page titles by passing two values to `margin-block`.
-- Avoid invalid `role="null"` and `aria-label="null"` attributes when Likely enhances sharing links.
-- Pin new starter sites to v3.5.0, including its Markdown URL-safety fixes; honor an explicit canonical domain and preserve configured baseURL when no deployment URL is supplied.
-- Unify language, theme and desktop search controls with shared neutral colors, borders, pressed and keyboard-focus states; preserve the theme icon colors and yellow AI-translation sparkle.
-- Hide native endnote list markers so Safari does not show double numbers beside the raised reference counters.
-- Raise footnote numbers consistently in article text and endnote lists, keeping native ordered-list semantics and unadorned clickable references.
-- Keep the optional header logo compact at 26 px without changing user avatar sizes.
-- Use an absolute image URL in both README versions so the animated preview renders in the Hugo Themes gallery.
-- Prevent the mobile navigation links from flashing before JavaScript initializes the menu, while keeping a fallback if the bundle fails or scripting is disabled.
-- Correct outdated CSS variable names in the customization guide and example article; show how to load site overrides after the theme stylesheet.
+
+- Keep code line numbers inside their local scroller and use coordinated class-based light/dark/monochrome print palettes. Print article/title/section text at 11/22/16 pt regardless of viewport width; keep navigation, search and logos off paper.
+- Prepare offscreen Mermaid diagrams and neutral print copies during idle time; publish complete SVGs atomically. Printing uses a cached copy synchronously, or readable source if rendering/downloads are unfinished.
+- Preserve Russian nesting around literal curly quotes, inline wrappers and visible URLs. Keep nonbreaking compound prepositions, abbreviations, particles and short-word groups without rewriting protected text.
+- Keep footnote numbers visible before quotes/lists/code, prevent Safari double markers and avoid enlarged reference line boxes. Hide return arrows only in margin-note mode.
+- Prevent mobile menu flashes, preserve no-JavaScript links, remove closing links from keyboard navigation and keep desktop transition geometry stable when leaving a scrolled page.
+- Honor explicit `backToTop = false`; omit it on resumes. Keep heading shortcuts sequential at page ends, clear the fragment from a CV's name link, and restore visible focus when returning to Tab.
+- Preserve project mark colors/size on hover, align GitHub stars with counts and keep header logos compact. Custom fonts without bold italic use a real upright bold face for combined emphasis.
+- Decode local WebP dimensions in regular Hugo builds, not only Extended builds.
+- Avoid Likely's `role="null"` / `aria-label="null"` attributes by copying only present attributes.
 
 ## [3.5.0] — 2026-11-06
 

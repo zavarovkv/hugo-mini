@@ -1,60 +1,54 @@
 # Contributing to Mini
 
-Thank you for your interest in contributing.
+[Documentation](docs/README.md) · [Issues](https://github.com/zavarovkv/hugo-mini/issues) · [Changelog](CHANGELOG.md)
+
+<a id="reporting-issues"></a>
+
+For a bug report, include `hugo version`, a minimal reproduction, and expected versus
+actual behavior. For code or documentation changes, follow the workflow below.
 
 ## Design Principles
 
-1. **Stay minimal** — Fast and focused. Avoid feature creep.
-2. **CSS over JS** — Prefer pure CSS. JavaScript is used only where CSS cannot achieve the result (theme toggle, mobile menu, Telegram widget sync).
-3. **Zero required configuration** — New users should get started with minimal setup.
-4. **Self-hosted assets** — No external CDN dependencies for critical resources.
+- Keep the theme minimal, fast and useful without required configuration.
+- Prefer CSS; use JavaScript only where browser behavior needs it.
+- Self-host critical assets and keep optional integrations optional.
+- Put native typography in Beauty.css; keep layout, UI and token configuration in Mini.
 
 ## Local Development
 
+Requires Hugo Extended 0.146.0+. From the theme root:
+
 ```bash
 git clone https://github.com/zavarovkv/hugo-mini.git
-cd hugo-mini/exampleSite
-hugo server --themesDir ../..
+cd hugo-mini
+hugo server -s exampleSite --themesDir ../..
 ```
 
-## Project Structure
-
-Layouts follow Hugo's current template system (0.146+): templates live at the
-root of `layouts/`, and `_partials` / `_shortcodes` / `_markup` carry the
-underscore prefix.
-
-```
-layouts/baseof.html            shell; title/head/favicon/header/main/footer/scripts blocks
-layouts/home.html              home page
-layouts/list.html              section listings (blog index, grouped by category)
-layouts/single.html            single post
-layouts/home.json              JSON Feed output
-layouts/home.llms.txt          llms.txt output for AI crawlers
-layouts/_partials/             header, footer, nav, SEO tags, OG image, Telegram bits
-layouts/_partials/custom_head.html  empty site-wide <head> hook
-layouts/_partials/custom_body.html  empty site-wide <body>-end hook
-layouts/_markup/               render hooks (headings, images, links, tables)
-layouts/_shortcodes/           content helpers; see docs/content.md
-assets/css/beauty.css          generated, pinned Beauty.css foundation; never edit by hand
-assets/css/main.css            theme tokens, font loading, layout and components
-assets/js/main.js              theme/menu controls, article shortcuts, code-copy, diagrams, sidebar
-i18n/                          UI strings (en, ru)
-exampleSite/                   demonstration site (bilingual)
-archetypes/                    content scaffolding templates
-scripts/                       counter fetchers and maintainer asset-vendoring tools
-tests/                         browser-behavior, template and helper regression tests
-```
-
-CSS and JS are bundled through Hugo Pipes from `assets/` — minified and
-fingerprinted. Do not add a second stylesheet or inline `<style>` blocks to
-templates. Shared typography and editorial helpers belong in Beauty.css; configure its public
-variables in the token block of `assets/css/main.css`. Keep theme layout and component styles in
-that file, and refresh the generated foundation only through `scripts/vendor-beauty.mjs` as
-documented in `docs/vendor-assets.md`.
+Open `http://localhost:1313/`. Ordinary demo builds do not need npm.
 
 ## Submitting Changes
 
-Browser checks need Node.js 22.12+ and development-only npm packages:
+1. Fork the repository and create a focused feature branch.
+2. Make the change; update related documentation and `CHANGELOG.md` for public behavior.
+3. Run the checks appropriate to the change below.
+4. Open a pull request explaining the problem, resulting behavior and validation.
+
+### Unit and build checks
+
+From the theme root, using Node.js 22.12+:
+
+```bash
+npm test
+hugo -s exampleSite --themesDir ../.. --minify --panicOnWarning
+```
+
+Unit checks include documentation links and README language consistency. The example
+build must emit nonempty HTML, RSS, JSON Feed, `llms.txt` and sitemap outputs,
+including `ru/index.json` and `ru/llms.txt`.
+
+### Browser checks
+
+For layout, JavaScript or Mermaid changes:
 
 ```bash
 npm ci
@@ -62,28 +56,68 @@ npx playwright install chromium webkit
 npm run test:browser
 ```
 
-Each run builds an isolated Hugo fixture and starts its own local server; an existing server is never reused. Chrome/Chromium and WebKit cover wide tables, complex footnotes, article shortcuts, keyboard scrolling, both color schemes, offscreen diagrams, synchronous print preparation, delayed/failed module downloads and rapid theme changes. The fixture uses self-hosted Mermaid with animated edges and modern shapes. Chromium also generates a PDF. CI runs these checks at both supported Hugo versions. To use installed Chrome locally, set `PLAYWRIGHT_CHROMIUM_CHANNEL=chrome`; `PLAYWRIGHT_PORT` selects another port.
+Each run builds an isolated fixture and starts its own server. Chromium and WebKit
+cover tables, complex footnotes, keyboard navigation, color schemes, diagrams and
+synchronous print behavior; Chromium also generates a PDF. Diagram fixtures include
+animated edges, modern shapes, delayed/failed downloads and rapid theme changes.
+CI runs against the minimum and latest supported Hugo versions.
 
-Consuming sites may reuse `tests/browser/contracts.mjs` and `browserConfig({ site: true })` without duplicating assertions. The test server copies their content to a temporary directory and builds through their real config, assets and theme, adding only the test fixture and local Mermaid. `BROWSER_HUGO_CONFIG` accepts comma-separated config paths for optional site-owned fonts. Private fonts and test output must not be committed or uploaded as public CI artifacts.
+| Optional variable | Use |
+| --- | --- |
+| `PLAYWRIGHT_CHROMIUM_CHANNEL=chrome` | Use installed Chrome locally. |
+| `PLAYWRIGHT_PORT` | Choose another test-server port. |
+| `BROWSER_HUGO_CONFIG` | Comma-separated config paths for a consuming site's font profile. |
 
-1. Fork the repository
-2. Create a feature branch
-3. From the theme root, run `node --test tests/*.test.mjs` and
-   `hugo -s exampleSite --themesDir ../.. --minify --panicOnWarning`.
-   Check the example pages on mobile and desktop, in both color schemes and with keyboard navigation.
-4. Open a pull request with a clear description
+Consuming sites can reuse `tests/browser/contracts.mjs` and
+`browserConfig({ site: true })`. The server copies the real site into a temporary
+directory and adds only fixtures/local Mermaid. Do not commit private fonts or
+upload them with public test artifacts.
+
+Check affected pages on mobile and desktop, in both color schemes and with a keyboard.
+For documentation-only changes, link/language checks and any changed command examples
+are sufficient; browser tests are not needed.
 
 ### README translations
 
-`README.md` (English) and `README.ru.md` (Russian) are maintained together.
-**Every README change must update all language versions in the same commit**,
-including links, badges, screenshots, commands, examples, and feature descriptions.
-Keep both language switchers working. The typography guide also has English and
-Russian versions; update both together. Other guides under `docs/` are in English.
-Keep the READMEs brief; link to `docs/` for implementation details. In Russian
-README text, use `е` instead of `ё` consistently (and `Е` instead of `Ё`).
-Use absolute HTTPS URLs for README images so they render in the Hugo Themes gallery.
+Update `README.md` and `README.ru.md` **together**, including links, badges, images,
+commands and feature descriptions. Keep both language switchers working and use
+absolute HTTPS image URLs for the Hugo Themes gallery.
 
-## Reporting Issues
+The typography authoring guides and visual references also have EN/RU pairs; update
+each pair together. Other guides are in English. Russian documentation uses `е` / `Е`
+in place of the dotted variants.
 
-Please include Hugo version (`hugo version`), a minimal reproduction case, and expected vs. actual behavior.
+### Documentation conventions
+
+- Keep READMEs brief; route readers through [the documentation home](docs/README.md).
+- Give each guide one primary task or reference role. Put prerequisites before steps and options beside their examples.
+- Prefer short paragraphs, descriptive links and compact comparison tables. Move detailed visual contracts to the reference rather than repeating them.
+- Preserve existing paths and heading anchors when moving sections; leave a link to the new location.
+- Keep installation commands, version requirements and EN/RU examples synchronized with code.
+
+## Project Structure
+
+Hugo 0.146+ templates use `_partials`, `_shortcodes` and `_markup` with leading underscores.
+
+| Path | Responsibility |
+| --- | --- |
+| `layouts/baseof.html` | Shell and named blocks |
+| `layouts/home.html`, `list.html`, `single.html`, `404.html` | Main page layouts |
+| `layouts/home.json`, `home.llms.txt` | JSON Feed and crawler text |
+| `layouts/_partials/` | Header/footer, metadata, OG images, integrations and extension hooks |
+| `layouts/_markup/` | Heading, image, link and table render hooks |
+| `layouts/_shortcodes/` | [Content components](docs/advanced-features.md#articles-and-components) |
+| `assets/css/beauty.css` | Generated foundation; never edit by hand |
+| `assets/css/main.css` | Theme tokens, fonts, layout and UI |
+| `assets/js/main.js` | Browser behavior |
+| `i18n/`, `exampleSite/`, `archetypes/` | UI translations, bilingual demo, content scaffolding |
+| `scripts/`, `tests/` | Optional helpers, asset maintenance and regression checks |
+
+Hugo Pipes bundles/minifies/fingerprints CSS and JavaScript. Avoid extra stylesheets
+or inline style blocks in shared templates. Configure Beauty's public tokens in
+`main.css` and refresh the foundation only through the
+[vendoring helper](docs/vendor-assets.md#beautycss-foundation).
+
+CI and release actions are pinned to immutable SHAs and use the Node.js 24 action
+runtime. Checkout credentials are not persisted; releases use a job-scoped token
+explicitly through `gh`. This is separate from the Node.js requirement for local tools.

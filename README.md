@@ -16,7 +16,7 @@ Build with Hugo. Core fonts, styles and scripts are served from your own site.
 
 [![Hugo Mini — desktop and mobile preview with the asterisk logo, navigation controls, and light and dark themes](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v5.gif)](https://hugo-mini-demo.vercel.app/)
 
-Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and Mirta fonts. [Font details](docs/deployment.md#deployment-owned-demo-fonts).
+Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and Mirta fonts. [Font details](docs/demo.md#deployment-owned-demo-fonts).
 
 ## Features
 
@@ -24,7 +24,7 @@ Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and M
 - **Easy navigation.** Mobile menus, light/dark mode and keyboard shortcuts. Multilingual sites with English and Russian UI included.
 - **Rich articles.** Code highlighting and copying, KaTeX formulas, Mermaid diagrams and wide images.
 - **Ready to share.** SEO metadata, generated social preview images, RSS, JSON Feed and sitemap.
-- **Beyond the blog.** Homepage blocks, featured posts, projects, reading lists and a [printable CV](docs/content.md#standalone-resume).
+- **Beyond the blog.** Homepage blocks, featured posts, projects, reading lists and a [printable CV](docs/resume.md).
 - **Your own style.** Custom colors, fonts and logos. Optional Telegram comments, sharing buttons and analytics.
 
 ## Quick start
@@ -62,7 +62,7 @@ Existing site or Hugo Modules? See [installation](docs/configuration.md#installa
 
 ## Documentation
 
-All features and options: [feature index](docs/advanced-features.md).
+[Documentation home](docs/README.md) · [Feature index](docs/advanced-features.md)
 
 - [Configuration & languages](docs/configuration.md) · [Example site](exampleSite/)
 - [Writing & components](docs/content.md) · [Typography](docs/typography.md)

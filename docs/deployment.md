@@ -1,103 +1,82 @@
 # Deployment
 
-Build the site with Hugo Extended 0.146 or newer:
+[Documentation](README.md) · [Configuration](configuration.md) · [Vercel starter](../starter/README.md)
 
-```bash
-hugo --minify
-```
+Mini produces a static site. Publish the generated `public/` directory to your host;
+no Node.js runtime or application server is needed.
 
-The generated site is in `public/`.
+## Build for production
 
-With `enableRobotsTXT = true`, the theme advertises the default root
-`sitemap.xml` in `robots.txt`. If you change the sitemap filename or disable
-sitemaps, supply your own `layouts/robots.txt` to match that configuration.
+1. Set `baseURL` to the final public URL, including any subdirectory.
+2. Restore the theme (`git submodule update --init --recursive` for a submodule).
+3. Run any optional counter fetchers, then build with Hugo Extended 0.146.0+:
+
+   ```bash
+   hugo --minify
+   ```
+
+4. Deploy `public/`. Check a post, an asset URL, a language link and a missing path.
+
+Drafts and future posts are excluded from ordinary production builds. Optional
+[GitHub](homepage.md#github-stars) and [Telegram](telegram.md) helpers require Node.js
+only when you choose to run them.
+
+## Sitemap and robots.txt
+
+Set `enableRobotsTXT = true` at the top level of your site configuration to advertise
+the default root `sitemap.xml`. If you rename or disable the sitemap, supply a matching
+`layouts/robots.txt`. See [front matter](content.md#front-matter) for page-level
+sitemap, noindex and canonical settings.
 
 ## GitHub Pages
 
-Use the official Pages actions or another maintained workflow. The essential sequence is:
+Use the official Pages actions or another maintained workflow:
 
-1. Check out the repository with submodules enabled.
-2. Install the required Hugo Extended version.
-3. Run any optional data fetchers.
+1. Check out with submodules enabled.
+2. Install a supported Hugo Extended version.
+3. Run optional data fetchers.
 4. Build with `hugo --minify`.
 5. Upload and deploy `public/` as the Pages artifact.
 
-Pin third-party actions to immutable commit SHAs and give the workflow only the permissions it needs. The [demo site's workflow](https://github.com/zavarovkv/zavarov.com/blob/main/.github/workflows/gh-pages.yml) is a production example.
+Pin third-party actions to immutable commit SHAs and grant only required permissions.
+The [production blog workflow](https://github.com/zavarovkv/zavarov.com/blob/main/.github/workflows/gh-pages.yml)
+is a working example; its translation and font steps are site-specific.
 
-The theme's own CI and release workflows use SHA-pinned Node.js 24 actions.
-Checkout credentials are not persisted: builds need read access, while release
-creation uses the job-scoped token explicitly through `gh`.
-
-GitHub Pages serves the root `404.html` for missing paths in every language.
-The theme includes inert translated views in that page and selects the language
-from the requested URL before initializing its controls. This keeps the missing
-URL and the server's HTTP 404 status, with no redirect or additional request.
-Without JavaScript, the host's default-language error page remains available.
+Pages serves the root `404.html` for every language. Mini selects an embedded
+translated view from the requested path before initializing controls, without
+redirecting, fetching another page or losing HTTP 404 status. Without JavaScript,
+the default-language error page remains available.
 
 ## Netlify and Vercel
 
-Set the build command to `hugo --minify`, the publish directory to `public`, and the Hugo version environment variable to a supported Extended release. If the theme is a submodule, enable recursive submodule checkout in the provider settings.
+| Setting | Value |
+| --- | --- |
+| Build command | `hugo --minify` |
+| Publish directory | `public` |
+| Hugo version | A supported Extended release, configured for your provider |
+| Theme checkout | Recursive submodules, if using a submodule |
 
-### Public theme demo on Vercel
-
-The theme repository itself includes a Vercel project configuration for the
-neutral `exampleSite` demonstration. Import `zavarovkv/hugo-mini` as a separate
-Vercel project, keep **Root Directory at the repository root**, and enable
-automatic exposure of Vercel system environment variables. Vercel builds with
-`scripts/build-vercel-demo.sh` and publishes `exampleSite/public/`.
-
-The script downloads a pinned Hugo Extended release, verifies its SHA-256 digest
-against the official release, and creates a temporary theme-directory symlink
-so the build works with Vercel's generic checkout path. It chooses the production hostname from
-`VERCEL_PROJECT_PRODUCTION_URL` and preview hostnames from `VERCEL_URL`, keeping
-absolute URLs correct for each deployment. Updating the Hugo version requires
-updating the checksum in the same commit.
-
-The example site's source configuration retains `https://example.com/` for
-local builds and CI; the Vercel build passes its actual hostname with
-`--baseURL`. The demo shows neutral example content with no author-specific
-Telegram links or analytics.
-
-#### Deployment-owned demo fonts
-
-The public demo uses the maintainer's licensed body, title and quotation families.
-Ordinary clones, CI, the Hugo Themes catalog and the starter still use bundled Inter;
-the licensed assets are not distributed in this repository.
-
-The optional **Production** environment variable `DEMO_FONT_PROFILE` contains JSON:
-`{"fonts": { ... }, "files": [{"source": "private-fonts/body.woff2", "url": "https://your-site.example/body.woff2", "sha256": "<64 lowercase hex characters>"}]}`.
-`fonts` is the complete [`params.fonts` configuration](fonts.md), with one file record
-per distinct `faces[].source`, `title.source` and `quote.source`. Use only assets and
-domains covered by your license. Keep this profile in deployment settings, not in the
-shared example configuration. It is not a binary font bundle or a credential.
-
-The build copies the example site to a temporary directory, downloads the listed
-HTTPS resources with a timeout, rejects redirects, verifies every SHA-256 digest,
-and adds the profile only to that temporary site. Hugo fingerprints and self-hosts
-the original files in the demo output. Browsers make no requests to the source site.
-The temporary profile, source tree and downloaded originals are removed after the
-build; only the generated site is published. Fonts served to visitors are public.
-
-The source URLs must remain available for future builds. For the maintained demo,
-they point to pinned font assets on the maintainer's blog. An unavailable asset or
-checksum mismatch fails the build, preserving the last successful deployment;
-there is no silent fallback to another font. Update URLs and checksums together
-when changing files. Remove `DEMO_FONT_PROFILE` and redeploy to restore Inter;
-the build cleans old output so unused licensed fonts are not carried forward.
+Providers differ in how they install Hugo. The [Vercel starter](../starter/README.md)
+includes a verified downloader; a generic project must make Hugo available itself.
 
 ### One-click blog starter on Vercel
 
-For a blog you can customize, use the [Deploy to Vercel button](../starter/README.md).
-Vercel clones only the `starter/` subdirectory into a new repository in your
-account. This is separate from the public, read-only example site above.
+The [Deploy to Vercel button](../starter/README.md) copies only `starter/` into a new
+repository in your account. Edit `hugo.toml`, the homepage and first post.
+Its setup script pins and verifies the theme commit; the build verifies Hugo's
+checksum. Generated theme and output directories are gitignored.
 
-The starter's `scripts/setup-theme.sh` clones an exact Hugo Mini release and
-checks its commit SHA. Its Vercel build script downloads Hugo Extended from the
-official release, verifies SHA-256, then builds the site. The generated theme
-and output directories are ignored by Git. Edit the starter's `hugo.toml`,
-homepage, and first post before sharing the site.
+Enable Vercel system environment variables for correct absolute URLs.
+`HUGO_BASEURL` overrides the generated hostname; without either, the build uses
+`hugo.toml` (site-root relative URLs by default).
 
-For correct absolute canonical URLs, enable Vercel system environment variables.
-An explicit `HUGO_BASEURL` takes precedence over the generated hostname. Without
-either environment setting, the build keeps `baseURL` from `hugo.toml` (the
-starter defaults to site-root relative URLs).
+### Public theme demo on Vercel
+
+The repository's demonstration is separate from the personal-blog starter.
+See [Demo maintenance](demo.md) for project setup, hostnames and build verification.
+
+#### Deployment-owned demo fonts
+
+The public demo uses separately licensed fonts; clones, CI, the catalog and starter
+use Inter. See [Demo font delivery](demo.md#deployment-owned-demo-fonts) for the
+optional profile, checksums and failure handling.

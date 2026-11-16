@@ -28,16 +28,18 @@ bash scripts/setup-theme.sh
 hugo server -D
 ```
 
-Open `http://localhost:1313/`. Create a post with:
+Open `http://localhost:1313/`. After stopping the server with `Ctrl+C`, create a post:
 
 ```bash
 hugo new content blog/my-next-post.md
 ```
 
+New posts are drafts. Preview with `hugo server -D`; set `draft = false` before publishing.
+
 ## Updates
 
-- **Theme:** Hugo Mini v3.5.0, verified by commit SHA. Update `theme_tag` and `theme_sha` together in [`setup-theme.sh`](scripts/setup-theme.sh), remove the old `themes/`, then rerun setup.
+- **Theme:** Hugo Mini v3.5.0, verified by commit SHA. Review the [changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md), update `theme_tag` and `theme_sha` together in [`setup-theme.sh`](scripts/setup-theme.sh), save any local theme edits, remove the generated `themes/hugo-mini/`, then rerun setup.
 - **Vercel build:** Hugo Extended 0.169.0, verified by SHA-256. Update the version and checksum together in [`build-vercel.sh`](scripts/build-vercel.sh).
 - Generated `themes/`, `public/` and `resources/` stay out of Git.
 
-[Theme documentation](https://github.com/zavarovkv/hugo-mini#documentation) · [Deployment details](https://github.com/zavarovkv/hugo-mini/blob/main/docs/deployment.md#one-click-blog-starter-on-vercel)
+[Theme documentation](https://github.com/zavarovkv/hugo-mini/blob/main/docs/README.md) · [Deployment details](https://github.com/zavarovkv/hugo-mini/blob/main/docs/deployment.md#one-click-blog-starter-on-vercel)

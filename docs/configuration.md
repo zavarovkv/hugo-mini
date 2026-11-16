@@ -1,16 +1,38 @@
 # Configuration
 
-Hugo Mini requires Hugo Extended 0.146 or newer. The [example configuration](../exampleSite/hugo.toml) is the complete reference.
+[Documentation](README.md) · [Example configuration](../exampleSite/hugo.toml) · [Defaults](../hugo.toml)
+
+Requires **Hugo Extended 0.146.0+**. Ordinary builds do not need Node.js.
+Merge snippets into existing TOML tables rather than declaring a table twice.
+
+[Install](#installation) · [Update](#updating) · [Parameters](#parameters) · [Languages](#multilingual-sites) · [Feeds](#feeds-and-crawlers)
 
 ## Installation
 
-Add the theme as a Git submodule:
+For a new blog, follow the [quick start](../README.md#quick-start).
+For an existing Hugo site, choose **one** installation method.
+
+### Git submodule
+
+From the root of your Git repository:
 
 ```bash
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 ```
 
-Then set `theme = "hugo-mini"` in `hugo.toml`. Alternatively, use a Hugo Module:
+Set `theme = "hugo-mini"` in `hugo.toml`. On a fresh clone, restore the theme with
+`git submodule update --init --recursive`.
+
+### Hugo Module
+
+Install [Go](https://go.dev/doc/install) and Git as well as Hugo. From your site root,
+initialize a module if you do not already have `go.mod` (replace the example path):
+
+```bash
+hugo mod init github.com/yourname/yourblog
+```
+
+Remove `theme = "hugo-mini"` if switching from a submodule, then add:
 
 ```toml
 [module]
@@ -18,96 +40,104 @@ Then set `theme = "hugo-mini"` in `hugo.toml`. Alternatively, use a Hugo Module:
     path = "github.com/zavarovkv/hugo-mini/v3"
 ```
 
-The `/v3` suffix is required by Go Modules for every 3.x release. It is not used when installing the theme as a Git submodule.
+Run `hugo mod get` and preview with `hugo server`. The `/v3` suffix is required
+for 3.x Go Modules; Git submodule URLs do not use it.
 
 ## Updating
 
-Review the [changelog](../CHANGELOG.md) before updating. From your site's root,
-with local theme changes committed, use the command for your installation:
+1. Review the [changelog](../CHANGELOG.md) and commit any local theme changes.
+2. From your site root, run the command for your installation:
 
-**Git submodule** — update to the latest commit on the tracked branch:
+   **Git submodule** — latest commit on the tracked branch:
 
-```bash
-git submodule update --remote --merge themes/hugo-mini
-```
+   ```bash
+   git submodule update --remote --merge themes/hugo-mini
+   ```
 
-**Hugo Module** — update within the current major version:
+   **Hugo Module** — current major version:
 
-```bash
-hugo mod get -u github.com/zavarovkv/hugo-mini/v3
-hugo mod tidy
-```
+   ```bash
+   hugo mod get -u github.com/zavarovkv/hugo-mini/v3
+   hugo mod tidy
+   ```
 
-Preview your site with `hugo server`, then run `hugo --minify`. Commit the
-updated submodule pointer or `go.mod` / `go.sum` in your site repository.
-The Vercel starter pins a release separately; follow its [update instructions](../starter/README.md#updates).
+3. Preview with `hugo server`, then run `hugo --minify`.
+4. Commit the submodule pointer or `go.mod` / `go.sum` in your site repository.
+
+The Vercel starter pins a release separately; use its [update instructions](../starter/README.md#updates).
 
 ## Parameters
 
-All parameters are optional unless your site content depends on them.
+Set these under `[params]`. All are optional unless your content depends on them.
+Detailed behavior is linked from each group.
+
+### Identity and appearance
 
 | Parameter | Purpose | Default |
 | --- | --- | --- |
-| `favicon` | Browser icon: SVG or 32×32 PNG under `static/`; set `false` to disable built-in icons | bundled black asterisk SVG |
-| `favicon192`, `appleTouchIcon` | Android (192×192) and iOS (180×180) PNG icons | bundled asterisk icons unless `favicon` is configured |
-| `authorName`, `authorURL` | Author metadata and links | site title / home |
-| `logo`, `logoDark` | Header logo; optional dark-mode image | unset |
-| `avatar`, `avatarHover` | Header avatar and hover frame (when `logo` is unset) | unset |
-| `copyrightYear` | Starting year of the footer range | current year |
-| `newPostDays` | Age window for the New badge | `30` |
-| `showSearchButton` | Show the magnifier linking to the homepage; full-text search is not implemented; `false` hides it | `true` |
-| `backToTop` | Left-gutter back-to-top control; `false` disables the control and its event handlers | `true` |
-| `sideNotes` | Put native footnotes in a wide desktop margin; narrow screens, print and no-JavaScript views retain endnotes | `false` |
-| `articleLinksNewTab` | Open internal and external destinations from post bodies in new tabs; preserve same-page anchors and site navigation | `false` |
-| `localizeLinks` | Resolve internal Markdown page links to an available translation in the current language | `true` |
-| `preferenceCookieDomain` | Share explicit theme/language preferences with subdomains of this parent host | unset |
-| `rememberLanguage` | Remember footer language choices and apply them to homepages and pages marked `languagePreferenceEntry = true` | `false` |
-| `headingScroll` | Make H1/H2 clickable to align them 24 px below the viewport top; heading text replaces H2 copy icons; Option/Alt + Up/Down moves between headings; updates the URL fragment (`#page-title` for H1), keeping section IDs and H3 behavior | `false` |
-| `articleH2UseTitleFont` | Use the H1 family and weight for H2 inside post bodies in `mainSections`; page front matter can override. [Font roles](fonts.md#use-the-title-face-for-article-h2) | `false` |
-| `editorialQuotes` | Render native Markdown quotations and `callout` with shared editorial figures and hanging punctuation in all languages; page front matter can override | `false` |
-| `typography` | Apply language-aware prose spacing and Russian punctuation rules at build time; page front matter can override | `true` |
+| `authorName`, `authorURL` | Author name and profile URL | Title / no explicit profile |
+| `logo`, `logoDark` | Header logo and dark variant | Unset |
+| `avatar`, `avatarHover` | Avatar and alternate frame when `logo` is absent | Unset |
+| `favicon` | SVG or 32×32 PNG in `static/`; `false` disables icons | Bundled asterisk |
+| `favicon192`, `appleTouchIcon` | Android 192×192 / iOS 180×180 PNGs | Bundled icons unless `favicon` is set |
+| `copyrightYear` | First year in the footer range | Current year |
+| `consoleArt`, `consoleYoda` | Custom or built-in homepage console art | Unset |
+| `notFoundYoda` | ASCII Yoda on the 404 page | `false` |
+
+Social links use `[params.social]`: `telegram`, `linkedin`, `github`, `email`.
+Schema.org author details use `[params.author]`, for example `jobTitle`.
+See [logos, menus and colors](customization.md).
+
+### Content and reading
+
+| Parameter | Purpose | Default |
+| --- | --- | --- |
 | `mainSections` | Sections treated as posts | Hugo default |
-| `featuredPosts` | Ordered content paths for the `featured-posts` shortcode; resolves within each language, with optional language-specific overrides. [Usage](content.md#featured-articles) | unset |
-| `socialSharing` | Likely sharing buttons on posts | `true` |
-| `telegramChannel` | Telegram comments and reaction source | unset |
-| `mermaidSrc` | Custom Mermaid script, including a local copy | pinned CDN URL |
-| `mermaidModuleSrc` | Optional Mermaid ESM entry; takes precedence over `mermaidSrc` | unset |
-| `aiTranslatedLang` | Language marked as AI translated | unset |
-| `consoleArt`, `consoleYoda` | Optional home-page console art | unset |
-| `notFoundYoda` | Show the built-in ASCII Yoda and a localized message on the 404 page | `false` |
+| `featuredPosts` | Ordered content paths for [featured articles](homepage.md#featured-articles) | Unset |
+| `newPostDays` | New-badge age window in days; `0` disables it | `30` |
+| `typography` | Build-time prose formatting | `true` |
+| `editorialQuotes` | Editorial figures for Markdown quotations and `callout` | `false` |
+| `hangingQuotes` | Hang eligible opening quotation marks | `false` |
+| `proseNumerals` | Old-style figures in eligible prose | `false` |
+| `sideNotes` | Desktop margin notes with endnote fallbacks | `false` |
+| `articleLinksNewTab` | Open post-body destinations in new tabs | `false` |
+| `articleH2UseTitleFont` | Use the H1 face for article H2 | `false` |
+| `headingScroll` | Click-to-align H1/H2 and Option/Alt + Up/Down | `false` |
+| `backToTop` | Left-gutter control on wide screens | `true` |
+| `showSearchButton` | Magnifier linking to the homepage; **not full-text search** | `true` |
 
-Social links live under `[params.social]`: `telegram`, `linkedin`, `github`, and `email`. Schema.org author data lives under `[params.author]`, for example `jobTitle`.
+Reading options from `typography` through `backToTop` also accept page front-matter
+overrides. `dropCap` and `wideCode` are per-page options, described in
+[content](content.md#front-matter). See [Typography](typography.md)
+([на русском](typography.ru.md)) for scope and exclusions.
 
-Set `aiTranslatedLang = "en"` when the original articles are in Russian and their English versions are AI-translated. The sparkle appears next to the English option, not the Russian one; the two-language switcher shows only the other language.
+### Languages and integrations
 
-Set `backToTop = false` in a page's front matter to disable the control on that page, or under site `[params]` to disable it throughout the site. A page value overrides the site setting.
+| Parameter | Purpose | Default |
+| --- | --- | --- |
+| `localizeLinks` | Resolve internal Markdown links to available translations | `true` |
+| `rememberLanguage` | Remember explicit choices on entry pages | `false` |
+| `preferenceCookieDomain` | Share preferences with subdomains | Unset |
+| `aiTranslatedLang` | Mark this language as AI-translated | Unset |
+| `socialSharing` | Likely buttons on posts | `true` |
+| `telegramChannel` | [Telegram](telegram.md) channel slug | Unset |
+| `mermaidSrc` | [Mermaid](media.md#choose-how-to-load-mermaid) classic script | Pinned CDN URL |
+| `mermaidModuleSrc` | Mermaid ESM entry; overrides `mermaidSrc` | Unset |
 
-Set `typography = false` to disable the theme's additional typography pass,
-either for a page or site-wide. This does not change Goldmark's native smart
-punctuation. See [typography](typography.md) ([на русском](typography.ru.md))
-for rules, exclusions and fragment opt-out.
+Analytics loads only when configured. Choose any combination:
 
-Analytics is opt-in. Set any combination of `yandexMetrikaId`, `googleAnalyticsId`, `plausibleDomain` / `plausibleSrc`, or `umamiWebsiteId` / `umamiSrc`.
-
-For self-hosted modular Mermaid, copy `mermaid.esm.min.mjs` and its `chunks/mermaid.esm.min/` directory from the same pinned npm package to `static/js/mermaid/`, then set `mermaidModuleSrc = "js/mermaid/mermaid.esm.min.mjs"`. Keep their relative paths intact. The classic `mermaidSrc` option and the pinned CDN fallback remain supported. Both modes prioritize nearby diagrams, then prepare the remaining diagrams and neutral print copies during idle time. Print uses the cached copy synchronously; before it is ready, or if loading fails, the readable source remains available.
-
-For local entries found under `static/`, the theme appends a content hash to the URL. An upgrade
-therefore bypasses the old browser cache while keeping relative chunk imports intact. This applies
-to both `mermaidModuleSrc` and `mermaidSrc`; external URLs and entries not present at build time
-are left unchanged.
-
-The loader supports Mermaid 11 and 12 with explicit `layout: 'dagre'`, `look: 'classic'`,
-`flowchart.wrappingWidth: 200` and `flowchart.minNodeWidth: 0`. These retain the previous flowchart
-geometry and avoid loading ELK solely because of Mermaid 12's changed defaults. Colors still follow
-the site's light/dark setting. Individual diagrams can override these defaults through Mermaid's
-own configuration. A self-hosted Mermaid 12 package requires Node.js 22.12+ to install and
-ES2024-capable browsers (Safari 17.4+); the theme's pinned Mermaid 11 fallback is unchanged.
+| Provider | Parameters |
+| --- | --- |
+| Yandex | `yandexMetrikaId` |
+| Google | `googleAnalyticsId` |
+| Plausible | `plausibleDomain`, optional `plausibleSrc` |
+| Umami | `umamiWebsiteId`, optional `umamiSrc` |
 
 ## Shared theme and language preferences
 
-By default, an explicit light/dark choice is saved in the current origin's local
-storage, and language links navigate normally. To share choices between a site
-and its subdomains, opt in on **each** site:
+By default, explicit light/dark choices stay in the current origin's local storage.
+Language links navigate normally. To share preferences across a parent domain and
+its subdomains, opt in on **each** site:
 
 ```toml
 [params]
@@ -115,34 +145,30 @@ and its subdomains, opt in on **each** site:
   rememberLanguage = true
 ```
 
-Shared `hugo-mini-theme` and `hugo-mini-language` cookies take precedence over
-older local storage. An existing explicit choice migrates when no shared choice
-exists; automatic system colors are never saved as a fixed theme. Cookies use
-the configured parent domain, a one-year lifetime, `SameSite=Lax`, and `Secure`
-on HTTPS. Local storage remains the fallback when cookies are unavailable or
-the page is on another host, such as a local preview.
+| Setting or situation | Behavior |
+| --- | --- |
+| Shared cookies | `hugo-mini-theme` and `hugo-mini-language` take precedence over older local storage. |
+| Migration | Existing explicit choices migrate when no shared choice exists; automatic system colors are never saved as a fixed theme. |
+| Cookie scope | Configured parent domain, one year, `SameSite=Lax`, `Secure` on HTTPS. |
+| Cookies unavailable / different preview host | Local storage remains the fallback. |
+| `rememberLanguage` | Footer choices apply to homepages and pages marked `languagePreferenceEntry = true` in front matter or cascade. |
+| Direct translated URL | Keeps that language without saving a preference. |
+| Automatic entry-page redirect | Uses published same-origin `hreflang`; preserves query and fragment. |
 
-With `rememberLanguage`, the footer saves explicit language selections.
-Homepages apply the selection using their published, same-origin `hreflang`
-links. Set `languagePreferenceEntry = true` in a landing page's front matter or
-cascade to give it the same behavior. Direct article URLs retain their
-language; simply opening a translated URL does not save a preference. Query
-strings and fragments survive an automatic entry-page redirect. Theme and
-entry-page language preferences refresh when returning to an open tab or
-restoring a page from browser history. Without JavaScript, language links
-still work as ordinary links.
+Preferences refresh when returning to an open tab or restoring browser history.
+Without JavaScript, language links remain ordinary links.
 
 ## Multilingual sites
 
-Define languages and their menus in `hugo.toml`:
+Define languages and menus in `hugo.toml`:
 
 ```toml
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
 [languages.en]
-  locale = "en-US"
-  label = "English"
+  languageCode = "en-US"
+  languageName = "English"
   weight = 1
   title = "Jane Doe"
 
@@ -156,29 +182,69 @@ defaultContentLanguageInSubdir = false
     weight = 1
 
 [languages.ru]
-  locale = "ru-RU"
-  label = "Русский"
+  languageCode = "ru-RU"
+  languageName = "Русский"
   weight = 2
   title = "Джейн Доу"
 ```
 
-Use `languageCode` and `languageName` instead of `locale` and `label` when the site itself must stay compatible with Hugo versions before those fields were introduced. The theme supports both forms across its documented Hugo range.
+For a version-independent content setup, pair files such as
+`content/blog/hello.en.md` and `content/blog/hello.ru.md`. See Hugo's
+[multilingual content guide](https://gohugo.io/content-management/multilingual/)
+for directory-based alternatives.
 
-Interface translations are TOML files under `i18n/`. Copy an existing file, translate its values, and keep the keys unchanged. The footer shows a compact switcher for two configured languages, or a keyboard-accessible native menu for three or more. A choice leads to the translated page when available, and to that language's homepage otherwise. Language names follow `label` (or `languageName` on older Hugo versions); the control is not limited to Russian and English.
+The example above works with the theme's minimum Hugo version. On newer Hugo,
+`locale` and `label` can replace `languageCode` and `languageName`; Mini supports both.
 
-In JSON Feed, each post's `content_text` contains the complete plain text rather than a truncated excerpt. Descriptions and summaries are plain text, and optional metadata such as an author URL is omitted when not configured.
+To add UI translations, copy an `i18n/` TOML file and translate values while keeping
+keys. The footer uses a compact switcher for two languages and an accessible menu
+for three or more. Missing page translations link to that language's homepage.
+
+`aiTranslatedLang = "en"` places the sparkle beside English. It is a label only;
+Mini does not translate content. The two-language switcher shows only the other language.
+
+## Feeds and crawlers
+
+Hugo provides HTML, RSS and a sitemap. To also emit JSON Feed and `llms.txt`, add:
+
+```toml
+[mediaTypes."text/plain"]
+  suffixes = ["txt"]
+
+[outputFormats.LLMS]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+  notAlternative = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON", "LLMS"]
+```
+
+After `hugo --minify`, check `public/index.json` and `public/llms.txt`, plus their
+language-prefixed equivalents. Optional `params.llms.about` supplies a short bio;
+menus, social links and visible posts supply the other sections.
+
+JSON Feed includes complete plain-text posts in `content_text`, not truncated
+excerpts. Descriptions and summaries are plain text; an unset author URL is omitted.
+See [visibility and canonical URLs](content.md#front-matter) and
+[robots.txt](deployment.md#sitemap-and-robotstxt) for crawler controls.
 
 ## Syntax highlighting
 
-Use the theme’s accessible light, dark and print palettes by enabling CSS classes in the **site** configuration:
+Enable the theme's light, dark and print palettes in your site config:
 
 ```toml
 [markup.highlight]
   noClasses = false
 ```
 
-The example site enables this explicitly. If a language has its own `markup` configuration, keep its highlighting settings consistent. `lineNos`, `lineNumbersInTable` and highlighted lines remain supported. An explicit `noClasses = true` (globally or on a code fence) keeps Hugo’s inline palette; its contrast and color-scheme behavior are then owned by that configuration.
+Keep language-specific markup settings consistent. `lineNos`, `lineNumbersInTable`
+and highlighted lines remain supported. Setting `noClasses = true` globally or on a fence uses
+Hugo's inline palette instead; that configuration owns its contrast and color behavior.
 
 ## Site fonts
 
-Optional `[params.fonts]` describes a site-owned family and its face assets; `[params.fonts.title]` can add a separate H1 face. See [fonts](fonts.md) for role weights, preload selection and `useDefaultFonts` page opt-outs. The default remains the bundled Inter family.
+Use `[params.fonts]` for a site-owned family, `[params.fonts.title]` for titles and
+`[params.fonts.quote]` for quotations. See [Fonts](fonts.md) for assets, weights,
+preloading and `useDefaultFonts`. The default remains bundled Inter.

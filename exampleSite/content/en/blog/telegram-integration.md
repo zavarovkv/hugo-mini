@@ -62,11 +62,9 @@ Add to your site's `package.json`:
 }
 ```
 
-Add the generated file to `.gitignore` — it's regenerated on every build, not versioned:
-
-```
-/data/telegram_reactions.json
-```
+Commit `data/telegram_reactions.json` or restore it from a CI cache before fetching.
+This gives the helper previous counts to preserve during an outage. If you choose
+to gitignore it, configure another restoration mechanism.
 
 Call the script in CI before `hugo --minify`:
 
@@ -88,7 +86,7 @@ The script auto-resolves channel and content directory from Hugo config via `hug
 node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs \
   --channel my_channel \
   --content-dir content/en/posts \
-  --output data/tg.json
+  --output data/telegram_reactions.json
 ```
 
 Also respects the `TELEGRAM_CHANNEL` env var.
