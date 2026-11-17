@@ -125,9 +125,11 @@ export function searchContracts({test, expect, site = false}) {
   test('late responses cannot replace a newer query and snippets cannot inject markup', async ({page}) => {
     await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
       export async function options() {}
-      export async function search(query) {
-        await new Promise(resolve=>setTimeout(resolve,query==='slow'?800:10));
-        return {results:[{data:async()=>({url:'/search-1/',meta:{title:query},excerpt:'A <mark>match</mark><img src=x onerror="window.searchInjected=true"><script>window.searchInjected=true</script>'})}]};
+      export function search(query) {
+        const response = {results:[{data:async()=>({url:'/search-1/',meta:{title:query},excerpt:'A <mark>match</mark><img src=x onerror="window.searchInjected=true"><script>window.searchInjected=true</script>'})}]};
+        if (query !== 'slow') return Promise.resolve(response);
+        window.slowSearchResponse = new Promise(resolve=>{ window.finishSlowSearch = ()=>resolve(response); });
+        return window.slowSearchResponse;
       }
     `}));
     await page.goto('/browser-checks/');
@@ -138,7 +140,9 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.search-result-title')).toHaveText('newest');
     await expect(page.locator('.search-results img, .search-results script')).toHaveCount(0);
     await expect(page.locator('.search-results mark')).toHaveText('match');
-    await page.waitForTimeout(850); // Let the deliberately delayed old request finish.
+    // Release the old response after the new one is rendered. A fixed delay
+    // can expire before CI observes the loading state, losing the actual race.
+    await page.evaluate(async()=>{ window.finishSlowSearch(); await window.slowSearchResponse; });
     await expect(page.locator('.search-result-title')).toHaveText('newest');
     expect(await page.evaluate(()=>window.searchInjected)).toBeUndefined();
   });
