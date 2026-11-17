@@ -9,7 +9,11 @@ export function searchContracts({test, expect, site = false}) {
     page.on('request', r => { if(r.url().includes('/pagefind/')) requests.push(r.url()); });
     await page.goto('/browser-checks/');
     expect(requests).toEqual([]);
+    const trigger = await page.locator('.search-toggle-desktop').boundingBox();
     await open(page, 'orchidquartz');
+    const close = await page.locator('.search-close').boundingBox();
+    expect(Math.abs(close.x - trigger.x)).toBeLessThan(1);
+    expect((await page.locator('#site-search').boundingBox()).width).toBe(await page.evaluate(() => innerWidth));
     const links = page.locator('.search-result');
     await expect(links).toHaveCount(11);
     await expect(page.locator('.search-content')).toHaveCSS('overflow-y','visible');
@@ -187,5 +191,20 @@ export function searchContracts({test, expect, site = false}) {
     await page.goto(baseURL+'/browser-checks/');
     await expect(page.locator('.search-toggle:visible')).toHaveCount(0);
     await context.close();
+  });
+
+  test('revealing search after a delayed script does not move the page', async ({page}) => {
+    let release;
+    const gate = new Promise(resolve => { release = resolve; });
+    await page.route('**/js/main*.js', async route => { await gate; await route.continue(); });
+    await page.goto('/search-1/', {waitUntil:'commit'});
+    await page.locator('main').waitFor({state:'visible'});
+    await page.evaluate(() => Promise.all([...document.fonts].filter(font => font.status === 'loading').map(font => font.loaded)));
+    const before = await page.locator('main').boundingBox();
+    await expect(page.locator('.search-toggle-desktop')).toBeHidden();
+    release();
+    await expect(page.locator('.search-toggle-desktop')).toBeVisible();
+    const after = await page.locator('main').boundingBox();
+    for (const key of ['x','y','width','height']) expect(Math.abs(after[key] - before[key])).toBeLessThan(0.5);
   });
 }

@@ -239,14 +239,12 @@
     --beauty-h2-font: var(--font-weight-title) var(--beauty-h2-size)/1.25 var(--font-title);
   }
 
-  /* Reserve classic desktop scrollbars on short pages as well as long ones.
-     Mobile overlays and paper retain their existing viewport geometry. */
+  /* Keep the reading column stable with classic scrollbars, including narrow
+     desktop windows. Overlay scrollbars consume no space; print opts out. */
+  @media screen { html { scrollbar-gutter: stable; } }
   @media screen and (min-width: 769px) {
     body.reading-layout > header {
       margin-block-end: 3rem;
-    }
-    html {
-      scrollbar-gutter: stable;
     }
 {{ if and $fonts.custom (ne $fonts.titleFamily $fonts.family) }}
     /* A separate display face uses its own spacing at desktop title sizes. */
@@ -2125,7 +2123,9 @@ body.search-open { position: fixed; inset-inline: 0; }
   inset: 0;
   margin: 0;
   padding: 0;
-  width: 100%;
+  /* The dialog owns its scrollbar. Percentage width would subtract the root
+     gutter first and reserve it again inside this top-layer scroll container. */
+  width: var(--search-viewport-width, 100vw);
   height: 100dvh;
   max-width: none;
   max-height: none;
@@ -2174,6 +2174,9 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-dialog .search-close:hover { color: var(--text-color); }
 .search-close svg { display: block; width: 24px; height: 24px; }
 @media (min-width: 769px) {
+  /* Reserve the on-demand trigger before the deferred bundle reveals it.
+     Otherwise logo-only headers grow when JavaScript initializes search. */
+  html.hugo-mini-js .header-container:has(.search-toggle-desktop[hidden])::after { content: ""; flex: none; width: 28px; height: 28px; }
   .search-form { grid-template-columns: 28px minmax(0, 1fr) 28px; }
   .search-dialog .search-close { width: 28px; height: 28px; min-height: 28px; min-block-size: 0; padding: 2px; color: var(--color-muted); transition: color 0.2s ease, transform 0.15s ease; }
   .search-dialog .search-close:is(:hover, :focus-visible) { color: var(--color-accent); }
@@ -2209,7 +2212,7 @@ body.search-open { position: fixed; inset-inline: 0; }
   }
   .search-dialog {
     inset: var(--search-viewport-top, 0px) 0 auto;
-    transform: none; width: 100%; max-width: none;
+    transform: none; max-width: none;
     height: var(--search-viewport-height, 100dvh); max-height: none;
     border: 0; border-radius: 0; box-shadow: none;
   }

@@ -377,6 +377,9 @@
     }
     function viewport() {
       if (!dialog.open) return;
+      // CSS viewport units can exclude a reserved root gutter. The top-layer
+      // dialog must cover the full viewport and reserve its own gutter once.
+      dialog.style.setProperty('--search-viewport-width', window.innerWidth + 'px');
       var vv = window.visualViewport;
       if (mobile.matches && vv) {
         dialog.style.setProperty('--search-viewport-height', vv.height + 'px');
