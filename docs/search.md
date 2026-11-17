@@ -92,11 +92,14 @@ The site's existing JSON Feed is independent of this index.
 - Use arrows to move through results, Enter to open, Escape to close and Tab for controls.
 - All matching pages appear in one list. The field and results scroll together,
   with the scrollbar at the screen edge.
+- Typing waits for a 250 ms pause and keeps the previous results until the new
+  list is ready. Slower searches animate the thin divider instead of displaying
+  loading text; reduced motion keeps that indicator static.
 - Search fills the screen; its contents follow the blog column. Mobile adapts to the on-screen keyboard.
 - `showSearchButton = false` hides header triggers; keyboard shortcuts remain available.
 - Override `search_*` strings in your site's `i18n/`. English and Russian are bundled.
-- Theme CSS exposes `--search-width`, `--search-placeholder`, `--search-highlight`
-  and `--search-hover`.
+- Theme CSS exposes `--search-width`, `--search-placeholder`, `--search-highlight`,
+  `--search-hover` and `--search-progress-color`.
 
 JavaScript and WebAssembly are required for search. Controls stay hidden when
 JavaScript is disabled. The engine and fragments load from the same site only

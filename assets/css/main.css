@@ -2100,6 +2100,7 @@
   --search-placeholder: color-mix(in srgb, var(--color-muted) 55%, var(--background-color));
   --search-highlight: color-mix(in srgb, var(--color-primary) 14%, transparent);
   --search-hover: color-mix(in srgb, var(--color-primary) 5%, var(--background-color));
+  --search-progress-color: color-mix(in srgb, var(--color-muted) 65%, var(--color-divider));
 }
 .search-toggle[hidden], .search-dialog [hidden] { display: none !important; }
 .search-toggle { font: inherit; min-block-size: 0; }
@@ -2142,6 +2143,7 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-dialog[open] { display: block; }
 .search-panel { display: flex; flex-direction: column; min-width: 0; width: 100%; max-width: calc(var(--search-width) + 40px); margin-inline: auto; min-height: 100%; }
 .search-form {
+  position: relative;
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) 44px;
   align-items: center;
@@ -2152,6 +2154,17 @@ body.search-open { position: fixed; inset-inline: 0; }
   border-bottom: 1px solid var(--color-divider);
 }
 .search-form::before { content: ""; }
+.search-form::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--search-progress-color), transparent) 50% 0 / 30% 100% no-repeat;
+  opacity: 0;
+}
+.search-loading .search-form::after { opacity: 1; }
 .search-form input {
   width: 100%; min-width: 0; min-height: 44px;
   padding: 0; margin: 0; border: 0; border-radius: 0;
@@ -2224,9 +2237,13 @@ body.search-open { position: fixed; inset-inline: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .search-dialog[open] { animation: search-appear 140ms ease-out; }
+  .search-form::after { transition: opacity 180ms ease; animation: search-progress 1.6s ease-in-out infinite paused; }
+  .search-loading .search-form::after { animation-play-state: running; }
   @keyframes search-appear { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes search-progress { from { background-position: -50% 0; } to { background-position: 150% 0; } }
 }
 @media (forced-colors: active) {
   .search-dialog { border: 1px solid CanvasText; }
   .search-result mark { background: Highlight; color: HighlightText; }
+  .search-loading .search-form::after { background: Highlight; animation: none; }
 }

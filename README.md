@@ -21,7 +21,7 @@ Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and M
 ## Features
 
 - **Typography for reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css), quotations, footnotes, optional margin notes and print styles. [See examples](docs/typography.md).
-- **Full-text search.** Optional [Pagefind search](docs/search.md), built with the site: relevant snippets, keyboard navigation and language-specific results.
+- **Full-text search.** Optional [Pagefind search](docs/search.md), built with the site: relevant snippets, stable results while typing, keyboard navigation and language-specific results.
 - **Easy navigation.** Mobile menus, light/dark mode and keyboard shortcuts. Multilingual sites with English and Russian UI included.
 - **Rich articles.** Code highlighting and copying, KaTeX formulas, Mermaid diagrams and wide images.
 - **Ready to share.** SEO metadata, generated social preview images, RSS, JSON Feed and sitemap.

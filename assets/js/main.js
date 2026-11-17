@@ -256,7 +256,7 @@
     var source = dialog.getAttribute('data-pagefind-src');
     var engine, attempts = 0, generation = 0, timer, loadingTimer;
     var renderedQuery = '', opener, scrollY = 0;
-    var keyboardOpen = false, locked = false;
+    var keyboardOpen = false, locked = false, composing = false;
     var mobile = window.matchMedia(MOBILE_QUERY);
 
     function query() { return input.value.trim().replace(/\s+/g, ' '); }
@@ -268,16 +268,28 @@
     function links() { return Array.from(results.querySelectorAll('a')); }
     function busy(value) {
       results.setAttribute('aria-busy', String(value));
+      if (!value) {
+        clearTimeout(loadingTimer);
+        dialog.classList.remove('search-loading');
+      }
     }
-    function reset() {
-      clearTimeout(loadingTimer);
+    function clearStatus() {
       status.classList.add('search-sr-only');
       status.classList.remove('search-empty');
       status.textContent = '';
+      retry.hidden = true;
+    }
+    function reset() {
+      clearStatus();
       renderedQuery = '';
       results.replaceChildren();
-      retry.hidden = true;
       busy(false);
+    }
+    function describeResults() {
+      clearStatus();
+      if (results.childElementCount) {
+        status.textContent = t('searchCount', 'Results: {count}').replace('{count}', String(results.childElementCount));
+      } else message('searchEmpty', 'Nothing found');
     }
     function loadEngine() {
       if (!engine) {
@@ -335,7 +347,6 @@
       return item;
     }
     async function showResults(hits, ticket) {
-      busy(true);
       var data = await Promise.all(hits.map(function (hit) { return hit.data(); }));
       if (ticket !== generation || !dialog.open) return;
       var fragment = document.createDocumentFragment();
@@ -343,14 +354,16 @@
         var item = result(record);
         if (item) fragment.append(item);
       });
+      var focused = results.contains(document.activeElement) && document.activeElement.href;
       results.replaceChildren(fragment);
-      busy(false);
-      status.classList.add('search-sr-only');
-      status.textContent = t('searchCount', 'Results: {count}').replace('{count}', String(hits.length));
+      if (focused) {
+        var replacement = links().find(function (link) { return link.href === focused; });
+        (replacement || input).focus({ preventScroll: true });
+      }
     }
     function failed(ticket) {
       if (ticket !== generation || !dialog.open) return;
-      clearTimeout(loadingTimer); busy(false); retry.hidden = false;
+      busy(false); retry.hidden = false;
       message('searchError', 'Search is unavailable right now. Please try again.');
       engine = null; attempts++;
     }
@@ -358,21 +371,29 @@
       clearTimeout(timer);
       var ticket = ++generation;
       var text = query();
-      reset();
-      dialog.scrollTop = 0;
-      if (!text) return;
+      if (!text) { reset(); return; }
+      if (text === renderedQuery) { busy(false); describeResults(); return; }
+      clearStatus();
       busy(true);
-      loadingTimer = setTimeout(function () {
-        if (ticket === generation) message('searchLoading', 'Searching…');
-      }, 200);
+      clearTimeout(loadingTimer);
+      // Fast local searches need no loading flash. Once visible, the quiet
+      // line stays active across further edits until the latest results arrive.
+      if (!dialog.classList.contains('search-loading')) {
+        loadingTimer = setTimeout(function () {
+          if (ticket !== generation || !dialog.open) return;
+          dialog.classList.add('search-loading');
+          status.textContent = t('searchLoading', 'Searching…');
+        }, 300);
+      }
       try {
         var api = await loadEngine();
         if (ticket !== generation || !dialog.open) return;
         var response = await api.search(text);
         if (ticket !== generation || !dialog.open) return;
-        if (response.results.length) await showResults(response.results, ticket);
-        else { busy(false); message('searchEmpty', 'Nothing found'); }
-        if (ticket === generation) { clearTimeout(loadingTimer); renderedQuery = text; }
+        await showResults(response.results, ticket);
+        if (ticket !== generation || !dialog.open) return;
+        busy(false); renderedQuery = text; describeResults();
+        dialog.scrollTop = 0;
       } catch (error) { failed(ticket); }
     }
     function viewport() {
@@ -404,7 +425,7 @@
       input.focus({ preventScroll: true });
       if (input.value) input.select();
       loadEngine().catch(function () { /* Surface failures only when searching. */ });
-      if (query() && !renderedQuery) search();
+      if (query() && query() !== renderedQuery) search();
     }
     document.querySelectorAll('.search-toggle').forEach(function (button) {
       button.hidden = false;
@@ -414,7 +435,7 @@
     });
     function restore() {
       if (!locked || dialog.open) return;
-      locked = false;
+      locked = false; composing = false;
       generation++; clearTimeout(timer); clearTimeout(loadingTimer);
       document.documentElement.classList.remove('search-open');
       document.body.classList.remove('search-open');
@@ -424,7 +445,6 @@
         if (opener.matches('.search-toggle')) opener.classList.toggle('search-pointer-focus', !keyboardOpen);
         opener.focus({ preventScroll: true });
       }
-      if (results.getAttribute('aria-busy') === 'true') renderedQuery = '';
       busy(false);
     }
     function close() { dialog.close(); restore(); }
@@ -439,15 +459,26 @@
     var backdropDown = false;
     dialog.addEventListener('pointerdown', function (e) { backdropDown = e.target === dialog; });
     dialog.addEventListener('click', function (e) { if (e.target === dialog && backdropDown) close(); });
-    input.addEventListener('input', function (e) {
+    function schedule(isComposing) {
       generation++; clearTimeout(timer); clearTimeout(loadingTimer);
-      reset();
-      if (query() && !e.isComposing) timer = setTimeout(search, 140);
+      var text = query();
+      if (!text) { reset(); return; }
+      if (text === renderedQuery) { busy(false); describeResults(); return; }
+      // Keep the previous list in place while typing and loading. Replace it
+      // only once, after every fragment for the latest query is ready.
+      clearStatus(); busy(true);
+      if (!isComposing && !composing) timer = setTimeout(search, 250);
+    }
+    input.addEventListener('input', function (e) { schedule(e.isComposing); });
+    input.addEventListener('compositionstart', function () {
+      composing = true;
+      generation++; clearTimeout(timer); clearTimeout(loadingTimer);
     });
-    input.addEventListener('compositionend', function () { clearTimeout(timer); timer = setTimeout(search, 140); });
+    input.addEventListener('compositionend', function () { composing = false; schedule(); });
     retry.addEventListener('click', search);
     dialog.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
+      if (composing) return;
       var first = links()[0];
       if (first && renderedQuery === query()) first.click();
       else search();

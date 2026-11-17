@@ -132,7 +132,8 @@ export function searchContracts({test, expect, site = false}) {
     `}));
     await page.goto('/browser-checks/');
     await open(page, 'slow');
-    await expect(page.locator('.search-status')).toContainText(site ? 'Ищем' : 'Searching');
+    await expect(page.locator('#site-search')).toHaveClass(/search-loading/);
+    await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
     await page.locator('#search-query').fill('newest');
     await expect(page.locator('.search-result-title')).toHaveText('newest');
     await expect(page.locator('.search-results img, .search-results script')).toHaveCount(0);
@@ -140,6 +141,111 @@ export function searchContracts({test, expect, site = false}) {
     await page.waitForTimeout(850); // Let the deliberately delayed old request finish.
     await expect(page.locator('.search-result-title')).toHaveText('newest');
     expect(await page.evaluate(()=>window.searchInjected)).toBeUndefined();
+  });
+
+  test('typing preserves results until one complete replacement is ready', async ({page}) => {
+    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
+      window.searchCalls = [];
+      export async function options() {}
+      export async function search(query) {
+        window.searchCalls.push(query);
+        return {results:[{data:async()=>{
+          if (query !== 'initial') await new Promise(resolve=>{ window.finishSearch = resolve; });
+          return {url:'/search-1/',meta:{title:query},excerpt:'Matching article'};
+        }}]};
+      }
+    `}));
+    await page.goto('/browser-checks/');
+    await open(page, 'initial');
+    const input = page.locator('#search-query');
+    await expect(page.locator('.search-result-title')).toHaveText('initial');
+    await page.evaluate(()=>{ window.previousSearchResult = document.querySelector('.search-result'); });
+    await input.fill('n');
+    await input.pressSequentially('ewest', {delay:40});
+    await expect.poll(()=>page.evaluate(()=>window.searchCalls)).toEqual(['initial','newest']);
+    await expect(page.locator('#site-search')).toHaveClass(/search-loading/);
+    expect(await page.evaluate(()=>window.previousSearchResult.isConnected)).toBe(true);
+    await expect(page.locator('.search-result-title')).toHaveText('initial');
+    await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
+    await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','true');
+    // Old results remain usable with a keyboard while the new fragments load.
+    await page.keyboard.press('ArrowDown');
+    await page.evaluate(()=>window.finishSearch());
+    await expect(page.locator('.search-result-title')).toHaveText('newest');
+    await expect(page.locator('.search-result')).toBeFocused();
+    await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
+    await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
+    await page.evaluate(()=>{ window.previousSearchResult = document.querySelector('.search-result'); });
+    await input.fill(' newest  ');
+    await page.waitForTimeout(350);
+    expect(await page.evaluate(()=>window.previousSearchResult.isConnected)).toBe(true);
+    expect(await page.evaluate(()=>window.searchCalls)).toEqual(['initial','newest']);
+    await input.fill('');
+    await expect(page.locator('.search-result')).toHaveCount(0);
+    await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
+  });
+
+  test('composition waits for committed text and reopening refreshes an unfinished query', async ({page}) => {
+    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
+      window.searchCalls = [];
+      export async function options() {}
+      export async function search(query) {
+        window.searchCalls.push(query);
+        return {results:[{data:async()=>({url:'/search-1/',meta:{title:query},excerpt:'Matching article'})}]};
+      }
+    `}));
+    await page.goto('/browser-checks/');
+    await open(page, 'initial');
+    await expect(page.locator('.search-result-title')).toHaveText('initial');
+    const input = page.locator('#search-query');
+    await input.dispatchEvent('compositionstart');
+    await input.evaluate(element=>{
+      element.value = '研究';
+      element.dispatchEvent(new InputEvent('input', {bubbles:true,isComposing:true}));
+    });
+    await page.waitForTimeout(350);
+    expect(await page.evaluate(()=>window.searchCalls)).toEqual(['initial']);
+    await expect(page.locator('.search-result-title')).toHaveText('initial');
+    await input.dispatchEvent('compositionend');
+    await expect(page.locator('.search-result-title')).toHaveText('研究');
+    await input.fill('reopened');
+    await page.keyboard.press('Escape');
+    await open(page);
+    await expect(page.locator('.search-result-title')).toHaveText('reopened');
+    await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
+    await input.fill('immediate');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.search-result-title')).toHaveText('immediate');
+    await expect(page).toHaveURL(/\/browser-checks\/$/);
+  });
+
+  for (const colorScheme of ['light','dark']) test(`loading uses the divider without moving content (${colorScheme})`, async ({page}) => {
+    await page.emulateMedia({colorScheme,reducedMotion:'no-preference'});
+    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
+      export async function options() {}
+      export async function search(query) {
+        await new Promise(resolve=>{ window.finishSearch = resolve; });
+        return {results:[]};
+      }
+    `}));
+    await page.goto('/browser-checks/');
+    await open(page);
+    const content = await page.locator('.search-content').boundingBox();
+    await page.locator('#search-query').fill('waiting');
+    await expect(page.locator('#site-search')).toHaveClass(/search-loading/);
+    await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
+    expect((await page.locator('.search-content').boundingBox()).y).toBe(content.y);
+    const indicator = () => page.locator('.search-form').evaluate(element=>{
+      const style = getComputedStyle(element,'::after');
+      return {height:style.height,animation:style.animationName,playState:style.animationPlayState,opacity:style.opacity};
+    });
+    await expect.poll(indicator).toMatchObject({height:'1px',animation:'search-progress',playState:'running',opacity:'1'});
+    await page.emulateMedia({reducedMotion:'reduce'});
+    await expect.poll(indicator).toMatchObject({height:'1px',animation:'none',opacity:'1'});
+    await page.evaluate(()=>window.finishSearch());
+    await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
+    await expect.poll(indicator).toMatchObject({opacity:'0'});
+    await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
   });
 
   test('a subdirectory deployment loads its bundle and keeps result URLs under the prefix', async ({page,baseURL}) => {
