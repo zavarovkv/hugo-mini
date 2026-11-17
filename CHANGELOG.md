@@ -54,6 +54,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Fixed
 
+- Close search before following same-page section links, preserve scroll when switching from the mobile menu, and keep development indexes current with `--baseURL` overrides and configuration changes.
 - Keep code line numbers inside their local scroller and use coordinated class-based light/dark/monochrome print palettes. Print article/title/section text at 11/22/16 pt regardless of viewport width; keep navigation, search and logos off paper.
 - Prepare offscreen Mermaid diagrams and neutral print copies during idle time; publish complete SVGs atomically. Printing uses a cached copy synchronously, or readable source if rendering/downloads are unfinished.
 - Preserve Russian nesting around literal curly quotes, inline wrappers and visible URLs. Keep nonbreaking compound prepositions, abbreviations, particles and short-word groups without rewriting protected text.

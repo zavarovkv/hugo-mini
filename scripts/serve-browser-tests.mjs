@@ -33,7 +33,7 @@ try {
   await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-diagrams.md'), join(contentDir, 'wide-diagram-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/resume.md'), join(contentDir, 'resume-checks.md'));
-  // Search uses real generated fragments, including pagination and exclusions.
+  // Search uses real generated fragments, complete result lists and exclusions.
   for (let i = 1; i <= 11; i++) await writeFile(join(contentDir, `search-${i}.md`),
     `+++\ntitle="Search contract ${i}"\n+++\nA short introduction.\n\n## Matching section\n\nThe orchidquartz collection explains careful product research and accessible search.\n`);
   for (const [name, flags] of [['hidden', 'hidden=true'], ['noindex', 'noindex=true'], ['optout', 'search=false'], ['draft', 'draft=true'], ['future', 'publishDate=2099-01-01'], ['expired', 'expiryDate=2000-01-01'], ['resume', 'layout="resume"']]) {

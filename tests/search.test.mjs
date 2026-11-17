@@ -2,9 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp, mkdir, symlink, writeFile, readFile, rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join, resolve} from 'node:path';
+import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {execFileSync} from 'node:child_process';
+import {execFileSync, spawn} from 'node:child_process';
+import {once} from 'node:events';
+import {setTimeout as delay} from 'node:timers/promises';
 import {indexSite, publishedFiles} from '../scripts/hugo-search.mjs';
 
 const theme=fileURLToPath(new URL('..',import.meta.url));
@@ -40,4 +42,55 @@ test('real indexes exclude nonpublic pages, remove deleted pages and refresh edi
   build();
   assert.doesNotMatch(await readFile(join(output,'visible/index.html'),'utf8'),/id=site-search|class="search-toggle/);
   await assert.rejects(indexSite(output),/No searchable pages/,'never fall back to indexing every body when search is disabled');
+});
+
+test('development honors a baseURL override, config changes, edits and removals', {timeout: 60_000}, async t => {
+  const root = await mkdtemp(join(tmpdir(), 'mini-search-watch-'));
+  let server;
+  t.after(async () => {
+    if (server && server.exitCode === null && server.signalCode === null) {
+      const stopped = once(server, 'exit');
+      server.kill('SIGTERM');
+      await stopped;
+    }
+    await rm(root, {recursive: true, force: true});
+  });
+  await mkdir(join(root, 'themes'));
+  await symlink(theme, join(root, 'themes/hugo-mini'));
+  await mkdir(join(root, 'content'));
+  const config = enabled => `theme="hugo-mini"\nbaseURL="https://example.org/"\ndisableKinds=["taxonomy","term"]\n[params]\nsearch=${enabled}\n`;
+  await writeFile(join(root, 'hugo.toml'), config(false));
+  for (const name of ['one', 'two']) await writeFile(join(root, 'content', name + '.md'), `+++\ntitle="${name}"\n+++\nInitial quartz content.\n`);
+  server = spawn(process.execPath, [join(theme, 'scripts/hugo-search.mjs'), 'dev', '--source', root,
+    '--baseURL', 'http://localhost/nested/', '--port', '0'], {cwd: theme, stdio: ['ignore', 'pipe', 'pipe']});
+  let log = '';
+  server.stdout.on('data', chunk => { log += chunk; });
+  server.stderr.on('data', chunk => { log += chunk; });
+  async function waitFor(predicate) {
+    const deadline = Date.now() + 15_000;
+    while (Date.now() < deadline && server.exitCode === null) {
+      if (await predicate()) return;
+      await delay(50);
+    }
+    assert.fail(log);
+  }
+  async function entry() {
+    try { return JSON.parse(await readFile(join(root, 'public/pagefind/pagefind-entry.json'), 'utf8')); }
+    catch (error) { if (error.code === 'ENOENT' || error instanceof SyntaxError) return null; throw error; }
+  }
+  await waitFor(() => log.includes('Web Server is available'));
+  // The server must notice search being enabled without a process restart.
+  await writeFile(join(root, 'hugo.toml'), config(true));
+  await waitFor(async () => (await entry())?.languages.en?.page_count === 2);
+  let indexed = await entry();
+  assert.equal(indexed.languages.en.page_count, 2);
+  const original = indexed.languages.en.hash;
+  await writeFile(join(root, 'content/one.md'), '+++\ntitle="Changed"\n+++\nUpdated quartz content.\n');
+  await waitFor(async () => { const value = await entry(); return value && value.languages.en.hash !== original; });
+  indexed = await entry();
+  assert.notEqual(indexed.languages.en.hash, original);
+  await rm(join(root, 'content/two.md'));
+  await waitFor(async () => (await entry())?.languages.en?.page_count === 1);
+  indexed = await entry();
+  assert.equal(indexed.languages.en.page_count, 1, 'stale Hugo output must not keep deleted pages searchable');
 });

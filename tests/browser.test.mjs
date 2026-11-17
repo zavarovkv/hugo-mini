@@ -42,7 +42,10 @@ function page({ saved, blocked = false, dark = false, mobile = true, math = fals
   });
   const window = Object.assign(new EventTarget(), {
     document, navigator: {}, setTimeout, clearTimeout, scrollY, pageYOffset: scrollY,
-    scrollTo(x, y) { scrollCalls.push([x, y]); this.scrollY = y; this.pageYOffset = y; },
+    scrollTo(x, y) {
+      if (typeof x === 'object') { y = x.top; x = x.left ?? 0; }
+      scrollCalls.push([x, y]); this.scrollY = y; this.pageYOffset = y;
+    },
     setInterval: (callback) => { intervals.set(++intervalID, callback); return intervalID; },
     clearInterval: (id) => intervals.delete(id),
     localStorage: { getItem() { if (blocked) throw new Error('Storage blocked'); return saved; } },

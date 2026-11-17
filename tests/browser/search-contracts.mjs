@@ -25,7 +25,8 @@ export function searchContracts({test, expect, site = false}) {
     await links.last().scrollIntoViewIfNeeded();
     expect((await page.locator('.search-form').boundingBox()).y).toBeLessThan(0);
     await page.locator('#search-query').fill('"exclusionquartz"');
-    await expect(page.locator('.search-status')).toContainText(site ? 'Ничего не найдено' : 'Nothing found');
+    await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
+    await expect(page.locator('.search-status')).toHaveCSS('text-align','center');
     await expect(links).toHaveCount(0);
     await page.locator('#search-query').fill('');
     await expect(page.locator('#search-query')).toHaveValue('');
@@ -89,6 +90,29 @@ export function searchContracts({test, expect, site = false}) {
     await open(page, 'orchidquartz');
     await expect(page.locator('.search-retry')).toBeVisible();
     unavailable=false;
+    await page.locator('.search-retry').click();
+    await expect(page.locator('.search-result')).toHaveCount(11);
+    await expect(page.locator('.search-retry')).toBeHidden();
+  });
+
+  test('a result on the current page closes search before following its section link', async ({page}) => {
+    await page.goto('/search-1/');
+    await open(page, 'orchidquartz');
+    const current = page.locator('.search-result[href$="/search-1/#matching-section"]');
+    await current.click();
+    await expect(page).toHaveURL(/\/search-1\/#matching-section$/);
+    await expect(page.locator('#site-search')).not.toBeVisible();
+    await expect(page.locator('body')).not.toHaveClass(/search-open/);
+    await expect(page.locator('#matching-section')).toBeInViewport();
+  });
+
+  for (const asset of ['pagefind-entry.json*', '*.pf_meta', '*.pf_fragment']) test(`search recovers after a failed ${asset} download`, async ({page}) => {
+    let unavailable = true;
+    await page.route(`**/pagefind/**/${asset}`, route => unavailable ? route.abort() : route.continue());
+    await page.goto('/browser-checks/');
+    await open(page, 'orchidquartz');
+    await expect(page.locator('.search-retry')).toBeVisible();
+    unavailable = false;
     await page.locator('.search-retry').click();
     await expect(page.locator('.search-result')).toHaveCount(11);
     await expect(page.locator('.search-retry')).toBeHidden();

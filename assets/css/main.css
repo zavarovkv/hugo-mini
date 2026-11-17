@@ -2181,6 +2181,7 @@ body.search-open { position: fixed; inset-inline: 0; }
 }
 .search-content { padding: 0 8px 20px; }
 .search-status { color: var(--color-muted); margin: 0; padding: 20px 12px 12px; font-size: 14px; line-height: 1.6; }
+.search-status.search-empty { margin-top: 48px; padding: 0 12px; color: var(--heading-color); text-align: center; font: var(--font-weight-title) clamp(1.625rem, 4vw, 2rem)/1.3 var(--font-title); }
 .search-results { list-style: none; padding: 0; margin: 0; }
 .search-results > li { margin: 0; padding: 0; }
 .search-results > li + li { border-top: 1px solid var(--color-divider); }
@@ -2189,8 +2190,7 @@ body.search-open { position: fixed; inset-inline: 0; }
   color: var(--text-color); text-decoration: none; font-weight: var(--font-weight-body);
   overflow-wrap: anywhere; scroll-margin-block: 8px;
 }
-.search-result:focus-visible { background: var(--search-hover); color: var(--text-color); }
-.search-result:focus-visible { outline-offset: -2px; }
+.search-result:focus-visible { background: var(--search-hover); color: var(--text-color); outline-offset: -2px; }
 .search-result-title { display: block; color: var(--color-primary); font-size: 21px; line-height: 1.35; font-weight: var(--font-weight-medium); }
 @media (hover: hover) and (pointer: fine) {
   .search-result:hover { background: var(--search-hover); color: var(--text-color); }
@@ -2214,12 +2214,10 @@ body.search-open { position: fixed; inset-inline: 0; }
     border: 0; border-radius: 0; box-shadow: none;
   }
   .search-panel { padding-bottom: env(safe-area-inset-bottom, 0px); }
-  .search-form { padding: 20px; gap: 8px; }
-  .search-form { padding-top: calc(20px + env(safe-area-inset-top, 0px)); }
+  .search-form { padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 20px; gap: 8px; }
   .search-form input { font-size: 26px; }
   .search-status { padding-top: 16px; }
   .search-result { padding-block: 18px; }
-  .search-result-title { font-size: 21px; }
   .search-result-excerpt { font-size: 17px; }
 }
 @media (prefers-reduced-motion: no-preference) {

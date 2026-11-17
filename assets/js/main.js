@@ -191,7 +191,7 @@
       document.body.classList.remove('menu-open');
       document.documentElement.classList.remove('menu-open');
       document.body.style.top = '';
-      if (wasOpen) window.scrollTo(0, lockedScrollY);
+      if (wasOpen) window.scrollTo({ top: lockedScrollY, behavior: 'instant' });
     }
 
     function openMenu() {
@@ -262,6 +262,7 @@
     function query() { return input.value.trim().replace(/\s+/g, ' '); }
     function message(key, fallback) {
       status.classList.remove('search-sr-only');
+      status.classList.toggle('search-empty', key === 'searchEmpty');
       status.textContent = t(key, fallback);
     }
     function links() { return Array.from(results.querySelectorAll('a')); }
@@ -271,6 +272,7 @@
     function reset() {
       clearTimeout(loadingTimer);
       status.classList.add('search-sr-only');
+      status.classList.remove('search-empty');
       status.textContent = '';
       renderedQuery = '';
       results.replaceChildren();
@@ -360,7 +362,6 @@
       dialog.scrollTop = 0;
       if (!text) return;
       busy(true);
-      status.textContent = '';
       loadingTimer = setTimeout(function () {
         if (ticket === generation) message('searchLoading', 'Searching…');
       }, 200);
@@ -370,7 +371,7 @@
         var response = await api.search(text);
         if (ticket !== generation || !dialog.open) return;
         if (response.results.length) await showResults(response.results, ticket);
-        else { busy(false); message('searchEmpty', 'Nothing found. Try different words or a shorter query.'); }
+        else { busy(false); message('searchEmpty', 'Nothing found'); }
         if (ticket === generation) { clearTimeout(loadingTimer); renderedQuery = text; }
       } catch (error) { failed(ticket); }
     }
@@ -424,6 +425,11 @@
       busy(false);
     }
     function close() { dialog.close(); restore(); }
+    results.addEventListener('click', function (e) {
+      // Same-page section links do not fire pagehide. Unlock the document
+      // before native navigation so the selected section can scroll into view.
+      if (!e.defaultPrevented && e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && e.target.closest('a[href]')) close();
+    });
     dialog.querySelector('.search-close').addEventListener('click', close);
     dialog.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
     dialog.addEventListener('close', restore);
@@ -432,7 +438,7 @@
     dialog.addEventListener('click', function (e) { if (e.target === dialog && backdropDown) close(); });
     input.addEventListener('input', function (e) {
       generation++; clearTimeout(timer); clearTimeout(loadingTimer);
-      reset(); status.textContent = '';
+      reset();
       if (query() && !e.isComposing) timer = setTimeout(search, 140);
     });
     input.addEventListener('compositionend', function () { clearTimeout(timer); timer = setTimeout(search, 140); });

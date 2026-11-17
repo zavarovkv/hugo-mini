@@ -11,7 +11,7 @@ function run(command, args, options = {}) {
   return new Promise((accept, reject) => {
     const child = spawn(command, args, { stdio: 'inherit', ...options });
     children.add(child);
-    child.once('error', reject);
+    child.once('error', error => { children.delete(child); reject(error); });
     child.once('exit', (code, signal) => {
       children.delete(child);
       if (code === 0) accept();
@@ -94,13 +94,18 @@ async function main() {
   if (mode === 'index') return indexSite(option(args, ['--site'], 'public'));
   if (!['build', 'dev'].includes(mode)) throw new Error('Usage: hugo-search.mjs build|dev [Hugo flags], or index --site public');
   const configArgs = [];
-  for (const [long, short] of [['--source', '-s'], ['--config'], ['--configDir'], ['--themesDir'], ['--environment', '-e'], ['--destination', '-d'], ['--baseURL', '-b']]) {
+  for (const [long, short] of [['--source', '-s'], ['--config'], ['--configDir'], ['--themesDir'], ['--environment', '-e'], ['--destination', '-d'], ['--clock']]) {
     const value = option(args, [long, short].filter(Boolean));
     if (value !== undefined) configArgs.push(long, value);
   }
   const hugo = process.env.HUGO_BIN || 'hugo';
   if (mode === 'dev' && !option(args, ['--environment', '-e'])) configArgs.push('--environment', 'development');
-  const config = JSON.parse(execFileSync(hugo, ['config', '--format', 'json', ...configArgs], { encoding: 'utf8' }));
+  // `hugo list published` does not accept --baseURL. Pass the override through
+  // Hugo's environment instead so config, rendering and the page list agree.
+  const baseURL = option(args, ['--baseURL', '-b']);
+  const env = baseURL === undefined ? process.env : { ...process.env, HUGO_BASEURL: baseURL };
+  const readConfig = () => JSON.parse(execFileSync(hugo, ['config', '--format', 'json', ...configArgs], { encoding: 'utf8', env }));
+  const config = readConfig();
   const source = resolve(option(args, ['--source', '-s'], '.'));
   const output = resolve(source, config.publishdir || 'public');
   const enabled = config.params?.search === true;
@@ -112,14 +117,18 @@ async function main() {
 
   let timer, running = false, pending = false, stopping = false;
   async function refresh() {
-    if (!enabled || stopping) return;
+    if (stopping) return;
     if (running) { pending = true; return; }
     running = true;
     do {
       pending = false;
       try {
-        const csv = execFileSync(hugo, ['list', 'published', ...configArgs], { encoding: 'utf8' });
-        await indexSite(output, { clean: false, files: publishedFiles(csv, config.baseurl) });
+        // Hugo reloads configuration while serving; follow search/publishDir
+        // changes too, including enabling search in an already-running server.
+        const current = readConfig();
+        if (current.params?.search !== true) continue;
+        const csv = execFileSync(hugo, ['list', 'published', ...configArgs], { encoding: 'utf8', env });
+        await indexSite(resolve(source, current.publishdir || 'public'), { clean: false, files: publishedFiles(csv, current.baseurl) });
       }
       catch (error) { console.error(`Search: ${error.message}`); }
     } while (pending && !stopping);

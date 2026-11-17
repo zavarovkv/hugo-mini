@@ -178,7 +178,7 @@ other = "Try again"
 other = "Searching…"
 
 [search_empty]
-other = "Nothing found. Try different words or a shorter query."
+other = "Nothing found"
 
 [search_error]
 other = "Search is unavailable right now. Please try again."
