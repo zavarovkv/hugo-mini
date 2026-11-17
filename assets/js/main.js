@@ -291,6 +291,13 @@
         status.textContent = t('searchCount', 'Results: {count}').replace('{count}', String(results.childElementCount));
       } else message('searchEmpty', 'Nothing found');
     }
+    function prepareSearch() {
+      // An empty result is also a completed state: keep it steady while the
+      // next query loads, just as we keep an existing list. Clear only errors
+      // and announcements that would otherwise describe the previous query.
+      if (!status.classList.contains('search-empty')) clearStatus();
+      retry.hidden = true;
+    }
     function loadEngine() {
       if (!engine) {
         var url = new URL(source, location.href);
@@ -373,7 +380,7 @@
       var text = query();
       if (!text) { reset(); return; }
       if (text === renderedQuery) { busy(false); describeResults(); return; }
-      clearStatus();
+      prepareSearch();
       busy(true);
       clearTimeout(loadingTimer);
       // Fast local searches need no loading flash. Once visible, the quiet
@@ -382,7 +389,7 @@
         loadingTimer = setTimeout(function () {
           if (ticket !== generation || !dialog.open) return;
           dialog.classList.add('search-loading');
-          status.textContent = t('searchLoading', 'Searching…');
+          if (status.classList.contains('search-sr-only')) status.textContent = t('searchLoading', 'Searching…');
         }, 300);
       }
       try {
@@ -466,7 +473,7 @@
       if (text === renderedQuery) { busy(false); describeResults(); return; }
       // Keep the previous list in place while typing and loading. Replace it
       // only once, after every fragment for the latest query is ready.
-      clearStatus(); busy(true);
+      prepareSearch(); busy(true);
       if (!isComposing && !composing) timer = setTimeout(search, 250);
     }
     input.addEventListener('input', function (e) { schedule(e.isComposing); });

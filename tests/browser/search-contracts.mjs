@@ -185,6 +185,34 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
   });
 
+  test('an empty result stays steady until the next query finishes', async ({page}) => {
+    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
+      export async function options() {}
+      export async function search(query) {
+        if (query !== 'empty') await new Promise(resolve=>{ window.finishSearch = resolve; });
+        return {results:query === 'match' ? [{data:async()=>({url:'/search-1/',meta:{title:'Match'},excerpt:'Matching article'})}] : []};
+      }
+    `}));
+    await page.goto('/browser-checks/');
+    await open(page, 'empty');
+    const status = page.locator('.search-status');
+    const label = site ? 'Ничего не нашлось' : 'Nothing found';
+    await expect(status).toHaveText(label);
+    const before = await status.boundingBox();
+    for (const query of ['still empty','match']) {
+      await page.locator('#search-query').fill(query);
+      await expect(page.locator('#site-search')).toHaveClass(/search-loading/);
+      await expect(status).toHaveText(label);
+      await expect(status).toHaveClass(/search-empty/);
+      expect(await status.boundingBox()).toEqual(before);
+      await page.evaluate(()=>window.finishSearch());
+      await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
+    }
+    await expect(page.locator('.search-result-title')).toHaveText('Match');
+    await expect(status).toHaveClass(/search-sr-only/);
+    await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
+  });
+
   test('composition waits for committed text and reopening refreshes an unfinished query', async ({page}) => {
     await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
       window.searchCalls = [];

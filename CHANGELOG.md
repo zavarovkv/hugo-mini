@@ -54,7 +54,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Fixed
 
-- Keep search results visible while typing and loading, debounce input, and replace the list only after the newest fragments arrive. A delayed, subtle divider animation replaces visible loading text and respects reduced motion.
+- Keep search results and empty states visible while typing and loading, debounce input, and replace the list only after the newest fragments arrive. A delayed, subtle divider animation replaces visible loading text and respects reduced motion.
 - Declare the desktop navigation transition before external styles load, preventing Chromium from intermittently skipping the menu fade. Mobile navigation and reduced motion remain immediate.
 - Reserve the search trigger before JavaScript loads so compact headers do not shift page content; align the search dialog with the page when classic scrollbars take up viewport space.
 - Close search before following same-page section links, preserve scroll when switching from the mobile menu, and keep development indexes current with `--baseURL` overrides and configuration changes.
