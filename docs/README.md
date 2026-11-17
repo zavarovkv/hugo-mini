@@ -21,7 +21,6 @@ the [quick start](../README.md#quick-start); use the guides below as you add fea
 | Add images, captions, diagrams or wide code | [Images, diagrams and code](media.md) |
 | Format quotations, footnotes or opening paragraphs | [Typography](typography.md) · [Типографика на русском](typography.ru.md) |
 | Build a homepage, show projects or keep a reading list | [Homepages and collections](homepage.md) |
-| Publish a CV and save it as a PDF | [Resumes](resume.md) |
 | Enable Telegram comments and reaction counts | [Telegram](telegram.md) |
 
 ## Customize and maintain

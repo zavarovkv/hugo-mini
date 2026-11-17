@@ -2,7 +2,7 @@
 
 # Writing content
 
-[Documentation](README.md) · [Media](media.md) · [Typography](typography.md) · [Homepage](homepage.md) · [CV](resume.md)
+[Documentation](README.md) · [Media](media.md) · [Typography](typography.md) · [Homepage](homepage.md)
 
 Put articles in the section selected by `params.mainSections`; `blog/` is a
 conventional choice. Use ordinary Hugo Markdown files and page bundles.
@@ -115,11 +115,6 @@ These components also work in ordinary content pages:
 | <a id="github-stars"></a>`github-stars` | [Build-time GitHub counters](homepage.md#github-stars) |
 | <a id="reading-lists"></a>`reading-list` | [Localized bookshelves](homepage.md#reading-lists) |
 
-## Standalone resume
-
-Use `layout = "resume"` for a CV with its own screen and print layout.
-See [Resumes](resume.md) for a complete example, job entries, education and PDF output.
-
 ## Article keyboard navigation
 
 | Shortcut | Action |
@@ -146,7 +141,7 @@ Use your browser's **Print** or **Save as PDF** command. No extra build is neede
 Print is light-on-paper in either screen theme: body text is 11 pt, page titles
 22 pt and section headings 16 pt. Code wraps and prints in monochrome.
 [Mermaid diagrams](media.md#diagram-loading-and-printing) use cached neutral copies,
-or readable source when rendering is unfinished. CVs have a [separate A4 layout](resume.md#print-or-save-as-pdf).
+or readable source when rendering is unfinished.
 
 ## Article ending
 

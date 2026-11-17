@@ -162,7 +162,7 @@
     {{- $mermaid = dict "src" "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js" "integrity" "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy" -}}
   {{- end -}}
 {{- end -}}
-<body class="{{ block "bodyClass" . }}{{ end }}" data-i18n="{{ $i18n | jsonify }}"{{ if .Param "headingScroll" }} data-heading-scroll="true"{{ end }}{{ if .Params.math }} data-math="true"{{ end }}{{ if or (eq (.Param "backToTop") false) (eq .Layout "resume") }} data-back-to-top="false"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
+<body class="{{ block "bodyClass" . }}{{ end }}" data-i18n="{{ $i18n | jsonify }}"{{ if .Param "headingScroll" }} data-heading-scroll="true"{{ end }}{{ if .Params.math }} data-math="true"{{ end }}{{ if eq (.Param "backToTop") false }} data-back-to-top="false"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
   {{- with .Site.Params.yandexMetrikaId }}
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" class="analytics-noscript" alt="" /></div></noscript>
   {{- end }}
@@ -173,14 +173,14 @@
   <header>
     {{- block "header" . }}{{ partial "header.html" . }}{{ end -}}
   </header>
-  {{- $searchable := and .IsPage (ne .Layout "resume") (not .Draft) (not (.PublishDate.After now)) (or .ExpiryDate.IsZero (.ExpiryDate.After now)) (not .Params.hidden) (not .Params.noindex) (not (eq .Params.search false)) -}}
+  {{- $searchable := and .IsPage (not .Draft) (not (.PublishDate.After now)) (or .ExpiryDate.IsZero (.ExpiryDate.After now)) (not .Params.hidden) (not .Params.noindex) (not (eq .Params.search false)) -}}
   <main{{ if and .Site.Params.search $searchable }} data-pagefind-body{{ else }} data-pagefind-ignore="all"{{ end }}>
     {{- block "main" . }}{{- end }}
   </main>
   <footer>
     {{- block "footer" . }}{{ partial "footer.html" . }}{{ end -}}
   </footer>
-  {{- partial "search-dialog.html" . -}}
+  {{- block "search" . }}{{ partial "search-dialog.html" . }}{{ end -}}
 
   {{- /* Bundled theme JS. No ExecuteAsTemplate: the script reads its localized
          strings from body[data-i18n], so one compiled bundle serves every

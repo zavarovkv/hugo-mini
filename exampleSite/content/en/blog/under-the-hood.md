@@ -10,13 +10,14 @@ Mini keeps the reading foundation separate from page layout and browser behavior
 
 ## Self-hosted Assets
 
-CSS, JavaScript, Inter fonts, KaTeX and sharing assets are served from the site's own domain. Ordinary Hugo builds need no npm installation. Optional Mermaid diagrams use a pinned CDN fallback unless the site provides a local bundle. Configured analytics, Telegram widgets and sharing actions can contact their own services.
+CSS, JavaScript, Inter fonts, KaTeX and sharing assets are served from the site's own domain. Hugo-only builds need no npm installation; optional Pagefind search needs Node.js 22.12+ and an indexing step after Hugo. Optional Mermaid diagrams use a pinned CDN fallback unless the site provides a local bundle. Configured analytics, Telegram widgets and sharing actions can contact their own services.
 
 ## Conditional Loading
 
 | Feature | When it loads |
 | --- | --- |
 | Shared theme CSS and JavaScript | Every page; minified and fingerprinted by Hugo |
+| Pagefind | When search opens; the local index is generated after each Hugo build |
 | KaTeX | Pages with `math = true` |
 | Mermaid | Nearby diagrams first, then idle preparation of remaining diagrams and print copies on pages with `mermaid = true` |
 | Likely | Posts with social sharing enabled |
@@ -33,7 +34,7 @@ The theme includes four WOFF2 faces with Latin and Cyrillic characters:
 - **500** — medium emphasis and prominent links
 - **600** — headings and bold text
 
-Weights 300 and 600 are preloaded. Other faces load when used. The font license is included with the files.
+Weights 300 and 600 are preloaded. Other faces load when used. The font license is included with the files. The public demo uses a deployment-owned font profile; ordinary clones use Inter.
 
 ## Render Hooks
 

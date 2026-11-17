@@ -53,6 +53,8 @@ Shared native typography belongs to [Beauty.css](vendor-assets.md#beautycss-foun
 | Language, theme, desktop search | No container border/background, including on hover |
 | Resting labels | `--color-muted`; language/search use `--color-accent` on hover/focus |
 | Theme / AI icons | Yellow sun, blue moon, yellow active sparkle |
+| Code copy | Muted icon; `--color-success` confirms copying with a checkmark. |
+| `.button.beauty-button` | Shared bold role; `--color-button-start`, `--color-button-end` and `--color-button-text` control the gradient and label. |
 
 Native `:focus-visible` controls focus display. Invisible control containers retain
 their click areas; these styles do not change geometry.
@@ -113,12 +115,16 @@ reference its name in the menu entry:
 | `layouts/_partials/custom_head.html` | Add tags to `<head>` after the theme stylesheet. |
 | `layouts/_partials/custom_body.html` | Add markup/scripts before `</body>`. |
 | `bodyClass` block | Select page layout classes; built-in home/list/single/404 use `reading-layout`. |
-| `baseof.html` blocks | Replace `head`, `favicon`, `header`, `main`, `footer` or `scripts`. |
+| `baseof.html` blocks | Replace `head`, `favicon`, `header`, `main`, `footer`, `search` or `scripts`. |
 | Matching site template path | Override the whole template only when it must diverge. |
 
 `reading-layout` selects the [blog reading scale](typography-reference.md#reading-layout).
 Independent templates can omit it. The 404 page uses `beauty-reading`, while its
 optional ASCII illustration keeps its own monospace scale.
+
+A standalone layout can replace the `search` block to omit the dialog. Use
+`search = false` in front matter separately to exclude the page from the index,
+and `backToTop = false` to omit the reading control.
 
 ### Custom header
 

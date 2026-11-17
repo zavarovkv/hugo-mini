@@ -1,5 +1,5 @@
 // A fresh Hugo build for every browser run. Never reuse a developer's server.
-import { mkdtemp, mkdir, writeFile, readFile, cp, symlink, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, readdir, cp, symlink, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -32,11 +32,21 @@ try {
   await cp(join(theme, 'tests/browser/fixtures/wide-images.md'), join(contentDir, 'wide-image-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-diagrams.md'), join(contentDir, 'wide-diagram-checks.md'));
-  await cp(join(theme, 'tests/browser/fixtures/resume.md'), join(contentDir, 'resume-checks.md'));
+  if (source) {
+    // Consumers own their custom-page fixtures; never import them into the theme.
+    const fixtures = join(source, 'tests/browser/fixtures');
+    const names = await readdir(fixtures).catch(error => {
+      if (error.code === 'ENOENT') return [];
+      throw error;
+    });
+    for (const name of names) await cp(join(fixtures, name), join(contentDir, name), {
+      recursive: true, force: false, errorOnExist: true,
+    });
+  }
   // Search uses real generated fragments, complete result lists and exclusions.
   for (let i = 1; i <= 11; i++) await writeFile(join(contentDir, `search-${i}.md`),
     `+++\ntitle="Search contract ${i}"\n+++\nA short introduction.\n\n## Matching section\n\nThe orchidquartz collection explains careful product research and accessible search.\n`);
-  for (const [name, flags] of [['hidden', 'hidden=true'], ['noindex', 'noindex=true'], ['optout', 'search=false'], ['draft', 'draft=true'], ['future', 'publishDate=2099-01-01'], ['expired', 'expiryDate=2000-01-01'], ['resume', 'layout="resume"']]) {
+  for (const [name, flags] of [['hidden', 'hidden=true'], ['noindex', 'noindex=true'], ['optout', 'search=false'], ['draft', 'draft=true'], ['future', 'publishDate=2099-01-01'], ['expired', 'expiryDate=2000-01-01']]) {
     await writeFile(join(contentDir, `search-${name}.md`), `+++\ntitle="Excluded ${name}"\n${flags}\n+++\nexclusionquartz orchidquartz\n`);
   }
   for (const lang of ['en', 'ru']) {

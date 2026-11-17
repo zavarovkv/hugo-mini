@@ -23,7 +23,7 @@ test('real indexes exclude nonpublic pages, remove deleted pages and refresh edi
   await writeFile(join(root,'hugo.toml'),'theme="hugo-mini"\nbaseURL="https://example.org/sub/"\ndisableKinds=["taxonomy","term"]\n[params]\nsearch=true\nsocialSharing=false\n');
   const content={
     visible:'', removed:'', hidden:'hidden=true', noindex:'noindex=true', optout:'search=false',
-    draft:'draft=true', future:'publishDate=2099-01-01', expired:'expiryDate=2000-01-01', resume:'layout="resume"',
+    draft:'draft=true', future:'publishDate=2099-01-01', expired:'expiryDate=2000-01-01',
   };
   for(const [name,flags] of Object.entries(content)) await writeFile(join(root,'content',name+'.md'),`+++\ntitle="${name}"\n${flags}\n+++\n${name} quartzoriginal\n`);
   const build=()=>execFileSync(process.env.HUGO_BIN || 'hugo',['--source',root,'--minify','--cleanDestinationDir','--buildDrafts','--buildFuture','--buildExpired'],{stdio:'pipe'});

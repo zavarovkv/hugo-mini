@@ -78,7 +78,7 @@ index build fails the command. The demo and Vercel starter already include this 
 | Published articles and standalone pages | Yes: title and main text; titles have extra weight |
 | Home, archives, taxonomy lists and 404 | No |
 | `hidden = true`, `noindex = true`, `search = false` | No |
-| Drafts, future/expired pages and `layout = "resume"` | No, including draft previews |
+| Drafts and future/expired pages | No, including draft previews |
 | Menus, footer, sharing controls and Mermaid source | No |
 
 Set `search = false` in a page's front matter to exclude it only from local search.

@@ -215,6 +215,10 @@ H1 uses `#page-title`; section IDs stay stable. H2 text replaces its copy icon.
 Repeated clicks do not add history entries; copy/open-in-new-tab/back/forward work
 as native links. Between sections, Up returns to the current section's heading.
 
+Custom templates can opt H3–H6 into this navigation with `data-heading-scroll`.
+`data-heading-reset` makes a heading clear the fragment when activated. These
+attributes do not change ordinary Markdown headings.
+
 Shortcuts ignore held-key repeats, editing/composition, extra modifiers and open
 menus/dialogs. Distinct presses work during scrolling. Selections and modified
 clicks stay native; authored links are not nested or replaced.

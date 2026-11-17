@@ -25,7 +25,7 @@ Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and M
 - **Easy navigation.** Mobile menus, light/dark mode and keyboard shortcuts. Multilingual sites with English and Russian UI included.
 - **Rich articles.** Code highlighting and copying, KaTeX formulas, Mermaid diagrams and wide images.
 - **Ready to share.** SEO metadata, generated social preview images, RSS, JSON Feed and sitemap.
-- **Beyond the blog.** Homepage blocks, featured posts, projects, reading lists and a [printable CV](docs/resume.md).
+- **Beyond the blog.** Homepage blocks, featured posts, projects and reading lists.
 - **Your own style.** Custom colors, fonts and logos. Optional Telegram comments, sharing buttons and analytics.
 
 ## Quick start

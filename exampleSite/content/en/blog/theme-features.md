@@ -21,6 +21,12 @@ Dark mode automatically adjusts:
 - Mermaid diagram colors
 - Avatar image (shows hover variant in dark mode)
 
+## Search
+
+Set `params.search = true` and install the [Pagefind build setup](https://github.com/zavarovkv/hugo-mini/blob/main/docs/search.md). The demo and starter already include it: run `npm ci`, then `npm run dev` or `npm run build`. Plain Hugo commands do not build the index.
+
+Open the magnifier or press `Cmd/Ctrl+K`. Results stay in the current language and update after a short typing pause; all matches scroll with the field. Queries stay in the browser.
+
 ## Categories
 
 Posts can be grouped by categories using front matter:
@@ -73,7 +79,7 @@ Mini supports two languages out of the box: English and Russian. The footer list
 
 ## Hidden Posts
 
-Set `hidden = true` to exclude a post from listings and feeds while keeping its public URL, sitemap entry and search indexing. Use `draft = true` for unpublished content; `hidden` does not restrict access.
+Set `hidden = true` to omit a post from listings, feeds, `llms.txt` and local search. Its URL and sitemap entry remain public, and external search engines may still index it. Use `noindex = true` to request exclusion from those engines; use `draft = true` for unpublished content.
 
 ```toml
 +++
@@ -93,13 +99,13 @@ pinned = true
 +++
 ```
 
-No visual marker — order is the only signal, keeping the listing clean.
+Pinning changes order without adding a badge.
 
 ## Heading Anchor Links
 
 Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, the icon is hidden by default — tap a heading to reveal it, then tap the icon to copy the section URL and follow the native anchor to the heading.
 
-Implemented via `_markup/render-heading.html` render hook + minimal JS — no extra dependencies. Note: only fires for markdown-parsed headings, not raw HTML `<h2>...</h2>`. Headings also have a small `scroll-margin-top` so navigating to an anchor leaves a gap at the top of the viewport instead of pushing the heading flush against the edge.
+This applies to Markdown headings, not raw HTML. With `headingScroll = true`, H1/H2 text becomes a click-to-align link; Option/Alt + Up/Down moves between headings. H3 keeps its copy link. Option/Alt + Left/Right opens older/newer articles, stopping at the ends.
 
 ## Privacy-friendly Analytics
 

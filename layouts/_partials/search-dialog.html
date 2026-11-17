@@ -1,4 +1,4 @@
-{{- if and site.Params.search (ne .Layout "resume") -}}
+{{- if site.Params.search -}}
 <dialog id="site-search" class="search-dialog" aria-label="{{ i18n "search" }}" data-pagefind-src="{{ "pagefind/pagefind.js" | relURL }}" data-pagefind-ignore="all">
   <div class="search-panel">
     <form class="search-form" role="search">

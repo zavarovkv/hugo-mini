@@ -754,7 +754,7 @@
       if (Math.abs(window.scrollY - top) <= 2) settledScrollY = window.scrollY;
     }
 
-    document.querySelectorAll('main h1, main h2, main .resume-entry-heading').forEach(function (heading, index) {
+    document.querySelectorAll('main h1, main h2, main :is(h3, h4, h5, h6)[data-heading-scroll]').forEach(function (heading, index) {
       if (heading.closest('.footnotes, .not-beauty') || heading.classList.contains('no-anchor')) return;
       var anchor = heading.querySelector(':scope > .heading-anchor');
       if (anchor) anchor.remove();

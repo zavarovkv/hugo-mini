@@ -75,6 +75,6 @@ test("moved content sections retain their public fragment links", () => {
     "wide-images", "wide-diagrams", "wide-code-blocks", "captions-and-heading-links",
     "wavy-arrow", "homepage-introduction", "latest-articles", "featured-articles",
     "columns", "projects", "github-stars", "reading-lists", "explicit-fractions",
-    "enlarged-author-statements", "standalone-resume",
+    "enlarged-author-statements",
   ]) assert.ok(ids.has(id), `Preserve docs/content.md#${id}`);
 });

@@ -71,7 +71,9 @@ CI runs against the minimum and latest supported Hugo versions.
 
 Consuming sites can reuse `tests/browser/contracts.mjs` and
 `browserConfig({ site: true })`. The server copies the real site into a temporary
-directory and adds only fixtures/local Mermaid. Do not commit private fonts or
+directory and adds fixtures/local Mermaid. Site-owned Markdown fixtures in
+`tests/browser/fixtures/` are added to the default-language content alongside the
+shared fixtures; name them uniquely so they cannot overwrite real pages. Do not commit private fonts or
 upload them with public test artifacts.
 
 Check affected pages on mobile and desktop, in both color schemes and with a keyboard.

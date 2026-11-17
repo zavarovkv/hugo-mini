@@ -152,8 +152,8 @@ exposed as the accessible name; arrows add no requests or focus stops.
 | Touch | No retained hover animation |
 
 Labels and layout do not move. Ordinary article links and the date-range arrow
-keep their own treatment. Above 768 px, a stable root scrollbar gutter prevents
-classic scrollbars from shifting the column; mobile and print are unchanged.
+keep their own treatment. A stable root scrollbar gutter prevents
+classic scrollbars from shifting the column. Overlay scrollbars reserve no space; print opts out.
 
 ## Code, tables and print
 

@@ -13,7 +13,6 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Added
 
-- **Resume pages:** standalone `resume` layout with contacts, experience entries, product/result headings and dated education/activity lists. Responsive columns, inherited fonts, one-color hierarchy and A4 browser printing share one Markdown source. See [Resumes](docs/resume.md).
 - **Featured articles:** `featured-posts` follows ordered `params.featuredPosts` content paths per language, skips duplicates/unavailable/hidden posts and omits empty blocks. It reuses the recent-post layout and archive link without affecting dates, feeds or pinning.
 - **Editorial quotations:** opt-in `editorialQuotes` styles native Markdown and `callout` with semantic figures, selectable hanging marks, reading-size quotations and end-aligned attributions. Existing inline marks and explicit figures remain intact; author statements use `beauty-lead`.
 - **Reading options:** per-article drop caps, optional hanging opening quotes and old-style prose figures, plus the explicit `fraction` shortcode. Sources, copied text, technical content and print fallbacks remain intact.
@@ -30,13 +29,15 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Removed
 
+- **Standalone CV:** the `resume` layout, `resume-*` shortcodes and their stylesheet now belong to consuming sites. Existing users must retain these files in their own site before updating.
 - Remove the article recent-posts sidebar/bottom list, `recentSidebarCount` and related assets. Wide content can use that space; homepage `latest-posts` is unchanged.
 - Remove unused `--link-color`, `--blockquote-color` and `--color-blockquote-border`. See [replacement tokens](docs/customization.md#assets).
 
 ### Changed
 
+- **Control palette:** keep code-copy icons and success feedback readable in both schemes; use theme tokens and the configured bold face for gradient action buttons.
 - **README preview:** pair dark desktop and light mobile views in slim browser and iPhone frames on a transparent canvas. Keep a seamless page/menu loop and a repeatable capture script for maintainers.
-- **Documentation:** add a task-oriented entry point and separate guides for media, homepages, resumes and demo maintenance. Split bilingual typography instructions from visual references; shorten dense sections, preserve old anchors and document missing module/feed setup steps.
+- **Documentation:** add a task-oriented entry point and separate guides for media, homepages and demo maintenance. Split bilingual typography instructions from visual references; shorten dense sections, preserve old anchors and document missing module/feed setup steps.
 - **Reading scale:** use a 720 px column, 18/28 px desktop and 19/29 px mobile text, 44/32 px H1 and consistent 48/32 px desktop versus 40/28 px mobile title gaps. Apply the same scale to 404 pages while retaining separate ASCII/print sizing.
 - **Headings and prose:** retain balanced page titles and natural section-title wrapping; add LTR optical alignment and dictionary hyphenation up to 360 px. Format visible titles/article links without changing metadata or URLs. Darken light body text to `#333`.
 - **Editorial rhythm:** share quotation measure, spacing, opening-mark scale and attribution treatment; enlarge the footer gap after a final quotation. Give author statements 32/48 px screen spacing and drop caps two-line wrapping with a quarter-line rise and descender clearance.
@@ -47,7 +48,6 @@ see the [documentation](docs/README.md); released entries below remain historica
 - **Mobile navigation:** replace the hamburger with an animated four-dot control, keep a 44 px touch target and use 20 px menu labels with generous rows. Support wrapped labels and enlarged text without horizontal overflow.
 - **Controls and footer:** use a fine rounded keyboard outline matching link underlines and forced-color fallbacks; remove control borders/backgrounds, preserve icon/accent colors and restore brand hover/focus colors in dark mode. Footer margins collapse in normal flow; social icons use 17/22 px desktop/mobile sizes.
 - **Compact metadata:** use 12 px language labels and 11 px green New/Нов. badges. Group post metadata/sharing at 16 px, separated from the article and comments by 32 px; missing widgets leave no empty gaps.
-- **Resume refinements:** use 17/26 px screen text, compact 0.6em bullet gaps, 32–36 px mobile names and the 1.125em role. Keep paragraph flow independent of date grids, mobile detail/date wrapping, section spacing and 10.5 pt A4 text.
 - **Asset/layout isolation:** content-version local logos, avatars, project marks and favicons; reserve desktop scrollbar space. Scope header/menu rules and legacy Beauty aliases without duplicating native styles.
 - **CI and starter:** use SHA-pinned Node.js 24 actions without persisted checkout credentials. Pin the starter to a verified theme revision and honor explicit canonical domains or configured baseURL.
 - **Onboarding:** keep brief synchronized EN/RU READMEs, absolute gallery images, current light/dark previews and starter-based local setup. Mark the demo's English option as AI-translated.
@@ -63,7 +63,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 - Preserve Russian nesting around literal curly quotes, inline wrappers and visible URLs. Keep nonbreaking compound prepositions, abbreviations, particles and short-word groups without rewriting protected text.
 - Keep footnote numbers visible before quotes/lists/code, prevent Safari double markers and avoid enlarged reference line boxes. Hide return arrows only in margin-note mode.
 - Prevent mobile menu flashes, preserve no-JavaScript links, remove closing links from keyboard navigation and keep desktop transition geometry stable when leaving a scrolled page.
-- Honor explicit `backToTop = false`; omit it on resumes. Keep heading shortcuts sequential at page ends, clear the fragment from a CV's name link, and restore visible focus when returning to Tab.
+- Honor explicit `backToTop = false`. Keep heading shortcuts sequential at page ends, support custom heading targets and fragment resets, and restore visible focus when returning to Tab.
 - Preserve project mark colors/size on hover, align GitHub stars with counts and keep header logos compact. Custom fonts without bold italic use a real upright bold face for combined emphasis.
 - Decode local WebP dimensions in regular Hugo builds, not only Extended builds.
 - Avoid Likely's `role="null"` / `aria-label="null"` attributes by copying only present attributes.

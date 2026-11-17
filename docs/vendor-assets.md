@@ -3,8 +3,8 @@
 [Documentation](README.md) · [Contributing](../CONTRIBUTING.md)
 
 **Audience: theme maintainers.** Ordinary Hugo builds use committed assets without
-npm or network downloads. Optional consumer-owned Mermaid and counter helpers have
-separate requirements.
+npm or network downloads. Optional Pagefind search, consumer-owned Mermaid and
+counter helpers have separate build requirements; see [Search](search.md).
 
 | Asset | Location / source of truth |
 | --- | --- |
@@ -13,6 +13,7 @@ separate requirements.
 | Likely | Readable upstream sources in `assets/likely/` |
 | KaTeX | `static/katex/`, manifest `vendor/katex.json` |
 | Mermaid | Consumer-owned script/package; theme test version in `package.json` |
+| Pagefind | Build dependency in `package-lock.json`; generated index in `public/pagefind/` |
 
 ## Beauty.css foundation
 

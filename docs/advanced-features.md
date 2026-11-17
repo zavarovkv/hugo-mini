@@ -34,8 +34,7 @@ starting point, open the [documentation home](README.md).
 | Opening initials and publication credits | [Drop caps](typography.md#drop-caps), [credits](typography.md#article-publication-credits) |
 | Footnotes and desktop margin notes | [Footnotes](typography.md#footnotes) |
 | New-tab article links | [Article links](typography.md#article-links) |
-| Browser printing and PDF | [Articles](content.md#printing), [CV](resume.md#print-or-save-as-pdf) |
-| `resume-entry`, `resume-list`, `resume-item` | [Resumes](resume.md) |
+| Browser printing and PDF | [Articles](content.md#printing) |
 | `latest-posts`, `featured-posts`, `columns`, `column` | [Homepage blocks](homepage.md) |
 | `project` and optional interactive marks | [Projects](homepage.md#projects) |
 | `github-stars` and saved counters | [GitHub stars](homepage.md#github-stars) |

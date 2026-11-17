@@ -6,11 +6,11 @@ description = "A complete guide to Markdown rendering and typography in the Mini
 categories = ["getting-started"]
 +++
 
-Mini renders all standard Markdown with clean, readable typography powered by the [Inter](https://rsms.me/inter/) font family — self-hosted, no CDN required.
+Mini styles native Markdown through Beauty.css. Bundled [Inter](https://rsms.me/inter/) is the default; the public demo uses a custom font profile. Fonts are served from the site itself.
 
 ## Headings
 
-Headings use a progressive scale from h1 to h6, with bold weight and tighter line height for visual hierarchy.
+Heading levels use a progressive scale and tighter line height; their faces and weights follow the active font profile.
 
 ### Third-Level Heading
 
@@ -20,9 +20,9 @@ Headings use a progressive scale from h1 to h6, with bold weight and tighter lin
 
 ## Text Formatting
 
-Regular paragraph text is set in 300 weight for comfortable reading. **Bold text** uses 600 weight and inherits the heading color for emphasis. *Italic text* adds a subtle visual shift. You can also combine **_bold and italic_** when needed.
+**Bold**, *italic* and **_combined emphasis_** follow the active font profile. Bundled Inter uses 300 for body text, 500 for prominent links and 600 for bold text.
 
-Inline `code` renders in a monospace font with a subtle background, making it easy to distinguish from prose — useful for referencing things like `config.toml` or `hugo server`.
+Inline `code` is monospace, with a subtle fill in dark mode: `config.toml`, `hugo server`.
 
 ## Links
 
@@ -37,12 +37,12 @@ Unordered lists:
 - Multilingual support with language switcher
 - Mobile-first responsive layout
 
-Ordered lists get bold markers for scannability:
+Ordered-list markers share the surrounding text weight:
 
 1. Create your content in `content/` directory
 2. Configure the theme in `config.toml`
-3. Run `hugo server` for local preview
-4. Deploy with `hugo --minify`
+3. Run `npm run dev` for the search-enabled demo or starter
+4. Build with `npm run build` and publish `public/`
 
 Nested lists work too:
 
@@ -63,7 +63,7 @@ Dieter Rams on design:
 
 ## Code Blocks
 
-Syntax highlighting works out of the box. Colors automatically adapt to dark mode.
+Set `markup.highlight.noClasses = false` for colors that follow both themes; the demo and starter already use this setting.
 
 ```go
 package main
