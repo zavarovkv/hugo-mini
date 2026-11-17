@@ -171,9 +171,6 @@ other = "Close"
 [search_results]
 other = "Search results"
 
-[search_more]
-other = "Show more"
-
 [search_retry]
 other = "Try again"
 

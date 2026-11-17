@@ -90,7 +90,8 @@ The site's existing JSON Feed is independent of this index.
 
 - Open with the header magnifier, the mobile menu, `Cmd/Ctrl+K` or `/` outside an editor.
 - Use arrows to move through results, Enter to open, Escape to close and Tab for controls.
-- Results load eight at a time; **Show more** keeps the current query and position.
+- All matching pages appear in one list. The field and results scroll together,
+  with the scrollbar at the screen edge.
 - Search fills the screen; its contents follow the blog column. Mobile adapts to the on-screen keyboard.
 - `showSearchButton = false` hides header triggers; keyboard shortcuts remain available.
 - Override `search_*` strings in your site's `i18n/`. English and Russian are bundled.

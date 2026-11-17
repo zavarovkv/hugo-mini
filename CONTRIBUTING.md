@@ -45,7 +45,7 @@ npm run build
 
 Unit checks include documentation links and README language consistency. The example
 build must emit nonempty HTML, RSS, JSON Feed, `llms.txt` and sitemap outputs,
-including `ru/index.json`, `ru/llms.txt` and `pagefind/pagefind-entry.json`. Search tests cover real indexes, both languages, exclusions, retries, pagination, focus, narrow screens and subdirectory hosting.
+including `ru/index.json`, `ru/llms.txt` and `pagefind/pagefind-entry.json`. Search tests cover real indexes, both languages, exclusions, retries, complete result lists, focus, narrow screens and subdirectory hosting.
 
 ### Browser checks
 

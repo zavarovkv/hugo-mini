@@ -252,13 +252,11 @@
     var input = dialog.querySelector('input');
     var results = dialog.querySelector('.search-results');
     var status = dialog.querySelector('.search-status');
-    var more = dialog.querySelector('.search-more');
     var retry = dialog.querySelector('.search-retry');
     var source = dialog.getAttribute('data-pagefind-src');
     var engine, attempts = 0, generation = 0, timer, loadingTimer;
-    var hits = [], loaded = 0, renderedQuery = '', opener, scrollY = 0;
+    var renderedQuery = '', opener, scrollY = 0;
     var keyboardOpen = false, locked = false;
-    var batchSize = 8;
     var mobile = window.matchMedia(MOBILE_QUERY);
 
     function query() { return input.value.trim().replace(/\s+/g, ' '); }
@@ -269,15 +267,14 @@
     function links() { return Array.from(results.querySelectorAll('a')); }
     function busy(value) {
       results.setAttribute('aria-busy', String(value));
-      more.disabled = value;
     }
     function reset() {
       clearTimeout(loadingTimer);
       status.classList.add('search-sr-only');
       status.textContent = '';
-      hits = []; loaded = 0; renderedQuery = '';
+      renderedQuery = '';
       results.replaceChildren();
-      more.hidden = true; retry.hidden = true;
+      retry.hidden = true;
       busy(false);
     }
     function loadEngine() {
@@ -335,27 +332,23 @@
       link.append(snippet); item.append(link);
       return item;
     }
-    async function appendBatch(ticket, focusNew) {
-      var start = loaded;
+    async function showResults(hits, ticket) {
       busy(true);
-      var data = await Promise.all(hits.slice(start, start + batchSize).map(function (hit) { return hit.data(); }));
+      var data = await Promise.all(hits.map(function (hit) { return hit.data(); }));
       if (ticket !== generation || !dialog.open) return;
-      var firstNew;
+      var fragment = document.createDocumentFragment();
       data.forEach(function (record) {
         var item = result(record);
-        if (item) { if (!firstNew) firstNew = item.querySelector('a'); results.append(item); }
+        if (item) fragment.append(item);
       });
-      loaded += data.length;
-      more.hidden = loaded >= hits.length;
+      results.replaceChildren(fragment);
       busy(false);
       status.classList.add('search-sr-only');
       status.textContent = t('searchCount', 'Results: {count}').replace('{count}', String(hits.length));
-      if (focusNew && firstNew) firstNew.focus({ preventScroll: true });
-      if (focusNew && firstNew) firstNew.scrollIntoView({ block: 'nearest' });
     }
     function failed(ticket) {
       if (ticket !== generation || !dialog.open) return;
-      clearTimeout(loadingTimer); busy(false); more.hidden = true; retry.hidden = false;
+      clearTimeout(loadingTimer); busy(false); retry.hidden = false;
       message('searchError', 'Search is unavailable right now. Please try again.');
       engine = null; attempts++;
     }
@@ -376,8 +369,7 @@
         if (ticket !== generation || !dialog.open) return;
         var response = await api.search(text);
         if (ticket !== generation || !dialog.open) return;
-        hits = response.results;
-        if (hits.length) await appendBatch(ticket, false);
+        if (response.results.length) await showResults(response.results, ticket);
         else { busy(false); message('searchEmpty', 'Nothing found. Try different words or a shorter query.'); }
         if (ticket === generation) { clearTimeout(loadingTimer); renderedQuery = text; }
       } catch (error) { failed(ticket); }
@@ -445,7 +437,6 @@
     });
     input.addEventListener('compositionend', function () { clearTimeout(timer); timer = setTimeout(search, 140); });
     retry.addEventListener('click', search);
-    more.addEventListener('click', function () { var ticket = generation; appendBatch(ticket, true).catch(function () { failed(ticket); }); });
     dialog.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
       var first = links()[0];

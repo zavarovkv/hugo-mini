@@ -302,10 +302,10 @@
     }
   }
 
-  /* A fine rounded keyboard outline follows the same ink as the element. */
+  /* Keyboard focus shares the fine stroke and muted ink of link underlines. */
   @media screen {
     :focus-visible {
-      outline: 1px solid currentColor;
+      outline: var(--beauty-link-thickness) solid var(--beauty-link-decoration-color);
       outline-offset: var(--beauty-focus-offset);
       border-radius: 3px;
     }
@@ -314,6 +314,7 @@
     :focus-visible {
       outline-color: Highlight;
       outline-style: solid;
+      outline-width: 2px;
     }
   }
 
@@ -2099,13 +2100,13 @@
    supplies results; it ships no UI stylesheet into this page. */
 :root {
   --search-width: var(--width);
-  --search-placeholder: color-mix(in srgb, var(--color-muted) 85%, white);
+  --search-placeholder: color-mix(in srgb, var(--color-muted) 55%, var(--background-color));
   --search-highlight: color-mix(in srgb, var(--color-primary) 14%, transparent);
   --search-hover: color-mix(in srgb, var(--color-primary) 5%, var(--background-color));
 }
 .search-toggle[hidden], .search-dialog [hidden] { display: none !important; }
 .search-toggle { font: inherit; min-block-size: 0; }
-.search-toggle:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; border-radius: 3px; }
+.search-toggle:focus-visible { outline-offset: 3px; border-radius: 3px; }
 .search-toggle.search-pointer-focus:focus { outline: none; }
 .search-toggle-mobile {
   background: transparent;
@@ -2136,17 +2137,12 @@ body.search-open { position: fixed; inset-inline: 0; }
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
-  scroll-padding-block-start: 100px;
   font: var(--font-weight-body) 18px/1.55 var(--font-main);
 }
 .search-dialog::backdrop { background: var(--background-color); }
 .search-dialog[open] { display: block; }
 .search-panel { display: flex; flex-direction: column; min-width: 0; width: 100%; max-width: calc(var(--search-width) + 40px); margin-inline: auto; min-height: 100%; }
 .search-form {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--background-color);
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) 44px;
   align-items: center;
@@ -2178,7 +2174,8 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-dialog .search-close:hover { color: var(--text-color); }
 .search-close svg { display: block; width: 24px; height: 24px; }
 @media (min-width: 769px) {
-  .search-dialog .search-close { color: var(--color-muted); transition: color 0.2s ease, transform 0.15s ease; }
+  .search-form { grid-template-columns: 28px minmax(0, 1fr) 28px; }
+  .search-dialog .search-close { width: 28px; height: 28px; min-height: 28px; min-block-size: 0; padding: 2px; color: var(--color-muted); transition: color 0.2s ease, transform 0.15s ease; }
   .search-dialog .search-close:is(:hover, :focus-visible) { color: var(--color-accent); }
   .search-dialog .search-close:active { transform: scale(0.95); }
 }
@@ -2202,7 +2199,7 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-result-section { display: block; margin-top: 4px; font-size: 14px; line-height: 1.5; color: var(--color-muted); }
 .search-result-excerpt { display: block; margin-top: 8px; font-size: 16px; line-height: 1.6; }
 .search-result mark { background: var(--search-highlight); color: inherit; padding: 0; border-radius: 2px; font-weight: var(--font-weight-medium); }
-.search-dialog :is(.search-more, .search-retry) { display: block; margin: 12px auto 0; color: var(--color-primary); font-size: 16px; }
+.search-dialog .search-retry { display: block; margin: 12px auto 0; color: var(--color-primary); font-size: 16px; }
 .search-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 768px) {
   .main-nav .search-toggle-mobile {

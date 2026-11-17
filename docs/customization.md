@@ -47,7 +47,7 @@ Shared native typography belongs to [Beauty.css](vendor-assets.md#beautycss-foun
 
 | Element | Default treatment |
 | --- | --- |
-| Keyboard focus | 1 px solid outline in the element's color, 3 px rounded corners; 4 px `--beauty-focus-offset` |
+| Keyboard focus | Same 0.5 px stroke and muted color as link underlines, 3 px rounded corners; 4 px `--beauty-focus-offset`. Forced colors retain a 2 px system outline. |
 | Forced-color mode | Solid system `Highlight` outline |
 | Heading shortcuts / print | No outline; returning to Tab restores keyboard focus indication |
 | Language, theme, desktop search | No container border/background, including on hover |

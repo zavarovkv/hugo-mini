@@ -4,14 +4,14 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('#search-query')).toBeFocused();
     if (query) await page.locator('#search-query').fill(query);
   }
-  test('search loads lazily, ranks article sections, paginates and honors exclusions', async ({page}) => {
+  test('search loads lazily, ranks article sections, shows every result and honors exclusions', async ({page}) => {
     const requests = [];
     page.on('request', r => { if(r.url().includes('/pagefind/')) requests.push(r.url()); });
     await page.goto('/browser-checks/');
     expect(requests).toEqual([]);
     await open(page, 'orchidquartz');
     const links = page.locator('.search-result');
-    await expect(links).toHaveCount(8);
+    await expect(links).toHaveCount(11);
     await expect(page.locator('.search-content')).toHaveCSS('overflow-y','visible');
     await expect(page.locator('dialog')).toHaveCSS('overflow-y','auto');
     await expect(page.locator('dialog')).toHaveCSS('height',`${await page.evaluate(()=>innerHeight)}px`);
@@ -20,10 +20,10 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.search-status')).toContainText('11');
     await expect(links.first().locator('mark')).toContainText('orchidquartz');
     await expect(links.first()).toHaveAttribute('href', /\/search-\d+\/#matching-section$/);
-    await page.locator('.search-more').click();
-    await expect(links).toHaveCount(11);
-    await expect(links.nth(8)).toBeFocused();
-    await expect(page.locator('.search-more')).toBeHidden();
+    await expect(page.locator('.search-more')).toHaveCount(0);
+    await expect(page.locator('#search-query')).toBeFocused();
+    await links.last().scrollIntoViewIfNeeded();
+    expect((await page.locator('.search-form').boundingBox()).y).toBeLessThan(0);
     await page.locator('#search-query').fill('"exclusionquartz"');
     await expect(page.locator('.search-status')).toContainText(site ? 'Ничего не найдено' : 'Nothing found');
     await expect(links).toHaveCount(0);
@@ -54,7 +54,7 @@ export function searchContracts({test, expect, site = false}) {
     const scroll = await page.evaluate(()=>scrollY);
     await open(page, 'orchidquartz');
     const input = page.locator('#search-query');
-    await expect(page.locator('.search-result')).toHaveCount(8);
+    await expect(page.locator('.search-result')).toHaveCount(11);
     await page.keyboard.press('ArrowDown');
     await expect(page.locator('.search-result').first()).toBeFocused();
     await page.keyboard.press('ArrowUp');
@@ -90,7 +90,7 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.search-retry')).toBeVisible();
     unavailable=false;
     await page.locator('.search-retry').click();
-    await expect(page.locator('.search-result')).toHaveCount(8);
+    await expect(page.locator('.search-result')).toHaveCount(11);
     await expect(page.locator('.search-retry')).toBeHidden();
   });
 
@@ -124,7 +124,7 @@ export function searchContracts({test, expect, site = false}) {
     });
     await page.goto(baseURL + '/nested/browser-checks/');
     await open(page, 'orchidquartz');
-    await expect(page.locator('.search-result')).toHaveCount(8);
+    await expect(page.locator('.search-result')).toHaveCount(11);
     await expect(page.locator('.search-result').first()).toHaveAttribute('href', /\/nested\/search-\d+\/#matching-section$/);
   });
 
@@ -144,12 +144,12 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.mobile-menu-toggle')).toHaveAttribute('aria-expanded','false');
     await expect(page.locator('#search-query')).toBeFocused();
     await page.locator('#search-query').fill('orchidquartz');
-    await expect(page.locator('.search-result')).toHaveCount(8);
+    await expect(page.locator('.search-result')).toHaveCount(11);
     for(const height of [640,320,640]) {
       await page.setViewportSize({width:320,height});
       await expect.poll(()=>page.locator('dialog').evaluate(el=>Math.round(el.getBoundingClientRect().height))).toBe(height);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-      await page.locator('.search-more').click({trial:true});
+      await page.locator('.search-result').last().click({trial:true});
       await page.locator('.search-close').click({trial:true});
     }
     await page.locator('.search-close').click();
