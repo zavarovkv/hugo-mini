@@ -173,17 +173,11 @@ other = "Закрыть"
 [search_results]
 other = "Результаты поиска"
 
-[search_retry]
-other = "Попробовать снова"
-
 [search_loading]
 other = "Ищем…"
 
 [search_empty]
 other = "Ничего не нашлось"
-
-[search_error]
-other = "Сейчас поиск недоступен. Попробуйте еще раз."
 
 [search_count]
 other = "Найдено: {count}"

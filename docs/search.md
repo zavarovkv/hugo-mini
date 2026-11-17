@@ -96,6 +96,8 @@ The site's existing JSON Feed is independent of this index.
   list is ready. Slower searches animate the thin divider instead of displaying
   loading text; reduced motion keeps that indicator static.
 - Search fills the screen; its contents follow the blog column. Mobile adapts to the on-screen keyboard.
+- Failed downloads use the ordinary centered empty state, with no error message
+  or retry button. Editing, pressing Enter or reopening retries the unfinished query.
 - `showSearchButton = false` hides header triggers; keyboard shortcuts remain available.
 - Override `search_*` strings in your site's `i18n/`. English and Russian are bundled.
 - Theme CSS exposes `--search-width`, `--search-placeholder`, `--search-highlight`,
@@ -108,3 +110,7 @@ to allow local modules/fetches, WebAssembly compilation (`'wasm-unsafe-eval'`)
 and Pagefind workers (`worker-src 'self' blob:`).
 For language support and hosting details, see [Pagefind's multilingual guide](https://pagefind.app/docs/multilingual/)
 and [hosting troubleshooting](https://pagefind.app/docs/hosting/).
+
+If known content returns an empty state locally, check that
+`/pagefind/pagefind-entry.json` returns JSON, not a 404. Restart with `npm run dev`
+and wait for **Search index updated**; plain `hugo server` does not generate an index.

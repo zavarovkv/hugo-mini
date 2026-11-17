@@ -87,16 +87,19 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.search-toggle-desktop')).toBeFocused();
   });
 
-  test('a failed module download offers a working retry', async ({page}) => {
+  test('a failed module download shows an empty state and Enter recovers', async ({page}) => {
     let unavailable=true;
     await page.route('**/pagefind/pagefind.js*', route=>unavailable ? route.abort() : route.continue());
     await page.goto('/browser-checks/');
     await open(page, 'orchidquartz');
-    await expect(page.locator('.search-retry')).toBeVisible();
+    await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
+    await expect(page.locator('.search-status')).toHaveClass(/search-empty/);
+    await expect(page.locator('.search-result, .search-retry')).toHaveCount(0);
+    await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
     unavailable=false;
-    await page.locator('.search-retry').click();
+    await page.locator('#search-query').press('Enter');
     await expect(page.locator('.search-result')).toHaveCount(11);
-    await expect(page.locator('.search-retry')).toBeHidden();
+    await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
   });
 
   test('a result on the current page closes search before following its section link', async ({page}) => {
@@ -115,11 +118,55 @@ export function searchContracts({test, expect, site = false}) {
     await page.route(`**/pagefind/**/${asset}`, route => unavailable ? route.abort() : route.continue());
     await page.goto('/browser-checks/');
     await open(page, 'orchidquartz');
-    await expect(page.locator('.search-retry')).toBeVisible();
+    await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
+    await expect(page.locator('.search-result, .search-retry')).toHaveCount(0);
+    await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
     unavailable = false;
-    await page.locator('.search-retry').click();
+    if (asset === 'pagefind-entry.json*') {
+      await page.locator('#search-query').fill('orchidquartz collection');
+    } else if (asset === '*.pf_meta') {
+      await page.keyboard.press('Escape');
+      await page.keyboard.press('Control+k');
+    } else await page.locator('#search-query').press('Enter');
     await expect(page.locator('.search-result')).toHaveCount(11);
-    await expect(page.locator('.search-retry')).toBeHidden();
+    await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
+  });
+
+  test('failures clear obsolete results, preserve focus and do not poison later queries', async ({page}) => {
+    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
+      window.searchCalls = window.searchCalls || [];
+      export async function options() {}
+      export async function search(query) {
+        window.searchCalls.push(query);
+        if (query === 'failed' || query === 'late failure') {
+          await new Promise((resolve,reject)=>{ window.failSearch = ()=>reject(new Error('Unavailable index')); });
+        }
+        return {results:[{data:async()=>({url:'/search-1/',meta:{title:query},excerpt:'Matching article'})}]};
+      }
+    `}));
+    await page.goto('/browser-checks/');
+    await open(page, 'initial');
+    await expect(page.locator('.search-result-title')).toHaveText('initial');
+    const input = page.locator('#search-query');
+    await input.fill('failed');
+    await expect.poll(()=>page.evaluate(()=>window.searchCalls)).toEqual(['initial','failed']);
+    await input.press('ArrowDown');
+    await expect(page.locator('.search-result')).toBeFocused();
+    await page.evaluate(()=>window.failSearch());
+    await expect(page.locator('.search-result')).toHaveCount(0);
+    await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
+    await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
+    await expect(input).toBeFocused();
+    // Returning to the last successful text must search again, not reuse the
+    // now-cleared list. A late failure must not clear a newer successful query.
+    await input.fill('initial');
+    await expect(page.locator('.search-result-title')).toHaveText('initial');
+    await input.fill('late failure');
+    await expect.poll(()=>page.evaluate(()=>window.searchCalls.at(-1))).toBe('late failure');
+    await input.fill('newest');
+    await expect(page.locator('.search-result-title')).toHaveText('newest');
+    await page.evaluate(()=>window.failSearch());
+    await expect(page.locator('.search-result-title')).toHaveText('newest');
   });
 
   test('late responses cannot replace a newer query and snippets cannot inject markup', async ({page}) => {

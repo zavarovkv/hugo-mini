@@ -27,6 +27,8 @@ Set `params.search = true` and install the [Pagefind build setup](https://github
 
 Open the magnifier or press `Cmd/Ctrl+K`. Results stay in the current language and update after a short typing pause; all matches scroll with the field. Queries stay in the browser.
 
+Unavailable search shows the same empty state as no matches. Editing the query, pressing Enter or reopening search tries again without a separate error screen.
+
 ## Categories
 
 Posts can be grouped by categories using front matter:

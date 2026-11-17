@@ -252,7 +252,6 @@
     var input = dialog.querySelector('input');
     var results = dialog.querySelector('.search-results');
     var status = dialog.querySelector('.search-status');
-    var retry = dialog.querySelector('.search-retry');
     var source = dialog.getAttribute('data-pagefind-src');
     var engine, attempts = 0, generation = 0, timer, loadingTimer;
     var renderedQuery = '', opener, scrollY = 0;
@@ -277,7 +276,6 @@
       status.classList.add('search-sr-only');
       status.classList.remove('search-empty');
       status.textContent = '';
-      retry.hidden = true;
     }
     function reset() {
       clearStatus();
@@ -293,10 +291,9 @@
     }
     function prepareSearch() {
       // An empty result is also a completed state: keep it steady while the
-      // next query loads, just as we keep an existing list. Clear only errors
-      // and announcements that would otherwise describe the previous query.
+      // next query loads, just as we keep an existing list. Clear announcements
+      // that would otherwise describe the previous query.
       if (!status.classList.contains('search-empty')) clearStatus();
-      retry.hidden = true;
     }
     function loadEngine() {
       if (!engine) {
@@ -370,9 +367,14 @@
     }
     function failed(ticket) {
       if (ticket !== generation || !dialog.open) return;
-      busy(false); retry.hidden = false;
-      message('searchError', 'Search is unavailable right now. Please try again.');
+      var focused = results.contains(document.activeElement);
+      // Failure has the same quiet presentation as an empty result, but is not
+      // cached as a completed query: Enter, editing or reopening can try again.
+      reset();
+      message('searchEmpty', 'Nothing found');
       engine = null; attempts++;
+      if (focused) input.focus({ preventScroll: true });
+      dialog.scrollTop = 0;
     }
     async function search() {
       clearTimeout(timer);
@@ -431,7 +433,7 @@
       dialog.showModal(); viewport();
       input.focus({ preventScroll: true });
       if (input.value) input.select();
-      loadEngine().catch(function () { /* Surface failures only when searching. */ });
+      loadEngine().catch(function () { /* A submitted query handles unavailable assets. */ });
       if (query() && query() !== renderedQuery) search();
     }
     document.querySelectorAll('.search-toggle').forEach(function (button) {
@@ -482,7 +484,6 @@
       generation++; clearTimeout(timer); clearTimeout(loadingTimer);
     });
     input.addEventListener('compositionend', function () { composing = false; schedule(); });
-    retry.addEventListener('click', search);
     dialog.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
       if (composing) return;
