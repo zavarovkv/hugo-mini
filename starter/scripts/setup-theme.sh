@@ -2,7 +2,7 @@
 # Install and verify an exact reviewed Hugo Mini revision.
 set -euo pipefail
 
-theme_sha="6c4aa8d8e74d504249aae93489ab9f186d674426"
+theme_sha="6b4acce973ce0607df41c9a712d8c897c2b9d635"
 root_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 theme_dir="${root_dir}/themes/hugo-mini"
 
