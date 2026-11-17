@@ -15,6 +15,7 @@ owns native text styling. Override tokens instead of copying base selectors.
 | Reading column | Up to 720 px | Available width |
 | Body text / leading | 18/28 px | 19/29 px |
 | H1 | 44 px | 32 px |
+| Homepage H1 | 36 px | 32 px |
 | Header to H1 | 48 px | 40 px |
 | H1 to content | 32 px | 28 px |
 | Article H2 | Theme heading scale | 24 px |
@@ -23,6 +24,7 @@ owns native text styling. Override tokens instead of copying base selectors.
 | Footnotes / leading | 15/24 px | 16/25.6 px |
 | Language label | 12 px | 12 px |
 | New badge | 11 px | 11 px |
+| Content to site footer (`--footer-gap`) | 112 px | 88 px |
 
 Short and multiline titles share the same rhythm. The 404 page uses the same
 reading/header scale; its ASCII illustration has an independent monospace size.
@@ -37,6 +39,9 @@ Visible titles are escaped before language formatting. `typography = false` also
 disables that formatting; metadata, feeds and URLs stay unchanged. Whole validated
 ISO-date table cells receive `<time>` and stay on one line. Bookshelves retain
 [their local scrolling and 20em minimum](homepage.md#table-layout).
+
+Thematic breaks use `--beauty-rule-margin: 2rem 1rem`: 32 px before the rule
+and 16 px after it. Menu and search-row dividers retain symmetric spacing.
 
 ## Headings
 
@@ -78,7 +83,7 @@ All quotation variants share geometry and the configured quote face:
 | Attribution alignment | `--beauty-quote-attribution-align: end`, muted color |
 | Opening mark | Scale 1.4, `--beauty-hanging-gap: 0.08em` |
 | Attribution dash gap | `0.125em`, beside the signature rather than in the gutter |
-| Footer after a final quotation | `--footer-quotation-gap`: 88 px instead of 56 px |
+| Footer after a final quotation | `--footer-quotation-gap`: 176 px desktop, 128 px mobile |
 | Author statement (`beauty-lead`) | `--beauty-lead-margin-block`: 32 px before, 48 px after |
 
 Attributions wrap within the quote width; native `blockquote footer` and captions

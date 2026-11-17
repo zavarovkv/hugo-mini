@@ -29,6 +29,22 @@ Place this shortcode in your homepage `_index.md`:
 To show recent articles by date instead, use `latest-posts count="3"`.
 Both shortcodes support the same optional archive link.
 
+## Columns
+
+`columns` stacks blocks on mobile and places them side by side above 768 px.
+Use `ratio="3:2"` for 60/40, `ratio="2:3"` for 40/60, or omit it for equal columns:
+
+{{< columns ratio="3:2" >}}
+{{< column >}}
+### Articles {.posts-group-title .no-anchor}
+Give the primary content more width, so longer article titles wrap less.
+{{< /column >}}
+{{< column >}}
+### Projects {.posts-group-title .no-anchor}
+Keep supporting descriptions compact.
+{{< /column >}}
+{{< /columns >}}
+
 ## Wide images
 
 Choose `wide=true` to let an illustration expand to the right of the text column, up to 960 px.

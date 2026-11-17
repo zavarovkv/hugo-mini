@@ -96,6 +96,8 @@ The site's existing JSON Feed is independent of this index.
   list is ready. Slower searches animate the thin divider instead of displaying
   loading text; reduced motion keeps that indicator static.
 - Search fills the screen; its contents follow the blog column. Mobile adapts to the on-screen keyboard.
+- The empty message is centered horizontally, with the space below the field
+  split 1:2 above and below the message.
 - Failed downloads use the ordinary centered empty state, with no error message
   or retry button. Editing, pressing Enter or reopening retries the unfinished query.
 - `showSearchButton = false` hides header triggers; keyboard shortcuts remain available.

@@ -1,3 +1,7 @@
-<div class="content-columns">
+{{- $ratio := .Get "ratio" | default "1:1" -}}
+{{- if not (in (slice "1:1" "3:2" "2:3") $ratio) -}}
+  {{- errorf "columns ratio must be 1:1, 3:2 or 2:3 (%s)" .Position -}}
+{{- end -}}
+<div class="content-columns"{{ if ne $ratio "1:1" }} data-columns-ratio="{{ $ratio }}"{{ end }}>
   {{ .Inner }}
 </div>

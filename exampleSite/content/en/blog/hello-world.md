@@ -93,7 +93,7 @@ func main() {
 
 ## Horizontal Rule
 
-Three dashes create a horizontal rule:
+Three dashes create a horizontal rule, with 32 px before it and 16 px after:
 
 ---
 

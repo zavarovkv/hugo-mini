@@ -42,11 +42,13 @@ see the [documentation](docs/README.md); released entries below remain historica
 - **Headings and prose:** retain balanced page titles and natural section-title wrapping; add LTR optical alignment and dictionary hyphenation up to 360 px. Format visible titles/article links without changing metadata or URLs. Darken light body text to `#333`.
 - **Editorial rhythm:** share quotation measure, spacing, opening-mark scale and attribution treatment; enlarge the footer gap after a final quotation. Give author statements 32/48 px screen spacing and drop caps two-line wrapping with a quarter-line rise and descender clearance.
 - **Notes, lists and tables:** use Beauty's shared typography and compatibility adapter. Footnotes have independent 15/24 px desktop and 16/25.6 px mobile scale; ordinary lists use 14 px gaps and responsive indentation. Keep table-header rhythm, semantic ISO dates and local keyboard-accessible scrolling.
-- **Homepage modules:** use the title face for the introduction, 64 px before desktop columns, and shared 8/12/24 px detail/item/group gaps. Align module headings, retain native paragraph flow and let list titles wrap naturally.
+- **Homepage modules:** give the introduction a 36/32 px desktop/mobile title, 64 px before desktop columns, and shared 8/12/24 px detail/item/group gaps. Optional `columns ratio="3:2"` or `"2:3"` prioritizes one column; the default remains equal and mobile stacks in source order.
 - **Reading shelves:** tie record spacing to paragraph rhythm, retain a 20em locally scrolling mobile table and apply prose typography without changing metadata.
 - **Links and arrows:** use the actual bold role for project names, shared fine SVG archive/project arrows and motion-aware 300 ms hover/focus movement. Refine the inline date-range arrow and bring wavy emphasis closer to text.
 - **Mobile navigation:** replace the hamburger with an animated four-dot control, keep a 44 px touch target and use 20 px menu labels with generous rows. Support wrapped labels and enlarged text without horizontal overflow.
-- **Controls and footer:** use a fine rounded keyboard outline matching link underlines and forced-color fallbacks; remove control borders/backgrounds, preserve icon/accent colors and restore brand hover/focus colors in dark mode. Footer margins collapse in normal flow; social icons use 17/22 px desktop/mobile sizes.
+- **Controls and footer:** use a fine rounded keyboard outline matching link underlines and forced-color fallbacks; remove control borders/backgrounds, preserve icon/accent colors and restore brand hover/focus colors in dark mode. Use 112/88 px desktop/mobile footer gaps, or 176/128 px after a final quotation, with collapsing margins in normal flow; social icons use 17/22 px sizes.
+- **Thematic breaks:** give prose rules 32 px above and 16 px below through Beauty's spacing token, preserving the symmetric dividers in menus and search lists.
+- **Empty search:** balance the message below the field with one part of free space above and two below, adapting to the available screen height.
 - **Compact metadata:** use 12 px language labels and 11 px green New/Нов. badges. Group post metadata/sharing at 16 px, separated from the article and comments by 32 px; missing widgets leave no empty gaps.
 - **Asset/layout isolation:** content-version local logos, avatars, project marks and favicons; reserve desktop scrollbar space. Scope header/menu rules and legacy Beauty aliases without duplicating native styles.
 - **CI and starter:** use SHA-pinned Node.js 24 actions without persisted checkout credentials. Pin the starter to a verified theme revision and honor explicit canonical domains or configured baseURL.
@@ -54,6 +56,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Fixed
 
+- Show the ordinary empty search state for failed downloads; remove error copy and retry controls. Enter, editing or reopening retries without leaving old results attached to a failed query.
 - Keep search results and empty states visible while typing and loading, debounce input, and replace the list only after the newest fragments arrive. A delayed, subtle divider animation replaces visible loading text and respects reduced motion.
 - Declare the desktop navigation transition before external styles load, preventing Chromium from intermittently skipping the menu fade. Mobile navigation and reduced motion remain immediate.
 - Reserve the search trigger before JavaScript loads so compact headers do not shift page content; align the search dialog with the page when classic scrollbars take up viewport space.

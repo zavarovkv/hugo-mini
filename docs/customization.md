@@ -174,8 +174,8 @@ empty icon also avoids an implicit `/favicon.ico` request.
 The default footer passes `params.social` and enables RSS. Reusing the partial keeps
 icons, language switching and color-scheme control.
 
-The outer `--section-gap-large` margin collapses with preceding block margins;
-a final quotation uses `--footer-quotation-gap`. Social icons use
+The outer `--footer-gap` margin (112 px desktop, 88 px mobile) collapses with preceding
+block margins; a final quotation uses `--footer-quotation-gap` (176/128 px). Social icons use
 `--footer-icon-size` (17 px), or `--footer-icon-size-small` (22 px) on mobile.
 Links are muted at rest and use brand colors on hover/focus; GitHub and X use a
 light active color in dark mode.

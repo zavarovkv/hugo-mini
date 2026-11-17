@@ -10,7 +10,7 @@ On multilingual sites, use each language's homepage file.
 ## Homepage introduction
 
 Begin with a native Markdown H1 and a short introduction. The heading uses the
-title typeface at 28 px on desktop and 24 px on mobile, with 24 px before the
+title typeface at 36 px on desktop and 32 px on mobile, with 24 px before the
 following text. Paragraphs use a compact 12 px interval.
 
 | Spacing token | Default | Used for |
@@ -88,11 +88,15 @@ Above 768 px, blocks form two equal columns; smaller screens stack them in sourc
 order. Each direct child block forms a column. `column` groups Markdown and nested
 shortcodes into one block; post-list shortcodes already produce one block.
 
+For unequal columns, use `columns ratio="3:2"` (60/40) or `ratio="2:3"` (40/60).
+The default is `1:1`. Ratios divide the space remaining after the gutter; mobile
+keeps a single column and the original reading order.
+
 | Control | Purpose |
 | --- | --- |
 | `--columns-gap` | Horizontal separation |
 | `--section-gap` | Space after and between stacked blocks |
-| `--section-gap-large` | Larger section/footer separation |
+| `--section-gap-large` | Larger separation before modules |
 | `.posts-group-title` | Compact module heading with `--content-item-gap` before its content |
 | `.no-anchor` | Omit a heading's copy link while keeping its ID |
 

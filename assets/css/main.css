@@ -84,7 +84,8 @@
     --section-gap: 2.5em;
     --section-gap-large: 3.5rem;
     --post-footer-gap: 2rem;
-    --footer-quotation-gap: 5.5rem;
+    --footer-gap: 7rem;
+    --footer-quotation-gap: 11rem;
     --footer-icon-size: 17px;
     --footer-icon-size-small: 22px;
     --article-wide-width: 60rem;
@@ -182,7 +183,7 @@
     --beauty-code-radius: 3px;
     --beauty-pre-padding: 16px 20px;
     --beauty-pre-radius: 6px;
-    --beauty-rule-margin: 0.5em;
+    --beauty-rule-margin: 2rem 1rem;
     --beauty-rule-border: 1px dashed var(--color-rule);
     --beauty-callout-background: var(--color-callout-bg);
     --beauty-callout-border: 1px solid var(--heading-color);
@@ -700,7 +701,7 @@
   /* Footer */
   body > footer {
     /* Adjacent content margins collapse into this gap instead of adding to it. */
-    margin-block-start: var(--section-gap-large);
+    margin-block-start: var(--footer-gap);
     border-block-start: 0;
     font-size: 0.875em;
     font-weight: var(--font-weight-body);
@@ -713,6 +714,12 @@
   @media screen {
     body > main:has(> article:last-child > .beauty-quotation:last-child) + footer {
       margin-block-start: var(--footer-quotation-gap);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    :root {
+      --footer-gap: 5.5rem;
+      --footer-quotation-gap: 8rem;
     }
   }
 
@@ -1300,12 +1307,16 @@
     cursor: default;
   }
 
-  /* Homepage titles keep the shared H1 face at a restrained reading scale. */
+  /* The homepage has one display accent; module headings retain reading size. */
   .home-content {
     --beauty-space: var(--content-item-gap);
-    --beauty-h1-size: 1.75rem;
-    --beauty-h1-size-small: 1.5rem;
-    --beauty-h1-margin: 0 var(--content-group-gap);
+  }
+  @media screen {
+    .home-content {
+      --beauty-h1-size: 2.25rem;
+      --beauty-h1-size-small: 2rem;
+      --beauty-h1-margin: 0 var(--content-group-gap);
+    }
   }
   @media screen and (min-width: 769px) {
     .home-content { --section-gap-large: 4rem; }
@@ -1353,6 +1364,8 @@
   .content-columns > * > :last-child { margin-bottom: 0; }
   @media (min-width: 769px) {
     .content-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .content-columns[data-columns-ratio="3:2"] { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+    .content-columns[data-columns-ratio="2:3"] { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
   }
 
   .loading-skeleton {
@@ -2189,8 +2202,13 @@ body.search-open { position: fixed; inset-inline: 0; }
   .search-dialog .search-close:active { transform: scale(0.95); }
 }
 .search-content { padding: 0 8px 20px; }
+.search-content:has(> .search-empty) { display: flex; flex: 1; flex-direction: column; padding-block: 0; }
+/* Divide the space below the field into one part above the message and two below. */
+.search-content:has(> .search-empty)::before,
+.search-content:has(> .search-empty)::after { content: ""; flex: 1 0 var(--content-group-gap); }
+.search-content:has(> .search-empty)::after { flex: 2 0 calc(2 * var(--content-group-gap)); }
 .search-status { color: var(--color-muted); margin: 0; padding: 20px 12px 12px; font-size: 14px; line-height: 1.6; }
-.search-status.search-empty { margin-top: 48px; padding: 0 12px; color: var(--heading-color); text-align: center; font: var(--font-weight-title) clamp(1.625rem, 4vw, 2rem)/1.3 var(--font-title); }
+.search-status.search-empty { flex: none; padding: 0 12px; color: var(--heading-color); text-align: center; font: var(--font-weight-title) clamp(1.625rem, 4vw, 2rem)/1.3 var(--font-title); }
 .search-results { list-style: none; padding: 0; margin: 0; }
 .search-results > li { margin: 0; padding: 0; }
 .search-results > li + li { border-top: 1px solid var(--color-divider); }
@@ -2208,7 +2226,6 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-result-section { display: block; margin-top: 4px; font-size: 14px; line-height: 1.5; color: var(--color-muted); }
 .search-result-excerpt { display: block; margin-top: 8px; font-size: 16px; line-height: 1.6; }
 .search-result mark { background: var(--search-highlight); color: inherit; padding: 0; border-radius: 2px; font-weight: var(--font-weight-medium); }
-.search-dialog .search-retry { display: block; margin: 12px auto 0; color: var(--color-primary); font-size: 16px; }
 .search-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 768px) {
   .main-nav .search-toggle-mobile {
