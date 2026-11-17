@@ -38,3 +38,5 @@ sequenceDiagram
   Alice->>Bob: Review
   Bob-->>Alice: Approved
 {{< /mermaid >}}
+
+<p><a class="button beauty-button" href="/">Read articles</a></p>

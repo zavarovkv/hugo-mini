@@ -51,12 +51,12 @@
 {{ end }}
 
 /* === Design tokens ===
-   Every colour, the content width and the type stack are declared here as
-   custom properties. This block is the light palette; the dark palette
+   Shared colours, layout dimensions and type roles use custom properties.
+   This block is the light palette; the dark palette
    overrides the same names under [data-theme="dark"] further down.
 
    To restyle the theme, configure these variables in your own stylesheet.
-   The full list is documented under "Customization" in the README. */
+   See docs/customization.md for the supported extension points. */
 :root {
     /* Layout & type */
     --width: 720px;
@@ -99,6 +99,10 @@
     --color-muted: #6b737b;
     --color-secondary: #556677;
     --color-badge-new: #228218;
+    --color-success: #2b8a3e;
+    --color-button-start: #c24b16;
+    --color-button-end: #bf3030;
+    --color-button-text: #fff;
 
     /* Lines & borders */
     --color-divider: #e5e5e5;
@@ -461,8 +465,8 @@
     padding: 0;
     border: none;
     border-radius: 5px;
-    background: rgba(0, 0, 0, 0.06);
-    color: rgba(0, 0, 0, 0.35);
+    background: color-mix(in srgb, var(--text-color) 6%, transparent);
+    color: var(--color-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -477,18 +481,7 @@
   }
 
   .copy-btn:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  [data-theme="dark"] .copy-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  [data-theme="dark"] .copy-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: rgba(255, 255, 255, 0.9);
+    background: color-mix(in srgb, var(--text-color) 10%, transparent);
   }
 
   .copy-btn svg {
@@ -498,7 +491,7 @@
   }
 
   .copy-btn.copied {
-    color: #4ade80;
+    color: var(--color-success);
   }
 
   .copy-btn.copied svg {
@@ -684,6 +677,7 @@
     --heading-color: #e8e8e8;
     --text-color: #c7ccd1;
     --color-secondary: var(--color-muted);
+    --color-success: #4ade80;
     --color-divider: #2a2a2a;
     --color-rule: #333;
     --color-callout-bg: #252018;
@@ -1239,7 +1233,7 @@
        from the default `a:link` rules (same treatment as desktop). The
        only mobile-specific overrides are layout (full-width blocks with
        big tap padding) and the 1px grey dividers between items — those
-       replace the thin 0.25px link underline for a cleaner list look. */
+       replace the thin link underline for a cleaner list look. */
     .main-nav a {
       width: 100%;
       box-sizing: border-box;
@@ -1578,12 +1572,12 @@
   .button:visited {
     display: inline-block;
     padding: 12px 24px;
-    --beauty-button-font: {{ if $fonts.custom }}var(--font-weight-bold){{ else }}700{{ end }} 16px/22px var(--font-secondary);
-    background: linear-gradient(180deg, #f88040 0%, #e04040 100%);
+    --beauty-button-font: var(--font-weight-bold) 1rem/1.375 var(--font-secondary);
+    background: linear-gradient(180deg, var(--color-button-start), var(--color-button-end));
     border: 0;
     border-bottom: none;
     border-radius: 4px;
-    color: #fff;
+    color: var(--color-button-text);
     cursor: pointer;
     transition: .33s ease-out;
     text-decoration: none;
@@ -1591,7 +1585,7 @@
 
   .button:hover {
     box-shadow: inset 0 0 100px rgba(0, 0, 0, .08);
-    color: #fff;
+    color: var(--color-button-text);
     border-bottom: none;
     transition: none;
   }
@@ -1600,7 +1594,7 @@
   [data-theme="dark"] .button:link,
   [data-theme="dark"] .button:visited,
   [data-theme="dark"] .button:hover {
-    color: #fff;
+    color: var(--color-button-text);
     border-bottom-color: transparent;
   }
 

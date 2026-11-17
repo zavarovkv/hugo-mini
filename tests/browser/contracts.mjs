@@ -51,6 +51,65 @@ export function layoutContracts(test, expect) {
   });
 
   for (const scheme of ['light', 'dark']) {
+    test(`action text and copy feedback remain readable (${scheme})`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'clipboard', { value: {
+          writeText: async text => { window.copiedCode = text; },
+        } });
+      });
+      await page.goto('/browser-checks/');
+      const copy = page.locator('.copy-btn').first();
+      await copy.focus();
+      const contrasts = () => page.evaluate(() => {
+        const context = document.createElement('canvas').getContext('2d');
+        function rgba(value) {
+          context.clearRect(0, 0, 1, 1);
+          context.fillStyle = value;
+          context.fillRect(0, 0, 1, 1);
+          return [...context.getImageData(0, 0, 1, 1).data].map((n, i) => i === 3 ? n / 255 : n);
+        }
+        const over = (fg, bg) => fg.slice(0, 3).map((v, i) => v * fg[3] + bg[i] * (1 - fg[3]));
+        function luminance(rgb) {
+          return rgb.slice(0, 3).reduce((sum, v, i) => {
+            v /= 255;
+            return sum + (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4) * [0.2126, 0.7152, 0.0722][i];
+          }, 0);
+        }
+        function ratio(a, b) {
+          const [low, high] = [luminance(a), luminance(b)].sort((x, y) => x - y);
+          return (high + 0.05) / (low + 0.05);
+        }
+        const action = getComputedStyle(document.querySelector('a.button'));
+        const stops = action.backgroundImage.match(/(?:rgba?|color)\([^)]*\)/g).map(rgba);
+        const gradient = Array.from({ length: 21 }, (_, i) => stops[0].map((v, n) => v + (stops[1][n] - v) * i / 20));
+        const button = document.querySelector('.copy-btn');
+        const style = getComputedStyle(button);
+        // Plain code can be transparent; composite its ancestors before the
+        // control fill so the check measures the page, not an implicit black.
+        const surfaces = [];
+        for (let node = button.parentElement; node; node = node.parentElement) {
+          surfaces.push(rgba(getComputedStyle(node).backgroundColor));
+        }
+        const backdrop = surfaces.reverse().reduce((background, color) => over(color, background), [255, 255, 255]);
+        const block = over(rgba(getComputedStyle(button.parentElement.querySelector('pre')).backgroundColor), backdrop);
+        const fill = over(rgba(style.backgroundColor), block);
+        return {
+          action: Math.min(...gradient.map(color => ratio(rgba(action.color), color))),
+          copy: ratio(over(rgba(style.color), fill), fill),
+        };
+      });
+      expect((await contrasts()).action).toBeGreaterThanOrEqual(4.5);
+      expect((await contrasts()).copy).toBeGreaterThanOrEqual(3);
+      await copy.hover();
+      expect((await contrasts()).copy).toBeGreaterThanOrEqual(3);
+      await copy.click();
+      await expect(copy).toHaveClass(/copied/);
+      // The fixture source stays identical with and without line numbers.
+      expect(await page.evaluate(() => window.copiedCode)).toBe('source()');
+      expect((await contrasts()).copy).toBeGreaterThanOrEqual(3);
+    });
+
     test(`wide tables scroll locally and fit paper (${scheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });
       await page.setViewportSize({ width: 390, height: 844 });
