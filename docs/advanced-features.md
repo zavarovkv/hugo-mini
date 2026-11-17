@@ -17,7 +17,8 @@ starting point, open the [documentation home](README.md).
 | Stable menu labels and transitions | [Menu transitions](customization.md#menu-transitions) |
 | Older/newer article shortcuts | [Article navigation](content.md#article-keyboard-navigation) |
 | Copyable anchors and click-to-align headings | [Heading controls](typography.md#heading-scroll-controls) |
-| Back-to-top and homepage magnifier | [Reading parameters](configuration.md#content-and-reading) |
+| Full-text search, snippets, keyboard and language support | [Pagefind search](search.md) |
+| Back-to-top | [Reading parameters](configuration.md#content-and-reading) |
 | Languages, translated links and AI labels | [Multilingual sites](configuration.md#multilingual-sites) |
 
 ## Articles and components

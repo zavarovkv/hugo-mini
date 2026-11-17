@@ -1,6 +1,6 @@
 /*
  * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
- * code-copy buttons, heading anchors, article shortcuts, wide blocks, side notes, back-to-top.
+ * search, code-copy buttons, heading anchors, article shortcuts, wide blocks, side notes, back-to-top.
  *
  * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
  * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
@@ -36,7 +36,7 @@
       }
     });
     if (selected) {
-      ['header', 'main', 'footer'].forEach(function (selector) {
+      ['header', 'main', 'footer', '#site-search'].forEach(function (selector) {
         var original = document.querySelector(selector);
         var translated = selected.content.querySelector(selector);
         if (original && translated) original.replaceWith(translated.cloneNode(true));
@@ -207,6 +207,7 @@
       document.documentElement.classList.add('menu-open');
     }
 
+    document.addEventListener('hugo-mini:close-menu', closeMenu);
     toggle.addEventListener('click', function () {
       if (nav.classList.contains('active')) closeMenu();
       else openMenu();
@@ -242,6 +243,250 @@
     nav.inert = mobileMql.matches;
     nav.classList.add('menu-ready');
     toggle.classList.add('menu-ready');
+  });
+
+  // ── Pagefind: on-demand, local search in the site's own typography ─────
+  ready(function initSearch() {
+    var dialog = document.getElementById('site-search');
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    var input = dialog.querySelector('input');
+    var results = dialog.querySelector('.search-results');
+    var status = dialog.querySelector('.search-status');
+    var more = dialog.querySelector('.search-more');
+    var retry = dialog.querySelector('.search-retry');
+    var source = dialog.getAttribute('data-pagefind-src');
+    var engine, attempts = 0, generation = 0, timer, loadingTimer;
+    var hits = [], loaded = 0, renderedQuery = '', opener, scrollY = 0;
+    var keyboardOpen = false, locked = false;
+    var batchSize = 8;
+    var mobile = window.matchMedia(MOBILE_QUERY);
+
+    function query() { return input.value.trim().replace(/\s+/g, ' '); }
+    function message(key, fallback) {
+      status.classList.remove('search-sr-only');
+      status.textContent = t(key, fallback);
+    }
+    function links() { return Array.from(results.querySelectorAll('a')); }
+    function busy(value) {
+      results.setAttribute('aria-busy', String(value));
+      more.disabled = value;
+    }
+    function reset() {
+      clearTimeout(loadingTimer);
+      status.classList.add('search-sr-only');
+      status.textContent = '';
+      hits = []; loaded = 0; renderedQuery = '';
+      results.replaceChildren();
+      more.hidden = true; retry.hidden = true;
+      busy(false);
+    }
+    function loadEngine() {
+      if (!engine) {
+        var url = new URL(source, location.href);
+        if (attempts) url.searchParams.set('retry', String(attempts));
+        engine = import(url.href).then(async function (api) {
+          await api.options({ excerptLength: 28 });
+          return api;
+        }).catch(function (error) { engine = null; attempts++; throw error; });
+      }
+      return engine;
+    }
+    function resultURL(value) {
+      try {
+        var url = new URL(value, location.href);
+        if (url.origin === location.origin && /^https?:$/.test(url.protocol)) return url.href;
+      } catch (e) { /* Ignore invalid index records. */ }
+      return null;
+    }
+    // Only Pagefind's <mark> nodes are retained. Titles and URLs never enter HTML.
+    function excerpt(node, html) {
+      var parsed = new DOMParser().parseFromString(String(html || ''), 'text/html');
+      function append(from, to) {
+        from.childNodes.forEach(function (child) {
+          if (child.nodeType === 3) to.append(document.createTextNode(child.textContent));
+          else if (child.nodeType === 1 && !/^(SCRIPT|STYLE|IFRAME|OBJECT)$/.test(child.tagName)) {
+            if (child.tagName === 'MARK') {
+              var mark = document.createElement('mark'); append(child, mark); to.append(mark);
+            } else append(child, to);
+          }
+        });
+      }
+      append(parsed.body, node);
+    }
+    function result(data) {
+      var section = data.sub_results && data.sub_results[0];
+      var href = resultURL(section && section.url || data.url);
+      if (!href) return null;
+      var item = document.createElement('li');
+      var link = document.createElement('a');
+      link.className = 'search-result'; link.href = href;
+      var title = document.createElement('span');
+      title.className = 'search-result-title';
+      title.textContent = data.meta.title || data.url;
+      link.append(title);
+      if (section && section.title && section.title !== data.meta.title) {
+        var heading = document.createElement('span');
+        heading.className = 'search-result-section'; heading.textContent = section.title;
+        link.append(heading);
+      }
+      var snippet = document.createElement('span');
+      snippet.className = 'search-result-excerpt';
+      excerpt(snippet, section && section.excerpt || data.excerpt);
+      link.append(snippet); item.append(link);
+      return item;
+    }
+    async function appendBatch(ticket, focusNew) {
+      var start = loaded;
+      busy(true);
+      var data = await Promise.all(hits.slice(start, start + batchSize).map(function (hit) { return hit.data(); }));
+      if (ticket !== generation || !dialog.open) return;
+      var firstNew;
+      data.forEach(function (record) {
+        var item = result(record);
+        if (item) { if (!firstNew) firstNew = item.querySelector('a'); results.append(item); }
+      });
+      loaded += data.length;
+      more.hidden = loaded >= hits.length;
+      busy(false);
+      status.classList.add('search-sr-only');
+      status.textContent = t('searchCount', 'Results: {count}').replace('{count}', String(hits.length));
+      if (focusNew && firstNew) firstNew.focus({ preventScroll: true });
+      if (focusNew && firstNew) firstNew.scrollIntoView({ block: 'nearest' });
+    }
+    function failed(ticket) {
+      if (ticket !== generation || !dialog.open) return;
+      clearTimeout(loadingTimer); busy(false); more.hidden = true; retry.hidden = false;
+      message('searchError', 'Search is unavailable right now. Please try again.');
+      engine = null; attempts++;
+    }
+    async function search() {
+      clearTimeout(timer);
+      var ticket = ++generation;
+      var text = query();
+      reset();
+      dialog.scrollTop = 0;
+      if (!text) return;
+      busy(true);
+      status.textContent = '';
+      loadingTimer = setTimeout(function () {
+        if (ticket === generation) message('searchLoading', 'Searching…');
+      }, 200);
+      try {
+        var api = await loadEngine();
+        if (ticket !== generation || !dialog.open) return;
+        var response = await api.search(text);
+        if (ticket !== generation || !dialog.open) return;
+        hits = response.results;
+        if (hits.length) await appendBatch(ticket, false);
+        else { busy(false); message('searchEmpty', 'Nothing found. Try different words or a shorter query.'); }
+        if (ticket === generation) { clearTimeout(loadingTimer); renderedQuery = text; }
+      } catch (error) { failed(ticket); }
+    }
+    function viewport() {
+      if (!dialog.open) return;
+      var vv = window.visualViewport;
+      if (mobile.matches && vv) {
+        dialog.style.setProperty('--search-viewport-height', vv.height + 'px');
+        dialog.style.setProperty('--search-viewport-top', vv.offsetTop + 'px');
+      } else {
+        dialog.style.removeProperty('--search-viewport-height');
+        dialog.style.removeProperty('--search-viewport-top');
+      }
+    }
+    function open(trigger, keyboard) {
+      if (dialog.open) { input.focus(); return; }
+      document.dispatchEvent(new Event('hugo-mini:close-menu'));
+      opener = trigger && trigger.classList.contains('search-toggle-mobile')
+        ? document.querySelector('.mobile-menu-toggle') : trigger || document.activeElement;
+      keyboardOpen = Boolean(keyboard);
+      scrollY = window.scrollY;
+      locked = true;
+      document.body.style.top = -scrollY + 'px';
+      document.documentElement.classList.add('search-open');
+      document.body.classList.add('search-open');
+      dialog.showModal(); viewport();
+      input.focus({ preventScroll: true });
+      if (input.value) input.select();
+      loadEngine().catch(function () { /* Surface failures only when searching. */ });
+      if (query() && !renderedQuery) search();
+    }
+    document.querySelectorAll('.search-toggle').forEach(function (button) {
+      button.hidden = false;
+      button.addEventListener('click', function (e) { open(button, e.detail === 0); });
+      button.addEventListener('blur', function () { button.classList.remove('search-pointer-focus'); });
+      button.addEventListener('keydown', function () { button.classList.remove('search-pointer-focus'); });
+    });
+    function restore() {
+      if (!locked || dialog.open) return;
+      locked = false;
+      generation++; clearTimeout(timer); clearTimeout(loadingTimer);
+      document.documentElement.classList.remove('search-open');
+      document.body.classList.remove('search-open');
+      document.body.style.top = '';
+      window.scrollTo({ top: scrollY, behavior: 'instant' });
+      if (opener && opener.isConnected) {
+        if (opener.matches('.search-toggle')) opener.classList.toggle('search-pointer-focus', !keyboardOpen);
+        opener.focus({ preventScroll: true });
+      }
+      if (results.getAttribute('aria-busy') === 'true') renderedQuery = '';
+      busy(false);
+    }
+    function close() { dialog.close(); restore(); }
+    dialog.querySelector('.search-close').addEventListener('click', close);
+    dialog.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
+    dialog.addEventListener('close', restore);
+    var backdropDown = false;
+    dialog.addEventListener('pointerdown', function (e) { backdropDown = e.target === dialog; });
+    dialog.addEventListener('click', function (e) { if (e.target === dialog && backdropDown) close(); });
+    input.addEventListener('input', function (e) {
+      generation++; clearTimeout(timer); clearTimeout(loadingTimer);
+      reset(); status.textContent = '';
+      if (query() && !e.isComposing) timer = setTimeout(search, 140);
+    });
+    input.addEventListener('compositionend', function () { clearTimeout(timer); timer = setTimeout(search, 140); });
+    retry.addEventListener('click', search);
+    more.addEventListener('click', function () { var ticket = generation; appendBatch(ticket, true).catch(function () { failed(ticket); }); });
+    dialog.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var first = links()[0];
+      if (first && renderedQuery === query()) first.click();
+      else search();
+    });
+    dialog.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !e.isComposing) { e.preventDefault(); close(); return; }
+      if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        var focusable = Array.from(dialog.querySelectorAll('input,button:not(:disabled),a[href]'))
+          .filter(function (node) { return !node.hidden && node.getClientRects().length; });
+        var current = focusable.indexOf(document.activeElement);
+        var next = (current + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length;
+        e.preventDefault(); focusable[next].focus();
+        return;
+      }
+      if (e.isComposing || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      var all = links(), index = all.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown' && (e.target === input || index >= 0)) {
+        if (all.length) { e.preventDefault(); all[Math.min(index + 1, all.length - 1)].focus(); }
+      } else if (e.key === 'ArrowUp' && index >= 0) {
+        e.preventDefault(); if (index === 0) input.focus(); else all[index - 1].focus();
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.defaultPrevented || e.isComposing || e.altKey || e.repeat) return;
+      var shortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k';
+      var slash = e.key === '/' && !e.metaKey && !e.ctrlKey && !e.shiftKey;
+      if (!shortcut && !slash) return;
+      if (e.target.isContentEditable || e.target.closest('input,textarea,select,[role="textbox"]')) {
+        if (!dialog.contains(e.target) || !shortcut) return;
+      }
+      if (!dialog.open && document.querySelector('dialog[open]')) return;
+      e.preventDefault(); open(null, true);
+    });
+    window.addEventListener('resize', viewport);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', viewport);
+      window.visualViewport.addEventListener('scroll', viewport);
+    }
+    window.addEventListener('pagehide', function () { if (dialog.open) close(); });
   });
 
   // ── Theme toggle + widgets that follow it ──────────────────────────────

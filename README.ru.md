@@ -21,6 +21,7 @@
 ## Возможности
 
 - **Типографика для чтения.** [Beauty.css](https://github.com/zavarovkv/beauty-css), цитаты, сноски, заметки на полях и верстка для печати. [Посмотреть примеры](docs/typography.ru.md).
+- **Полнотекстовый поиск.** [Pagefind](docs/search.md) собирает индекс вместе с сайтом: фрагменты статей, управление с клавиатуры и выдача на текущем языке.
 - **Удобная навигация.** Мобильное меню, светлая и темная темы, клавиатурные сочетания. Поддержка нескольких языков; русский и английский интерфейсы уже включены.
 - **Все для статей.** Подсветка и копирование кода, формулы KaTeX, диаграммы Mermaid и широкие изображения.
 - **Все для публикации.** SEO-метаданные, автоматические изображения для соцсетей, RSS, JSON Feed и карта сайта.
@@ -29,7 +30,7 @@
 
 ## Быстрый старт
 
-Нужны **[Hugo Extended 0.146+](https://gohugo.io/installation/)** и **Git**. Для обычной сборки Node.js не требуется.
+Нужны **[Hugo Extended 0.146+](https://gohugo.io/installation/)** и **Git**. Готовый шаблон с поиском также требует **Node.js 22.12+**; сайты без поиска можно собирать только Hugo.
 
 Создайте блог с примерами главной страницы, страницы об авторе и первой статьи:
 
@@ -40,7 +41,9 @@ git init
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 cp themes/hugo-mini/starter/hugo.toml hugo.toml
 cp -R themes/hugo-mini/starter/content/. content/
-hugo server
+cp themes/hugo-mini/starter/package*.json .
+npm ci
+npm run dev
 ```
 
 Откройте `http://localhost:1313/`. Укажите название блога и автора в `hugo.toml`, замените примеры страниц в `content/`.
@@ -49,10 +52,10 @@ hugo server
 
 ```bash
 hugo new content blog/my-first-post.md
-hugo server -D
+npm run dev -- --buildDrafts
 ```
 
-Для публикации остановите сервер, задайте свой `baseURL`, измените `draft` статьи на `false`, выполните `hugo --minify` и загрузите `public/` на статический хостинг. [Инструкция по публикации](docs/deployment.md).
+Для публикации остановите сервер, задайте свой `baseURL`, измените `draft` статьи на `false`, выполните `npm run build` и загрузите `public/` на статический хостинг. [Инструкция по публикации](docs/deployment.md).
 
 **Предпочитаете Vercel?** Разверните [готовый шаблон](starter/README.md) в своем репозитории:
 

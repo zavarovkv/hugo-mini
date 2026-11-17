@@ -167,12 +167,14 @@
   <header>
     {{- block "header" . }}{{ partial "header.html" . }}{{ end -}}
   </header>
-  <main>
+  {{- $searchable := and .IsPage (ne .Layout "resume") (not .Draft) (not (.PublishDate.After now)) (or .ExpiryDate.IsZero (.ExpiryDate.After now)) (not .Params.hidden) (not .Params.noindex) (not (eq .Params.search false)) -}}
+  <main{{ if and .Site.Params.search $searchable }} data-pagefind-body{{ else }} data-pagefind-ignore="all"{{ end }}>
     {{- block "main" . }}{{- end }}
   </main>
   <footer>
     {{- block "footer" . }}{{ partial "footer.html" . }}{{ end -}}
   </footer>
+  {{- partial "search-dialog.html" . -}}
 
   {{- /* Bundled theme JS. No ExecuteAsTemplate: the script reads its localized
          strings from body[data-i18n], so one compiled bundle serves every

@@ -11,8 +11,9 @@ This file provides guidance to Codex when working in the `hugo-mini` theme repos
 Run commands from the theme repository root unless noted otherwise.
 
 ```bash
-hugo server -s exampleSite --themesDir ../..                 # Local demo with live reload
-hugo -s exampleSite --themesDir ../.. --minify               # Production-style build
+npm ci                                                     # Install pinned tooling
+npm run dev                                                # Hugo + live search index
+npm run build                                              # Hugo + Pagefind production build
 node --check scripts/fetch-telegram-reactions.mjs            # Syntax-check the Node helper
 ```
 
@@ -34,6 +35,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - `assets/css/main.css` owns theme identity/components and public tokens. The pinned, generated
   `assets/css/beauty.css` foundation is bundled before it into one browser stylesheet.
 - `assets/js/main.js` is the single browser bundle for behavior that CSS cannot provide.
+- Optional `params.search` uses the theme dialog and Pagefind 1.6.0. `scripts/hugo-search.mjs` builds/reindexes after Hugo; never index menus, hidden/noindex/search=false pages, resumes or drafts. The demo and starter enable it. Keep Node/lockfiles, hosting builds and `docs/search.md` synchronized; do not turn JSON Feed into a search index.
 - Article Option/Alt + Left/Right navigation uses `article-neighbors.html` and the cached current-language `main-pages.html` collection. Left means older, right means newer; hidden posts and drafts are excluded, pinning does not reorder navigation, and boundaries never wrap. Keep the feature invisible and leave editing/overlay keyboard behavior intact.
 - `assets/js/theme-init.js` is the small, testable before-paint exception, inlined before CSS to resolve the saved or system color scheme.
 - `assets/likely/` contains upstream sharing CSS/JS, minified and fingerprinted by Hugo only for pages with sharing enabled.
@@ -76,11 +78,11 @@ The example site must continue to produce HTML, RSS, JSON Feed, `llms.txt`, site
 
 For layout, CSS, JavaScript, asset, i18n, or example-content changes:
 
-1. Run `hugo -s exampleSite --themesDir ../.. --minify`.
-2. Confirm the build produces non-empty `exampleSite/public/index.html`, `index.json`, `llms.txt`, `sitemap.xml`, `ru/index.json`, and `ru/llms.txt`.
+1. Run `npm run build` (Hugo and Pagefind).
+2. Confirm the build produces non-empty `exampleSite/public/index.html`, `index.json`, `llms.txt`, `sitemap.xml`, `ru/index.json`, `ru/llms.txt`, and `pagefind/pagefind-entry.json`.
 3. For visual or interaction changes, inspect the affected pages at desktop and mobile widths and test both color schemes when relevant.
 4. For JavaScript helper changes, run `node --check` and exercise the smallest safe representative path. Do not overwrite a consuming site's reaction dataset during an unrelated test.
-5. For layout or Mermaid changes, run `npm ci`, `npx playwright install chromium webkit`, and `npm run test:browser`. This is a maintainer-only toolchain; ordinary Hugo users do not need npm. The isolated browser fixture covers local table overflow, complex footnotes, article shortcuts, print, both color schemes and delayed/failed diagram downloads. Shared assertions can also run against a consuming site's build; see `CONTRIBUTING.md`.
+5. For layout or Mermaid changes, run `npm ci`, `npx playwright install chromium webkit`, and `npm run test:browser`. Browser tests are maintainer tooling; optional Pagefind search also requires npm at build time. The isolated browser fixture covers local table overflow, complex footnotes, article shortcuts, print, both color schemes and delayed/failed diagram downloads. Shared assertions can also run against a consuming site's build; see `CONTRIBUTING.md`.
 
 ## Documentation and Releases
 

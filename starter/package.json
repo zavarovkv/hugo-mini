@@ -1,0 +1,10 @@
+{
+  "name": "mini-blog",
+  "private": true,
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "dev": "node themes/hugo-mini/scripts/hugo-search.mjs dev",
+    "build": "node themes/hugo-mini/scripts/hugo-search.mjs build"
+  },
+  "devDependencies": { "pagefind": "1.6.0" }
+}

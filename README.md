@@ -21,6 +21,7 @@ Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and M
 ## Features
 
 - **Typography for reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css), quotations, footnotes, optional margin notes and print styles. [See examples](docs/typography.md).
+- **Full-text search.** Optional [Pagefind search](docs/search.md), built with the site: relevant snippets, keyboard navigation and language-specific results.
 - **Easy navigation.** Mobile menus, light/dark mode and keyboard shortcuts. Multilingual sites with English and Russian UI included.
 - **Rich articles.** Code highlighting and copying, KaTeX formulas, Mermaid diagrams and wide images.
 - **Ready to share.** SEO metadata, generated social preview images, RSS, JSON Feed and sitemap.
@@ -29,7 +30,7 @@ Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and M
 
 ## Quick start
 
-Requires **[Hugo Extended 0.146+](https://gohugo.io/installation/)** and **Git**. No Node.js needed for ordinary builds.
+Requires **[Hugo Extended 0.146+](https://gohugo.io/installation/)** and **Git**. The search-enabled starter also needs **Node.js 22.12+**; sites without search can build with Hugo alone.
 
 Create a blog with a sample homepage, About page and first post:
 
@@ -40,7 +41,9 @@ git init
 git submodule add https://github.com/zavarovkv/hugo-mini.git themes/hugo-mini
 cp themes/hugo-mini/starter/hugo.toml hugo.toml
 cp -R themes/hugo-mini/starter/content/. content/
-hugo server
+cp themes/hugo-mini/starter/package*.json .
+npm ci
+npm run dev
 ```
 
 Open `http://localhost:1313/`. Set your title and author in `hugo.toml`; replace the sample pages in `content/`.
@@ -49,10 +52,10 @@ Stop the server with `Ctrl+C`, then create a post and preview drafts:
 
 ```bash
 hugo new content blog/my-first-post.md
-hugo server -D
+npm run dev -- --buildDrafts
 ```
 
-To publish, stop the server, set your `baseURL`, change the post's `draft` to `false`, run `hugo --minify` and deploy `public/` to a static host. [Deployment guide](docs/deployment.md).
+To publish, stop the server, set your `baseURL`, change the post's `draft` to `false`, run `npm run build` and deploy `public/` to a static host. [Deployment guide](docs/deployment.md).
 
 **Prefer Vercel?** Deploy the [starter](starter/README.md) into your own repository:
 

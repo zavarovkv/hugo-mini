@@ -555,10 +555,10 @@ socialSharing=false
   for (const path of ['index.html', 'blog/index.html', 'blog/normal/index.html']) {
     assert.ok((await example.read(path)).includes(titleHTML), `${path}: visible title is formatted`);
   }
-  assert.match(await example.read('blog/raw/index.html'), /<h1>Текст — без обработки<\/h1>/);
+  assert.match(await example.read('blog/raw/index.html'), /<h1\b[^>]*>Текст — без обработки<\/h1>/);
   const safe = await example.read('safe/index.html');
-  assert.match(safe, /<h1>Заголовок &lt;img src=x onerror=alert\(1\)(?:&gt;|>) (?:&amp;|&) текст<\/h1>/);
-  assert.doesNotMatch(safe.match(/<main>[\s\S]*?<\/main>/)[0], /<img src=x/);
+  assert.match(safe, /<h1\b[^>]*>Заголовок &lt;img src=x onerror=alert\(1\)(?:&gt;|>) (?:&amp;|&) текст<\/h1>/);
+  assert.doesNotMatch(safe.match(/<main\b[^>]*>[\s\S]*?<\/main>/)[0], /<img src=x/);
   const feed = JSON.parse(await example.read('index.json'));
   assert.equal(feed.items.find(item => item.url.endsWith('/blog/normal/')).title, title);
 });

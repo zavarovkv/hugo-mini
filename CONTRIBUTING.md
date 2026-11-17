@@ -16,15 +16,16 @@ actual behavior. For code or documentation changes, follow the workflow below.
 
 ## Local Development
 
-Requires Hugo Extended 0.146.0+. From the theme root:
+Requires Hugo Extended 0.146.0+ and Node.js 22.12+. From the theme root:
 
 ```bash
 git clone https://github.com/zavarovkv/hugo-mini.git
 cd hugo-mini
-hugo server -s exampleSite --themesDir ../..
+npm ci
+npm run dev
 ```
 
-Open `http://localhost:1313/`. Ordinary demo builds do not need npm.
+Open `http://localhost:1313/`. The demo enables search; the helper refreshes its index after each Hugo rebuild.
 
 ## Submitting Changes
 
@@ -39,12 +40,12 @@ From the theme root, using Node.js 22.12+:
 
 ```bash
 npm test
-hugo -s exampleSite --themesDir ../.. --minify --panicOnWarning
+npm run build
 ```
 
 Unit checks include documentation links and README language consistency. The example
 build must emit nonempty HTML, RSS, JSON Feed, `llms.txt` and sitemap outputs,
-including `ru/index.json` and `ru/llms.txt`.
+including `ru/index.json`, `ru/llms.txt` and `pagefind/pagefind-entry.json`. Search tests cover real indexes, both languages, exclusions, retries, pagination, focus, narrow screens and subdirectory hosting.
 
 ### Browser checks
 

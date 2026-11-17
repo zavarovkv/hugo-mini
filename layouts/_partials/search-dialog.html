@@ -1,0 +1,17 @@
+{{- if and site.Params.search (ne .Layout "resume") -}}
+<dialog id="site-search" class="search-dialog" aria-label="{{ i18n "search" }}" data-pagefind-src="{{ "pagefind/pagefind.js" | relURL }}" data-pagefind-ignore="all">
+  <div class="search-panel">
+    <form class="search-form" role="search">
+      <label class="search-sr-only" for="search-query">{{ i18n "search" }}</label>
+      <input id="search-query" type="search" placeholder="{{ i18n "search" }}" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-controls="search-results" aria-describedby="search-status" maxlength="200">
+      <button type="button" class="search-close" aria-label="{{ i18n "search_close" }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l6 6M18 18l-6-6M18 6l-6 6M6 18l6-6"/></svg></button>
+    </form>
+    <div class="search-content">
+      <p id="search-status" class="search-status search-sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+      <ol id="search-results" class="search-results" aria-label="{{ i18n "search_results" }}"></ol>
+      <button type="button" class="search-more" hidden>{{ i18n "search_more" }}</button>
+      <button type="button" class="search-retry" hidden>{{ i18n "search_retry" }}</button>
+    </div>
+  </div>
+</dialog>
+{{- end -}}

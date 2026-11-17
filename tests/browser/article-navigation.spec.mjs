@@ -36,7 +36,7 @@ test('article shortcuts preserve text editing and ignore standalone pages', asyn
     document.addEventListener('keydown', event => { window.shortcutPrevented = event.defaultPrevented; });
   });
   for (const selector of ['input', 'textarea', '[contenteditable]']) {
-    await page.locator(selector).focus();
+    await page.locator('article').locator(selector).focus();
     await page.keyboard.press('Alt+ArrowLeft');
     expect(await page.evaluate(() => window.shortcutPrevented)).toBe(false);
     await expect(page).toHaveURL(/\/blog\/middle\/$/);

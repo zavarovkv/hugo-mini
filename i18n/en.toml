@@ -140,9 +140,6 @@ other = "Toggle menu"
 [search]
 other = "Search"
 
-[search_coming_soon]
-other = "coming soon"
-
 [copy_section_link]
 other = "Copy link to this section"
 
@@ -167,3 +164,27 @@ other = "to"
 [github_stars]
 one = "{{ .Count }} star on GitHub"
 other = "{{ .Count }} stars on GitHub"
+
+[search_close]
+other = "Close"
+
+[search_results]
+other = "Search results"
+
+[search_more]
+other = "Show more"
+
+[search_retry]
+other = "Try again"
+
+[search_loading]
+other = "Searching…"
+
+[search_empty]
+other = "Nothing found. Try different words or a shorter query."
+
+[search_error]
+other = "Search is unavailable right now. Please try again."
+
+[search_count]
+other = "Results: {count}"

@@ -11,11 +11,13 @@ content, without author-specific Telegram links or analytics.
 1. Import `zavarovkv/hugo-mini` as a separate Vercel project.
 2. Keep **Root Directory at the repository root**.
 3. Enable automatic exposure of Vercel system environment variables.
-4. Use the repository's Vercel configuration: `scripts/build-vercel-demo.sh` builds and `exampleSite/public/` is published.
+4. Keep the install command `npm ci` for the pinned Pagefind dependency.
+5. Use the repository's Vercel configuration: `scripts/build-vercel-demo.sh` builds and `exampleSite/public/` is published.
 
 | Build concern | Behavior |
 | --- | --- |
 | Hugo | Download a pinned Extended release and verify its official SHA-256 digest. Update version and checksum together. |
+| Search | Index both languages after Hugo; publish `exampleSite/public/pagefind/` with the site. |
 | Checkout path | Create a temporary theme-directory symlink for Vercel's generic checkout path. |
 | Production URL | Use `VERCEL_PROJECT_PRODUCTION_URL`. |
 | Preview URL | Use `VERCEL_URL`. |

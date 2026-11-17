@@ -1,10 +1,10 @@
-{{- /* Until search is implemented, its navigation entry links to the homepage. */ -}}
+{{- if site.Params.search -}}
 {{- $label := i18n "search" | default "Search" -}}
-{{- $soon := i18n "search_coming_soon" | default "Coming soon" -}}
-<a href="{{ site.Home.RelPermalink }}" class="search-toggle search-toggle-{{ .variant }}" aria-label="{{ $label }} — {{ $soon }}" title="{{ $label }} — {{ $soon }}">
+<button type="button" hidden class="search-toggle search-toggle-{{ .variant }}" aria-label="{{ $label }}" title="{{ $label }}" aria-haspopup="dialog" aria-controls="site-search">
   {{- if eq .variant "mobile" -}}
     <span class="nav-label beauty-link-label">{{ $label }}</span>
   {{- else -}}
     {{- with resources.Get "icons/search.svg" -}}{{ .Content | safeHTML }}{{- end -}}
   {{- end -}}
-</a>
+</button>
+{{- end -}}

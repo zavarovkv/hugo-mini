@@ -14,5 +14,6 @@ min = "0.146.0"
   hangingQuotes = false
   proseNumerals = false
   showSearchButton = true
+  search = false
   preferenceCookieDomain = ""
   rememberLanguage = false

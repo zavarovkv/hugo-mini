@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Vercel's build runs without npm or a preinstalled Hugo executable.
+# Vercel installs npm dependencies; this script supplies the verified Hugo binary.
 set -euo pipefail
 
 hugo_version="0.169.0"
@@ -34,3 +34,4 @@ if [[ -n "${base_url}" ]]; then
   build_args+=(--baseURL "${base_url}")
 fi
 "${temp_dir}/hugo" "${build_args[@]}"
+node "${root_dir}/themes/hugo-mini/scripts/hugo-search.mjs" index --site "${root_dir}/public"

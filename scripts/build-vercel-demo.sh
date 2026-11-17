@@ -51,3 +51,6 @@ fi
 "${temp_dir}/hugo" -s "$demo_source" --themesDir "${temp_dir}/themes" \
   --config "$demo_config" --destination "${PWD}/exampleSite/public" --cleanDestinationDir \
   --baseURL "https://${demo_host%/}/" --minify --panicOnWarning
+
+# The optional search bundle is published alongside the generated demo.
+node scripts/hugo-search.mjs index --site "${PWD}/exampleSite/public"

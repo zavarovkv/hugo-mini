@@ -24,7 +24,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 - **Wide content:** semantic `image` figures, `mermaid wide=true` captions and per-page `wideCode` share an optional 960 px measure with viewport limits, mobile/print layouts and source fallbacks.
 - **Font profiles:** site-owned body, H1 and quotation faces with validated weights, fingerprints, selective preloads and `useDefaultFonts` opt-outs; `articleH2UseTitleFont` optionally extends the H1 role to article H2.
 - **Project marks and identity:** optional light/dark project icons with accessible click-to-spin behavior; bundled asterisk header marks and browser/device favicons support site overrides.
-- **Homepage magnifier:** optional `showSearchButton` links to the homepage; it does not implement full-text search.
+- **Full-text search:** opt-in Pagefind with an index built after Hugo, per-language results, highlighted section snippets, keyboard navigation and a full-screen dialog with a centered reading column. Self-hosted assets load on demand; excluded pages stay out of the index. The starter and demo include the build step. See [Search](docs/search.md).
 - **Demo fonts:** optional deployment-owned profile with verified HTTPS downloads and temporary build inputs. Ordinary clones, the catalog, CI and starter retain Inter.
 - **Browser checks:** Chromium/WebKit fixtures cover tables, complex notes, keyboard navigation, diagram themes/failures and synchronous printing at the supported Hugo versions.
 
@@ -45,11 +45,11 @@ see the [documentation](docs/README.md); released entries below remain historica
 - **Reading shelves:** tie record spacing to paragraph rhythm, retain a 20em locally scrolling mobile table and apply prose typography without changing metadata.
 - **Links and arrows:** use the actual bold role for project names, shared fine SVG archive/project arrows and motion-aware 300 ms hover/focus movement. Refine the inline date-range arrow and bring wavy emphasis closer to text.
 - **Mobile navigation:** replace the hamburger with an animated four-dot control, keep a 44 px touch target and use 20 px menu labels with generous rows. Support wrapped labels and enlarged text without horizontal overflow.
-- **Controls and footer:** unify dotted keyboard focus and forced-color fallbacks; remove control borders/backgrounds, preserve icon/accent colors and restore brand hover/focus colors in dark mode. Footer margins collapse in normal flow; social icons use 17/22 px desktop/mobile sizes.
+- **Controls and footer:** use a fine rounded keyboard outline in the element's color and forced-color fallbacks; remove control borders/backgrounds, preserve icon/accent colors and restore brand hover/focus colors in dark mode. Footer margins collapse in normal flow; social icons use 17/22 px desktop/mobile sizes.
 - **Compact metadata:** use 12 px language labels and 11 px green New/Нов. badges. Group post metadata/sharing at 16 px, separated from the article and comments by 32 px; missing widgets leave no empty gaps.
 - **Resume refinements:** use 17/26 px screen text, compact 0.6em bullet gaps, 32–36 px mobile names and the 1.125em role. Keep paragraph flow independent of date grids, mobile detail/date wrapping, section spacing and 10.5 pt A4 text.
 - **Asset/layout isolation:** content-version local logos, avatars, project marks and favicons; reserve desktop scrollbar space. Scope header/menu rules and legacy Beauty aliases without duplicating native styles.
-- **CI and starter:** use SHA-pinned Node.js 24 actions without persisted checkout credentials. Pin the starter to v3.5.0 and honor explicit canonical domains or configured baseURL.
+- **CI and starter:** use SHA-pinned Node.js 24 actions without persisted checkout credentials. Pin the starter to a verified theme revision and honor explicit canonical domains or configured baseURL.
 - **Onboarding:** keep brief synchronized EN/RU READMEs, absolute gallery images, current light/dark previews and starter-based local setup. Mark the demo's English option as AI-translated.
 
 ### Fixed

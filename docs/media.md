@@ -97,7 +97,7 @@ bundled syntax palette and its light/dark/print styles.
 ## Formulas
 
 Set `math = true` only on pages that use formulas. KaTeX is self-hosted by the theme;
-no npm install is needed for ordinary builds. Keep code and formulas in their native
+formulas need no npm dependency. Keep code and formulas in their native
 Markdown syntax so prose typography does not alter them.
 
 ## Captions

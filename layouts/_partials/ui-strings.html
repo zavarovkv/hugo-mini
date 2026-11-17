@@ -1,4 +1,8 @@
 {{- return (dict
+  "searchLoading" (i18n "search_loading" | default "Searching…")
+  "searchEmpty" (i18n "search_empty" | default "Nothing found. Try different words or a shorter query.")
+  "searchError" (i18n "search_error" | default "Search is unavailable right now. Please try again.")
+  "searchCount" (i18n "search_count" | default "Results: {count}")
   "goUp" (i18n "go_up" | default "Go up")
   "toDark" (i18n "theme_dark" | default "Switch to dark theme")
   "toLight" (i18n "theme_light" | default "Switch to light theme")

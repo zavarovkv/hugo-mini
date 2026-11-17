@@ -140,9 +140,6 @@ other = "Открыть или закрыть меню"
 [search]
 other = "Поиск"
 
-[search_coming_soon]
-other = "скоро появится"
-
 [copy_section_link]
 other = "Скопировать ссылку на раздел"
 
@@ -169,3 +166,27 @@ one = "{{ .Count }} звезда на GitHub"
 few = "{{ .Count }} звезды на GitHub"
 many = "{{ .Count }} звезд на GitHub"
 other = "{{ .Count }} звезды на GitHub"
+
+[search_close]
+other = "Закрыть"
+
+[search_results]
+other = "Результаты поиска"
+
+[search_more]
+other = "Показать еще"
+
+[search_retry]
+other = "Попробовать снова"
+
+[search_loading]
+other = "Ищем…"
+
+[search_empty]
+other = "Ничего не найдено. Попробуйте другие слова или сократите запрос."
+
+[search_error]
+other = "Сейчас поиск недоступен. Попробуйте еще раз."
+
+[search_count]
+other = "Найдено: {count}"

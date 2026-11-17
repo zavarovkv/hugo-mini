@@ -15,7 +15,8 @@ no Node.js runtime or application server is needed.
    hugo --minify
    ```
 
-4. Deploy `public/`. Check a post, an asset URL, a language link and a missing path.
+4. If search is enabled, run Pagefind after Hugo (or use `npm run build` from the starter). Install dependencies with `npm ci` first; see [Search](search.md#build-and-preview).
+5. Deploy all of `public/`, including `pagefind/`. Check a post, search, an asset URL, a language link and a missing path.
 
 Drafts and future posts are excluded from ordinary production builds. Optional
 [GitHub](homepage.md#github-stars) and [Telegram](telegram.md) helpers require Node.js
@@ -35,7 +36,7 @@ Use the official Pages actions or another maintained workflow:
 1. Check out with submodules enabled.
 2. Install a supported Hugo Extended version.
 3. Run optional data fetchers.
-4. Build with `hugo --minify`.
+4. Build with `hugo --minify`, or `npm ci` then `npm run build` for the search-enabled starter.
 5. Upload and deploy `public/` as the Pages artifact.
 
 Pin third-party actions to immutable commit SHAs and grant only required permissions.
@@ -51,7 +52,8 @@ the default-language error page remains available.
 
 | Setting | Value |
 | --- | --- |
-| Build command | `hugo --minify` |
+| Build command | `hugo --minify`; `npm run build` for the search-enabled starter |
+| Install command with search | `npm ci` |
 | Publish directory | `public` |
 | Hugo version | A supported Extended release, configured for your provider |
 | Theme checkout | Recursive submodules, if using a submodule |

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
+import { indexSite } from './hugo-search.mjs';
 
 const theme = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = process.argv.includes('--site') ? process.cwd() : null;
@@ -32,6 +33,18 @@ try {
   await cp(join(theme, 'tests/browser/fixtures/wide-code.md'), join(contentDir, 'wide-code-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/wide-diagrams.md'), join(contentDir, 'wide-diagram-checks.md'));
   await cp(join(theme, 'tests/browser/fixtures/resume.md'), join(contentDir, 'resume-checks.md'));
+  // Search uses real generated fragments, including pagination and exclusions.
+  for (let i = 1; i <= 11; i++) await writeFile(join(contentDir, `search-${i}.md`),
+    `+++\ntitle="Search contract ${i}"\n+++\nA short introduction.\n\n## Matching section\n\nThe orchidquartz collection explains careful product research and accessible search.\n`);
+  for (const [name, flags] of [['hidden', 'hidden=true'], ['noindex', 'noindex=true'], ['optout', 'search=false'], ['draft', 'draft=true'], ['future', 'publishDate=2099-01-01'], ['expired', 'expiryDate=2000-01-01'], ['resume', 'layout="resume"']]) {
+    await writeFile(join(contentDir, `search-${name}.md`), `+++\ntitle="Excluded ${name}"\n${flags}\n+++\nexclusionquartz orchidquartz\n`);
+  }
+  for (const lang of ['en', 'ru']) {
+    const dir = source ? join(root, 'content', lang) : contentDir;
+    await mkdir(dir, {recursive:true});
+    await writeFile(join(dir, source ? 'search-language.md' : `search-language.${lang}.md`),
+      `+++\ntitle="${lang === 'en' ? 'English research' : 'Русские исследования'}"\n+++\nlanguagequartz. ${lang === 'en' ? 'Research improves products.' : 'Исследования улучшают продукты.'}\n`);
+  }
   if (!source) {
     await writeFile(join(contentDir, 'about.md'), '+++\ntitle="About & contact"\n+++\nNavigation destination.\n');
     await mkdir(join(contentDir, 'blog'));
@@ -70,19 +83,22 @@ weight=3
 icon="telegram"
 `}
 [params]
+search=true
 mermaidModuleSrc="browser-mermaid/mermaid.esm.min.mjs"
 socialSharing=false
 [markup.goldmark.renderer]
 unsafe=true
+${source ? '' : '[languages.en]\nweight=1\n[languages.ru]\nweight=2\n'}
 `);
   const config = source ? (process.env.BROWSER_HUGO_CONFIG || 'config.toml').split(',').map(file => resolve(source, file)) : [];
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source', root, '--config', [...config, overlay].join(','), '--baseURL', `http://127.0.0.1:${process.env.PLAYWRIGHT_PORT || 4174}/`, '--minify', '--panicOnWarning', '--cacheDir', join(root, 'cache')], { stdio: 'inherit' });
+  await indexSite(output);
 } catch (error) {
   await rm(root, { recursive: true, force: true });
   throw error;
 }
 
-const types = { html: 'text/html', css: 'text/css', js: 'text/javascript', mjs: 'text/javascript', svg: 'image/svg+xml', woff2: 'font/woff2', otf: 'font/otf', png: 'image/png', webp: 'image/webp', json: 'application/json' };
+const types = { html: 'text/html', css: 'text/css', js: 'text/javascript', mjs: 'text/javascript', svg: 'image/svg+xml', woff2: 'font/woff2', otf: 'font/otf', png: 'image/png', webp: 'image/webp', json: 'application/json', wasm: 'application/wasm' };
 const server = createServer(async (request, response) => {
   try {
     let pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);

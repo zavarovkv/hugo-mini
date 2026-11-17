@@ -40,7 +40,7 @@ for (const colorScheme of ['light', 'dark']) {
         await link.focus();
         await expect(link).toBeFocused();
         await expect(link, `${brand} keyboard`).toHaveCSS('color', activeColor);
-        await expect(link).toHaveCSS('outline-style', 'dotted');
+        await expect(link).toHaveCSS('outline-style', 'solid');
         await expect(link).toHaveCSS('text-decoration-line', 'none');
       }
     }

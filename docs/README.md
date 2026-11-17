@@ -8,6 +8,7 @@ the [quick start](../README.md#quick-start); use the guides below as you add fea
 | I want to… | Read |
 | --- | --- |
 | Install Mini on an existing site or use Hugo Modules | [Installation](configuration.md#installation) |
+| Add full-text search and build its index | [Search](search.md) |
 | Update the theme | [Updating](configuration.md#updating) |
 | Set up identity, languages, feeds or analytics | [Configuration](configuration.md) |
 | Publish to GitHub Pages, Netlify or Vercel | [Deployment](deployment.md) |

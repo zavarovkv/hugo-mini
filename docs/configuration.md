@@ -104,7 +104,8 @@ See [logos, menus and colors](customization.md).
 | `articleH2UseTitleFont` | Use the H1 face for article H2 | `false` |
 | `headingScroll` | Click-to-align H1/H2 and Option/Alt + Up/Down | `false` |
 | `backToTop` | Left-gutter control on wide screens | `true` |
-| `showSearchButton` | Magnifier linking to the homepage; **not full-text search** | `true` |
+| `search` | Enable [Pagefind search](search.md); requires an index step after Hugo | `false` |
+| `showSearchButton` | Show search triggers when search is enabled | `true` |
 
 Reading options from `typography` through `backToTop` also accept page front-matter
 overrides. `dropCap` and `wideCode` are per-page options, described in

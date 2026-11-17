@@ -43,6 +43,7 @@ home = ["HTML", "RSS", "JSON"]
 [permalinks]
 blog = "/:slug/"
 [params]
+search = true
 mainSections = ["blog"]
 aiTranslatedLang = "en"
 telegramChannel = "fixture"
@@ -114,11 +115,14 @@ weight = 1
       assert.equal(attribute(androidIcon, "href"), await versionedAssetURL(`${baseURL}images/hugo-mini-favicon-192.png`, join(output, "images/hugo-mini-favicon-192.png")));
       assert.equal(attribute(appleIcon, "href"), await versionedAssetURL(`${baseURL}images/hugo-mini-apple-touch-icon.png`, join(output, "images/hugo-mini-apple-touch-icon.png")));
       assert.ok(home.includes("title-avatar-container"), "default favicon does not replace the header avatar");
-      const links = [...home.matchAll(/(<a\b[^>]*class="search-toggle search-toggle-(mobile|desktop)"[^>]*>)([\s\S]*?)<\/a>/g)];
-      assert.equal(links.length, 2, "search is enabled by default on desktop and mobile");
+      const links = [...home.matchAll(/(<button\b[^>]*class="search-toggle search-toggle-(mobile|desktop)"[^>]*>)([\s\S]*?)<\/button>/g)];
+      assert.equal(links.length, 2, "opt-in search has desktop and mobile buttons");
       for (const [, tag] of links) {
-        assert.equal(attribute(tag, "href"), `${basePath}${langPath}`, "search links to the current language homepage");
+        assert.equal(attribute(tag, "aria-controls"), "site-search");
+        assert.equal(attribute(tag, "aria-haspopup"), "dialog");
+        assert.ok(/\bhidden\b/.test(tag), "JavaScript reveals controls only after initialization");
       }
+      assert.ok(home.includes(`data-pagefind-src=${basePath}pagefind/pagefind.js`), "all languages share the root index, including a base path");
       const mobile = links.find((link) => link[2] === "mobile");
       const desktop = links.find((link) => link[2] === "desktop");
       assert.ok(mobile[3].includes(label) && !mobile[3].includes("<svg"), "mobile search is text-only");

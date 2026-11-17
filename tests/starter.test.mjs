@@ -15,6 +15,7 @@ test('starter canonical URL precedence preserves explicit domains and config fal
   // This test exercises build argument selection offline. The CI starter build
   // separately runs the real installer and verifies the pinned theme revision.
   const commands = {
+    node: '#!/bin/sh\nexit 0\n',
     curl: '#!/bin/sh\nexit 0\n',
     sha256sum: '#!/bin/sh\ncat >/dev/null\n',
     tar: `#!/bin/sh

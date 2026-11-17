@@ -25,6 +25,7 @@ ignoreErrors    = ["error-disable-taxonomy"]
   home = ["HTML", "RSS", "JSON", "LLMS"]
 
 [params]
+  search = true
   authorName = "Jane Doe"  # fictitious example author
   authorURL  = ""          # no real profile in the public demo
 

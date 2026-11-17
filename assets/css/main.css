@@ -302,12 +302,12 @@
     }
   }
 
-  /* One keyboard-focus treatment for content and controls. Beauty supplies
-     the outline width and offset; the theme chooses its ink and line style. */
+  /* A fine rounded keyboard outline follows the same ink as the element. */
   @media screen {
     :focus-visible {
-      outline-color: var(--heading-color);
-      outline-style: dotted;
+      outline: 1px solid currentColor;
+      outline-offset: var(--beauty-focus-offset);
+      border-radius: 3px;
     }
   }
   @media screen and (forced-colors: active) {
@@ -1981,6 +1981,9 @@
      typographic print rules (widows, heading breaks and wrapped code); these
      overrides only handle theme components and explicit dark-mode colors. */
   @media print {
+    .search-dialog, .search-dialog::backdrop, .search-toggle { display: none !important; }
+    html.search-open { overflow: visible; }
+    body.search-open { position: static; }
     :focus-visible { outline: none; }
     @page { margin: 18mm; }
 
@@ -2090,3 +2093,139 @@
       --code-highlight: #eee;
     }
   }
+
+/* === Search ===
+   The dialog uses the site's fonts, palette and reading measure. Pagefind only
+   supplies results; it ships no UI stylesheet into this page. */
+:root {
+  --search-width: var(--width);
+  --search-highlight: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --search-hover: color-mix(in srgb, var(--color-primary) 5%, var(--background-color));
+}
+.search-toggle[hidden], .search-dialog [hidden] { display: none !important; }
+.search-toggle { font: inherit; min-block-size: 0; }
+.search-toggle:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; border-radius: 3px; }
+.search-toggle.search-pointer-focus:focus { outline: none; }
+.search-toggle-mobile {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  text-align: start;
+  cursor: pointer;
+}
+.search-toggle-mobile:hover { color: var(--color-accent); background: transparent; }
+html.search-open { overflow: hidden; }
+body.search-open { position: fixed; inset-inline: 0; }
+.search-dialog {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  background: var(--background-color);
+  color: var(--text-color);
+  box-shadow: none;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scroll-padding-block-start: 100px;
+  font: var(--font-weight-body) 18px/1.55 var(--font-main);
+}
+.search-dialog::backdrop { background: var(--background-color); }
+.search-dialog[open] { display: block; }
+.search-panel { display: flex; flex-direction: column; min-width: 0; width: 100%; max-width: calc(var(--search-width) + 40px); margin-inline: auto; min-height: 100%; }
+.search-form {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--background-color);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+  padding: 20px;
+  margin: 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+.search-form::before { content: ""; }
+.search-form input {
+  width: 100%; min-width: 0; min-height: 44px;
+  padding: 0; margin: 0; border: 0; border-radius: 0;
+  outline: none; box-shadow: none; background: transparent;
+  color: var(--heading-color); font: var(--font-weight-title) 32px/1.4 var(--font-title);
+  text-align: center;
+  -webkit-appearance: none; appearance: none;
+}
+.search-form input::placeholder { color: var(--color-muted); opacity: 1; }
+.search-form input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.search-dialog button {
+  flex: none; min-height: 44px; margin: 0; padding: 0 8px;
+  border: 0; border-radius: 4px; background: transparent;
+  color: var(--color-muted); font: var(--font-weight-body) 14px/1.5 var(--font-main); cursor: pointer;
+}
+.search-dialog button:hover { color: var(--color-accent); background: transparent; }
+.search-dialog button:disabled { cursor: progress; opacity: 0.5; }
+.search-dialog .search-close { width: 44px; height: 44px; padding: 10px; color: var(--text-color); }
+.search-dialog .search-close:hover { color: var(--text-color); }
+.search-close svg { display: block; width: 24px; height: 24px; }
+@media (min-width: 769px) {
+  .search-dialog .search-close { color: var(--color-muted); transition: color 0.2s ease, transform 0.15s ease; }
+  .search-dialog .search-close:is(:hover, :focus-visible) { color: var(--color-accent); }
+  .search-dialog .search-close:active { transform: scale(0.95); }
+}
+.search-content { padding: 0 8px 20px; }
+.search-status { color: var(--color-muted); margin: 0; padding: 20px 12px 12px; font-size: 14px; line-height: 1.6; }
+.search-results { list-style: none; padding: 0; margin: 0; }
+.search-results > li { margin: 0; padding: 0; }
+.search-results > li + li { border-top: 1px solid var(--color-divider); }
+.search-result, .search-result:link, .search-result:visited {
+  display: block; margin: 4px 0; padding: 16px 12px; border: 0; border-radius: 6px;
+  color: var(--text-color); text-decoration: none; font-weight: var(--font-weight-body);
+  overflow-wrap: anywhere; scroll-margin-block: 8px;
+}
+.search-result:hover, .search-result:focus-visible { background: var(--search-hover); color: var(--text-color); }
+.search-result:focus-visible { outline-offset: -2px; }
+.search-result-title { display: block; color: var(--color-primary); font-size: 21px; line-height: 1.35; font-weight: var(--font-weight-medium); }
+.search-result:hover .search-result-title { color: var(--color-accent); }
+.search-result-section { display: block; margin-top: 4px; font-size: 14px; line-height: 1.5; color: var(--color-muted); }
+.search-result-excerpt { display: block; margin-top: 8px; font-size: 16px; line-height: 1.6; }
+.search-result mark { background: var(--search-highlight); color: inherit; padding: 0; border-radius: 2px; font-weight: var(--font-weight-medium); }
+.search-dialog :is(.search-more, .search-retry) { display: block; margin: 12px auto 0; color: var(--color-primary); font-size: 16px; }
+.search-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 768px) {
+  .main-nav .search-toggle-mobile {
+    width: 100%; min-block-size: var(--header-nav-target-small); flex-shrink: 0;
+    padding: 20px; margin: 0; font-size: var(--header-nav-size-small);
+    border-bottom: 1px solid var(--color-divider);
+  }
+  .search-dialog {
+    inset: var(--search-viewport-top, 0px) 0 auto;
+    transform: none; width: 100%; max-width: none;
+    height: var(--search-viewport-height, 100dvh); max-height: none;
+    border: 0; border-radius: 0; box-shadow: none;
+  }
+  .search-panel { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .search-form { padding: 20px; gap: 8px; }
+  .search-form { padding-top: calc(20px + env(safe-area-inset-top, 0px)); }
+  .search-form input { font-size: 26px; }
+  .search-status { padding-top: 16px; }
+  .search-result { padding-block: 18px; }
+  .search-result-title { font-size: 21px; }
+  .search-result-excerpt { font-size: 17px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .search-dialog[open] { animation: search-appear 140ms ease-out; }
+  @keyframes search-appear { from { opacity: 0; } to { opacity: 1; } }
+}
+@media (forced-colors: active) {
+  .search-dialog { border: 1px solid CanvasText; }
+  .search-result mark { background: Highlight; color: HighlightText; }
+}

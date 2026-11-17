@@ -23,7 +23,7 @@ test('editorial helpers preserve text, protected content, metadata and opt-outs'
   build();
   const read = name => readFile(join(root,'public/blog',name,'index.html'),'utf8');
   const enabled = await read('enabled');
-  assert.match(enabled, /<h1><span class="beauty-hanging-open">(?:«|&laquo;)<\/span>Opening/);
+  assert.match(enabled, /<h1\b[^>]*><span class="beauty-hanging-open">(?:«|&laquo;)<\/span>Opening/);
   assert.match(enabled, /<h2[^>]*><span class="beauty-hanging-open">(?:«|&laquo;)<\/span>Heading/);
   assert.match(enabled, /<p><span class="beauty-hanging-open">(?:«|&laquo;)<\/span>A quote/);
   assert.match(enabled, /<strong><span class="beauty-hanging-open">(?:“|&ldquo;)<\/span>Emphasized quote/);

@@ -25,8 +25,9 @@ Add optional fields as needed:
 | Field | Effect |
 | --- | --- |
 | `pinned = true` | Move the post to the top of its category group. |
-| `hidden = true` | Omit from listings, RSS, JSON Feed and `llms.txt`; keep the public URL and sitemap entry. |
-| `noindex = true` | Ask search engines not to index the page; also omit it from the sitemap. |
+| `hidden = true` | Omit from listings, RSS, JSON Feed, `llms.txt` and local search; keep the public URL and sitemap entry. |
+| `noindex = true` | Ask search engines not to index the page; omit it from the sitemap and local search. |
+| `search = false` | Exclude only from [Pagefind search](search.md). |
 | `math = true` | Load self-hosted KaTeX for formulas. |
 | `mermaid = true` | Enable [Mermaid diagrams](media.md#wide-diagrams). |
 | `wideCode = true` | Allow [long code blocks](media.md#wide-code-blocks) to expand. |

@@ -4,7 +4,7 @@ A small, ready-to-edit Hugo blog powered by [Hugo Mini](https://github.com/zavar
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
 
-The button copies this starter into your own repository and deploys it. No npm install needed.
+The button copies this starter into your own repository and deploys it, including full-text search. Vercel installs the pinned Pagefind dependency and builds the index after Hugo.
 
 ## Customize your site
 
@@ -21,11 +21,12 @@ For canonical URLs:
 
 ## Run locally
 
-Install [Hugo Extended 0.146+](https://gohugo.io/installation/) and Git, then run from the starter's root:
+Install [Hugo Extended 0.146+](https://gohugo.io/installation/), Git and Node.js 22.12+, then run from the starter's root:
 
 ```bash
 bash scripts/setup-theme.sh
-hugo server -D
+npm ci
+npm run dev -- --buildDrafts
 ```
 
 Open `http://localhost:1313/`. After stopping the server with `Ctrl+C`, create a post:
@@ -34,11 +35,11 @@ Open `http://localhost:1313/`. After stopping the server with `Ctrl+C`, create a
 hugo new content blog/my-next-post.md
 ```
 
-New posts are drafts. Preview with `hugo server -D`; set `draft = false` before publishing.
+New posts are drafts. Preview with `npm run dev -- --buildDrafts`; set `draft = false` before publishing. Drafts stay out of search. `npm run build` builds Hugo and its search index; publish all of `public/`. See [search setup](https://github.com/zavarovkv/hugo-mini/blob/main/docs/search.md) for exclusions and keyboard controls.
 
 ## Updates
 
-- **Theme:** Hugo Mini v3.5.0, verified by commit SHA. Review the [changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md), update `theme_tag` and `theme_sha` together in [`setup-theme.sh`](scripts/setup-theme.sh), save any local theme edits, remove the generated `themes/hugo-mini/`, then rerun setup.
+- **Theme:** Hugo Mini is pinned to a reviewed commit SHA. Review the [changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md), update `theme_sha` in [`setup-theme.sh`](scripts/setup-theme.sh), save any local theme edits, remove the generated `themes/hugo-mini/`, then rerun setup.
 - **Vercel build:** Hugo Extended 0.169.0, verified by SHA-256. Update the version and checksum together in [`build-vercel.sh`](scripts/build-vercel.sh).
 - Generated `themes/`, `public/` and `resources/` stay out of Git.
 
