@@ -7,6 +7,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  {{- /* Make the cross-document opt-in available before external CSS can race
+         the incoming page's reveal. Component styles stay in the main bundle. */}}
+  {{- with resources.Get "css/navigation-transition.css" | resources.Minify }}
+  <style>{{ .Content | safeCSS }}</style>
+  {{- end }}
+
   {{- /* Published alternates also let the opt-in language preference resolve
          entry pages before CSS. Keep these ordinary URLs for static packagers. */}}
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ (partial "page-seo.html" .).canonical }}">

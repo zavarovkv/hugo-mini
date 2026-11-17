@@ -52,7 +52,7 @@ for (const colorScheme of ['light', 'dark']) {
     await about.click();
     await expect(page).toHaveURL(/\/about\/$/);
     await expectSelected(page, 'About & contact');
-    await expect.poll(() => page.evaluate(() => window.menuTransition.finished)).toBe(true);
+    await expect.poll(() => page.evaluate(() => window.menuTransition)).toMatchObject({ active: true, finished: true });
     const transition = await page.evaluate(() => window.menuTransition);
     expect(transition.active).toBe(true);
     expect(transition.error).toBeUndefined();
@@ -68,6 +68,31 @@ for (const colorScheme of ['light', 'dark']) {
     await expectSelected(page, 'Articles');
   });
 }
+
+test('desktop menu transition survives a delayed destination stylesheet', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await observeTransitions(page);
+  await page.goto('/blog/');
+  await menuGeometry(page);
+  let delayed = false;
+  // Routing disables the cache; delay destination CSS relative to its HTML.
+  // The early opt-in must preserve the real menu animation after CSS arrives.
+  await page.route('**/css/main.*.css', async route => {
+    delayed = true;
+    await new Promise(resolve => setTimeout(resolve, 200));
+    await route.continue();
+  });
+  await page.locator('#main-navigation').getByRole('link', { name: 'About & contact', exact: true }).click();
+  await expect(page).toHaveURL(/\/about\/$/);
+  await expect.poll(() => page.evaluate(() => window.menuTransition)).toMatchObject({ active: true, finished: true });
+  expect(delayed).toBe(true);
+  const transition = await page.evaluate(() => window.menuTransition);
+  expect(transition.error).toBeUndefined();
+  expect(transition.animations.length).toBeGreaterThan(0);
+  expect(transition.animations.every(animation => animation.pseudo?.includes('(main-navigation)') && animation.duration === 300)).toBe(true);
+  await expectSelected(page, 'About & contact');
+});
 
 test('desktop menu fades in place after leaving a scrolled page', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 700 });
@@ -88,7 +113,7 @@ test('desktop menu fades in place after leaving a scrolled page', async ({ page 
   expect(before.y + before.height).toBeLessThan(0);
   await link.click();
   await expect(page).toHaveURL(/\/blog\/middle\/$/);
-  await expect.poll(() => page.evaluate(() => window.menuTransition.finished)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.menuTransition)).toMatchObject({ active: true, finished: true });
   const transition = await page.evaluate(() => window.menuTransition);
   expect(transition.active).toBe(true);
   expect(transition.error).toBeUndefined();

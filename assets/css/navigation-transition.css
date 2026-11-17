@@ -1,0 +1,6 @@
+/* The incoming document can resolve its navigation opt-in before external CSS
+   has been applied. Inline this tiny declaration in <head>; all visual rules
+   remain in main.css. Mobile navigation and reduced motion stay immediate. */
+@media screen and (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}

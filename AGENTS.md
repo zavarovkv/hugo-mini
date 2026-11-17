@@ -38,6 +38,7 @@ Hugo Extended 0.146.0 is the supported minimum. CI builds the example site with 
 - Optional `params.search` uses the theme dialog and Pagefind 1.6.0. `scripts/hugo-search.mjs` builds/reindexes after Hugo; never index menus, hidden/noindex/search=false pages, resumes or drafts. The demo and starter enable it. Keep Node/lockfiles, hosting builds and `docs/search.md` synchronized; do not turn JSON Feed into a search index.
 - Article Option/Alt + Left/Right navigation uses `article-neighbors.html` and the cached current-language `main-pages.html` collection. Left means older, right means newer; hidden posts and drafts are excluded, pinning does not reorder navigation, and boundaries never wrap. Keep the feature invisible and leave editing/overlay keyboard behavior intact.
 - `assets/js/theme-init.js` is the small, testable before-paint exception, inlined before CSS to resolve the saved or system color scheme.
+- `assets/css/navigation-transition.css` is the before-paint navigation opt-in, inlined in the head to avoid racing external CSS during cross-document transitions. Keep visual menu/transition rules in `main.css`.
 - `assets/likely/` contains upstream sharing CSS/JS, minified and fingerprinted by Hugo only for pages with sharing enabled.
 - `static/` contains the four used Inter font faces, their license, and KaTeX.
 - `i18n/` contains built-in English and Russian interface strings.

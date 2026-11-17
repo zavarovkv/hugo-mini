@@ -1074,10 +1074,9 @@
 
   /* Cross-document transitions blend the desktop menu's regular/bold states.
      Keep page content immediate; the mobile overlay retains its own lifecycle.
-     Browsers without View Transitions keep ordinary document navigation. */
+     Browsers without View Transitions keep ordinary document navigation.
+     The navigation opt-in lives in the early navigation-transition.css asset. */
   @media screen and (min-width: 769px) and (prefers-reduced-motion: no-preference) {
-    @view-transition { navigation: auto; }
-
     :root { view-transition-name: none; }
     #main-navigation { view-transition-name: main-navigation; }
 
