@@ -2099,6 +2099,7 @@
    supplies results; it ships no UI stylesheet into this page. */
 :root {
   --search-width: var(--width);
+  --search-placeholder: color-mix(in srgb, var(--color-muted) 85%, white);
   --search-highlight: color-mix(in srgb, var(--color-primary) 14%, transparent);
   --search-hover: color-mix(in srgb, var(--color-primary) 5%, var(--background-color));
 }
@@ -2164,7 +2165,7 @@ body.search-open { position: fixed; inset-inline: 0; }
   text-align: center;
   -webkit-appearance: none; appearance: none;
 }
-.search-form input::placeholder { color: var(--color-muted); opacity: 1; }
+.search-form input::placeholder { color: var(--search-placeholder); opacity: 1; }
 .search-form input::-webkit-search-cancel-button { -webkit-appearance: none; }
 .search-dialog button {
   flex: none; min-height: 44px; margin: 0; padding: 0 8px;
@@ -2191,10 +2192,13 @@ body.search-open { position: fixed; inset-inline: 0; }
   color: var(--text-color); text-decoration: none; font-weight: var(--font-weight-body);
   overflow-wrap: anywhere; scroll-margin-block: 8px;
 }
-.search-result:hover, .search-result:focus-visible { background: var(--search-hover); color: var(--text-color); }
+.search-result:focus-visible { background: var(--search-hover); color: var(--text-color); }
 .search-result:focus-visible { outline-offset: -2px; }
 .search-result-title { display: block; color: var(--color-primary); font-size: 21px; line-height: 1.35; font-weight: var(--font-weight-medium); }
-.search-result:hover .search-result-title { color: var(--color-accent); }
+@media (hover: hover) and (pointer: fine) {
+  .search-result:hover { background: var(--search-hover); color: var(--text-color); }
+  .search-result:hover .search-result-title { color: var(--color-accent); }
+}
 .search-result-section { display: block; margin-top: 4px; font-size: 14px; line-height: 1.5; color: var(--color-muted); }
 .search-result-excerpt { display: block; margin-top: 8px; font-size: 16px; line-height: 1.6; }
 .search-result mark { background: var(--search-highlight); color: inherit; padding: 0; border-radius: 2px; font-weight: var(--font-weight-medium); }

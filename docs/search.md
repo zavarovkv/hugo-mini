@@ -94,7 +94,8 @@ The site's existing JSON Feed is independent of this index.
 - Search fills the screen; its contents follow the blog column. Mobile adapts to the on-screen keyboard.
 - `showSearchButton = false` hides header triggers; keyboard shortcuts remain available.
 - Override `search_*` strings in your site's `i18n/`. English and Russian are bundled.
-- Theme CSS exposes `--search-width`, `--search-highlight` and `--search-hover`.
+- Theme CSS exposes `--search-width`, `--search-placeholder`, `--search-highlight`
+  and `--search-hover`.
 
 JavaScript and WebAssembly are required for search. Controls stay hidden when
 JavaScript is disabled. The engine and fragments load from the same site only
