@@ -31,22 +31,7 @@ The first four rules are provided by Goldmark. Mini formats existing number grou
 
 ## Control
 
-Disable the extra pass in page front matter:
-
-```toml
-+++
-typography = false
-+++
-```
-
-Or in site configuration:
-
-```toml
-[params]
-  typography = false
-```
-
-A page can override the site with `typography = true`. Exclude a fragment and its children:
+Set `typography = false` in page front matter or in the site's `[params]` table. The page setting takes precedence. To skip one fragment and its children, mark its wrapper.
 
 ```html
 <span data-typography="off">16px and 10 %</span>
@@ -157,18 +142,9 @@ See [drop-cap tokens](typography-reference.md#drop-caps) when changing fonts.
 
 ## Article links
 
-External Markdown links already open in a new tab by default. The option below
-extends this behavior to internal destinations and authored links in post bodies.
+External Markdown links open in a new tab by default. Set `articleLinksNewTab = true` in `[params]` or page front matter to open internal page links in new tabs from post bodies too.
 
-Set `articleLinksNewTab = true` in site or page params to open post-body destinations,
-including internal links, in new tabs. The default is `false`.
-
-| Included | Left unchanged |
-| --- | --- |
-| Posts in `mainSections`: Markdown, authored HTML and shortcode links | Same-page anchors, footnotes, downloads, non-web schemes, navigation, listings and standalone pages |
-
-Markdown receives `target="_blank"` and `rel="noopener noreferrer"` during the build;
-the browser enhances authored HTML/shortcode links.
+The option applies to posts in `mainSections`. Hugo sets `target="_blank"` and `rel="noopener noreferrer"` on Markdown links at build time. The browser handles links from HTML and shortcodes. Same-page anchors, footnotes, downloads, non-web schemes, menus and standalone pages retain their usual behavior.
 
 ## Footnotes
 
@@ -212,23 +188,9 @@ Set `headingScroll = true` in site or page params (default: `false`).
 | Option/Alt + Down / Up | Next / previous H1/H2 relative to the reading position; no wrapping. |
 | Click H3 | Keep the normal copy-link behavior. |
 
-H1 uses `#page-title`; section IDs stay stable. H2 text replaces its copy icon.
-Repeated clicks do not add history entries; copy/open-in-new-tab/back/forward work
-as native links. Between sections, Up returns to the current section's heading.
+H1 links to `#page-title`. H2 retains its section ID. Between sections, Up returns to the current heading. Browser back/forward navigation works with these links. Editing, selections, modified clicks and open menus or dialogs keep their usual behavior.
 
-Custom templates can opt H3–H6 into this navigation with `data-heading-scroll`.
-`data-heading-reset` makes a heading clear the fragment when activated. These
-attributes do not change ordinary Markdown headings.
-
-Shortcuts ignore held-key repeats, editing/composition, extra modifiers and open
-menus/dialogs. Distinct presses work during scrolling. Selections and modified
-clicks stay native; authored links are not nested or replaced.
-
-Reduced motion disables smooth scrolling. Without JavaScript, original headings
-and H2/H3 links remain. `.no-anchor` headings are not enhanced; near the footer,
-document length limits alignment. There are no visible shortcut hints.
-See [focus styling](customization.md#focus-and-controls) and
-[article-to-article shortcuts](content.md#article-keyboard-navigation).
+Custom templates can add `data-heading-scroll` to H3–H6 or `data-heading-reset` to clear the URL fragment. The `.no-anchor` class excludes a heading. Reduced motion uses instant scrolling. Without JavaScript, original H2/H3 links remain available. [Article-to-article shortcuts](content.md#article-keyboard-navigation)
 
 ## Reading layout
 

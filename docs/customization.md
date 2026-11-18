@@ -45,19 +45,13 @@ Shared native typography belongs to [Beauty.css](vendor-assets.md#beautycss-foun
 
 ### Focus and controls
 
-| Element | Default treatment |
-| --- | --- |
-| Keyboard focus | Same 0.5 px stroke and muted color as link underlines, 3 px rounded corners; 4 px `--beauty-focus-offset`. Forced colors retain a 2 px system outline. |
-| Forced-color mode | Solid system `Highlight` outline |
-| Heading shortcuts / print | No outline; returning to Tab restores keyboard focus indication |
-| Language, theme, desktop search | No container border/background, including on hover |
-| Resting labels | `--color-muted`; language/search use `--color-accent` on hover/focus |
-| Theme / AI icons | Yellow sun, blue moon, yellow active sparkle |
-| Code copy | Muted icon; `--color-success` confirms copying with a checkmark. |
-| `.button.beauty-button` | Shared bold role; `--color-button-start`, `--color-button-end` and `--color-button-text` control the gradient and label. |
+Keyboard focus uses a thin, rounded outline offset by `--beauty-focus-offset` (4 px). Forced-color mode uses a 2 px system outline. Preserve both when changing link colors.
 
-Native `:focus-visible` controls focus display. Invisible control containers retain
-their click areas; these styles do not change geometry.
+| Control | Color token |
+| --- | --- |
+| Language and search | `--color-muted` at rest, `--color-accent` on hover or focus |
+| Copy confirmation | `--color-success` |
+| Buttons (`.button.beauty-button`) | `--color-button-start`, `--color-button-end`, `--color-button-text` |
 
 ## Logo and favicon
 
@@ -83,17 +77,7 @@ preserved. External URLs and missing files retain their configured paths.
 
 ## Menu transitions
 
-Internal labels reserve their bold width so section changes do not move neighboring
-items. Hidden sizing copies do not duplicate accessible names; selected labels
-remain bold and visible text keeps Beauty's underline.
-
-Above 768 px, browsers with cross-document View Transitions blend menu opacity over
-`--nav-transition-duration` (300 ms). Position and size come from the destination
-page; content updates immediately. This uses native same-origin navigation, without
-a router or extra JavaScript.
-
-Mobile keeps its overlay behavior. Reduced motion and unsupported browsers receive
-an immediate state change; icons keep their desktop/mobile placement.
+Desktop menu items reserve space for their bold active labels. Above 768 px, supported browsers fade menu changes over `--nav-transition-duration` (300 ms). Content updates immediately. Mobile uses its own overlay, and reduced-motion settings skip the transition.
 
 ## Menu icons
 
@@ -127,6 +111,8 @@ A standalone layout can replace the `search` block to omit the dialog. Use
 and `backToTop = false` to omit the reading control.
 
 ### Custom header
+
+The default header splits a multiword site title at its first space and hides the first word at widths up to 768 px. To keep a brand name such as “Mini Blog” visible in full, add `.title-first-name { display: inline; }` to your [site stylesheet](#colors).
 
 Use `<a class="brand-link" href="…"><strong>Project name</strong></a>` for a bold
 brand link without an underline. Keyboard focus remains visible.

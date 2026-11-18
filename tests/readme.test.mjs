@@ -27,7 +27,10 @@ test("both READMEs expose the language switcher, matching examples and localized
   assert.equal(ruLinks.filter((link) => link === "docs/typography.ru.md").length, 2, "Russian links use only the Russian typography guide");
   assert.ok(!enLinks.includes("docs/typography.ru.md"), "no cross-language typography links in English");
   assert.ok(!ruLinks.includes("docs/typography.md"), "no cross-language typography links in Russian");
-  assert.deepEqual(ruLinks.map((link) => link === "docs/typography.ru.md" ? "docs/typography.md" : link).sort(), enLinks, "other links remain synchronized");
+  const demo = "https://hugo-mini-demo.vercel.app/";
+  assert.ok(enLinks.includes(demo) && ruLinks.includes(demo + "ru/"), "demo links open in the README language");
+  const equivalents = new Map([["docs/typography.ru.md", "docs/typography.md"], [demo + "ru/", demo]]);
+  assert.deepEqual(ruLinks.map((link) => equivalents.get(link) ?? link).sort(), enLinks, "other links remain synchronized");
 });
 
 test("Russian README consistently uses е instead of ё", () => {

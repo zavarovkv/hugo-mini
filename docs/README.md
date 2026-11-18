@@ -1,13 +1,13 @@
 # Documentation
 
-Hugo Mini is a minimal theme for blogs, essays and personal sites. Start with
-the [quick start](../README.md#quick-start); use the guides below as you add features.
+**New blog:** follow the [quick start](../README.md#quick-start) or [deploy the starter on Vercel](../starter/README.md). **Existing site:** [install the theme](configuration.md#installation) and enable the features you need.
+
+Examples use TOML and paths relative to your site root. Merge snippets into existing tables such as `[params]`. The [bilingual demo source](../exampleSite/) shows a complete site.
 
 ## Start and publish
 
 | I want to… | Read |
 | --- | --- |
-| Install Mini on an existing site or use Hugo Modules | [Installation](configuration.md#installation) |
 | Add full-text search and build its index | [Search](search.md) |
 | Update the theme | [Updating](configuration.md#updating) |
 | Set up identity, languages, feeds or analytics | [Configuration](configuration.md) |
@@ -33,11 +33,3 @@ the [quick start](../README.md#quick-start); use the guides below as you add fea
 | Contribute code, run checks or report a bug | [Contributing](../CONTRIBUTING.md) |
 | Refresh bundled libraries | [Bundled assets](vendor-assets.md) |
 | See release changes and upgrade notes | [Changelog](../CHANGELOG.md) |
-
-Examples in these guides use TOML configuration. Merge snippets into your existing
-tables; do not add a second `[params]` table to the same file. Paths are relative
-to your **site root**, unless a guide explicitly says to run from the theme root.
-
-For working examples, browse the [minimal starter](../starter/README.md) or the
-[bilingual demo source](../exampleSite/). The starter is intended for your own
-content; the demo exercises the theme's features.

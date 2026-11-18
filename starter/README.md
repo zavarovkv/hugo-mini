@@ -1,10 +1,10 @@
 # Hugo Mini starter
 
-A small, ready-to-edit Hugo blog powered by [Hugo Mini](https://github.com/zavarovkv/hugo-mini).
+A ready-to-edit [Hugo Mini](https://github.com/zavarovkv/hugo-mini) blog with a homepage, About page, sample article and full-text search.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
 
-The button copies this starter into your own repository and deploys it, including full-text search. Vercel installs the pinned Pagefind dependency and builds the index after Hugo.
+The button copies the starter into your own repository. Vercel builds the site and search index on each deployment.
 
 ## Customize your site
 
@@ -35,12 +35,12 @@ Open `http://localhost:1313/`. After stopping the server with `Ctrl+C`, create a
 hugo new content blog/my-next-post.md
 ```
 
-New posts are drafts. Preview with `npm run dev -- --buildDrafts`; set `draft = false` before publishing. Drafts stay out of search. `npm run build` builds Hugo and its search index; publish all of `public/`. See [search setup](https://github.com/zavarovkv/hugo-mini/blob/main/docs/search.md) for exclusions and keyboard controls.
+Restart the preview to see the draft. Set `draft = false` to publish it and include it in search. To build locally, run `npm run build` and publish the whole `public/` directory. [Search and exclusions](https://github.com/zavarovkv/hugo-mini/blob/main/docs/search.md)
 
 ## Updates
 
 - **Theme:** Hugo Mini is pinned to a reviewed commit SHA. Review the [changelog](https://github.com/zavarovkv/hugo-mini/blob/main/CHANGELOG.md), update `theme_sha` in [`setup-theme.sh`](scripts/setup-theme.sh), save any local theme edits, remove the generated `themes/hugo-mini/`, then rerun setup.
-- **Vercel build:** Hugo Extended 0.169.0, verified by SHA-256. Update the version and checksum together in [`build-vercel.sh`](scripts/build-vercel.sh).
+- **Vercel build:** The build verifies the Hugo Extended download. Update its pinned version and SHA-256 checksum together in [`build-vercel.sh`](scripts/build-vercel.sh).
 - Generated `themes/`, `public/` and `resources/` stay out of Git.
 
 [Theme documentation](https://github.com/zavarovkv/hugo-mini/blob/main/docs/README.md) · [Deployment details](https://github.com/zavarovkv/hugo-mini/blob/main/docs/deployment.md#one-click-blog-starter-on-vercel)

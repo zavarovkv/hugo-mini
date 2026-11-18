@@ -1,121 +1,82 @@
 # Search
 
-[Documentation](README.md) · [Configuration](configuration.md) · [Deployment](deployment.md)
+[Documentation](README.md) · [Deployment](deployment.md)
 
-Mini uses [Pagefind](https://pagefind.app/) for full-text search. Hugo renders the
-pages; Pagefind indexes that HTML after each build. The dialog inherits the site's
-fonts and colors, highlights matches and links to relevant article sections.
-Results stay in the current language. No service, API key or search server is needed.
+Mini uses [Pagefind](https://pagefind.app/) to search published pages in the reader's language. The index lives beside the site. Queries run in the browser and need no account or search service.
 
 ## Enable on an existing site
 
-Use a theme revision that includes search. From your **site root**, with Node.js
-22.12+ and Hugo Extended 0.146+ installed:
+**The starter and demo have search enabled.** After installing the theme, run `npm ci` and `npm run dev` in the project root.
 
-```bash
-npm install --save-dev --save-exact pagefind@1.6.0
-```
+For an existing site, use Hugo Extended 0.146+, Node.js 22.12+ and a theme revision that includes Pagefind. The `v3.5.0` tag predates search. If you use Hugo Modules, select a revision containing search with `hugo mod get github.com/zavarovkv/hugo-mini/v3@main` and commit the resulting module files.
 
-Merge into your Hugo configuration:
+1. Install the indexer and commit the npm manifest and lockfile.
 
-```toml
-[params]
-search = true
-```
+   ```bash
+   npm install --save-dev --save-exact pagefind@1.6.0
+   ```
 
-For a submodule at `themes/hugo-mini`, merge these scripts into `package.json`:
+2. Enable search in `hugo.toml`.
 
-```json
-{
-  "scripts": {
-    "dev": "node themes/hugo-mini/scripts/hugo-search.mjs dev",
-    "build": "node themes/hugo-mini/scripts/hugo-search.mjs build"
-  }
-}
-```
+   ```toml
+   [params]
+   search = true
+   ```
 
-Run `npm run dev` locally and `npm run build` for publication. Commit the npm
-manifest and lockfile. The [starter](../starter/README.md) includes this setup.
-Search is opt-in for other sites; `search = false` keeps ordinary Hugo-only builds.
+3. For a theme installed at `themes/hugo-mini`, add these scripts to the site's `package.json`. For a Hugo Module, use the build commands below.
+
+   ```json
+   {
+     "scripts": {
+       "dev": "node themes/hugo-mini/scripts/hugo-search.mjs dev",
+       "build": "node themes/hugo-mini/scripts/hugo-search.mjs build"
+     }
+   }
+   ```
 
 ## Build and preview
 
-The helper runs Hugo with full disk rendering, then Pagefind. Production builds
-remove stale output and recreate the index; development rebuilds reindex after
-Hugo finishes, including additions, edits and removals. Development indexes an
-HTML snapshot selected by `hugo list published`, so stale server files cannot
-keep removed pages searchable. It rebuilds on every
-successful Hugo build, not only when a content hash changes. Hugo flags pass through:
+| Task | Command | What to expect |
+| --- | --- | --- |
+| Preview edits | `npm run dev` | Each successful Hugo rebuild refreshes the index from currently published pages, including edits and deletions. Wait for **Search index updated**, then reload an already-open page. |
+| Preview drafts | `npm run dev -- --buildDrafts` | Draft pages render for review and stay out of search. |
+| Publish | `npm ci`, then `npm run build` | A clean Hugo build followed by indexing. Deploy the entire output directory, including `pagefind/`. |
 
-```bash
-npm run dev -- --buildDrafts
-npm run build -- --baseURL https://example.org/blog/
-```
+The helper forwards Hugo options such as `--baseURL https://example.org/blog/`. Development needs full disk rendering. Plain `hugo server` does not run Pagefind.
 
-For Hugo Modules or your own build pipeline, run the equivalent two steps after
-installing Pagefind in the site:
+With Hugo Modules or a custom pipeline, install the pinned npm dependency and run these commands for a search-enabled site with published content. Adjust `public` if you use a different destination.
 
 ```bash
 hugo --minify --cleanDestinationDir
-npx --no-install pagefind --site public
+npx --no-install pagefind --site public --root-selector 'main[data-pagefind-body]' --exclude-selectors '.heading-anchor, .footnote-backref, .copy-btn'
 ```
-
-Use the actual destination if it differs from `public`. With plain `hugo server`,
-rerun Pagefind after content edits; the helper automates this. Do not enable
-`--renderToMemory` or `--renderStaticToDisk` with the helper. During development,
-the new index is ready when the terminal prints **Search index updated**; reload
-the page to use the new index in an already-open browser.
-
-On CI/hosting, run `npm ci` before the build and publish **all** of `public/`,
-including `pagefind/`. Use `npm run build` as the hosting build command when the
-helper is installed. Missing indexes show a retry message; a failed production
-index build fails the command. The demo and Vercel starter already include this step.
 
 ## What is searchable
 
-| Content | Included |
-| --- | --- |
-| Published articles and standalone pages | Yes: title and main text; titles have extra weight |
-| Home, archives, taxonomy lists and 404 | No |
-| `hidden = true`, `noindex = true`, `search = false` | No |
-| Drafts and future/expired pages | No, including draft previews |
-| Menus, footer, sharing controls and Mermaid source | No |
+The index includes titles and main text from published articles and standalone pages. Titles carry extra weight. Matches can link directly to a section.
 
-Set `search = false` in a page's front matter to exclude it only from local search.
-The development server removes its generated index when search is disabled or
-the last searchable page is removed or excluded. It rebuilds the index when an
-eligible page returns with search enabled.
-To omit a block in authored HTML, add `data-pagefind-ignore` to its wrapper.
-Exclusion is not access control: a published page remains reachable by its URL.
-The site's existing JSON Feed is independent of this index.
+| To exclude | Use |
+| --- | --- |
+| A page from local search only | `search = false` in page front matter |
+| A page from listings as well | [`hidden = true`](content.md#front-matter) |
+| A page from local search and the sitemap, with a noindex directive for crawlers | `noindex = true` |
+| A block of authored HTML | `data-pagefind-ignore` on its wrapper |
+
+Homepages, archives, taxonomy lists, 404 pages, drafts, future and expired pages, menus, footers and Mermaid source stay out of the index. A published page remains accessible by URL. JSON Feed is independent of search.
 
 ## Interaction and customization
 
-- Open with the header magnifier, the mobile menu, `Cmd/Ctrl+K` or `/` outside an editor.
-- Use arrows to move through results, Enter to open, Escape to close and Tab for controls.
-- All matching pages appear in one list. The field and results scroll together,
-  with the scrollbar at the screen edge.
-- Typing waits for a 250 ms pause and keeps the previous results until the new
-  list is ready. Slower searches animate the thin divider instead of displaying
-  loading text; reduced motion keeps that indicator static.
-- Search fills the screen; its contents follow the blog column. Mobile adapts to the on-screen keyboard.
-- The empty message is centered horizontally, with the space below the field
-  split 1:2 above and below the message.
-- Failed downloads use the ordinary centered empty state, with no error message
-  or retry button. Editing, pressing Enter or reopening retries the unfinished query.
-- `showSearchButton = false` hides header triggers; keyboard shortcuts remain available.
-- Override `search_*` strings in your site's `i18n/`. English and Russian are bundled.
-- Theme CSS exposes `--search-width`, `--search-placeholder`, `--search-highlight`,
-  `--search-hover` and `--search-progress-color`.
+- Open search from the header, the mobile menu, `Cmd/Ctrl+K` or `/` outside an editor. Use the arrow keys to select a result, Enter to open it and Escape to close.
+- All matches appear in one list. Typing pauses briefly before searching, and previous results remain visible until the new list is ready.
+- `showSearchButton = false` hides the triggers and keeps the shortcuts. Override `search_*` labels in your site's `i18n/`.
+- CSS tokens include `--search-width`, `--search-placeholder`, `--search-highlight`, `--search-hover` and `--search-progress-color`.
 
-JavaScript and WebAssembly are required for search. Controls stay hidden when
-JavaScript is disabled. The engine and fragments load from the same site only
-when search opens; no query is sent to a search service. A restrictive CSP needs
-to allow local modules/fetches, WebAssembly compilation (`'wasm-unsafe-eval'`)
-and Pagefind workers (`worker-src 'self' blob:`).
-For language support and hosting details, see [Pagefind's multilingual guide](https://pagefind.app/docs/multilingual/)
-and [hosting troubleshooting](https://pagefind.app/docs/hosting/).
+## If a published page never appears
 
-If known content returns an empty state locally, check that
-`/pagefind/pagefind-entry.json` returns JSON, not a 404. Restart with `npm run dev`
-and wait for **Search index updated**; plain `hugo server` does not generate an index.
+An unavailable index and a query with no matches show the same empty state. Editing the query, pressing Enter after a failure, or reopening search retries the request.
+
+1. Check the page is published, uses the current language and meets the inclusion rules above.
+2. Open `pagefind/pagefind-entry.json` under the site's base URL. It should return JSON. Locally, start `npm run dev` and wait for indexing. On a host, check that the build succeeded and uploaded `pagefind/` with the HTML.
+3. For a restrictive Content Security Policy, allow same-origin modules and fetches, WebAssembly compilation (`'wasm-unsafe-eval'`) and workers (`worker-src 'self' blob:`). Search loads on demand and requires JavaScript and WebAssembly.
+
+The helper clears a previous development index when search is disabled or the last eligible page disappears. A production build with search enabled requires at least one eligible page and fails if indexing fails. [Pagefind hosting guide](https://pagefind.app/docs/hosting/)

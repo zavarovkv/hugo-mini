@@ -19,9 +19,9 @@ content, without author-specific Telegram links or analytics.
 | Hugo | Download a pinned Extended release and verify its official SHA-256 digest. Update version and checksum together. |
 | Search | Index both languages after Hugo; publish `exampleSite/public/pagefind/` with the site. |
 | Checkout path | Create a temporary theme-directory symlink for Vercel's generic checkout path. |
-| Production URL | Use `VERCEL_PROJECT_PRODUCTION_URL`. |
+| Production URL | Use `VERCEL_PROJECT_PRODUCTION_URL`, falling back to `VERCEL_URL`. |
 | Preview URL | Use `VERCEL_URL`. |
-| Local / CI URL | Keep the example's `https://example.com/`; Vercel overrides it with `--baseURL`. |
+| Local / CI URL | Use `npm run dev` or `npm run build` from the theme root. The Vercel script requires `VERCEL_URL`. |
 
 ## Deployment-owned demo fonts
 

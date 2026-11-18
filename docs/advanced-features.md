@@ -2,8 +2,7 @@
 
 [Documentation](README.md) · [Configuration defaults](../hugo.toml) · [Example site](../exampleSite/)
 
-Use this index to find a feature's setup, options and limitations. For a task-oriented
-starting point, open the [documentation home](README.md).
+Look up a setting, shortcode or template hook. Each guide includes its defaults and a working example where applicable.
 
 ## Reading and navigation
 
@@ -59,4 +58,4 @@ starting point, open the [documentation home](README.md).
 | Public theme demo | [Demo maintenance](demo.md) |
 | Bundled libraries, tests and contribution workflow | [Assets](vendor-assets.md), [contributing](../CONTRIBUTING.md) |
 
-Public behavior changes are recorded in the [changelog](../CHANGELOG.md).
+For changes between versions, see the [changelog](../CHANGELOG.md).

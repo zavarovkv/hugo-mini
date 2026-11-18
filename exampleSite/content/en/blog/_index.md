@@ -1,4 +1,4 @@
 +++
 title = "Articles"
-description = "Blog articles about product management and technology"
+description = "Writing examples and setup guides for the Hugo Mini theme"
 +++

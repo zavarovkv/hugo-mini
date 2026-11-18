@@ -2,123 +2,41 @@
 title = "Telegram Integration"
 slug = "telegram-integration"
 date = "2026-04-05T12:00:00+00:00"
-description = "Discussion comments and build-time reaction counts — the theme's two Telegram features"
+description = "How to show a Telegram discussion, views and reactions on a blog post"
 categories = ["getting-started"]
 +++
 
-Mini treats Telegram as a first-class engagement surface for blogs whose audience lives partly on the messenger. Two independent features plug into the same `telegramChannel` + `telegram_post` configuration:
-
-1. Discussion comments via Telegram's official widget
-2. Build-time reaction counts and view counts surfaced next to the post date
-
-Each feature renders only when its config is present, so you can enable them one at a time.
+A post can show the discussion from its Telegram message, with views and reactions beside the publication date. This demo has no channel connected.
 
 ## Discussion Comments
 
-Set your channel username (without `@`) in `config.toml`:
+Set your public channel in `hugo.toml` and enable discussion for the message in Telegram.
 
 ```toml
 [params]
-  telegramChannel = "your_channel"
+telegramChannel = "your_channel"
 ```
 
-Tag each post with the message ID of the corresponding channel post:
-
-```toml
-+++
-title = "My Post"
-telegram_post = 42
-+++
-```
-
-Mini embeds Telegram's official Discussion Comments widget on the page, lazy-loaded when the section scrolls into view (via `IntersectionObserver`). The existing widget switches between light and dark mode without reloading the comments.
+Put the numeric message ID in the article’s front matter. For `https://t.me/your_channel/42`, use `telegram_post = 42`. The reader’s browser loads the Telegram widget as the comments section comes into view.
 
 ## Reactions & View Counts
 
-The theme ships a zero-dependency Node script that scrapes public Telegram embeds for each of your posts and writes reaction + view counts to `data/telegram_reactions.json`. Two partials (`telegram-views.html` and `telegram-reactions.html`) read that data and render an inline row next to the post date:
+<a id="how-it-works"></a>
+<a id="setup"></a>
 
-```
-eye 857   Aug 28, 2024                              star 11   heart 7
-```
-
-Eye icon + view count on the left, reactions aligned right via flexbox. On mobile, the two groups stack vertically. The eye glyph is a filled monochrome two-path SVG with a circular pupil — borrowed from Ilya Birman's blog — rendered in `currentColor` so it matches the surrounding text.
-
-### How it works
-
-1. For every post with `telegram_post = NNN`, the script fetches `https://t.me/<channel>/<id>?embed=1` — a public URL, no auth required
-2. Parses the embedded HTML for `<span class="tgme_reaction">` elements and the `.tgme_widget_message_views` span
-3. Writes a single JSON file that Hugo loads via `site.Data.telegram_reactions`
-4. The theme partials look up the current post's ID in that map and render the row — or render nothing if the data is missing
-
-Paid star reactions are preserved. Custom premium emoji with no text fallback are skipped. View counts preserve Telegram's formatting (`1.2K`, `857`).
-
-### Setup
-
-Add to your site's `package.json`:
-
-```json
-"scripts": {
-  "fetch-telegram-reactions": "node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs"
-}
-```
-
-Commit `data/telegram_reactions.json` or restore it from a CI cache before fetching.
-This gives the helper previous counts to preserve during an outage. If you choose
-to gitignore it, configure another restoration mechanism.
-
-Call the script in CI before `hugo --minify`:
-
-```yaml
-- name: Fetch Telegram reactions
-  continue-on-error: true
-  run: npm run fetch-telegram-reactions
-- name: Build
-  run: hugo --minify
-```
-
-`continue-on-error: true` lets publishing continue during an outage. The fetcher retries transient failures and preserves saved counts. A fresh runner needs a restored cache, artifact or committed snapshot to have previous values; without one, unavailable counts are omitted.
-
-### Auto-resolution and overrides
-
-The script auto-resolves channel and content directory from Hugo config via `hugo config --format json`. In the common case no flags are needed. To override:
+To display counters, run the helper from your site root before building. This example assumes Mini is installed under `themes/hugo-mini/`.
 
 ```bash
-node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs \
-  --channel my_channel \
-  --content-dir content/en/posts \
-  --output data/telegram_reactions.json
+node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs
 ```
 
-Also respects the `TELEGRAM_CHANNEL` env var.
+The helper saves a snapshot in `data/telegram_reactions.json`. Then run your usual site build. In the starter, `npm run build` also refreshes search.
 
-### Graceful degradation
+<a id="graceful-degradation"></a>
 
-The partials render nothing when:
+Commit the snapshot or restore it from your CI cache to keep previous values during a Telegram outage. With no saved values, the article publishes without counters.
 
-- The data file doesn't exist (local dev without running the fetch script)
-- The post has no `telegram_post` front matter
-- The entry for this post's ID is missing (post deleted, fetch failed, etc.)
+<a id="auto-resolution-and-overrides"></a>
+<a id="complete-setup"></a>
 
-This means you can `hugo server` locally without ever running the fetch script — the site just won't show reaction counts. Same for first-time clones.
-
-## Complete Setup
-
-To enable both features, add to `config.toml`:
-
-```toml
-[params]
-  telegramChannel = "your_channel"
-```
-
-Then in each post that has a corresponding Telegram message:
-
-```toml
-+++
-title = "My Post"
-telegram_post = 42
-+++
-```
-
-And wire the fetch script into `package.json` + CI as shown above.
-
-That's it — comments widget and build-time reaction counts kick in on every post that has `telegram_post` set. Remove the `telegram_post` field from a post's front matter and the comments widget + reactions row disappear for that post specifically.
+[Script options and CI setup](https://github.com/zavarovkv/hugo-mini/blob/main/docs/telegram.md)

@@ -5,7 +5,7 @@
 Use native Markdown for ordinary images and code. Add shortcodes when you need
 a caption, a diagram or a wider figure.
 
-[Images](#wide-images) · [Diagrams](#wide-diagrams) · [Code](#wide-code-blocks) · [Captions](#captions) · [Layout limits](#wide-layout-reference)
+[Images](#wide-images) · [Diagrams](#wide-diagrams) · [Code](#wide-code-blocks) · [Formulas](#formulas) · [Captions](#captions) · [Layout limits](#wide-layout-reference)
 
 ## Wide images
 
@@ -63,22 +63,11 @@ file breaks dynamic imports. Local entry URLs receive a content hash while relat
 chunk paths remain intact. External or missing local URLs are left unchanged.
 
 Mermaid 12 needs Node.js 22.12+ for its tooling and ES2024-capable browsers, including
-Safari 17.4+. A site may retain Mermaid 11 for older browsers. See the
-[maintainer upgrade procedure](vendor-assets.md#mermaid).
-
-Mini sets Dagre/classic rendering, `flowchart.wrappingWidth = 200` and
-`flowchart.minNodeWidth = 0` to preserve Mermaid 11 geometry with Mermaid 12 and
-avoid an accidental switch to ELK. Individual diagrams can override these settings.
+Safari 17.4+. Sites supporting older browsers can retain Mermaid 11. Mini uses Dagre with the classic renderer. [Mermaid upgrade notes](vendor-assets.md#mermaid)
 
 ### Diagram loading and printing
 
-1. Nearby diagrams render first.
-2. Remaining diagrams and neutral print copies are prepared during idle time.
-3. Theme changes render offscreen and publish complete SVGs atomically.
-
-Print switches synchronously to a cached neutral copy. If it is unavailable,
-readable source prints instead; `beforeprint` never waits for a download.
-Leaving print restores the screen theme. These fallbacks also apply to wide diagrams.
+Nearby diagrams render first. The browser prepares the rest and their print copies when idle. Switching color schemes replaces each diagram once its new colors are ready. Print uses a neutral diagram or the readable source if rendering is still in progress.
 
 ## Wide code blocks
 
@@ -96,9 +85,17 @@ bundled syntax palette and its light/dark/print styles.
 
 ## Formulas
 
-Set `math = true` only on pages that use formulas. KaTeX is self-hosted by the theme;
-formulas need no npm dependency. Keep code and formulas in their native
-Markdown syntax so prose typography does not alter them.
+Set `math = true` in each article that uses formulas. Mini serves KaTeX from your site and renders in the browser. Enable Goldmark passthrough in `hugo.toml` to preserve TeX commands, underscores and matrix row breaks during Markdown processing.
+
+```toml
+[markup.goldmark.extensions.passthrough]
+  enable = true
+  [markup.goldmark.extensions.passthrough.delimiters]
+    inline = [['\(', '\)']]
+    block = [['$$', '$$'], ['\[', '\]']]
+```
+
+Write `\(x_1\)` inline or place a display formula between two lines of `$$`. If your articles use single-dollar inline math, add `['$', '$']` to the `inline` array.
 
 ## Captions
 

@@ -2,8 +2,7 @@
 
 [Documentation](README.md) · [Configuration](configuration.md)
 
-Link an article to a message in a public Telegram channel to show comments and,
-optionally, saved view/reaction counts. Both the channel and message ID are required.
+Connect an article to a public channel post to show its Telegram discussion or display its views and reactions. Comments load from Telegram in the reader’s browser. Counters come from a snapshot saved before the site builds.
 
 ## Connect a post
 
@@ -24,7 +23,7 @@ optionally, saved view/reaction counts. Both the channel and message ID are requ
 
 ## Comments
 
-Single posts load Telegram's Discussion widget lazily when both fields are present.
+Set up comments for the channel post in Telegram. Mini loads the Discussion widget as the reader approaches the comments section on a post with both fields set.
 The widget follows the light/dark theme, including after page restoration; switching
 themes updates the existing widget without reloading comments.
 
@@ -34,22 +33,11 @@ From your **site root**, run the optional Node.js helper before Hugo:
 
 ```bash
 node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs
-hugo --minify
 ```
 
-It scans Markdown recursively, including `post/index.md` bundles, and writes
+Then run your usual [site build](deployment.md#build-for-production). The helper scans Markdown recursively, including `post/index.md` bundles, and writes
 `data/telegram_reactions.json`. Requests read public embeds, retry rate limits and
 preserve previous values when an individual request fails.
-
-For an npm alias, merge this into your site's `package.json`:
-
-```json
-{
-  "scripts": {
-    "fetch-telegram-reactions": "node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs"
-  }
-}
-```
 
 ## Configuration discovery and overrides
 

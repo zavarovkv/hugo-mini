@@ -2,123 +2,41 @@
 title = "Интеграция с Telegram"
 slug = "telegram-integration"
 date = "2026-04-05T12:00:00+00:00"
-description = "Комментарии Discussion и счетчики реакций при сборке — две Telegram-фичи темы"
+description = "Как подключить комментарии Telegram и показывать просмотры и реакции под статьей"
 categories = ["getting-started"]
 +++
 
-Mini относится к Telegram как к first-class инструменту engagement'а для блогов, чья аудитория частично живет в мессенджере. Две независимых фичи работают поверх одной и той же связки `telegramChannel` + `telegram_post`:
-
-1. Комментарии через официальный виджет Telegram Discussion
-2. Счетчики реакций при сборке и просмотров рядом с датой поста
-
-Каждая фича рендерится только при наличии своего конфига — можно включать по одной.
+Под статьей можно показать обсуждение публикации из Telegram, а рядом с датой — число просмотров и реакции. В этом демо канал не подключен.
 
 ## Комментарии Discussion
 
-Задай username канала (без `@`) в `config.toml`:
+Укажите публичный канал в `hugo.toml` и включите обсуждение публикации в Telegram.
 
 ```toml
 [params]
-  telegramChannel = "your_channel"
+telegramChannel = "your_channel"
 ```
 
-Пометь каждый пост ID сообщения в канале:
-
-```toml
-+++
-title = "Мой пост"
-telegram_post = 42
-+++
-```
-
-Mini встраивает официальный виджет Telegram Discussion Comments, который ленится — подгружается только когда секция попадает в viewport (через `IntersectionObserver`). Существующий виджет переключается между светлой и темной темами без перезагрузки комментариев.
+В параметрах статьи укажите номер сообщения. Например, для `https://t.me/your_channel/42` это `telegram_post = 42`. Когда читатель дойдет до комментариев, тема загрузит виджет Telegram.
 
 ## Реакции и просмотры
 
-Тема включает zero-dependency Node-скрипт, который парсит публичные embed'ы Telegram для каждого поста и пишет счетчики реакций + просмотров в `data/telegram_reactions.json`. Два partial'а (`telegram-views.html` и `telegram-reactions.html`) читают эти данные и рендерят inline-ряд рядом с датой поста:
+<a id="как-это-работает"></a>
+<a id="установка"></a>
 
-```
-👁 857   28 августа 2024                           ⭐ 11   ❤ 7
-```
-
-Иконка глаза + число просмотров слева, реакции выровнены справа через flexbox. На мобиле две группы стекаются вертикально. Глаз — filled монохромный SVG из двух path + круглый зрачок, позаимствован из блога Ильи Бирмана, рисуется через `currentColor` так что наследует цвет окружающего текста.
-
-### Как это работает
-
-1. Для каждого поста с `telegram_post = NNN` скрипт делает fetch на `https://t.me/<channel>/<id>?embed=1` — публичный URL, auth не нужен
-2. Парсит встроенный HTML на `<span class="tgme_reaction">` и `.tgme_widget_message_views`
-3. Пишет один JSON-файл, который Hugo грузит как `site.Data.telegram_reactions`
-4. Partial'ы темы ищут ID текущего поста в этом map'е и рендерят ряд — либо ничего, если данных нет
-
-Paid-реакции звездами (`⭐`) сохраняются. Custom premium-эмодзи без текстового fallback'а пропускаются. Счетчики просмотров сохраняют форматирование Telegram (`1.2K`, `857`).
-
-### Установка
-
-В `package.json` сайта:
-
-```json
-"scripts": {
-  "fetch-telegram-reactions": "node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs"
-}
-```
-
-Сохраните `data/telegram_reactions.json` в репозитории или восстановите из кеша CI
-до запроса. Тогда скрипт сможет оставить предыдущие счетчики при сбое. Если файл
-добавлен в `.gitignore`, настройте другой способ восстановления.
-
-Вызов скрипта в CI перед `hugo --minify`:
-
-```yaml
-- name: Fetch Telegram reactions
-  continue-on-error: true
-  run: npm run fetch-telegram-reactions
-- name: Build
-  run: hugo --minify
-```
-
-`continue-on-error: true` позволяет продолжить публикацию при сбое Telegram. Скрипт повторяет временно неудачные запросы и сохраняет предыдущие значения. На новом CI-раннере их нужно восстановить из кеша, артефакта или закоммиченного снимка; без сохраненных данных недоступные счетчики не показываются.
-
-### Автоматическое определение и override'ы
-
-Скрипт авто-резолвит channel и content directory через `hugo config --format json`. В обычном случае флаги не нужны. Для переопределения:
+Чтобы вывести счетчики, выполните команду из корня сайта перед сборкой. Пример рассчитан на тему в `themes/hugo-mini/`.
 
 ```bash
-node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs \
-  --channel my_channel \
-  --content-dir content/en/posts \
-  --output data/telegram_reactions.json
+node themes/hugo-mini/scripts/fetch-telegram-reactions.mjs
 ```
 
-Также учитывает env var `TELEGRAM_CHANNEL`.
+Скрипт запишет данные в `data/telegram_reactions.json`. Затем соберите сайт обычной командой. В стартере выполните `npm run build`, чтобы обновить и страницы, и поисковый индекс.
 
-### Graceful degradation
+<a id="graceful-degradation"></a>
 
-Partial'ы ничего не рендерят если:
+Сохраните JSON в репозитории или кеше CI, чтобы при недоступности Telegram в блоге остались последние известные значения. Если данных еще нет, статья выйдет без счетчиков.
 
-- Data-файла нет (локальная разработка без запуска fetch-скрипта)
-- У поста нет `telegram_post` во front matter
-- Запись для этого ID отсутствует (пост удален из канала, fetch упал, etc.)
+<a id="автоматическое-определение-и-overrideы"></a>
+<a id="полная-настройка"></a>
 
-Это значит что `hugo server` локально работает без запуска fetch-скрипта — сайт просто не покажет счетчики. Так же и при первом клонировании репозитория.
-
-## Полная настройка
-
-Чтобы включить обе фичи, добавь в `config.toml`:
-
-```toml
-[params]
-  telegramChannel = "your_channel"
-```
-
-Затем в front matter каждого поста которому соответствует Telegram-сообщение:
-
-```toml
-+++
-title = "Мой пост"
-telegram_post = 42
-+++
-```
-
-И wire fetch-скрипт в `package.json` + CI как показано выше.
-
-Готово — виджет комментариев и счетчики реакций включаются на каждом посте у которого задан `telegram_post`. Убери поле из front matter — виджет комментариев и ряд с реакциями исчезают именно для этого поста.
+[Параметры скрипта и настройка CI](https://github.com/zavarovkv/hugo-mini/blob/main/docs/telegram.md)

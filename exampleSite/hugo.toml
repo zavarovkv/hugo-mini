@@ -69,6 +69,11 @@ ignoreErrors    = ["error-disable-taxonomy"]
 
 [markup]
   [markup.goldmark]
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        inline = [['\(', '\)'], ['$', '$']]
+        block = [['$$', '$$'], ['\[', '\]']]
     [markup.goldmark.renderer]
       unsafe = true   # required for shortcodes and HTML in content
 

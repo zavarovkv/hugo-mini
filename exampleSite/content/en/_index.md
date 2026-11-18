@@ -2,21 +2,20 @@
 description = "A minimal Hugo blog theme with dark mode and multilingual support"
 +++
 
-Welcome to **Mini** — a minimal Hugo blog theme for writers who want a clear reading experience. The theme needs no JavaScript framework or build pipeline beyond Hugo.
+# Hugo Mini
 
-Inter fonts, shared CSS and JavaScript, and generated share images are self-hosted. Optional integrations such as Telegram, analytics and the Mermaid CDN fallback are enabled separately.
+A theme for personal blogs, essays and notes. Read a [sample article with quotations, lists and tables](/hello-world/), or [start your own blog](https://github.com/zavarovkv/hugo-mini/blob/main/README.md#quick-start).
 
-<h3 class="posts-group-title">Start here</h3>
+## Writing examples {.posts-group-title .no-anchor}
 
-- [Theme Features](/theme-features/) — dark mode, categories, pinned posts, and everything else configured from `config.toml`
-- [Hello World](/hello-world/) — the usual first post, kept around as a scaffold
-- [Under the Hood](/under-the-hood/) — how the theme is built: CSS architecture, render hooks, Hugo Pipes
-- [Telegram Integration](/telegram-integration/) — Discussion comments, reactions, and view counts
+- [Formulas](/math-demo/) — an inline equation, an integral and a matrix.
+- [Diagrams](/mermaid-demo/) — a flowchart, sequence diagram, Gantt chart and pie chart.
+- [Shortcodes](/shortcodes-demo/) — featured posts, columns and a captioned illustration.
 
-<h3 class="posts-group-title">Demo posts</h3>
+## How the theme works {.posts-group-title .no-anchor}
 
-- [Math formulas](/math-demo/) — KaTeX rendering, per-page opt-in
-- [Mermaid diagrams](/mermaid-demo/) — flowcharts, sequence, state, ER diagrams
-- [Shortcodes](/shortcodes-demo/) — `caption`, `mermaid`, `plug`
+- [Theme features](/theme-features/) — search, navigation and language switching.
+- [Under the hood](/under-the-hood/) — how styles, fonts and scripts load.
+- [Telegram](/telegram-integration/) — comments, views and reactions on a post.
 
-Browse every post in the [articles section](/blog/), or switch to [Русский](/ru/) to see the multilingual setup in action.
+[All articles](/blog/)

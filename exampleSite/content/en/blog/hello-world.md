@@ -63,7 +63,7 @@ Dieter Rams on design:
 
 ## Code Blocks
 
-Set `markup.highlight.noClasses = false` for colors that follow both themes; the demo and starter already use this setting.
+Set `markup.highlight.noClasses = false` for colors that follow both themes. The demo enables this in its Hugo configuration.
 
 ```go
 package main

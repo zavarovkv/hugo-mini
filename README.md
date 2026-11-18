@@ -8,29 +8,25 @@
   <a href="README.md">English</a> | <a href="README.ru.md">Русский</a>
 </p>
 
-**A minimal Hugo theme for personal blogs, essays and notes.**
-
-Build with Hugo. Core fonts, styles and scripts are served from your own site.
+**A Hugo theme for personal blogs, essays and notes.** Write in Markdown and publish a static site. Fonts, styles and core JavaScript are served from your own domain.
 
 **[Live demo](https://hugo-mini-demo.vercel.app/)** · **[Quick start](#quick-start)** · **[Hugo Themes](https://themes.gohugo.io/themes/hugo-mini/)** · **[Documentation](#documentation)**
 
 [![Hugo Mini — a dark browser window and light iPhone view on a transparent background](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v8.gif)](https://hugo-mini-demo.vercel.app/)
 
-Bundled font: **Inter**. The demo uses separately licensed Story, Sourdine and Mirta fonts. [Font details](docs/demo.md#deployment-owned-demo-fonts).
+Mini includes **Inter**. The live demo uses separately licensed Story, Sourdine and Mirta fonts. [Demo fonts](docs/demo.md#deployment-owned-demo-fonts)
 
 ## Features
 
-- **Typography for reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css), quotations, footnotes, optional margin notes and print styles. [See examples](docs/typography.md).
-- **Full-text search.** Optional [Pagefind search](docs/search.md), built with the site: relevant snippets, stable results while typing, keyboard navigation and language-specific results.
-- **Easy navigation.** Mobile menus, light/dark mode and keyboard shortcuts. Multilingual sites with English and Russian UI included.
-- **Rich articles.** Code highlighting and copying, KaTeX formulas, Mermaid diagrams and wide images.
-- **Ready to share.** SEO metadata, generated social preview images, RSS, JSON Feed and sitemap.
-- **Beyond the blog.** Homepage blocks, featured posts, projects and reading lists.
-- **Your own style.** Custom colors, fonts and logos. Optional Telegram comments, sharing buttons and analytics.
+- **Reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css) typography, quotations, margin notes and print layouts. [Authoring examples](docs/typography.md)
+- **Articles and homepages.** Highlighted, copyable code, KaTeX formulas, Mermaid diagrams and wide images. Build a homepage from featured posts, projects and reading lists.
+- **Navigation.** Light and dark modes, mobile menus, keyboard shortcuts and language switching. English and Russian interface text is included.
+- **Search.** [Pagefind](docs/search.md) searches full text in the reader’s language. The starter enables search and rebuilds the index with the site.
+- **Publishing.** Sitemap, RSS and social preview cards. Optional JSON Feed, Telegram comments, sharing controls and analytics.
 
 ## Quick start
 
-Requires **[Hugo Extended 0.146+](https://gohugo.io/installation/)** and **Git**. The search-enabled starter also needs **Node.js 22.12+**; sites without search can build with Hugo alone.
+Requires **[Hugo Extended 0.146+](https://gohugo.io/installation/)** and **Git**. The search-enabled starter also needs **Node.js 22.12+**. Once the theme is installed, a site without search can build with Hugo alone.
 
 Create a blog with a sample homepage, About page and first post:
 
@@ -48,14 +44,14 @@ npm run dev
 
 Open `http://localhost:1313/`. Set your title and author in `hugo.toml`; replace the sample pages in `content/`.
 
-Stop the server with `Ctrl+C`, then create a post and preview drafts:
+To create your first post and preview it as a draft, stop the server with `Ctrl+C` and run the following commands.
 
 ```bash
 hugo new content blog/my-first-post.md
 npm run dev -- --buildDrafts
 ```
 
-To publish, stop the server, set your `baseURL`, change the post's `draft` to `false`, run `npm run build` and deploy `public/` to a static host. [Deployment guide](docs/deployment.md).
+To publish, set `baseURL` and the post’s `draft = false`, then run `npm run build`. Deploy the whole `public/` directory, including its search index. [Deployment guide](docs/deployment.md).
 
 **Prefer Vercel?** Deploy the [starter](starter/README.md) into your own repository:
 

@@ -55,21 +55,9 @@ Use `params.featuredPosts` to choose articles and their order.
    {{< featured-posts archive="/blog/" archiveLabel="All articles" >}}
    ```
 
-A file at `content/en/blog/first-steps.md` uses `/blog/first-steps`, even if its
-published URL is `/en/getting-started/`. Omit the content directory, language
-directory and extension. Set `featuredPosts` under `[languages.<lang>.params]`
-for a different selection in each language.
+Use the **content path**. For `content/en/blog/first-steps.md`, enter `/blog/first-steps` even if the published URL is `/en/getting-started/`. Set `featuredPosts` under `[languages.<lang>.params]` for a different selection per language.
 
-The configured order is preserved and duplicates are removed. Missing pages,
-unavailable translations, hidden posts and pages outside `mainSections` are skipped.
-Hugo's usual draft and future-date rules apply.
-
-If nothing qualifies, the whole block disappears; there is no recent-post fallback.
-The list determines the count. Selection does not affect dates, feeds, category
-pinning or `latest-posts`.
-
-The heading uses the `featured_posts` i18n key. Layout and archive options match
-`latest-posts`.
+Mini keeps the configured order and skips duplicates, missing translations, hidden posts and pages outside `mainSections`. Hugo's draft and publication-date rules apply. An empty selection hides the block. The optional archive link works like [latest articles](#latest-articles). Override `featured_posts` in `i18n/` to change the heading.
 
 ## Columns
 
@@ -99,9 +87,6 @@ keeps a single column and the original reading order.
 | `--section-gap-large` | Larger separation before modules |
 | `.posts-group-title` | Compact module heading with `--content-item-gap` before its content |
 | `.no-anchor` | Omit a heading's copy link while keeping its ID |
-
-The containing module supplies external spacing. Reading and keyboard order stay
-unchanged when columns stack.
 
 ## Projects
 
@@ -142,7 +127,6 @@ From your **site root**, fetch counts before building (requires Node.js):
 
 ```bash
 node themes/hugo-mini/scripts/fetch-github-stars.mjs example/project
-hugo --minify
 ```
 
 | Behavior | Details |
@@ -216,9 +200,4 @@ review from listings and feeds while keeping it indexable and in the sitemap.
 
 Books appear newest reading month first, in two columns: title above author/year/rating
 on the left, reading month on the right. Long text wraps within its column.
-The table's 20em minimum width scrolls inside a labeled, keyboard-accessible
-`beauty-scroll` container on narrow screens.
-
-Column labels share heading weight and a single rule. Title-to-metadata spacing is
-one third of a paragraph interval; records use 1.25 intervals. A section gap follows
-the table. No extra JavaScript or network requests are needed.
+On narrow screens, a labeled, keyboard-accessible scroll area holds the table at its 20em minimum width. The list uses saved site data and adds no browser requests.

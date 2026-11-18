@@ -4,8 +4,7 @@
 
 [Documentation](README.md) · [Media](media.md) · [Typography](typography.md) · [Homepage](homepage.md)
 
-Put articles in the section selected by `params.mainSections`; `blog/` is a
-conventional choice. Use ordinary Hugo Markdown files and page bundles.
+In the starter, run `hugo new content blog/my-first-post.md`, write in Markdown and set `draft = false` when ready to publish. Articles can also be page bundles such as `content/blog/my-first-post/index.md`. For a different post section, set `mainSections` under `[params]`.
 
 ## Front matter
 
@@ -28,7 +27,7 @@ Add optional fields as needed:
 | `hidden = true` | Omit from listings, RSS, JSON Feed, `llms.txt` and local search; keep the public URL and sitemap entry. |
 | `noindex = true` | Ask search engines not to index the page; omit it from the sitemap and local search. |
 | `search = false` | Exclude only from [Pagefind search](search.md). |
-| `math = true` | Load self-hosted KaTeX for formulas. |
+| `math = true` | Load self-hosted KaTeX. See [TeX delimiters and Markdown setup](media.md#formulas). |
 | `mermaid = true` | Enable [Mermaid diagrams](media.md#wide-diagrams). |
 | `wideCode = true` | Allow [long code blocks](media.md#wide-code-blocks) to expand. |
 | `telegram_post = 123` | Link a positive Telegram message ID to [comments and counters](telegram.md). |
@@ -37,7 +36,7 @@ Add optional fields as needed:
 | `sideNotes = true` | Move [footnotes into the desktop margin](typography.md#footnotes) when space permits. |
 
 **Visibility is not access control.** Hidden pages remain public and crawlable.
-Use `draft = true` for unpublished work; preview with `hugo server -D`.
+Use `draft = true` for unpublished work. Preview with `npm run dev -- --buildDrafts` in the starter or `hugo server -D` on a Hugo-only site.
 Draft previews and 404 pages emit `noindex`. To omit an otherwise indexable page
 from the sitemap, set `disable = true` in its `[sitemap]` front-matter table.
 

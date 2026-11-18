@@ -2,7 +2,7 @@
 
 [Documentation](README.md) · [Example configuration](../exampleSite/hugo.toml) · [Defaults](../hugo.toml)
 
-Requires **Hugo Extended 0.146.0+**. Ordinary builds do not need Node.js.
+Requires **Hugo Extended 0.146.0+**. A Hugo-only site can build without Node.js. The [search-enabled starter](search.md) also needs Node.js 22.12+.
 Merge snippets into existing TOML tables rather than declaring a table twice.
 
 [Install](#installation) · [Update](#updating) · [Parameters](#parameters) · [Languages](#multilingual-sites) · [Feeds](#feeds-and-crawlers)
@@ -40,7 +40,7 @@ Remove `theme = "hugo-mini"` if switching from a submodule, then add:
     path = "github.com/zavarovkv/hugo-mini/v3"
 ```
 
-Run `hugo mod get` and preview with `hugo server`. The `/v3` suffix is required
+Run `hugo mod get github.com/zavarovkv/hugo-mini/v3` and preview with `hugo server`. For search, select a [revision with Pagefind support](search.md#enable-on-an-existing-site) and add its index step. The `/v3` suffix is required
 for 3.x Go Modules; Git submodule URLs do not use it.
 
 ## Updating
@@ -61,10 +61,10 @@ for 3.x Go Modules; Git submodule URLs do not use it.
    hugo mod tidy
    ```
 
-3. Preview with `hugo server`, then run `hugo --minify`.
+3. Preview and build using the site’s usual commands. With the search helper, run `npm run dev` and `npm run build`. For a Hugo-only site, use `hugo server` and `hugo --minify`.
 4. Commit the submodule pointer or `go.mod` / `go.sum` in your site repository.
 
-The Vercel starter pins a release separately; use its [update instructions](../starter/README.md#updates).
+The one-click Vercel starter pins an exact theme commit. Follow its [update instructions](../starter/README.md#updates).
 
 ## Parameters
 
@@ -146,18 +146,9 @@ its subdomains, opt in on **each** site:
   rememberLanguage = true
 ```
 
-| Setting or situation | Behavior |
-| --- | --- |
-| Shared cookies | `hugo-mini-theme` and `hugo-mini-language` take precedence over older local storage. |
-| Migration | Existing explicit choices migrate when no shared choice exists; automatic system colors are never saved as a fixed theme. |
-| Cookie scope | Configured parent domain, one year, `SameSite=Lax`, `Secure` on HTTPS. |
-| Cookies unavailable / different preview host | Local storage remains the fallback. |
-| `rememberLanguage` | Footer choices apply to homepages and pages marked `languagePreferenceEntry = true` in front matter or cascade. |
-| Direct translated URL | Keeps that language without saving a preference. |
-| Automatic entry-page redirect | Uses published same-origin `hreflang`; preserves query and fragment. |
+With `rememberLanguage`, a choice made in the footer applies to homepages and pages marked `languagePreferenceEntry = true`. Direct article links open in their own language. Automatic redirects follow the published same-origin translation and preserve the query and fragment. Without JavaScript, readers can still follow the footer links.
 
-Preferences refresh when returning to an open tab or restoring browser history.
-Without JavaScript, language links remain ordinary links.
+The optional parent-domain cookies (`hugo-mini-theme` and `hugo-mini-language`) last one year, use `SameSite=Lax` and are secure on HTTPS. A shared choice takes precedence. If none exists, Mini migrates an explicit local choice. If cookies are unavailable, local storage still works. System colors remain automatic until the reader chooses a theme.
 
 ## Multilingual sites
 
@@ -192,7 +183,9 @@ defaultContentLanguageInSubdir = false
 For a version-independent content setup, pair files such as
 `content/blog/hello.en.md` and `content/blog/hello.ru.md`. See Hugo's
 [multilingual content guide](https://gohugo.io/content-management/multilingual/)
-for directory-based alternatives.
+for directory-based alternatives. Set up each language's menu if the labels or destinations differ.
+
+Ordinary internal Markdown links follow the current language when a translation exists. Use the footer switcher for an explicit change of language. In particular, a Markdown link to `/` on a translated homepage can resolve back to that homepage.
 
 The example above works with the theme's minimum Hugo version. On newer Hugo,
 `locale` and `label` can replace `languageCode` and `languageName`; Mini supports both.

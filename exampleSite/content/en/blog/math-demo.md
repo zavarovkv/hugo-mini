@@ -7,9 +7,7 @@ categories = ["getting-started"]
 math = true
 +++
 
-Mini supports math rendering via [KaTeX](https://katex.org/) — the fastest math typesetting library for the web. KaTeX files are self-hosted, so formulas render without external requests.
-
-Enable math per-page by adding `math = true` to front matter. The KaTeX CSS and JS are only loaded on pages that need them.
+The formulas below are written in Markdown using TeX. Mini serves [KaTeX](https://katex.org/) from the site on pages with `math = true`.
 
 ## Inline Math
 
@@ -64,4 +62,4 @@ math = true
 +++
 ```
 
-That's all you need. No global config, no shortcodes — just standard `$...$` and `$$...$$` syntax.
+Enable [Goldmark passthrough](https://github.com/zavarovkv/hugo-mini/blob/main/docs/media.md#formulas) in the site configuration to preserve subscripts and matrix row breaks. The demo already includes this setting.
