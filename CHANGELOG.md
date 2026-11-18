@@ -2,14 +2,15 @@
 
 All notable changes to the Mini Hugo theme are documented here.
 
-[Unreleased](#unreleased) · [Latest recorded release](#350--2026-11-06) · [GitHub releases](https://github.com/zavarovkv/hugo-mini/releases)
+[Unreleased](#unreleased) · [Latest recorded release](#400--2026-11-18) · [GitHub releases](https://github.com/zavarovkv/hugo-mini/releases)
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-Changes below are grouped by user-visible behavior. For setup and current defaults,
-see the [documentation](docs/README.md); released entries below remain historical records.
+## [4.0.0] — 2026-11-18
+
+Hugo Modules users must update the import path to `github.com/zavarovkv/hugo-mini/v4`. Sites using the article sidebar or overriding its partial must update their configuration or layouts. See the [v3 migration guide](docs/configuration.md#upgrade-from-v3-to-v4).
 
 ### Added
 
@@ -29,7 +30,6 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Removed
 
-- **Standalone CV:** the `resume` layout, `resume-*` shortcodes and their stylesheet now belong to consuming sites. Existing users must retain these files in their own site before updating.
 - Remove the article recent-posts sidebar/bottom list, `recentSidebarCount` and related assets. Wide content can use that space; homepage `latest-posts` is unchanged.
 - Remove unused `--link-color`, `--blockquote-color` and `--color-blockquote-border`. See [replacement tokens](docs/customization.md#assets).
 
@@ -451,7 +451,10 @@ Nothing else changes: config params, front matter, shortcodes and i18n keys are 
 - Yandex.Metrika analytics (optional, `params.yandexMetrikaId`)
 - Console art feature (`params.consoleArt`)
 
-[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/zavarovkv/hugo-mini/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.5.0...v4.0.0
+[3.5.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.4.0...v3.5.0
+[3.4.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.3...v3.3.0
 [3.2.3]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/zavarovkv/hugo-mini/compare/v3.2.1...v3.2.2

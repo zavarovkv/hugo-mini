@@ -37,11 +37,10 @@ Remove `theme = "hugo-mini"` if switching from a submodule, then add:
 ```toml
 [module]
   [[module.imports]]
-    path = "github.com/zavarovkv/hugo-mini/v3"
+    path = "github.com/zavarovkv/hugo-mini/v4"
 ```
 
-Run `hugo mod get github.com/zavarovkv/hugo-mini/v3` and preview with `hugo server`. For search, select a [revision with Pagefind support](search.md#enable-on-an-existing-site) and add its index step. The `/v3` suffix is required
-for 3.x Go Modules; Git submodule URLs do not use it.
+Run `hugo mod get github.com/zavarovkv/hugo-mini/v4@v4.0.0` and preview with `hugo server`. Git submodules use the repository URL without a version suffix. To enable full-text search, add the [Pagefind build step](search.md#build-and-preview).
 
 ## Updating
 
@@ -57,7 +56,7 @@ for 3.x Go Modules; Git submodule URLs do not use it.
    **Hugo Module** — current major version:
 
    ```bash
-   hugo mod get -u github.com/zavarovkv/hugo-mini/v3
+   hugo mod get -u github.com/zavarovkv/hugo-mini/v4
    hugo mod tidy
    ```
 
@@ -65,6 +64,15 @@ for 3.x Go Modules; Git submodule URLs do not use it.
 4. Commit the submodule pointer or `go.mod` / `go.sum` in your site repository.
 
 The one-click Vercel starter pins an exact theme commit. Follow its [update instructions](../starter/README.md#updates).
+
+### Upgrade from v3 to v4
+
+- **Hugo Modules.** Change the site's `module.imports` path from `github.com/zavarovkv/hugo-mini/v3` to `github.com/zavarovkv/hugo-mini/v4`. Run `hugo mod get github.com/zavarovkv/hugo-mini/v4@v4.0.0`, then `hugo mod tidy`. Commit the Hugo config, `go.mod` and `go.sum`.
+- **Git submodules.** From the site root, run `git -C themes/hugo-mini fetch origin tag v4.0.0`, then `git -C themes/hugo-mini checkout v4.0.0`. Commit the updated submodule pointer.
+- **Article sidebar.** Remove `recentSidebarCount` from your config and calls to `recent-posts.html` from custom layouts. The built-in list beside or below articles was removed. Use [`latest-posts`](homepage.md#latest-articles) to place a recent-articles list on a content page.
+- **Custom styles.** Update [retired color tokens](customization.md#assets) if your stylesheet uses them.
+
+Search is opt-in on existing sites. A Hugo-only blog can upgrade to v4 without installing Node.js.
 
 ## Parameters
 

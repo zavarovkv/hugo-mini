@@ -57,7 +57,7 @@ To publish, set `baseURL` and the post’s `draft = false`, then run `npm run bu
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
 
-Existing site or Hugo Modules? See [installation](docs/configuration.md#installation). For later changes, follow the [update guide](docs/configuration.md#updating).
+Existing site or Hugo Modules? See [installation](docs/configuration.md#installation). Follow the [update guide](docs/configuration.md#updating) or [move from v3 to v4](docs/configuration.md#upgrade-from-v3-to-v4).
 
 ## Documentation
 

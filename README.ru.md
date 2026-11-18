@@ -57,7 +57,7 @@ npm run dev -- --buildDrafts
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzavarovkv%2Fhugo-mini%2Ftree%2Fmain%2Fstarter&project-name=my-mini-blog&repository-name=my-mini-blog)
 
-Уже есть сайт или используете Hugo Modules? Смотрите [установку](docs/configuration.md#installation). Для следующих версий есть [инструкция по обновлению](docs/configuration.md#updating).
+Уже есть сайт или используете Hugo Modules? Смотрите [установку](docs/configuration.md#installation). Для установленной темы есть [инструкция по обновлению](docs/configuration.md#updating) и [переходу с v3 на v4](docs/configuration.md#upgrade-from-v3-to-v4).
 
 ## Документация
 

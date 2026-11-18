@@ -8,7 +8,7 @@ Mini uses [Pagefind](https://pagefind.app/) to search published pages in the rea
 
 **The starter and demo have search enabled.** After installing the theme, run `npm ci` and `npm run dev` in the project root.
 
-For an existing site, use Hugo Extended 0.146+, Node.js 22.12+ and a theme revision that includes Pagefind. The `v3.5.0` tag predates search. If you use Hugo Modules, select a revision containing search with `hugo mod get github.com/zavarovkv/hugo-mini/v3@main` and commit the resulting module files.
+For an existing site, use Hugo Mini v4, Hugo Extended 0.146+ and Node.js 22.12+. If you use v3, follow the [upgrade guide](configuration.md#upgrade-from-v3-to-v4) first.
 
 1. Install the indexer and commit the npm manifest and lockfile.
 
