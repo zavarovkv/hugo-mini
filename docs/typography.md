@@ -24,6 +24,7 @@ The first four rules are provided by Goldmark. Mini formats existing number grou
 
 ## Scope and exclusions
 
+- Mini processes text between HTML tags. Number formatting runs on fragments with digits, and Russian quotation nesting carries across inline tags.
 - Extra formatting applies to English homepage/single-page bodies, visible titles and article links. Metadata, feeds and Markdown sources stay unchanged.
 - Code, math, Mermaid, HTML attributes/comments, URLs and paths are preserved. Mini does not join words across tags or guess ambiguous ranges.
 - Russian has [separate rules](typography.ru.md#правила-для-русского-языка). Other languages do not receive Mini's extra prose pass.

@@ -1,0 +1,15 @@
+{{- /* Build the chronological lookup once per language. Listing pins do not
+       affect navigation, and preview drafts are never destinations. */ -}}
+{{- $posts := where (partialCached "main-pages.html" . .Site.Language.Lang) "Draft" false -}}
+{{- $index := newScratch -}}
+{{- range $i, $post := $posts -}}
+  {{- $neighbors := dict "enabled" true -}}
+  {{- if lt (add $i 1) (len $posts) -}}
+    {{- $neighbors = merge $neighbors (dict "previous" (index $posts (add $i 1)).RelPermalink) -}}
+  {{- end -}}
+  {{- if gt $i 0 -}}
+    {{- $neighbors = merge $neighbors (dict "next" (index $posts (sub $i 1)).RelPermalink) -}}
+  {{- end -}}
+  {{- $index.SetInMap "posts" $post.RelPermalink $neighbors -}}
+{{- end -}}
+{{- return ($index.Get "posts" | default dict) -}}

@@ -487,7 +487,7 @@
     dialog.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
       if (composing) return;
-      var first = links()[0];
+      var first = results.querySelector('a');
       if (first && renderedQuery === query()) first.click();
       else search();
     });
@@ -502,6 +502,7 @@
         return;
       }
       if (e.isComposing || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
       var all = links(), index = all.indexOf(document.activeElement);
       if (e.key === 'ArrowDown' && (e.target === input || index >= 0)) {
         if (all.length) { e.preventDefault(); all[Math.min(index + 1, all.length - 1)].focus(); }
@@ -1160,12 +1161,14 @@
     var section = article && article.querySelector(':scope > .footnotes');
     var list = section && section.querySelector(':scope > ol');
     if (!list || !list.children.length) return;
-    var entries = Array.prototype.map.call(list.children, function (note) {
-      var reference = Array.prototype.find.call(article.querySelectorAll('.footnote-ref'), function (ref) {
-        try { return decodeURIComponent(ref.hash.slice(1)) === note.id; }
-        catch (e) { return ref.hash.slice(1) === note.id; }
-      });
-      return { note: note, reference: reference };
+    var firstReference = new Map();
+    article.querySelectorAll('.footnote-ref').forEach(function (ref) {
+      var id = ref.hash.slice(1);
+      try { id = decodeURIComponent(id); } catch (e) { /* Keep literal IDs. */ }
+      if (!firstReference.has(id)) firstReference.set(id, ref);
+    });
+    var entries = Array.from(list.children, function (note) {
+      return { note: note, reference: firstReference.get(note.id) };
     });
     if (entries.some(function (entry) { return !entry.reference; })) return;
     var heading = section.previousElementSibling;
@@ -1194,8 +1197,9 @@
       var obstacles = Array.prototype.map.call(article.querySelectorAll(':scope > .article-image-wide, :scope > .article-diagram-wide, :scope > .code-block'), function (block) {
         return block.getBoundingClientRect();
       }).filter(function (block) { return block.left < right && block.right > left; });
+      var listTop = list.getBoundingClientRect().top - rect.top;
       var end = 0;
-      entries.forEach(function (entry) {
+      var positions = entries.map(function (entry) {
         var top = Math.max(end, entry.reference.getBoundingClientRect().top - rect.top);
         var height = entry.note.getBoundingClientRect().height;
         obstacles.forEach(function (block) {
@@ -1203,11 +1207,14 @@
             top = block.bottom - rect.top + space;
           }
         });
-        entry.note.style.setProperty('--sidenote-top', top + 'px');
         end = top + height + space;
+        return top;
+      });
+      entries.forEach(function (entry, index) {
+        entry.note.style.setProperty('--sidenote-top', positions[index] + 'px');
       });
       // Long final notes must not cover the footer.
-      var remaining = end - space - (list.getBoundingClientRect().top - rect.top);
+      var remaining = end - space - listTop;
       article.style.setProperty('--sidenotes-overflow', Math.max(0, remaining) + 'px');
     }
 

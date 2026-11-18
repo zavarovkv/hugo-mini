@@ -39,15 +39,18 @@
       {{- end -}}
     {{- end -}}
   {{- else if or $tag (hasPrefix $token "<!--") (hasPrefix $token "<![CDATA[") (hasPrefix $token `\[`) (hasPrefix $token `\(`) (hasPrefix $token "$$") (and $.math (hasPrefix $token "$") (gt (len $token) 1)) -}}
-    {{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
-    {{- $text := $prose.text -}}
-    {{- if and $hangingStart (strings.TrimSpace $text) -}}
-      {{- $text = partial "typography/hanging-start.html" $text -}}
-      {{- $hangingStart = false -}}
+    {{- if $pending -}}
+      {{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
+      {{- $text := $prose.text -}}
+      {{- if and $hangingStart (strings.TrimSpace $text) -}}
+        {{- $text = partial "typography/hanging-start.html" $text -}}
+        {{- $hangingStart = false -}}
+      {{- end -}}
+      {{- $parts = $parts | append $text -}}
+      {{- $quoteStack = $prose.quoteStack -}}
+      {{- $pending = "" -}}
     {{- end -}}
-    {{- $parts = $parts | append $text $token -}}
-    {{- $quoteStack = $prose.quoteStack -}}
-    {{- $pending = "" -}}
+    {{- $parts = $parts | append $token -}}
     {{- $skip := in $verbatim $tag -}}
     {{- if and $tag (not $closing) (in (lower $token) "data-typography") -}}
       {{- /* Parse whole attributes so a quoted example cannot enable the opt-out. */ -}}
@@ -84,6 +87,8 @@
     {{- $quoteStack = slice -}}
   {{- end -}}
 {{- end -}}
-{{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
-{{- $parts = $parts | append $prose.text -}}
+{{- if $pending -}}
+  {{- $prose := partial "typography/text.html" (dict "text" $pending "lang" $lang "quoteStack" $quoteStack) -}}
+  {{- $parts = $parts | append $prose.text -}}
+{{- end -}}
 {{- return (delimit $parts "" | safeHTML) -}}
