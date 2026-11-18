@@ -1317,6 +1317,9 @@
       --beauty-h1-size-small: 2rem;
       --beauty-h1-margin: 0 var(--content-group-gap);
     }
+    .home-content > h1:first-child + p + p {
+      margin-block-start: var(--content-group-gap);
+    }
   }
   @media screen and (min-width: 769px) {
     .home-content { --section-gap-large: 4rem; }

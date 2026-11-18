@@ -11,7 +11,8 @@ On multilingual sites, use each language's homepage file.
 
 Begin with a native Markdown H1 and a short introduction. The heading uses the
 title typeface at 36 px on desktop and 32 px on mobile, with 24 px before the
-following text. Paragraphs use a compact 12 px interval.
+following text. On screen, allow 24 px between the opening paragraph and the
+next paragraph, then 12 px between subsequent paragraphs.
 
 | Spacing token | Default | Used for |
 | --- | --- | --- |

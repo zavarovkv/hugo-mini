@@ -16,6 +16,7 @@ owns native text styling. Override tokens instead of copying base selectors.
 | Body text / leading | 18/28 px | 19/29 px |
 | H1 | 44 px | 32 px |
 | Homepage H1 | 36 px | 32 px |
+| First homepage paragraph to the next paragraph | 24 px | 24 px |
 | Header to H1 | 48 px | 40 px |
 | H1 to content | 32 px | 28 px |
 | Article H2 | Theme heading scale | 24 px |

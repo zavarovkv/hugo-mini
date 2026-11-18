@@ -8,6 +8,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Changed
+
+- Homepage introductions now have a 24 px gap between their first two paragraphs.
+
 ## [4.0.0] — 2026-11-18
 
 Hugo Modules users must update the import path to `github.com/zavarovkv/hugo-mini/v4`. Sites using the article sidebar or overriding its partial must update their configuration or layouts. See the [v3 migration guide](docs/configuration.md#upgrade-from-v3-to-v4).
