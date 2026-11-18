@@ -1315,7 +1315,7 @@
     .home-content {
       --beauty-h1-size: 2.25rem;
       --beauty-h1-size-small: 2rem;
-      --beauty-h1-margin: 0 var(--content-group-gap);
+      --beauty-h1-margin: 0 1rem;
     }
     .home-content > h1:first-child + p + p {
       margin-block-start: var(--content-group-gap);
@@ -1399,6 +1399,7 @@
 
   .project-entry { margin-block: var(--content-group-gap); }
   .project-title {
+    position: relative;
     margin: 0;
     font-size: 1em;
     font-weight: var(--font-weight-body);
@@ -1454,6 +1455,15 @@
   .project-mark-button:disabled {
     opacity: 1;
     cursor: default;
+  }
+  @media screen and (min-width: 769px) {
+    .home-content .content-columns > :nth-child(even) .project-mark-button {
+      position: absolute;
+      inset-inline-end: 100%;
+      inset-block-start: 0.5lh;
+      transform: translateY(-50%);
+      margin: 0;
+    }
   }
   .project-mark {
     position: relative;

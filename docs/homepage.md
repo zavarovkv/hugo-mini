@@ -10,9 +10,9 @@ On multilingual sites, use each language's homepage file.
 ## Homepage introduction
 
 Begin with a native Markdown H1 and a short introduction. The heading uses the
-title typeface at 36 px on desktop and 32 px on mobile, with 24 px before the
-following text. On screen, allow 24 px between the opening paragraph and the
-next paragraph, then 12 px between subsequent paragraphs.
+title typeface at 36 px on desktop and 32 px on mobile. On screen, the opening
+paragraph starts 16 px below the heading. The next gap is 24 px, followed by
+12 px between subsequent paragraphs.
 
 | Spacing token | Default | Used for |
 | --- | --- | --- |
@@ -105,7 +105,9 @@ A project with a small mark that matches the color scheme.
 Descriptions accept Markdown and keep ordinary body-link weight. Put a secondary
 source link in `<p class="beauty-note">…</p>` for smaller, muted text.
 
-Optional `icon` and `iconDark` select light/dark marks. Local image URLs are
+Optional `icon` and `iconDark` select light/dark marks. On a two-column homepage,
+marks in the second column sit in the gutter so project names align with their
+descriptions. When the columns stack, marks sit beside the names. Local image URLs are
 content-versioned; external URLs stay unchanged. With JavaScript, the mark becomes
 a separate keyboard-accessible button that spins on activation. Without it, the
 mark stays decorative. Reduced-motion preferences are respected.

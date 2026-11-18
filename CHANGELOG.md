@@ -10,7 +10,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Changed
 
-- Homepage introductions now have a 24 px gap between their first two paragraphs.
+- Homepage introductions start 16 px below the title, with 24 px between their first two paragraphs. Project logos in the second homepage column sit in the gutter on desktop.
 
 ## [4.0.0] — 2026-11-18
 
