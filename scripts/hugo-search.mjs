@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Hugo + a pinned, locally installed Pagefind. No network requests at build time.
 import { spawn, execFileSync } from 'node:child_process';
-import { readdir, readFile, rm, mkdir, mkdtemp, copyFile } from 'node:fs/promises';
+import { access, readdir, readFile, rm, mkdir, mkdtemp, copyFile } from 'node:fs/promises';
 import { resolve, join, dirname, sep } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
@@ -18,6 +18,15 @@ function run(command, args, options = {}) {
       else reject(new Error(`${command} ${args[0] || ''} failed (${signal || code}).`));
     });
   });
+}
+
+// A live Hugo rebuild can leave the previous index on disk even after every
+// searchable page is gone. Only clean a directory marked as Pagefind output.
+async function clearDevelopmentIndex(site) {
+  const directory = join(site, 'pagefind');
+  try { await access(join(directory, 'pagefind-entry.json')); }
+  catch (error) { if (error.code === 'ENOENT') return; throw error; }
+  await rm(directory, { recursive: true, force: true });
 }
 
 export async function indexSite(site, { clean = true, files } = {}) {
@@ -45,6 +54,10 @@ export async function indexSite(site, { clean = true, files } = {}) {
       }
     }
     await inspect(snapshot || site);
+    if (!eligible && snapshot) {
+      await clearDevelopmentIndex(site);
+      return;
+    }
     if (!eligible) throw new Error(`No searchable pages in ${site}. Enable params.search and build Hugo first.`);
     if (clean) await rm(join(site, 'pagefind'), { recursive: true, force: true });
     await run(process.platform === 'win32' ? 'npx.cmd' : 'npx', ['--no-install', 'pagefind', '--site', snapshot || site, '--output-path', join(site, 'pagefind'),
@@ -69,9 +82,11 @@ export function publishedFiles(csv, baseURL) {
   if (field || row.length) { row.push(field); rows.push(row); }
   const columns = rows.shift();
   if (!columns?.includes('kind') || !columns.includes('permalink')) throw new Error('Unexpected Hugo published-page list.');
-  const prefix = new URL(baseURL || '/', 'https://example.org').pathname;
-  return rows.filter(record => record[columns.indexOf('kind')] === 'page').map(record => {
-    const pathname = new URL(record[columns.indexOf('permalink')], 'https://example.org').pathname;
+  const prefix = new URL(baseURL || '/', 'https://example.org').pathname.replace(/\/?$/, '/');
+  const kind = columns.indexOf('kind');
+  const permalink = columns.indexOf('permalink');
+  return rows.filter(record => record[kind] === 'page').map(record => {
+    const pathname = new URL(record[permalink], 'https://example.org').pathname;
     if (!pathname.startsWith(prefix)) throw new Error('Published URL is outside baseURL.');
     const file = decodeURIComponent(pathname.slice(prefix.length));
     return file.endsWith('/') ? file + 'index.html' : file;
@@ -126,9 +141,13 @@ async function main() {
         // Hugo reloads configuration while serving; follow search/publishDir
         // changes too, including enabling search in an already-running server.
         const current = readConfig();
-        if (current.params?.search !== true) continue;
+        const destination = resolve(source, current.publishdir || 'public');
+        if (current.params?.search !== true) {
+          await clearDevelopmentIndex(destination);
+          continue;
+        }
         const csv = execFileSync(hugo, ['list', 'published', ...configArgs], { encoding: 'utf8', env });
-        await indexSite(resolve(source, current.publishdir || 'public'), { clean: false, files: publishedFiles(csv, current.baseurl) });
+        await indexSite(destination, { clean: false, files: publishedFiles(csv, current.baseurl) });
       }
       catch (error) { console.error(`Search: ${error.message}`); }
     } while (pending && !stopping);

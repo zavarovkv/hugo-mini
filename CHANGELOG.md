@@ -56,6 +56,7 @@ see the [documentation](docs/README.md); released entries below remain historica
 
 ### Fixed
 
+- Clear stale development search results after disabling search or removing the last eligible page.
 - Show the ordinary empty search state for failed downloads; remove error copy and retry controls. Enter, editing or reopening retries without leaving old results attached to a failed query.
 - Keep search results and empty states visible while typing and loading, debounce input, and replace the list only after the newest fragments arrive. A delayed, subtle divider animation replaces visible loading text and respects reduced motion.
 - Declare the desktop navigation transition before external styles load, preventing Chromium from intermittently skipping the menu fade. Mobile navigation and reduced motion remain immediate.

@@ -82,6 +82,9 @@ index build fails the command. The demo and Vercel starter already include this 
 | Menus, footer, sharing controls and Mermaid source | No |
 
 Set `search = false` in a page's front matter to exclude it only from local search.
+The development server removes its generated index when search is disabled or
+the last searchable page is removed or excluded. It rebuilds the index when an
+eligible page returns with search enabled.
 To omit a block in authored HTML, add `data-pagefind-ignore` to its wrapper.
 Exclusion is not access control: a published page remains reachable by its URL.
 The site's existing JSON Feed is independent of this index.

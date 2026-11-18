@@ -13,6 +13,7 @@ const theme=fileURLToPath(new URL('..',import.meta.url));
 test('published page paths handle quoted titles, languages and subdirectories',()=>{
   const csv='title,kind,permalink\r\n"A, \"\"quoted\"\"\nheading",page,https://example.org/blog/one/\r\nHome,home,https://example.org/blog/\r\nTwo,page,https://example.org/blog/en/two.html\r\n';
   assert.deepEqual(publishedFiles(csv,'https://example.org/blog/'),['one/index.html','en/two.html']);
+  assert.deepEqual(publishedFiles(csv,'https://example.org/blog'),['one/index.html','en/two.html']);
   assert.throws(()=>publishedFiles('title,other\nA,B\n','/'),/Unexpected Hugo/);
 });
 test('real indexes exclude nonpublic pages, remove deleted pages and refresh edited content', async t=>{
@@ -93,4 +94,11 @@ test('development honors a baseURL override, config changes, edits and removals'
   await waitFor(async () => (await entry())?.languages.en?.page_count === 1);
   indexed = await entry();
   assert.equal(indexed.languages.en.page_count, 1, 'stale Hugo output must not keep deleted pages searchable');
+  const remaining = join(root, 'content/one.md');
+  await writeFile(remaining, '+++\ntitle="Private"\nsearch=false\n+++\nNot searchable.\n');
+  await waitFor(async () => (await entry()) === null);
+  await writeFile(remaining, '+++\ntitle="Visible again"\n+++\nSearchable.\n');
+  await waitFor(async () => (await entry())?.languages.en?.page_count === 1);
+  await writeFile(join(root, 'hugo.toml'), config(false));
+  await waitFor(async () => (await entry()) === null);
 });
