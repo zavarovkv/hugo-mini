@@ -10,9 +10,8 @@ On multilingual sites, use each language's homepage file.
 ## Homepage introduction
 
 Begin with a native Markdown H1 and a short introduction. The heading uses the
-title typeface at 36 px on desktop and 32 px on mobile. On screen, the opening
-paragraph starts 16 px below the heading. The next gap is 24 px, followed by
-12 px between subsequent paragraphs.
+title typeface at 36 px on desktop and 32 px on mobile, with 24 px before the
+following text. Paragraphs use a compact 12 px interval.
 
 | Spacing token | Default | Used for |
 | --- | --- | --- |
@@ -21,8 +20,10 @@ paragraph starts 16 px below the heading. The next gap is 24 px, followed by
 | `--content-group-gap` | 24 px | Separate projects, archive link after a list |
 
 Columns begin 64 px after the introduction above 768 px; mobile and print use
-the shared 56 px section gap. These tokens do not change article line height,
-paragraph rhythm or footer spacing.
+the shared 56 px section gap. Within homepage columns, allow 16 px after section
+headings and between projects, 8 px between article titles, and 12 px before
+the archive link. The article archive uses the same 16 px heading gap and
+8 px item gap within each category.
 
 ## Latest articles
 
@@ -86,7 +87,7 @@ keeps a single column and the original reading order.
 | `--columns-gap` | Horizontal separation |
 | `--section-gap` | Space after and between stacked blocks |
 | `--section-gap-large` | Larger separation before modules |
-| `.posts-group-title` | Compact module heading with `--content-item-gap` before its content |
+| `.posts-group-title` | Compact module heading, with 16 px before its content in homepage columns and archive categories |
 | `.no-anchor` | Omit a heading's copy link while keeping its ID |
 
 ## Projects
@@ -105,14 +106,15 @@ A project with a small mark that matches the color scheme.
 Descriptions accept Markdown and keep ordinary body-link weight. Put a secondary
 source link in `<p class="beauty-note">…</p>` for smaller, muted text.
 
-Optional `icon` and `iconDark` select light/dark marks. On a two-column homepage,
-marks in the second column sit in the gutter so project names align with their
-descriptions. When the columns stack, marks sit beside the names. Local image URLs are
+Optional `icon` and `iconDark` select light/dark marks. Desktop homepage marks
+are 1em square. In the second column they sit in the gutter so project names align
+with their descriptions. When columns stack, marks sit beside the names. Local image URLs are
 content-versioned; external URLs stay unchanged. With JavaScript, the mark becomes
 a separate keyboard-accessible button that spins on activation. Without it, the
 mark stays decorative. Reduced-motion preferences are respected.
 
-Project fields use the 8 px detail gap; adjacent projects use the 24 px group gap.
+Project fields use the 8 px detail gap. The gap between projects is 16 px inside
+homepage columns and 24 px elsewhere.
 The name's arrow moves on hover or keyboard focus without shifting text; its
 motion is independent of the optional logo button.
 

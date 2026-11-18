@@ -1315,10 +1315,7 @@
     .home-content {
       --beauty-h1-size: 2.25rem;
       --beauty-h1-size-small: 2rem;
-      --beauty-h1-margin: 0 1rem;
-    }
-    .home-content > h1:first-child + p + p {
-      margin-block-start: var(--content-group-gap);
+      --beauty-h1-margin: 0 var(--content-group-gap);
     }
   }
   @media screen and (min-width: 769px) {
@@ -1355,6 +1352,20 @@
   }
   .posts-group-title + :is(.blog-posts, .project-entry) {
     margin-block-start: 0;
+  }
+
+  .home-content .content-columns,
+  .posts-columns {
+    --content-group-gap: 1rem;
+  }
+  :is(.home-content .content-columns, .posts-columns) .posts-group-title {
+    margin-block-end: var(--content-group-gap);
+  }
+  :is(.home-content .content-columns, .posts-columns) .blog-posts {
+    --beauty-list-gap: var(--content-detail-gap);
+  }
+  .home-content .content-columns .blog-posts {
+    --beauty-space: var(--content-item-gap);
   }
 
   .content-columns {
@@ -1456,6 +1467,12 @@
     opacity: 1;
     cursor: default;
   }
+  .project-mark {
+    position: relative;
+    display: block;
+    inline-size: 1.1em;
+    block-size: 1.1em;
+  }
   @media screen and (min-width: 769px) {
     .home-content .content-columns > :nth-child(even) .project-mark-button {
       position: absolute;
@@ -1464,12 +1481,10 @@
       transform: translateY(-50%);
       margin: 0;
     }
-  }
-  .project-mark {
-    position: relative;
-    display: block;
-    inline-size: 1.1em;
-    block-size: 1.1em;
+    .home-content .project-mark {
+      inline-size: 1em;
+      block-size: 1em;
+    }
   }
   .project-mark img {
     position: absolute;
