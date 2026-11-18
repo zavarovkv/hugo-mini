@@ -19,7 +19,7 @@ following text. Paragraphs use a compact 12 px interval.
 | `--content-item-gap` | 12 px | Paragraphs, listing items, module heading to content |
 | `--content-group-gap` | 24 px | Separate projects, archive link after a list |
 
-Columns begin 64 px after the introduction above 768 px; mobile and print use
+Columns begin 64 px after the introduction above `48rem`; mobile and print use
 the shared 56 px section gap. Within homepage columns, allow 16 px after section
 headings and between projects, 8 px between article titles, and 12 px before
 the archive link. The article archive uses the same 16 px heading gap and
@@ -74,7 +74,7 @@ A short introduction to your projects.
 {{< /columns >}}
 ```
 
-Above 768 px, blocks form two equal columns; smaller screens stack them in source
+Above `48rem`, blocks form two equal columns; smaller screens stack them in source
 order. Each direct child block forms a column. `column` groups Markdown and nested
 shortcodes into one block; post-list shortcodes already produce one block.
 

@@ -94,7 +94,7 @@ Both parameters below default to `false` and accept site or page settings:
 | Option | Scope and exclusions |
 | --- | --- |
 | `hangingQuotes = true` | Hang initial «, “ or ‘ in H1–H3 and ordinary paragraphs, including blockquotes. Excludes paragraphs in lists, notes, tables, figures and asides. |
-| `proseNumerals = true` | Select old-style proportional figures in direct article paragraphs and their quotations. Headings, lists, tables, captions and note numbers keep their usual figures. |
+| `proseNumerals = true` | Select old-style proportional figures in direct article paragraphs and quotations, including `beauty-quotation` figures. Headings, lists, tables, captions and note numbers keep their usual figures. |
 
 Hanging marks stay in copied text and return inside the line in print. Listings
 and metadata stay unchanged. `typography = false` and `data-typography="off"`

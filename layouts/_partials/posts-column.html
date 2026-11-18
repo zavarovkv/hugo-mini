@@ -29,7 +29,7 @@
     {{- $ordered := $pinned | append $unpinned -}}
 
     <div class="posts-group">
-      <h3 class="posts-group-title">{{ $title }}</h3>
+      <h2 class="posts-group-title no-anchor">{{ $title }}</h2>
       <ul class="blog-posts">
         {{- range $ordered }}
         {{- $dates := partial "page-dates.html" . -}}

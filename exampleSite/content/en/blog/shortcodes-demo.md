@@ -31,7 +31,7 @@ Both shortcodes support the same optional archive link.
 
 ## Columns
 
-`columns` stacks blocks on mobile and places them side by side above 768 px.
+`columns` stacks blocks on mobile and places them side by side above `48rem`.
 Use `ratio="3:2"` for 60/40, `ratio="2:3"` for 40/60, or omit it for equal columns:
 
 {{< columns ratio="3:2" >}}

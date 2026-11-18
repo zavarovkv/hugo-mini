@@ -77,7 +77,7 @@ preserved. External URLs and missing files retain their configured paths.
 
 ## Menu transitions
 
-Desktop menu items reserve space for their bold active labels. Above 768 px, supported browsers fade menu changes over `--nav-transition-duration` (300 ms). Content updates immediately. Mobile uses its own overlay, and reduced-motion settings skip the transition.
+Desktop menu items reserve space for their bold active labels. Above `48rem`, supported browsers fade menu changes over `--nav-transition-duration` (300 ms). Content updates immediately. Mobile uses its own overlay, and reduced-motion settings skip the transition.
 
 ## Menu icons
 
@@ -112,7 +112,7 @@ and `backToTop = false` to omit the reading control.
 
 ### Custom header
 
-The default header splits a multiword site title at its first space and hides the first word at widths up to 768 px. To keep a brand name such as “Mini Blog” visible in full, add `.title-first-name { display: inline; }` to your [site stylesheet](#colors).
+The default header splits a multiword site title at its first space and hides the first word at widths up to `48rem`. To keep a brand name such as “Mini Blog” visible in full, add `.title-first-name { display: inline; }` to your [site stylesheet](#colors).
 
 Use `<a class="brand-link" href="…"><strong>Project name</strong></a>` for a bold
 brand link without an underline. Keyboard focus remains visible.

@@ -10,7 +10,9 @@ owns native text styling. Override tokens instead of copying base selectors.
 
 ## Reading layout
 
-| Element | Desktop | Mobile, 768 px and below |
+The compact layout starts at `48rem` and below (768 px with a 16 px browser default).
+
+| Element | Desktop | Mobile |
 | --- | --- | --- |
 | Reading column | Up to 720 px | Available width |
 | Body text / leading | 18/28 px | 19/29 px |
@@ -21,7 +23,8 @@ owns native text styling. Override tokens instead of copying base selectors.
 | Header to H1 | 48 px | 40 px |
 | H1 to content | 32 px | 28 px |
 | Article H2 | Theme heading scale | 24 px |
-| Attributions | Theme caption scale | 15 px |
+| Quote attributions (`0.875em`) | 15.75 px | 16.625 px |
+| Fine print (`.beauty-fine-print`) | 14 px | 15 px |
 | Post metadata | Theme metadata scale | 14 px |
 | Footnotes / leading | 15/24 px | 16/25.6 px |
 | Language label | 12 px | 12 px |

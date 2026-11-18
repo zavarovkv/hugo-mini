@@ -141,7 +141,7 @@ label defaults to the localized `wavy_arrow_to` string (“to” / “по”);
 | --- | --- | --- | --- |
 | Desktop width | Up to source width, wide limit and available space | Up to wide limit and available space | Reading width or full available wide measure |
 | Start edge | Aligned with text | Aligned with text | Aligned with text |
-| Mobile (768 px and below), nested blocks, print | Normal column | Normal column | Normal column |
+| Mobile (`48rem` and below), nested blocks, print | Normal column | Normal column | Normal column |
 | Without JavaScript | CSS expansion fallback | Readable source | Column-width scrolling |
 
 `--article-wide-width` defaults to `60rem` (960 px); `--article-edge-gap` reserves

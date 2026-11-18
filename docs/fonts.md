@@ -73,7 +73,7 @@ fingerprinting and byte preservation match the body loader.
 
 `--font-title` and Beauty's H1 token select the face, including in print. H1 geometry
 stays unchanged; H2–H6, navigation, listings and body text retain their roles.
-Title letter spacing is normal above 768 px and `-0.01em` on mobile.
+Title letter spacing is normal above `48rem` and `-0.01em` on mobile.
 
 ## Use the title face for article H2
 

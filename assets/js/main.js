@@ -10,8 +10,8 @@
 (function () {
   'use strict';
 
-  // Breakpoint shared with CSS (@media max-width: 768px). Keep in sync.
-  var MOBILE_QUERY = '(max-width: 768px)';
+  // Match the compact layout in Mini and Beauty, including browser font preferences.
+  var MOBILE_QUERY = '(max-width: 48rem)';
 
   // Static hosts may serve the default-language 404 for any missing URL.
   // Select its translated view before initializing controls and UI strings.

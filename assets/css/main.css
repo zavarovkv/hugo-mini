@@ -247,7 +247,7 @@
   /* Keep the reading column stable with classic scrollbars, including narrow
      desktop windows. Overlay scrollbars consume no space; print opts out. */
   @media screen { html { scrollbar-gutter: stable; } }
-  @media screen and (min-width: 769px) {
+  @media screen and (width > 48rem) {
     body.reading-layout > header {
       margin-block-end: 3rem;
     }
@@ -266,7 +266,7 @@
       --beauty-h1-hyphens: auto;
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 48rem) {
     body.reading-layout {
       --beauty-h1-margin: 0 1.75rem;
       --beauty-reading-line-height: calc(29 / 19);
@@ -390,13 +390,13 @@
 
   /* A hanging quote occupies the usual anchor gutter. Leave it clear; when
      the viewport has no room for both, keep the anchor after the heading. */
-  @media screen and (min-width: 833px) {
+  @media screen and (width > 48rem) and (width > 832px) {
     :is(h2, h3):has(.beauty-hanging-open) > .heading-anchor {
       right: calc(100% + 0.65em);
     }
   }
 
-  @media screen and (min-width: 769px) and (max-width: 832px) {
+  @media screen and (width > 48rem) and (max-width: 832px) {
     :is(h2, h3):has(.beauty-hanging-open) > .heading-anchor {
       position: static;
       display: inline-block;
@@ -407,7 +407,7 @@
   }
 
   /* Mobile: inline after heading text, hidden until heading is tapped */
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     h2:has(> .heading-anchor), h3:has(> .heading-anchor) {
       cursor: pointer;
     }
@@ -567,7 +567,7 @@
     color: var(--color-secondary);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     .reading-shelf .reading-date {
       width: 5.5rem;
       padding-inline-start: 0.75rem;
@@ -716,7 +716,7 @@
       margin-block-start: var(--footer-quotation-gap);
     }
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 48rem) {
     :root {
       --footer-gap: 5.5rem;
       --footer-quotation-gap: 8rem;
@@ -771,7 +771,7 @@
     max-inline-size: min(100%, var(--beauty-reading-width));
   }
 
-  @media screen and (min-width: 769px) {
+  @media screen and (width > 48rem) {
     article.beauty-reading > .article-image-wide {
       /* The CSS fallback fits the centered reading shell without JavaScript.
          Enhancement measures the actual viewport edge. */
@@ -914,7 +914,7 @@
     order: -1;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     .nav-icon {
       order: 1;
       margin-left: 1px;
@@ -948,7 +948,7 @@
   }
 
   /* Hide first name on mobile */
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     .title-first-name {
       display: none;
     }
@@ -1077,7 +1077,7 @@
      Keep page content immediate; the mobile overlay retains its own lifecycle.
      Browsers without View Transitions keep ordinary document navigation.
      The navigation opt-in lives in the early navigation-transition.css asset. */
-  @media screen and (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+  @media screen and (width > 48rem) and (prefers-reduced-motion: no-preference) {
     :root { view-transition-name: none; }
     #main-navigation { view-transition-name: main-navigation; }
 
@@ -1148,7 +1148,7 @@
   }
 
   /* Mobile styles */
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     html, body {
       overflow-x: hidden;
       box-sizing: border-box;
@@ -1318,7 +1318,7 @@
       --beauty-h1-margin: 0 var(--content-group-gap);
     }
   }
-  @media screen and (min-width: 769px) {
+  @media screen and (width > 48rem) {
     .home-content { --section-gap-large: 4rem; }
   }
 
@@ -1350,6 +1350,7 @@
     transform: none;
     margin-block: 0 var(--content-item-gap);
   }
+  .posts-group > .posts-group-title { letter-spacing: inherit; }
   .posts-group-title + :is(.blog-posts, .project-entry) {
     margin-block-start: 0;
   }
@@ -1376,7 +1377,7 @@
   .content-columns > * { min-width: 0; margin-block: 0; }
   .content-columns > * > :first-child { margin-top: 0; }
   .content-columns > * > :last-child { margin-bottom: 0; }
-  @media (min-width: 769px) {
+  @media (width > 48rem) {
     .content-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .content-columns[data-columns-ratio="3:2"] { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
     .content-columns[data-columns-ratio="2:3"] { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
@@ -1473,7 +1474,7 @@
     inline-size: 1.1em;
     block-size: 1.1em;
   }
-  @media screen and (min-width: 769px) {
+  @media screen and (width > 48rem) {
     .home-content .content-columns > :nth-child(even) .project-mark-button {
       position: absolute;
       inset-inline-end: 100%;
@@ -1548,7 +1549,7 @@
 
   /* Flatten desktop wrappers so mobile category margins collapse uniformly,
      while the listing retains its outer margins. */
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     .posts-columns {
       display: flow-root;
     }
@@ -1856,7 +1857,7 @@
   [data-theme="dark"] .social-x      { --beauty-hover: #f0f6fc; }
 
   /* Larger touch targets for mobile footer */
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     .search-toggle-desktop { display: none; }
     .social-icons {
       --footer-icon-size: var(--footer-icon-size-small);
@@ -1980,7 +1981,7 @@
 
   /* Placement only: Beauty still owns note text, markers and link styling.
      Original endnotes remain in DOM order and return to normal flow on paper. */
-  @media screen and (min-width: 769px) {
+  @media screen and (width > 48rem) {
     article.has-side-notes { position: relative; }
     .has-side-notes > .side-notes-heading { display: none; }
     .has-side-notes > .footnotes { margin-block-start: 0; }
@@ -2220,7 +2221,7 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-dialog .search-close { width: 44px; height: 44px; padding: 10px; color: var(--text-color); }
 .search-dialog .search-close:hover { color: var(--text-color); }
 .search-close svg { display: block; width: 24px; height: 24px; }
-@media (min-width: 769px) {
+@media (width > 48rem) {
   /* Reserve the on-demand trigger before the deferred bundle reveals it.
      Otherwise logo-only headers grow when JavaScript initializes search. */
   html.hugo-mini-js .header-container:has(.search-toggle-desktop[hidden])::after { content: ""; flex: none; width: 28px; height: 28px; }
@@ -2255,7 +2256,7 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-result-excerpt { display: block; margin-top: 8px; font-size: 16px; line-height: 1.6; }
 .search-result mark { background: var(--search-highlight); color: inherit; padding: 0; border-radius: 2px; font-weight: var(--font-weight-medium); }
 .search-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .main-nav .search-toggle-mobile {
     width: 100%; min-block-size: var(--header-nav-target-small); flex-shrink: 0;
     padding: 20px; margin: 0; font-size: var(--header-nav-size-small);

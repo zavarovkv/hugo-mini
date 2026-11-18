@@ -10,6 +10,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Changed
 
+- Archive categories use level-two headings. The compact layout, navigation and reading type now switch together at `48rem`, including when readers increase their browser’s default font size.
+- Paragraph-wrapped lists respect the configured item gap, and editorial quotes use the article’s prose numeral style.
 - Desktop homepage project logos are 1em square and sit in the gutter when placed in the second column.
 - Homepage columns and archive categories use 16 px below section headings and 8 px between article links. The homepage also groups the archive link and project entries more closely.
 
