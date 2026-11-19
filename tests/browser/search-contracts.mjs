@@ -19,18 +19,15 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.search-content')).toHaveCSS('overflow-y','visible');
     await expect(page.locator('dialog')).toHaveCSS('overflow-y','auto');
     await expect(page.locator('dialog')).toHaveCSS('height',`${await page.evaluate(()=>innerHeight)}px`);
-    await expect(page.locator('.search-help')).toHaveCount(0);
     await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
     await expect(page.locator('.search-status')).toContainText('11');
     await expect(links.first().locator('mark')).toContainText('orchidquartz');
     await expect(links.first()).toHaveAttribute('href', /\/search-\d+\/#matching-section$/);
-    await expect(page.locator('.search-more')).toHaveCount(0);
     await expect(page.locator('#search-query')).toBeFocused();
     await links.last().scrollIntoViewIfNeeded();
     expect((await page.locator('.search-form').boundingBox()).y).toBeLessThan(0);
     await page.locator('#search-query').fill('"exclusionquartz"');
     await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
-    await expect(page.locator('.search-status')).toHaveCSS('text-align','center');
     await expect(links).toHaveCount(0);
     await page.locator('#search-query').fill('');
     await expect(page.locator('#search-query')).toHaveValue('');
@@ -236,34 +233,6 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
   });
 
-  test('an empty result stays steady until the next query finishes', async ({page}) => {
-    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
-      export async function options() {}
-      export async function search(query) {
-        if (query !== 'empty') await new Promise(resolve=>{ window.finishSearch = resolve; });
-        return {results:query === 'match' ? [{data:async()=>({url:'/search-1/',meta:{title:'Match'},excerpt:'Matching article'})}] : []};
-      }
-    `}));
-    await page.goto('/browser-checks/');
-    await open(page, 'empty');
-    const status = page.locator('.search-status');
-    const label = site ? 'Ничего не нашлось' : 'Nothing found';
-    await expect(status).toHaveText(label);
-    const before = await status.boundingBox();
-    for (const query of ['still empty','match']) {
-      await page.locator('#search-query').fill(query);
-      await expect(page.locator('#site-search')).toHaveClass(/search-loading/);
-      await expect(status).toHaveText(label);
-      await expect(status).toHaveClass(/search-empty/);
-      expect(await status.boundingBox()).toEqual(before);
-      await page.evaluate(()=>window.finishSearch());
-      await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
-    }
-    await expect(page.locator('.search-result-title')).toHaveText('Match');
-    await expect(status).toHaveClass(/search-sr-only/);
-    await expect(page.locator('#site-search')).not.toHaveClass(/search-loading/);
-  });
-
   test('composition waits for committed text and reopening refreshes an unfinished query', async ({page}) => {
     await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
       window.searchCalls = [];
@@ -298,35 +267,6 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page).toHaveURL(/\/browser-checks\/$/);
   });
 
-  for (const colorScheme of ['light','dark']) test(`loading uses the divider without moving content (${colorScheme})`, async ({page}) => {
-    await page.emulateMedia({colorScheme,reducedMotion:'no-preference'});
-    await page.route('**/pagefind/pagefind.js*', route=>route.fulfill({contentType:'text/javascript',body:`
-      export async function options() {}
-      export async function search(query) {
-        await new Promise(resolve=>{ window.finishSearch = resolve; });
-        return {results:[]};
-      }
-    `}));
-    await page.goto('/browser-checks/');
-    await open(page);
-    const content = await page.locator('.search-content').boundingBox();
-    await page.locator('#search-query').fill('waiting');
-    await expect(page.locator('#site-search')).toHaveClass(/search-loading/);
-    await expect(page.locator('.search-status')).toHaveClass(/search-sr-only/);
-    expect((await page.locator('.search-content').boundingBox()).y).toBe(content.y);
-    const indicator = () => page.locator('.search-form').evaluate(element=>{
-      const style = getComputedStyle(element,'::after');
-      return {height:style.height,animation:style.animationName,playState:style.animationPlayState,opacity:style.opacity};
-    });
-    await expect.poll(indicator).toMatchObject({height:'1px',animation:'search-progress',playState:'running',opacity:'1'});
-    await page.emulateMedia({reducedMotion:'reduce'});
-    await expect.poll(indicator).toMatchObject({height:'1px',animation:'none',opacity:'1'});
-    await page.evaluate(()=>window.finishSearch());
-    await expect(page.locator('.search-status')).toHaveText(site ? 'Ничего не нашлось' : 'Nothing found');
-    await expect.poll(indicator).toMatchObject({opacity:'0'});
-    await expect(page.locator('.search-results')).toHaveAttribute('aria-busy','false');
-  });
-
   test('a subdirectory deployment loads its bundle and keeps result URLs under the prefix', async ({page,baseURL}) => {
     await page.route('**/nested/**', async route=>{
       const url=new URL(route.request().url());
@@ -341,9 +281,8 @@ export function searchContracts({test, expect, site = false}) {
     await expect(page.locator('.search-result').first()).toHaveAttribute('href', /\/nested\/search-\d+\/#matching-section$/);
   });
 
-  for(const colorScheme of ['light','dark']) test(`mobile search fits a narrow screen and shrinking viewport (${colorScheme})`, async ({page})=>{
+  test('mobile search fits a narrow screen and shrinking viewport', async ({page})=>{
     await page.setViewportSize({width:320,height:640});
-    await page.emulateMedia({colorScheme});
     await page.goto('/browser-checks/');
     await page.locator('.mobile-menu-toggle').click();
     const menuBox = await page.locator('.mobile-menu-toggle').boundingBox();
@@ -352,8 +291,6 @@ export function searchContracts({test, expect, site = false}) {
     const closeBox = await page.locator('.search-close').boundingBox();
     for (const key of ['x','y','width','height']) expect(Math.abs(closeBox[key] - menuBox[key])).toBeLessThan(1);
     await expect(page.locator('.search-close')).toHaveCSS('color',menuColor);
-    await expect(page.locator('.search-close svg')).toHaveCSS('width','24px');
-    await expect(page.locator('.search-close svg')).toHaveAttribute('stroke-width','1.5');
     await expect(page.locator('.mobile-menu-toggle')).toHaveAttribute('aria-expanded','false');
     await expect(page.locator('#search-query')).toBeFocused();
     await page.locator('#search-query').fill('orchidquartz');

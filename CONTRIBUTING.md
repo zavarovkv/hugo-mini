@@ -76,6 +76,9 @@ directory and adds fixtures/local Mermaid. Site-owned Markdown fixtures in
 shared fixtures; name them uniquely so they cannot overwrite real pages. Do not commit private fonts or
 upload them with public test artifacts.
 
+To exercise only published pages with your site’s own search and diagram configuration,
+use `browserConfig({ publishedSite: true })`. This runs the production build in a temporary directory.
+
 Check affected pages on mobile and desktop, in both color schemes and with a keyboard.
 For documentation-only changes, link/language checks and any changed command examples
 are sufficient; browser tests are not needed.

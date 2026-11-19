@@ -13,7 +13,7 @@ const source = process.argv.includes('--site') ? process.cwd() : null;
 const root = await mkdtemp(join(tmpdir(), 'hugo-browser-'));
 const output = join(root, 'public');
 const require = createRequire(import.meta.url);
-try {
+async function buildFixtures() {
   await mkdir(join(root, 'themes'));
   await symlink(theme, join(root, 'themes/hugo-mini'));
   if (source) {
@@ -103,6 +103,20 @@ ${source ? '' : '[languages.en]\nweight=1\n[languages.ru]\nweight=2\n'}
   const config = source ? (process.env.BROWSER_HUGO_CONFIG || 'config.toml').split(',').map(file => resolve(source, file)) : [];
   execFileSync(process.env.HUGO_BIN || 'hugo', ['--source', root, '--config', [...config, overlay].join(','), '--baseURL', `http://127.0.0.1:${process.env.PLAYWRIGHT_PORT || 4174}/`, '--minify', '--panicOnWarning', '--cacheDir', join(root, 'cache')], { stdio: 'inherit' });
   await indexSite(output);
+}
+
+try {
+  if (process.argv.includes('--published-site')) {
+    const config = process.env.BROWSER_HUGO_CONFIG || 'config.toml';
+    const baseURL = `http://127.0.0.1:${process.env.PLAYWRIGHT_PORT || 4174}/`;
+    execFileSync(process.execPath, [join(theme, 'scripts/hugo-search.mjs'), 'build',
+      '--config', config, '--destination', output, '--baseURL', baseURL,
+      '--cacheDir', join(root, 'cache'), '--noBuildLock'], {
+      stdio: 'inherit', env: { ...process.env, HUGO_RESOURCEDIR: join(root, 'resources') },
+    });
+  } else {
+    await buildFixtures();
+  }
 } catch (error) {
   await rm(root, { recursive: true, force: true });
   throw error;

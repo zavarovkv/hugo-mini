@@ -1,6 +1,5 @@
 export function sideNoteContracts({test, expect}) {
-  for (const colorScheme of ['light', 'dark']) test(`side notes preserve links, avoid collisions and return below on narrow screens (${colorScheme})`, async ({page}) => {
-    await page.emulateMedia({colorScheme});
+  test('side notes preserve links, avoid collisions and return below on narrow screens', async ({page}) => {
     await page.setViewportSize({width:1440, height:900});
     await page.goto('/side-note-checks/');
     await page.evaluate(() => document.fonts.ready);

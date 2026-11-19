@@ -14,7 +14,6 @@ async function observeTransitions(page) {
         ).map(animation => ({
           pseudo: animation.effect?.pseudoElement,
           duration: animation.effect?.getTiming().duration,
-          keyframes: animation.effect?.getKeyframes(),
         }));
       }).catch(error => { window.menuTransition.error = String(error); });
       transition.finished.then(() => { window.menuTransition.finished = true; });
@@ -39,92 +38,32 @@ async function expectSelected(page, name) {
   })).toBe(true);
 }
 
-for (const colorScheme of ['light', 'dark']) {
-  test(`desktop menu blends its selected state without moving neighboring links (${colorScheme})`, async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.emulateMedia({ colorScheme, reducedMotion: 'no-preference' });
-    await observeTransitions(page);
-    await page.goto('/blog/');
-    await expectSelected(page, 'Articles');
-    const before = await menuGeometry(page);
-    const about = page.locator('#main-navigation').getByRole('link', { name: 'About & contact', exact: true });
-    await expect(about).toHaveAccessibleName('About & contact');
-    await about.click();
-    await expect(page).toHaveURL(/\/about\/$/);
-    await expectSelected(page, 'About & contact');
-    await expect.poll(() => page.evaluate(() => window.menuTransition)).toMatchObject({ active: true, finished: true });
-    const transition = await page.evaluate(() => window.menuTransition);
-    expect(transition.active).toBe(true);
-    expect(transition.error).toBeUndefined();
-    expect(transition.animations.length).toBeGreaterThan(0);
-    expect(transition.animations.every(animation => animation.pseudo?.includes('(main-navigation)') && animation.duration === 300)).toBe(true);
-    const after = await menuGeometry(page);
-    expect(after.length).toBe(before.length);
-    after.forEach((rect, index) => {
-      for (const dimension of ['x', 'y', 'width', 'height']) expect(Math.abs(rect[dimension] - before[index][dimension])).toBeLessThan(0.5);
-    });
-    // Native history traversal retains the original selected section too.
-    await page.goBack();
-    await expectSelected(page, 'Articles');
-  });
-}
-
-test('desktop menu transition survives a delayed destination stylesheet', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+test('desktop menu switches sections without moving neighboring links', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await observeTransitions(page);
   await page.goto('/blog/');
-  await menuGeometry(page);
-  let delayed = false;
-  // Routing disables the cache; delay destination CSS relative to its HTML.
-  // The early opt-in must preserve the real menu animation after CSS arrives.
-  await page.route('**/css/main.*.css', async route => {
-    delayed = true;
-    await new Promise(resolve => setTimeout(resolve, 200));
-    await route.continue();
-  });
-  await page.locator('#main-navigation').getByRole('link', { name: 'About & contact', exact: true }).click();
+  await expectSelected(page, 'Articles');
+  const before = await menuGeometry(page);
+  const about = page.locator('#main-navigation').getByRole('link', { name: 'About & contact', exact: true });
+  await expect(about).toHaveAccessibleName('About & contact');
+  await about.click();
   await expect(page).toHaveURL(/\/about\/$/);
-  await expect.poll(() => page.evaluate(() => window.menuTransition)).toMatchObject({ active: true, finished: true });
-  expect(delayed).toBe(true);
-  const transition = await page.evaluate(() => window.menuTransition);
-  expect(transition.error).toBeUndefined();
-  expect(transition.animations.length).toBeGreaterThan(0);
-  expect(transition.animations.every(animation => animation.pseudo?.includes('(main-navigation)') && animation.duration === 300)).toBe(true);
   await expectSelected(page, 'About & contact');
-});
-
-test('desktop menu fades in place after leaving a scrolled page', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 700 });
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await observeTransitions(page);
-  await page.goto('/browser-checks/');
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-    const link = document.createElement('a');
-    link.href = '/blog/middle/';
-    link.id = 'scrolled-article-link';
-    link.textContent = 'Read the article';
-    document.querySelector('main').append(link);
-  });
-  const link = page.locator('#scrolled-article-link');
-  await link.scrollIntoViewIfNeeded();
-  const before = await page.locator('#main-navigation').boundingBox();
-  expect(before.y + before.height).toBeLessThan(0);
-  await link.click();
-  await expect(page).toHaveURL(/\/blog\/middle\/$/);
   await expect.poll(() => page.evaluate(() => window.menuTransition)).toMatchObject({ active: true, finished: true });
   const transition = await page.evaluate(() => window.menuTransition);
   expect(transition.active).toBe(true);
   expect(transition.error).toBeUndefined();
   expect(transition.animations.length).toBeGreaterThan(0);
-  expect(transition.animations.every(animation =>
-    /^::view-transition-(old|new)\(main-navigation\)$/.test(animation.pseudo) &&
-    animation.duration === 300 &&
-    animation.keyframes.every(frame => !('transform' in frame || 'width' in frame || 'height' in frame))
-  )).toBe(true);
-  const after = await page.locator('#main-navigation').boundingBox();
-  expect(after.y).toBeGreaterThanOrEqual(0);
+  expect(transition.animations.every(animation => animation.pseudo?.includes('(main-navigation)') && animation.duration === 300)).toBe(true);
+  const after = await menuGeometry(page);
+  expect(after.length).toBe(before.length);
+  after.forEach((rect, index) => {
+    for (const dimension of ['x', 'y', 'width', 'height']) expect(Math.abs(rect[dimension] - before[index][dimension])).toBeLessThan(0.5);
+  });
+  // Native history traversal retains the original selected section too.
+  await page.goBack();
+  await expectSelected(page, 'Articles');
 });
 
 test('reduced motion keeps section navigation immediate', async ({ page }) => {

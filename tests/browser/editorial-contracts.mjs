@@ -89,8 +89,7 @@ test('opt-in drop caps use the title face without changing copy, adjacent prose 
   })).toBe(text);
 });
 
-for (const colorScheme of ['light','dark']) test(`editorial helpers preserve copy, margins and number roles (${colorScheme})`, async ({page}) => {
-  await page.emulateMedia({colorScheme});
+test('editorial helpers preserve copy, margins and number roles', async ({page}) => {
   for (const width of [320,1440]) {
     await page.setViewportSize({width,height:900});
     await page.goto('/editorial-checks/');

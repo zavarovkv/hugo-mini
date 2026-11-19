@@ -1,5 +1,7 @@
-export function browserConfig({ site = false } = {}) {
+export function browserConfig({ site = false, publishedSite = false } = {}) {
   const port = process.env.PLAYWRIGHT_PORT || 4174;
+  const baseURL = `http://127.0.0.1:${port}`;
+  const server = 'scripts/serve-browser-tests.mjs';
   return {
     testDir: './tests/browser',
     timeout: 30_000,
@@ -8,14 +10,16 @@ export function browserConfig({ site = false } = {}) {
     forbidOnly: Boolean(process.env.CI),
     retries: 0,
     reporter: 'list',
-    use: { baseURL: `http://127.0.0.1:${port}`, trace: 'retain-on-failure' },
+    use: { baseURL, trace: 'retain-on-failure' },
     projects: [
       { name: 'chromium', use: { browserName: 'chromium', channel: process.env.PLAYWRIGHT_CHROMIUM_CHANNEL } },
       { name: 'webkit', use: { browserName: 'webkit' } },
     ],
     webServer: {
-      command: site ? 'node themes/hugo-mini/scripts/serve-browser-tests.mjs --site' : 'node scripts/serve-browser-tests.mjs',
-      url: `http://127.0.0.1:${port}/browser-checks/`,
+      command: site || publishedSite
+        ? `node themes/hugo-mini/${server} ${publishedSite ? '--published-site' : '--site'}`
+        : `node ${server}`,
+      url: publishedSite ? baseURL : `${baseURL}/browser-checks/`,
       reuseExistingServer: false,
       timeout: 60_000,
     },
