@@ -20,6 +20,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 - Desktop homepage project logos are 1em square and sit in the gutter when placed in the second column.
 - Homepage columns and archive categories use 16 px below section headings and 8 px between article links. The homepage also groups the archive link and project entries more closely.
 
+### Fixed
+
+- Safari on iPhone updates the status and address bar backgrounds when readers switch colors in the open mobile menu.
+
 ## [4.0.0] — 2026-11-18
 
 Hugo Modules users must update the import path to `github.com/zavarovkv/hugo-mini/v4`. Sites using the article sidebar or overriding its partial must update their configuration or layouts. See the [v3 migration guide](docs/configuration.md#upgrade-from-v3-to-v4).

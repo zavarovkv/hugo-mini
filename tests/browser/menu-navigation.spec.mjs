@@ -147,6 +147,8 @@ test('mobile menu shares the footer links, language and theme controls', async (
   const mutedColor = await footer.evaluate(element => getComputedStyle(element).color);
   await expect(rss).toHaveCSS('color', mutedColor);
   await toggle.click();
+  const canvas = page.locator('html');
+  await expect(canvas).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   const menuRSS = nav.getByRole('link', { name: 'RSS', exact: true });
   await expect(menuRSS).toHaveAttribute('href', rssURL);
   await expect(menuRSS).toHaveCSS('color', mutedColor);
@@ -156,7 +158,10 @@ test('mobile menu shares the footer links, language and theme controls', async (
 
   await page.setViewportSize({ width: 320, height: 320 });
   await nav.locator('.theme-toggle').click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(canvas).toHaveCSS('background-color', 'rgb(26, 26, 26)');
+  for (const layer of [page.locator('body'), nav]) {
+    await expect(layer).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  }
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   expect(await nav.evaluate(menu => menu.scrollTop > 0 && menu.scrollWidth === menu.clientWidth)).toBe(true);
   await page.keyboard.press('Escape');

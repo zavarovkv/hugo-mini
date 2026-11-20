@@ -1280,6 +1280,16 @@
     }
   }
 
+  /* Safari on iOS samples the page canvas for its status and address bars.
+     An opaque fixed menu can leave that sample stuck on the previous theme. */
+  @media screen and (max-width: 48rem) {
+    html.menu-open { background-color: var(--background-color); }
+    body.menu-open,
+    .main-nav.menu-ready.active { background-color: transparent; }
+    /* Keep the page geometry and focus order while the menu covers it. */
+    body.menu-open > :not(header) { opacity: 0; }
+  }
+
   /* Selected navigation link */
   .link-selected,
   .link-selected:link,
