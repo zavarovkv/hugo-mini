@@ -144,11 +144,12 @@ test('mobile menu shares the footer links, language and theme controls', async (
   const toggle = page.locator('.mobile-menu-toggle');
   const rss = footer.getByRole('link', { name: 'RSS', exact: true });
   const rssURL = await rss.getAttribute('href');
-  const rssColor = await rss.evaluate(link => getComputedStyle(link).color);
+  const mutedColor = await footer.evaluate(element => getComputedStyle(element).color);
+  await expect(rss).toHaveCSS('color', mutedColor);
   await toggle.click();
   const menuRSS = nav.getByRole('link', { name: 'RSS', exact: true });
   await expect(menuRSS).toHaveAttribute('href', rssURL);
-  await expect(menuRSS).toHaveCSS('color', rssColor);
+  await expect(menuRSS).toHaveCSS('color', mutedColor);
   const bar = nav.locator('.footer-bar');
   const box = await bar.boundingBox();
   expect(box.y + box.height).toBeCloseTo(844 - 20, 0);
