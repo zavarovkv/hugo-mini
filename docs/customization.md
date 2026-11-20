@@ -125,7 +125,8 @@ placement and desktop arrangement; Mini supplies the overlay behavior.
 | --- | --- |
 | Text | `--header-text-size`: 16 px |
 | Mobile identity | `--header-title-size-small`: 20 px |
-| Mobile links | `--header-nav-size-small`: 20 px |
+| Mobile links and search | `--header-nav-size-small`: 1.5rem (24 px) |
+| Mobile row minimum height | `--header-nav-target-small`: 4.75rem (76 px) |
 | Menu toggle | 44×44 px target around a 24 px icon |
 
 The menu handles Escape, link selection, focus leaving navigation and the desktop
@@ -157,8 +158,8 @@ empty icon also avoids an implicit `/favicon.ico` request.
 | `labels` omitted | Platform names |
 | `copyright` omitted | Standard year range |
 
-The default footer passes `params.social` and enables RSS. Reusing the partial keeps
-icons, language switching and color-scheme control.
+The default footer passes `params.social` and enables RSS. The mobile menu reuses
+the same links, language switcher and color-scheme control, including overrides passed to this partial.
 
 The outer `--footer-gap` margin (112 px desktop, 88 px mobile) collapses with preceding
 block margins; a final quotation uses `--footer-quotation-gap` (176/128 px). Social icons use

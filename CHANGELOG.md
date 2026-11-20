@@ -8,8 +8,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ## [Unreleased]
 
+### Added
+
+- The mobile menu includes the footer’s social links, language switcher and color-scheme toggle.
+
 ### Changed
 
+- Mobile menu links and search use 24 px labels in borderless rows at least 76 px tall.
 - Archive categories use level-two headings. The compact layout, navigation and reading type now switch together at `48rem`, including when readers increase their browser’s default font size.
 - Paragraph-wrapped lists respect the configured item gap, and editorial quotes use the article’s prose numeral style.
 - Desktop homepage project logos are 1em square and sit in the gutter when placed in the second column.

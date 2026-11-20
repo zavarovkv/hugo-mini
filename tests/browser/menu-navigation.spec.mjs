@@ -92,6 +92,10 @@ test('mobile section changes preserve the closed overlay and selected label', as
   await expectSelected(page, 'About & contact');
   const labelStarts = await page.locator('#main-navigation .nav-label > .beauty-link-label').evaluateAll(labels => labels.map(label => label.getBoundingClientRect().left));
   expect(new Set(labelStarts).size).toBe(1);
+  const rows = await page.locator('#main-navigation > :is(a, .search-toggle-mobile):visible').evaluateAll(items =>
+    items.map(item => [getComputedStyle(item).fontSize, item.getBoundingClientRect().height, getComputedStyle(item).borderBottomWidth])
+  );
+  expect(rows).toEqual(Array(rows.length).fill(['24px', 76, '0px']));
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });
 
@@ -111,7 +115,7 @@ test('long mobile labels remain inside their rows with enlarged text on a short 
   await page.locator('.mobile-menu-toggle').click();
   for (const scale of [100, 200]) {
     await page.evaluate(scale => { document.documentElement.style.fontSize = scale + '%'; }, scale);
-    const rows = await page.locator('#main-navigation a').evaluateAll(links => links.map(link => {
+    const rows = await page.locator('#main-navigation > a').evaluateAll(links => links.map(link => {
       const box = link.getBoundingClientRect();
       const style = getComputedStyle(link);
       const range = document.createRange();
@@ -127,8 +131,42 @@ test('long mobile labels remain inside their rows with enlarged text on a short 
     expect(rows.every(row => row.contained), `labels at ${scale}%`).toBe(true);
     expect(rows.every((row, index) => index === 0 || row.top >= rows[index - 1].bottom - 1)).toBe(true);
     expect(await page.locator('#main-navigation').evaluate(nav => nav.scrollWidth <= nav.clientWidth + 1)).toBe(true);
-    await page.locator('#main-navigation a').last().click({ trial: true });
+    await page.locator('#main-navigation > a').last().click({ trial: true });
   }
+});
+
+test('mobile menu shares the footer links, language and theme controls', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto('/search-language/');
+  const footer = page.locator('body > footer');
+  const nav = page.locator('#main-navigation');
+  const toggle = page.locator('.mobile-menu-toggle');
+  const rss = footer.getByRole('link', { name: 'RSS', exact: true });
+  const rssURL = await rss.getAttribute('href');
+  const rssColor = await rss.evaluate(link => getComputedStyle(link).color);
+  await toggle.click();
+  const menuRSS = nav.getByRole('link', { name: 'RSS', exact: true });
+  await expect(menuRSS).toHaveAttribute('href', rssURL);
+  await expect(menuRSS).toHaveCSS('color', rssColor);
+  const bar = nav.locator('.footer-bar');
+  const box = await bar.boundingBox();
+  expect(box.y + box.height).toBeCloseTo(844 - 20, 0);
+
+  await page.setViewportSize({ width: 320, height: 320 });
+  await nav.locator('.theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  expect(await nav.evaluate(menu => menu.scrollTop > 0 && menu.scrollWidth === menu.clientWidth)).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  await expect(footer.locator('.theme-toggle')).toBeVisible();
+  await footer.locator('.theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await toggle.click();
+  await nav.locator('.lang-toggle[data-lang="ru"]').click();
+  await expect(page).toHaveURL(/\/ru\/search-language\/$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', /^ru/);
 });
 
 test('closing mobile links leave the tab order before fading and return on desktop', async ({ page }) => {

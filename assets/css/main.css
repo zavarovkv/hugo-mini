@@ -72,8 +72,8 @@
     --font-weight-title: {{ $fonts.title }};
     --header-text-size: 0.9rem;
     --header-title-size-small: 1.2em;
-    --header-nav-size-small: 1.25rem;
-    --header-nav-target-small: 4.5rem;
+    --header-nav-size-small: 1.5rem;
+    --header-nav-target-small: 4.75rem;
     --nav-transition-duration: 300ms;
     --menu-icon-duration: 400ms;
     --menu-icon-easing: cubic-bezier(0.22, 1, 0.36, 1);
@@ -1045,7 +1045,7 @@
     flex-wrap: nowrap;
   }
 
-  .main-nav a {
+  .main-nav > a {
     font-size: var(--header-text-size);
     line-height: 1.5;
     margin-inline-end: 8px;
@@ -1219,6 +1219,7 @@
       bottom: 0;
       background-color: var(--background-color);
       padding: 96px 0 20px;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
       z-index: 1000;
       overflow-x: hidden;
       overflow-y: auto;
@@ -1236,23 +1237,26 @@
       visibility: visible;
     }
 
-    /* Mobile overlay nav: link colour, weight and :hover are inherited
-       from the default `a:link` rules (same treatment as desktop). The
-       only mobile-specific overrides are layout (full-width blocks with
-       big tap padding) and the 1px grey dividers between items — those
-       replace the thin link underline for a cleaner list look. */
-    .main-nav a {
+    /* All primary actions share a full-width target, including search. */
+    .main-nav > :is(a, .search-toggle-mobile) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
       width: 100%;
       box-sizing: border-box;
       min-block-size: var(--header-nav-target-small);
       flex-shrink: 0;
-      margin-inline-end: 0;
-      padding: 20px;
-      display: block;
+      margin: 0;
+      padding: 1rem 20px;
       font-size: var(--header-nav-size-small);
+      line-height: 1.35;
       white-space: normal;
       overflow-wrap: anywhere;
-      border-bottom: 1px solid var(--color-divider);
+      border: 0;
+    }
+
+    .main-nav > :is(a, .search-toggle-mobile):focus-visible {
+      outline-offset: calc(-1 * var(--beauty-focus-offset));
     }
 
     .main-nav .nav-label {
@@ -1262,26 +1266,6 @@
 
     .main-nav .nav-label[data-label] > .beauty-link-label {
       justify-self: start;
-    }
-
-    /* Override the desktop text-decoration underline for icon links —
-       in mobile overlay they use the same grey divider as other items. */
-    .main-nav a:has(.nav-icon),
-    .main-nav a:has(.nav-icon):link,
-    .main-nav a:has(.nav-icon):visited {
-      text-decoration: none;
-      border-bottom: 1px solid var(--color-divider);
-    }
-
-    /* The search link uses the same typography and spacing as menu links. */
-    .main-nav .search-toggle-mobile { display: block; }
-
-    /* Current-page link has `border-bottom: none` globally — put the
-       divider back so it keeps the rhythm of the overlay list. */
-    .main-nav .link-selected,
-    .main-nav .link-selected:link,
-    .main-nav .link-selected:visited {
-      border-bottom: 1px solid var(--color-divider);
     }
 
     /* Lock scroll when menu is open */
@@ -1867,6 +1851,25 @@
     .lang-toggle { min-width: 48px; height: 34px; }
     .theme-toggle { width: 34px; height: 34px; }
     .theme-toggle svg { width: 20px; height: 20px; }
+
+    /* The same bar sits below the links and scrolls with short menus. */
+    .main-nav > .footer-bar {
+      flex: none;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-block-start: auto;
+      padding: var(--content-group-gap) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
+    }
+    .main-nav .social-icons { flex-wrap: wrap; gap: 0; }
+    .main-nav .social-icon {
+      display: grid;
+      place-items: center;
+      min-height: 44px;
+      padding-inline: 8px;
+    }
+    .main-nav .footer-controls { margin-inline-start: auto; gap: 4px; }
+    .main-nav :is(.lang-toggle, .theme-toggle) { min-width: 44px; min-height: 44px; }
+    .main-nav .lang-menu-options { max-height: 50dvh; overflow-y: auto; }
   }
 
   /* Chroma classes keep syntax colors theme-aware without rewriting code.
@@ -2257,11 +2260,6 @@ body.search-open { position: fixed; inset-inline: 0; }
 .search-result mark { background: var(--search-highlight); color: inherit; padding: 0; border-radius: 2px; font-weight: var(--font-weight-medium); }
 .search-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 48rem) {
-  .main-nav .search-toggle-mobile {
-    width: 100%; min-block-size: var(--header-nav-target-small); flex-shrink: 0;
-    padding: 20px; margin: 0; font-size: var(--header-nav-size-small);
-    border-bottom: 1px solid var(--color-divider);
-  }
   .search-dialog {
     inset: var(--search-viewport-top, 0px) 0 auto;
     transform: none; max-width: none;

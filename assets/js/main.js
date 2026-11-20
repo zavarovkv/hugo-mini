@@ -180,9 +180,19 @@
     if (!toggle || !nav) return;
     var mobileMql = window.matchMedia(MOBILE_QUERY);
     var lockedScrollY = 0;
+    // Move the live controls so custom footer links and saved preferences work
+    // in both places with a single set of focus targets and event handlers.
+    var actions = document.querySelector('body > footer .footer-bar');
+    var footerParent = actions && actions.parentNode;
+    var footerNext = actions && actions.nextSibling;
+    var languages = actions && actions.querySelector('.lang-menu');
 
     function closeMenu() {
       var wasOpen = nav.classList.contains('active');
+      if (wasOpen && actions) {
+        if (languages) languages.open = false;
+        footerParent.insertBefore(actions, footerNext);
+      }
       nav.classList.remove('active');
       // Fading links must leave the tab order immediately, before visibility
       // changes at the end of the CSS transition. Desktop links stay usable.
@@ -205,6 +215,8 @@
       toggle.setAttribute('aria-expanded', 'true');
       document.body.classList.add('menu-open');
       document.documentElement.classList.add('menu-open');
+      if (actions) nav.appendChild(actions);
+      nav.scrollTop = 0;
     }
 
     document.addEventListener('hugo-mini:close-menu', closeMenu);
@@ -222,6 +234,11 @@
 
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape' || !nav.classList.contains('active')) return;
+      if (languages && languages.open) {
+        languages.open = false;
+        languages.querySelector('summary').focus();
+        return;
+      }
       closeMenu();
       toggle.focus();
     });

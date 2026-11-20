@@ -154,7 +154,7 @@ its subdomains, opt in on **each** site:
   rememberLanguage = true
 ```
 
-With `rememberLanguage`, a choice made in the footer applies to homepages and pages marked `languagePreferenceEntry = true`. Direct article links open in their own language. Automatic redirects follow the published same-origin translation and preserve the query and fragment. Without JavaScript, readers can still follow the footer links.
+With `rememberLanguage`, a choice made in the footer or mobile menu applies to homepages and pages marked `languagePreferenceEntry = true`. Direct article links open in their own language. Automatic redirects follow the published same-origin translation and preserve the query and fragment. Without JavaScript, readers can still follow the footer links.
 
 The optional parent-domain cookies (`hugo-mini-theme` and `hugo-mini-language`) last one year, use `SameSite=Lax` and are secure on HTTPS. A shared choice takes precedence. If none exists, Mini migrates an explicit local choice. If cookies are unavailable, local storage still works. System colors remain automatic until the reader chooses a theme.
 
