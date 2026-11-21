@@ -91,7 +91,7 @@ All quotation variants share geometry and the configured quote face:
 | Opening mark | Scale 1.4, `--beauty-hanging-gap: 0.08em` |
 | Attribution dash gap | `0.125em`, beside the signature rather than in the gutter |
 | Footer after a final quotation | `--footer-quotation-gap`: 176 px desktop, 128 px mobile |
-| Author statement (`beauty-lead`) | `--beauty-lead-margin-block`: 32 px before, 48 px after |
+| Author statement (`beauty-lead`) | `--beauty-lead-color` uses `--beauty-dropcap-color` on screen. `--beauty-lead-margin-block` gives 32 px before and 48 px after. |
 
 Attributions wrap within the quote width; native `blockquote footer` and captions
 after direct blockquotes align to the inline end too. Image captions have separate

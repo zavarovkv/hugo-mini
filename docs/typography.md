@@ -84,8 +84,8 @@ Omit the caption if the introduction already names the source. Omit
 `quotation-reading` for a larger standalone testimonial. Captions keep the body
 face even with a [quotation font](fonts.md#a-separate-quotation-family).
 
-For your own definition or thesis, use `<p class="beauty-lead">…</p>`: larger body
-text without quotation marks or a rule. See [quotation sizes and spacing](typography-reference.md#quotations).
+Use `<p class="beauty-lead">…</p>` for your own definition or thesis. It uses larger
+body text and matches the drop-cap color on screen. See [quotation sizes and spacing](typography-reference.md#quotations).
 
 ## Opening quotes, numerals and fractions
 

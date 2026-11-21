@@ -1620,6 +1620,7 @@
   /* Long quotations follow the surrounding article's reading scale. */
   @media screen {
     .beauty-lead {
+      --beauty-lead-color: var(--beauty-dropcap-color);
       --beauty-lead-margin-block: 2rem 3rem;
     }
 
