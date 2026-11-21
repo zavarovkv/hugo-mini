@@ -25,6 +25,8 @@ content, without author-specific Telegram links or analytics.
 
 ## Deployment-owned demo fonts
 
+On the public demo, article H2s share the title face. [Shortcodes](https://hugo-mini-demo.vercel.app/shortcodes-demo/#wide-images) demonstrates the heading, outline, wide illustration and caption together. [Typography](https://hugo-mini-demo.vercel.app/hello-world/) shows drop caps, author statements and footnotes. The demo uses `fontDisplay = "optional"` and a one-year immutable cache for fingerprinted font URLs.
+
 The maintained demo uses licensed body, title and quotation faces. They are **not**
 distributed in the repository. Ordinary clones, CI, the Hugo Themes catalog and
 starter builds use bundled Inter.

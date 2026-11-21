@@ -4,13 +4,16 @@ slug = "hello-world"
 date = "2026-04-01T12:00:00+00:00"
 description = "A complete guide to Markdown rendering and typography in the Mini theme"
 categories = ["getting-started"]
+dropCap = true
 +++
 
 Mini styles native Markdown through Beauty.css. Bundled [Inter](https://rsms.me/inter/) is the default; the public demo uses a custom font profile. Fonts are served from the site itself.
 
 ## Headings
 
-Heading levels use a progressive scale and tighter line height; their faces and weights follow the active font profile.
+In the public demo, H1 and article H2 headings use Sourdine Medium. Body text and lower-level headings use Story.[^fonts]
+
+[^fonts]: A fresh installation uses the bundled Inter. To use your own title face for article H2s, configure `params.fonts.title` and enable `articleH2UseTitleFont`.
 
 ### Third-Level Heading
 
@@ -22,11 +25,11 @@ Heading levels use a progressive scale and tighter line height; their faces and 
 
 **Bold**, *italic* and **_combined emphasis_** follow the active font profile. Bundled Inter uses 300 for body text, 500 for prominent links and 600 for bold text.
 
-Inline `code` is monospace, with a subtle fill in dark mode: `config.toml`, `hugo server`.
+Inline `code` is monospace. In prose, the `fraction` shortcode sets a fraction like {{< fraction "1/3" >}} alongside ordinary figures such as 2026.
 
 ## Links
 
-Internal links like [Articles](/blog/) behave normally. External links like [Hugo documentation](https://gohugo.io/documentation/) automatically open in a new tab with `rel="noopener noreferrer"` — thanks to the built-in render hook. No configuration needed.
+Open [Articles](/blog/) in a new tab or jump to [Tables](#tables) in this article. The demo enables `articleLinksNewTab` in post bodies.
 
 ## Lists
 
@@ -56,6 +59,8 @@ Nested lists work too:
   - Custom shortcodes
 
 ## Blockquotes
+
+<p class="beauty-lead">An editorial lead gives a definition or a central idea a paragraph of its own.</p>
 
 Dieter Rams on design:
 
@@ -106,3 +111,5 @@ Images are lazy-loaded with `loading="lazy"` and `decoding="async"` via the rend
 ```markdown
 ![Alt text](/path/to/image.png)
 ```
+
+<p class="beauty-note">Source of this example: <a href="https://github.com/zavarovkv/hugo-mini/blob/main/exampleSite/content/en/blog/hello-world.md">Hugo Mini</a>.</p>

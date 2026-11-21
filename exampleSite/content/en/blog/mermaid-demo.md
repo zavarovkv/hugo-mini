@@ -25,7 +25,7 @@ graph TD
 
 ## Sequence Diagram
 
-{{< mermaid >}}
+{{< mermaid wide=true caption="How the browser loads an article and applies a theme change." >}}
 sequenceDiagram
     participant U as User
     participant B as Browser

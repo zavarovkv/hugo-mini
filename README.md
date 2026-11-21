@@ -14,7 +14,7 @@
 
 [![Hugo Mini — a dark browser window and light iPhone view on a transparent background](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v8.gif)](https://hugo-mini-demo.vercel.app/)
 
-Mini includes **Inter**. The live demo uses separately licensed Story, Sourdine and Mirta fonts. [Demo fonts](docs/demo.md#deployment-owned-demo-fonts)
+Mini includes **Inter**. The live demo uses Story for body text, Sourdine for article headings and Mirta for quotations, under separate licenses. [Demo fonts](docs/demo.md#deployment-owned-demo-fonts)
 
 ## Features
 

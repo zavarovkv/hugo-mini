@@ -5,7 +5,6 @@ date = "2026-03-01T12:00:00+00:00"
 description = "Dark mode, categories, new-post badges, social sharing, and other built-in features"
 categories = ["getting-started"]
 pinned = true
-articleOutline = true
 +++
 
 Beyond Markdown and shortcodes, Mini includes several features that work through configuration — no code changes needed.
@@ -106,9 +105,9 @@ Pinning changes order without adding a badge.
 
 ## Heading Anchor Links
 
-Markdown `##` and `###` headings get a clickable link-chain icon (Telegram blog style). On desktop, the icon sits in the left margin and appears on heading hover. On mobile, the icon is hidden by default — tap a heading to reveal it, then tap the icon to copy the section URL and follow the native anchor to the heading.
+On a wide screen, scroll past this article’s title to see the outline on the left. Select a section to jump to it. The demo enables `articleOutline` for posts with at least two H2 headings. The outline appears from `64rem` (usually 1024 px).
 
-This applies to Markdown headings, not raw HTML. With `headingScroll = true`, H1/H2 text becomes a click-to-align link; Option/Alt + Up/Down moves between headings. H3 keeps its copy link. Option/Alt + Left/Right opens older/newer articles, stopping at the ends.
+Click the title or an H2 to align it near the top, or use Option/Alt + ↑/↓ to move between headings (`headingScroll`). H3 headings keep their copy-link icon. Option/Alt + ← opens the older article and Option/Alt + → opens the newer one in the same language.
 
 ## Privacy-friendly Analytics
 

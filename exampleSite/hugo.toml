@@ -24,12 +24,28 @@ ignoreErrors    = ["error-disable-taxonomy"]
 [outputs]
   home = ["HTML", "RSS", "JSON", "LLMS"]
 
+# Shared reading profile for the demo articles in both languages.
+[[cascade]]
+  [cascade.target]
+    kind = "page"
+    path = "/blog/**"
+  [cascade.params]
+    articleOutline = true
+    headingScroll = true
+    articleH2UseTitleFont = true
+    articleLinksNewTab = true
+    sideNotes = true
+    hangingQuotes = true
+    proseNumerals = true
+
 [params]
   search = true
+  rememberLanguage = true
   authorName = "Jane Doe"  # fictitious example author
   authorURL  = ""          # no real profile in the public demo
 
   # Appearance
+  fontDisplay = "optional"  # keep the first visible typeface on a slow connection
   logo      = "images/hugo-mini-logo-light.svg"
   logoDark  = "images/hugo-mini-logo-dark.svg"
   # avatar      = "images/avatar.svg"        # alternative: personal avatar
@@ -50,7 +66,8 @@ ignoreErrors    = ["error-disable-taxonomy"]
   # Features
   editorialQuotes = true   # shared editorial style for Markdown quotations
   # socialSharing = false   # uncomment to disable Likely sharing buttons
-  # consoleYoda   = true    # uncomment to print a built-in Yoda in the browser console
+  consoleYoda = true       # built-in console art on the homepage
+  notFoundYoda = true      # illustrated 404
 
 
   # Analytics (all optional — set only the ones you use)

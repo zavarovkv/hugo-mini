@@ -46,6 +46,18 @@ jobs:
         # resolves to the checked-out repo root.
         run: npm run build
 
+      - name: Check reading features in both demo languages
+        run: |
+          for prefix in '' ru/; do
+            html="exampleSite/public/${prefix}shortcodes-demo/index.html"
+            grep -Eq '<nav class="?article-outline"? ' "$html"
+            grep -Eq '<body [^>]*data-heading-scroll="?true' "$html"
+            grep -Eq '<article [^>]*article-title-headings' "$html"
+            grep -q 'reading-shelf-scroll' "$html"
+            grep -q 'data-side-notes' "exampleSite/public/${prefix}hello-world/index.html"
+            grep -q 'beauty-footnote-number' "exampleSite/public/${prefix}hello-world/index.html"
+          done
+
       - name: Build the one-click Vercel starter
         run: |
           bash starter/scripts/setup-theme.sh

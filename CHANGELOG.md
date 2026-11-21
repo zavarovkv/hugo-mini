@@ -28,6 +28,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Fixed
 
+- Demo articles use the title face for H2 and demonstrate the desktop outline, heading shortcuts, margin notes and wide media in both languages.
+- The demo uses the optional `fontDisplay` setting and caches fingerprinted web fonts to avoid late type changes on slow connections.
 - Same-article Markdown anchors stay in the current tab, including relative and absolute links without JavaScript. Localized links preserve the entire fragment.
 - Print uses the configured text, heading and link colors in both light and dark themes.
 - Safari on iPhone updates the status and address bar backgrounds when readers switch colors in the open mobile menu.

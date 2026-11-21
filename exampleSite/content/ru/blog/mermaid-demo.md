@@ -25,7 +25,7 @@ graph TD
 
 ## Диаграмма последовательности
 
-{{< mermaid >}}
+{{< mermaid wide=true caption="Как браузер загружает статью и применяет выбранную тему." >}}
 sequenceDiagram
     participant U as Пользователь
     participant B as Браузер

@@ -14,7 +14,7 @@
 
 [![Hugo Mini — темная тема в браузере и светлая на iPhone, на прозрачном фоне](https://raw.githubusercontent.com/zavarovkv/hugo-mini/main/images/readme-preview-v8.gif)](https://hugo-mini-demo.vercel.app/ru/)
 
-В комплекте **Inter**. В опубликованном демо используются Стори, Сурдин и Мирта с отдельными лицензиями. [Шрифты демо](docs/demo.md#deployment-owned-demo-fonts)
+В комплекте **Inter**. В публичном демо основной текст набран Стори, заголовки статей — Сурдином, цитаты — Миртой. У этих шрифтов отдельные лицензии. [Шрифты демо](docs/demo.md#deployment-owned-demo-fonts)
 
 ## Возможности
 

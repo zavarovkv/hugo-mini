@@ -42,7 +42,7 @@ Weights 300 and 600 are preloaded. Other faces load when used. The font license 
 
 **Links** (`render-link.html`) open external URLs in a new tab with `rel="noopener noreferrer"`. Internal page links resolve to the current language when a translation exists; `localizeLinks = false` disables that behavior.
 
-**Headings** (`render-heading.html`) retain IDs and optional classes. H2 and H3 headings receive a copyable section link unless marked `.no-anchor`.
+**Headings** (`render-heading.html`) retain IDs and optional classes. The demo enables `headingScroll` so an article title or H2 links to itself. H3 retains the copy-link icon. Use `.no-anchor` to omit the link on an individual Markdown heading.
 
 **Tables** (`render-table.html`) scroll within a keyboard-focusable region, keep validated ISO dates semantic and wrap cells for print.
 

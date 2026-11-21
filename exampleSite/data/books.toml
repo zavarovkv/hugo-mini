@@ -1,0 +1,21 @@
+[[items]]
+id = "alice-in-wonderland"
+title = "Alice’s Adventures in Wonderland"
+author = "Lewis Carroll"
+year = 1865
+read = "2026-02"
+
+[items.translations.ru]
+title = "Алиса в Стране чудес"
+author = "Льюис Кэрролл"
+
+[[items]]
+id = "through-the-looking-glass"
+title = "Through the Looking-Glass"
+author = "Lewis Carroll"
+year = 1871
+read = "2026-03"
+
+[items.translations.ru]
+title = "Алиса в Зазеркалье"
+author = "Льюис Кэрролл"

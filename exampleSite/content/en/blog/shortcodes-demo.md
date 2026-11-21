@@ -4,6 +4,8 @@ slug = "shortcodes-demo"
 date = "2026-01-15T12:00:00+00:00"
 description = "Built-in shortcodes and styled HTML elements in the Mini theme"
 categories = ["getting-started"]
+wideCode = true
+reading_list = "books"
 +++
 
 Mini includes shortcodes and CSS classes for content that goes beyond standard Markdown.
@@ -36,14 +38,26 @@ Use `ratio="3:2"` for 60/40, `ratio="2:3"` for 40/60, or omit it for equal colum
 
 {{< columns ratio="3:2" >}}
 {{< column >}}
-### Articles {.posts-group-title .no-anchor}
-Give the primary content more width, so longer article titles wrap less.
+{{< latest-posts count="2" >}}
 {{< /column >}}
 {{< column >}}
 ### Projects {.posts-group-title .no-anchor}
-Keep supporting descriptions compact.
+{{< project name="Hugo Mini" url="https://themes.gohugo.io/themes/hugo-mini/" icon="images/hugo-mini-logo-light.svg" iconDark="images/hugo-mini-logo-dark.svg" >}}
+The theme used by this demo. {{< github-stars repo="zavarovkv/hugo-mini" >}}
+{{< /project >}}
 {{< /column >}}
 {{< /columns >}}
+
+<details><summary>Preview an unknown counter</summary>
+<p>An unknown value reserves space until the counter is ready.</p>
+<p aria-hidden="true">Views <span class="loading-skeleton" aria-busy="true"><span>000</span></span></p>
+</details>
+
+## Reading list
+
+The `reading-list` shortcode renders a localized shelf from one data file.
+
+{{< reading-list >}}
 
 ## Wide images
 
@@ -119,7 +133,7 @@ The `.button` CSS class creates a styled call-to-action button with a gradient b
 
 ## Combining Elements
 
-These elements work well together. Here's a typical pattern for a landing section:
+Markdown {{< wavy-arrow label="renders as" >}} HTML
 
 <span class="beauty-emphasis">For writers</span> — Mini keeps things simple. Write in Markdown, add front matter flags for math or diagrams when needed, and let the theme handle the rest.
 

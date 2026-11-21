@@ -4,6 +4,8 @@ slug = "shortcodes-demo"
 date = "2026-01-15T12:00:00+00:00"
 description = "Встроенные шорткоды и стилизованные HTML-элементы в теме Mini"
 categories = ["getting-started"]
+wideCode = true
+reading_list = "books"
 +++
 
 Mini включает шорткоды и CSS-классы для контента, который выходит за рамки стандартного Markdown.
@@ -36,14 +38,26 @@ featuredPosts = ["/blog/theme-features", "/blog/under-the-hood", "/blog/hello-wo
 
 {{< columns ratio="3:2" >}}
 {{< column >}}
-### Статьи {.posts-group-title .no-anchor}
-Основному содержанию можно дать больше ширины, чтобы длинные названия реже переносились.
+{{< latest-posts count="2" >}}
 {{< /column >}}
 {{< column >}}
 ### Проекты {.posts-group-title .no-anchor}
-Дополнительные описания остаются компактными.
+{{< project name="Hugo Mini" url="https://themes.gohugo.io/themes/hugo-mini/" icon="images/hugo-mini-logo-light.svg" iconDark="images/hugo-mini-logo-dark.svg" >}}
+Тема, на которой работает это демо. {{< github-stars repo="zavarovkv/hugo-mini" >}}
+{{< /project >}}
 {{< /column >}}
 {{< /columns >}}
+
+<details><summary>Как выглядит счетчик во время загрузки</summary>
+<p>Пока значение неизвестно, индикатор занимает место будущего числа. Ниже показан пример этого состояния.</p>
+<p aria-hidden="true">Просмотры <span class="loading-skeleton" aria-busy="true"><span>000</span></span></p>
+</details>
+
+## Книжная полка
+
+Шорткод `reading-list` собирает полку на обоих языках из одного файла данных.
+
+{{< reading-list >}}
 
 ## Широкие изображения
 
@@ -119,7 +133,7 @@ CSS-класс `.button` создает стилизованную кнопку 
 
 ## Комбинирование элементов
 
-Эти элементы хорошо работают вместе. Вот типичный паттерн для лендинг-секции:
+Markdown {{< wavy-arrow label="преобразуется в" >}} HTML
 
 <span class="beauty-emphasis">Для авторов</span> — Mini не усложняет. Пишите в Markdown, добавляйте флаги в front matter для формул или диаграмм при необходимости, а тема позаботится об остальном.
 
