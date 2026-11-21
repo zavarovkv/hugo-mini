@@ -15,6 +15,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Changed
 
+- Article drop caps carry a subtle link tint in both color schemes.
 - Image and Mermaid figures share centered italic captions and 32–56 px of vertical space. Wide figures extend equally into both margins.
 
 - Article titles are centered above a short vertical rule on screen. Footnotes use tighter leading and begin with a number linking to the first citation, including in the desktop margin.

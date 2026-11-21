@@ -117,6 +117,7 @@
     --beauty-font: var(--font-secondary);
     --beauty-heading-font: var(--font-main);
     --beauty-heading-weight: var(--font-weight-bold);
+    --beauty-dropcap-color: color-mix(in srgb, var(--heading-color) 80%, var(--color-primary));
     --beauty-dropcap-font: var(--font-title);
     --beauty-dropcap-weight: var(--font-weight-title);
     --beauty-dropcap-lines: 2;
@@ -711,6 +712,7 @@
     --background-color: #1a1a1a;
     --heading-color: #e8e8e8;
     --text-color: #c7ccd1;
+    --beauty-dropcap-color: color-mix(in srgb, var(--text-color) 80%, var(--color-primary));
     --color-secondary: var(--color-muted);
     --color-success: #4ade80;
     --color-divider: #2a2a2a;

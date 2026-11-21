@@ -106,6 +106,7 @@ RTL и печать остаются без сдвига. На узком экр
 | Переменная | Настройка темы / значение |
 | --- | --- |
 | `--beauty-dropcap-font` | `--font-title` |
+| `--beauty-dropcap-color` | 20% цвета ссылки и 80% цвета заголовка (светлая тема) или основного текста (темная) |
 | `--beauty-dropcap-weight` | `--font-weight-title` |
 | `--beauty-dropcap-lines` | `2` |
 | `--beauty-dropcap-lines-small` | Значение Beauty: `2` |

@@ -133,7 +133,7 @@ and is not inherited from site params.
 - Notes, captions, fine print and `data-typography="off"` paragraphs are excluded.
 
 The initial uses the H1 family and weight, wraps across two lines and rises by a
-quarter line. Text is neither removed nor duplicated. Print and browsers without
+quarter line. A hint of the link color tints the initial in both palettes. Print and browsers without
 `initial-letter` support use ordinary text; no script or extra font is loaded.
 
 For single-letter opening words such as “I” or “A”, a nonbreaking space preserves

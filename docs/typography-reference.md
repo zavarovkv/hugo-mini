@@ -106,6 +106,7 @@ H1 family and weight to it, with no cloned letter or extra font request.
 | Token | Theme mapping / default |
 | --- | --- |
 | `--beauty-dropcap-font` | `--font-title` |
+| `--beauty-dropcap-color` | 20% link color mixed into the heading color (light) or body text color (dark) |
 | `--beauty-dropcap-weight` | `--font-weight-title` |
 | `--beauty-dropcap-lines` | `2` |
 | `--beauty-dropcap-lines-small` | Beauty default: `2` |

@@ -14,20 +14,23 @@ test('opt-in drop caps use the title face without changing copy, adjacent prose 
       const original = await first.textContent();
       const result = await first.evaluate(p => {
         const cap = getComputedStyle(p, '::first-letter');
-        const body = getComputedStyle(p);
         const title = getComputedStyle(document.querySelector('h1'));
+        const pixel = document.createElement('canvas').getContext('2d');
+        pixel.fillStyle = cap.color;
+        pixel.fillRect(0, 0, 1, 1);
         const range = document.createRange();
         range.selectNodeContents(p);
         getSelection().removeAllRanges(); getSelection().addRange(range);
         return {
           lines:cap.getPropertyValue('initial-letter') || cap.getPropertyValue('-webkit-initial-letter'),
           titleFace:cap.fontFamily === title.fontFamily && cap.fontWeight === title.fontWeight,
-          bodyColor:cap.color === body.color,
+          color:Array.from(pixel.getImageData(0, 0, 1, 1).data),
           copy:getSelection().toString(),
           overflow:document.documentElement.scrollWidth > innerWidth,
         };
       });
-      expect(result).toEqual({lines:standard ? '2.25 3' : '2.25 2', titleFace:true, bodyColor:true, copy:original, overflow:false});
+      const color = colorScheme === 'light' ? [27,46,59,255] : [180,198,213,255];
+      expect(result).toEqual({lines:standard ? '2.25 3' : '2.25 2', titleFace:true, color, copy:original, overflow:false});
       const wrapping = await first.evaluate(p => {
         const text = p.firstChild;
         const range = document.createRange();
@@ -68,6 +71,7 @@ test('opt-in drop caps use the title face without changing copy, adjacent prose 
       const nextBox = await next.boundingBox();
       expect(nextBox.y).toBeGreaterThanOrEqual(firstBox.y + firstBox.height);
       await page.emulateMedia({media:'print'});
+      expect(await first.evaluate(p => getComputedStyle(p, '::first-letter').color === getComputedStyle(p).color)).toBe(true);
       expect(await first.evaluate(p => {
         const s = getComputedStyle(p, '::first-letter');
         return s.getPropertyValue('initial-letter') || s.getPropertyValue('-webkit-initial-letter');
