@@ -29,7 +29,7 @@ test('opt-in drop caps use the title face without changing copy, adjacent prose 
           overflow:document.documentElement.scrollWidth > innerWidth,
         };
       });
-      const color = colorScheme === 'light' ? [27,46,59,255] : [180,198,213,255];
+      const color = colorScheme === 'light' ? [19,62,91,255] : [180,198,213,255];
       expect(result).toEqual({lines:standard ? '2.25 3' : '2.25 2', titleFace:true, color, copy:original, overflow:false});
       const wrapping = await first.evaluate(p => {
         const text = p.firstChild;

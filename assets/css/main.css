@@ -117,7 +117,7 @@
     --beauty-font: var(--font-secondary);
     --beauty-heading-font: var(--font-main);
     --beauty-heading-weight: var(--font-weight-bold);
-    --beauty-dropcap-color: color-mix(in srgb, var(--heading-color) 80%, var(--color-primary));
+    --beauty-dropcap-color: color-mix(in srgb, var(--heading-color) 55%, var(--color-primary));
     --beauty-dropcap-font: var(--font-title);
     --beauty-dropcap-weight: var(--font-weight-title);
     --beauty-dropcap-lines: 2;
