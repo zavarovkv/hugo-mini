@@ -247,6 +247,8 @@ Hugo's inline palette instead; that configuration owns its contrast and color be
 
 ## Site fonts
 
+`params.fontDisplay` sets the CSS font-loading policy for bundled and custom faces. It defaults to `"swap"`. The public demo uses `"optional"` to avoid a late change of typeface.
+
 Use `[params.fonts]` for a site-owned family, `[params.fonts.title]` for titles and
 `[params.fonts.quote]` for quotations. See [Fonts](fonts.md) for assets, weights,
 preloading and `useDefaultFonts`. The default remains bundled Inter.

@@ -125,7 +125,7 @@ roles to `--font-weight-body`, `--font-weight-medium`, `--font-weight-bold` and
 ### Loading and emphasis
 
 - Assets must exist **before** Hugo builds. Bytes are preserved and URLs fingerprinted.
-- Only configured custom preloads are emitted; `font-display: swap` keeps text visible.
+- Only configured custom preloads are emitted. The default `params.fontDisplay = "swap"` allows a web font to replace fallback text after paint. The demo uses `"optional"` so a late font can be used on a subsequent visit while the current page keeps its first visible face.
 - Inter may remain in the output, but custom-font pages do not preload or request it.
 - Synthetic weight/style is disabled. Without a matching bold italic face, combined emphasis uses real upright bold; supplying that face restores combined emphasis.
 

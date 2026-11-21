@@ -422,6 +422,8 @@ test('site fonts use fingerprinted assets and keep default-font pages isolated',
   const example = await site(t, `baseURL="https://example.org/sub/"
 theme="hugo-mini"
 disableKinds=["taxonomy","term"]
+[params]
+fontDisplay="optional"
 [params.fonts]
 family="Site Font"
 [[params.fonts.faces]]
@@ -452,6 +454,10 @@ preload=true
   assert.match(css, /main :is\(strong,b\) :is\(em,i\)/, 'missing bold italic uses the real upright bold face');
   assert.doesNotMatch(css, /inter-v20/);
   const defaultCSS = await example.read(cssPath(standard));
+  for (const sheet of [css, defaultCSS]) {
+    const faces = sheet.match(/@font-face\{[^}]+\}/g);
+    assert.ok(faces?.length && faces.every(face => face.includes('font-display:optional')));
+  }
   assert.match(defaultCSS, /--font-weight-body:300/);
   assert.doesNotMatch(defaultCSS, /Site Font|private\//);
   const url = custom.match(/href=\/sub\/(private\/regular\.[a-f0-9]{64}\.woff2)/)[1];

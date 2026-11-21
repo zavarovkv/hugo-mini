@@ -3,5 +3,11 @@
   "framework": null,
   "installCommand": "npm ci",
   "buildCommand": "bash scripts/build-vercel-demo.sh",
-  "outputDirectory": "exampleSite/public"
+  "outputDirectory": "exampleSite/public",
+  "headers": [
+    {
+      "source": "/private-fonts/:asset*.:hash([0-9a-f]{64}).:ext(otf|ttf|woff2?)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
 }

@@ -1,6 +1,10 @@
 {{- /* Site-owned font assets; this theme never includes a consumer's font files.
      Callers cache by language and useDefaultFonts, and key CSS by this result. */ -}}
-{{- $profile := dict "custom" false "regular" 300 "medium" 500 "bold" 600 "title" 500 -}}
+{{- $display := .Site.Params.fontDisplay | default "swap" -}}
+{{- if not (in (slice "auto" "block" "swap" "fallback" "optional") $display) -}}
+  {{- errorf "fontDisplay: invalid CSS font-display value %q" $display -}}
+{{- end -}}
+{{- $profile := dict "custom" false "regular" 300 "medium" 500 "bold" 600 "title" 500 "display" $display -}}
 {{- $config := .Site.Params.fonts -}}
 {{- if and $config (not .Params.useDefaultFonts) -}}
   {{- if not (and $config.family (findRE `^[\pL\pN _-]+$` $config.family)) -}}
@@ -45,6 +49,6 @@
   {{- range $role, $weight := $weights -}}
     {{- if and (not (and (eq $role "title") $config.title)) (not (in $normalWeights $weight)) -}}{{ errorf "fonts: %s weight %d has no normal face" $role $weight }}{{- end -}}
   {{- end -}}
-  {{- $profile = merge $weights (dict "custom" true "family" $config.family "titleFamily" $titleFamily "quoteFamily" $quoteFamily "quoteWeight" $quoteWeight "faces" $faces "boldItalic" $boldItalic) -}}
+  {{- $profile = merge $weights (dict "custom" true "family" $config.family "titleFamily" $titleFamily "quoteFamily" $quoteFamily "quoteWeight" $quoteWeight "faces" $faces "boldItalic" $boldItalic "display" $display) -}}
 {{- end -}}
 {{- return $profile -}}
