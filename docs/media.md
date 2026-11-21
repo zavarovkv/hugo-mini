@@ -77,8 +77,8 @@ Nearby diagrams render first. The browser prepares the rest and their print copi
 ## Wide code blocks
 
 Set `wideCode = true` in **page front matter**, then use ordinary fenced Markdown.
-Short examples retain the reading width; blocks that overflow can expand to the
-wide measure. Only direct article blocks expand, not nested examples.
+On desktop, long blocks extend equally into both margins, up to the same 960 px
+limit as wide illustrations. Short examples and nested blocks keep their usual width.
 
 Source, font size, line numbers and copy buttons stay unchanged. Screen code
 scrolls instead of wrapping. JavaScript measures overflow after layout/font changes;
@@ -147,11 +147,11 @@ label defaults to the localized `wavy_arrow_to` string (“to” / “по”);
 | Constraint | Images | Diagrams | Code |
 | --- | --- | --- | --- |
 | Desktop width | Up to source width, wide limit and available space | Up to wide limit and available space | Reading width or full available wide measure |
-| Alignment | Centered on text column | Centered on text column | Aligned with text start |
+| Alignment | Centered on text column | Centered on text column | Centered on text column |
 | Mobile (`48rem` and below), nested blocks, print | Normal column | Normal column | Normal column |
 | Without JavaScript | CSS expansion fallback | Readable source | Column-width scrolling |
 
 `--article-wide-width` defaults to `60rem` (960 px); `--article-edge-gap` reserves
-24 px at the viewport edge. Wide images and diagrams also leave room for section markers.
+24 px at the viewport edge. All three leave room for section markers.
 Measurements refresh after resize, font/image loading and article layout changes.
 Mini owns this geometry; Beauty.css owns native typography and caption rhythm.

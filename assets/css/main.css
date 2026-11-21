@@ -830,20 +830,13 @@
   }
 
   @media screen and (width > 48rem) {
-    article.beauty-reading > :is(.article-image-wide, .article-diagram-wide) {
-      --figure-room: calc(min(100vw, var(--article-available, 100vw)) - 2 * var(--figure-edge-gap, var(--article-edge-gap)));
-      --figure-width: min(var(--article-wide-width), var(--image-natural-width, var(--article-wide-width)), var(--figure-room));
-      inline-size: var(--figure-width);
-      max-inline-size: none;
-      margin-inline: calc((100% - var(--figure-width)) / 2);
-    }
-
+    article.beauty-reading > :is(.article-image-wide, .article-diagram-wide),
     article.beauty-reading.article-wide-code > .code-block.is-wide-code {
-      /* Overflowing examples use the full wide measure, rather than a different
-         width for every line length. The pre retains scrolling beyond the cap. */
-      inline-size: min(var(--article-wide-width), calc(var(--article-available, 50vw + 50%) - var(--article-edge-gap)));
+      --wide-room: calc(min(100vw, var(--article-available, 100vw)) - 2 * var(--wide-edge-gap, var(--article-edge-gap)));
+      --wide-width: min(var(--article-wide-width), var(--image-natural-width, var(--article-wide-width)), var(--wide-room));
+      inline-size: var(--wide-width);
       max-inline-size: none;
-      min-inline-size: 100%;
+      margin-inline: calc((100% - var(--wide-width)) / 2);
     }
   }
 
@@ -1994,7 +1987,7 @@
   @media screen and (min-width: 64rem) {
     /* Leave room for section markers on smaller desktop screens. */
     .article-outline:not([hidden]) ~ article {
-      --figure-edge-gap: max(6rem, var(--article-edge-gap));
+      --wide-edge-gap: max(6rem, var(--article-edge-gap));
     }
 
     .article-outline:not([hidden]) {

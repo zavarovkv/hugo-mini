@@ -15,12 +15,17 @@ export function wideCodeContracts(test, expect) {
     expect(await blocks.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(720);
     await article.evaluate(e => e.classList.add('article-wide-code'));
 
-    for (const width of [320, 768, 800, 1440]) {
+    for (const width of [320, 768, 800, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      await expect.poll(() => blocks.evaluateAll(nodes => nodes.every(node => {
-        const r = node.getBoundingClientRect(), a = node.closest('article').getBoundingClientRect();
-        return Math.abs(r.left - a.left) < 0.5 && r.width <= 960 && r.right <= document.documentElement.clientWidth;
-      }))).toBe(true);
+      await expect.poll(() => blocks.evaluateAll(nodes => {
+        const picture = document.querySelector('.article-image-wide').getBoundingClientRect();
+        const column = nodes[0].closest('article').getBoundingClientRect();
+        return nodes.every((node, index) => {
+          const reference = index === 2 ? column : picture;
+          const box = node.getBoundingClientRect();
+          return Math.abs(box.left - reference.left) < 0.5 && Math.abs(box.right - reference.right) < 0.5;
+        });
+      })).toBe(true);
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(await blocks.nth(2).evaluate(e => Math.abs(e.getBoundingClientRect().width - e.closest('article').getBoundingClientRect().width) < 1)).toBe(true);
       expect(await page.locator('blockquote .code-block').evaluate(e => e.getBoundingClientRect().width <= e.closest('blockquote').getBoundingClientRect().width)).toBe(true);

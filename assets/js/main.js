@@ -1127,9 +1127,8 @@
   (function () {
     var article = document.querySelector('article.beauty-reading');
     if (!article) return;
-    var figures = article.querySelectorAll(':scope > .article-image-wide, :scope > .article-diagram-wide');
     var codeBlocks = article.classList.contains('article-wide-code') ? Array.from(article.querySelectorAll(':scope > .code-block')) : [];
-    if (!figures.length && !codeBlocks.length) return;
+    if (!codeBlocks.length && !article.querySelector(':scope > .article-image-wide, :scope > .article-diagram-wide')) return;
     var mobile = window.matchMedia(MOBILE_QUERY);
     var print = window.matchMedia('print');
     var queued = false;
@@ -1142,22 +1141,17 @@
         block.classList.remove('is-wide-code');
       });
       if (mobile.matches) return;
-      var rtl = getComputedStyle(article).direction === 'rtl';
       var viewport = document.documentElement.clientWidth;
       var rect = article.getBoundingClientRect();
       var center = (rect.left + rect.right) / 2;
-      var figureRoom = Math.max(0, 2 * Math.min(center, viewport - center));
-      var codeRoom = Math.max(0, rtl ? rect.right : viewport - rect.left);
+      var available = Math.max(0, 2 * Math.min(center, viewport - center));
       var overflowing = codeBlocks.filter(function (block) {
         return Array.prototype.some.call(block.querySelectorAll('pre, .highlight > div'), function (scroller) {
           return scroller.scrollWidth > scroller.clientWidth + 1;
         });
       });
-      figures.forEach(function (figure) {
-        figure.style.setProperty('--article-available', figureRoom + 'px');
-      });
+      article.style.setProperty('--article-available', available + 'px');
       overflowing.forEach(function (block) {
-        block.style.setProperty('--article-available', codeRoom + 'px');
         block.classList.add('is-wide-code');
       });
     }

@@ -5,7 +5,9 @@ hidden = true
 wideCode = true
 +++
 
-Long code blocks use the available space to the right.
+Long code blocks share the edges of a wide illustration.
+
+{{< image src="/browser-wide.svg" alt="Wide illustration" width=1200 height=800 wide=true >}}
 
 ```python {linenos=inline}
 message = "A deliberately long line that overflows the reading column and still requires horizontal scrolling beyond the 960 pixel cap."

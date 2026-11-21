@@ -15,6 +15,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Changed
 
+- Wide code blocks now extend equally into both margins, aligned with wide images and diagrams.
 - Article drop caps use an inky link tint on light backgrounds and a paler tint on dark backgrounds.
 - Enlarged author statements share the drop-cap color on screen.
 - Image and Mermaid figures share centered italic captions and 32–56 px of vertical space. Wide figures extend equally into both margins.
