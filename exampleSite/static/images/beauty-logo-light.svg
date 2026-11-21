@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Beauty.css">
+  <title>Beauty.css</title>
+  <g fill="none" stroke="#242424" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 11H32C21 11 15 18 15 28s6 17 17 17h6"/>
+    <path d="M38 11v42"/>
+    <path d="M50 11v42"/>
+  </g>
+</svg>

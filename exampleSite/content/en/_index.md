@@ -2,20 +2,29 @@
 description = "A minimal Hugo blog theme with dark mode and multilingual support"
 +++
 
-# Hugo Mini
+# Hugo Mini {.no-anchor}
 
-A theme for personal blogs, essays and notes. Read a [sample article with quotations, lists and tables](/hello-world/), or [start your own blog](https://github.com/zavarovkv/hugo-mini/blob/main/README.md#quick-start).
+A theme for personal blogs, essays and notes.
 
-## Writing examples {.posts-group-title .no-anchor}
+Explore the [sample article](/hello-world/) to see how quotations, lists and tables look. Follow the [quick start guide](https://github.com/zavarovkv/hugo-mini/blob/main/README.md#quick-start) to set up your own blog.
 
-- [Formulas](/math-demo/) — an inline equation, an integral and a matrix.
-- [Diagrams](/mermaid-demo/) — a flowchart, sequence diagram, Gantt chart and pie chart.
-- [Shortcodes](/shortcodes-demo/) — featured posts, columns and a captioned illustration.
+{{< columns ratio="3:2" >}}
+{{< featured-posts archive="/blog/" archiveLabel="All articles" >}}
 
-## How the theme works {.posts-group-title .no-anchor}
+{{< column >}}
 
-- [Theme features](/theme-features/) — search, navigation and language switching.
-- [Under the hood](/under-the-hood/) — how styles, fonts and scripts load.
-- [Telegram](/telegram-integration/) — comments, views and reactions on a post.
+## Projects {.posts-group-title .no-anchor}
 
-[All articles](/blog/)
+{{< project name="Hugo Mini" url="https://themes.gohugo.io/themes/hugo-mini/" icon="images/hugo-mini-logo-light.svg" iconDark="images/hugo-mini-logo-dark.svg" >}}
+The Hugo theme behind this blog.
+
+<p class="beauty-note">{{< github-stars repo="zavarovkv/hugo-mini" >}}</p>
+{{< /project >}}
+
+{{< project name="Beauty.css" url="https://www.npmjs.com/package/beauty-css" icon="images/beauty-logo-light.svg" iconDark="images/beauty-logo-dark.svg" >}}
+The CSS library that styles its text, tables and figures.
+
+<p class="beauty-note">{{< github-stars repo="zavarovkv/beauty-css" >}}</p>
+{{< /project >}}
+{{< /column >}}
+{{< /columns >}}
