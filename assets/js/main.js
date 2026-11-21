@@ -1,6 +1,6 @@
 /*
  * hugo-mini theme behaviour: mobile menu, theme toggle, Telegram widget,
- * search, code-copy buttons, heading anchors, article shortcuts, wide blocks, side notes, back-to-top.
+ * search, code-copy buttons, heading anchors, article shortcuts and outline, wide blocks and side notes.
  *
  * Plain JavaScript on purpose — it is bundled through Hugo Pipes but NOT run
  * through ExecuteAsTemplate, so it stays lintable and formattable and no `{{`
@@ -1120,7 +1120,7 @@
     if (printMedia.matches) printMode(true);
   });
 
-  // ── Wide blocks: use free inline-end space within the viewport ───
+  // ── Wide blocks: measure the room around the reading column ──────
   (function () {
     var article = document.querySelector('article.beauty-reading');
     if (!article) return;
@@ -1144,14 +1144,17 @@
       var viewport = document.documentElement.clientWidth;
       // CSS handles width limits, source size and print.
       blocks.forEach(function (block) {
-        if (block.classList.contains('code-block')) {
+        var isCode = block.classList.contains('code-block');
+        if (isCode) {
           var overflowing = Array.prototype.some.call(block.querySelectorAll('pre, .highlight > div'), function (scroller) {
             return scroller.scrollWidth > scroller.clientWidth + 1;
           });
           block.classList.toggle('is-wide-code', overflowing);
         }
         var rect = block.getBoundingClientRect();
-        block.style.setProperty('--article-available', Math.max(0, rtl ? rect.right : viewport - rect.left) + 'px');
+        var center = (rect.left + rect.right) / 2;
+        var available = isCode ? (rtl ? rect.right : viewport - rect.left) : 2 * Math.min(center, viewport - center);
+        block.style.setProperty('--article-available', Math.max(0, available) + 'px');
       });
     }
 
@@ -1271,59 +1274,121 @@
       });
     }
   })();
+  // ── Article outline: native fragment links with a live reading position ──
+  ready(function initArticleOutline() {
+    var nav = document.querySelector('.article-outline');
+    if (!nav) return;
+    var article = document.querySelector('.post-title + article');
+    var wide = window.matchMedia('screen and (min-width: 64rem)');
+    var entries = Array.from(nav.querySelectorAll('a'), function (link) {
+      return {link: link, item: link.parentElement, heading: document.getElementById(decodeURIComponent(link.hash.slice(1)))};
+    });
+    var sections = [];
+    var titleBottom = 0;
+    var current = null;
+    var frame = 0;
+    var observer = window.ResizeObserver && new ResizeObserver(measure);
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  // ── Back to top: click area in the left gutter ──────────────────────────
-  (function () {
-    if (document.body.getAttribute('data-back-to-top') === 'false') return;
-
-    var SCROLL_THRESHOLD = 400;
-    var MIN_GUTTER = 130;
-    var label = t('goUp', 'Go up');
-
-    var wrap = document.createElement('a');
-    wrap.className = 'back-to-top-wrap';
-    // href keeps it keyboard-focusable; the handler preventDefaults the jump.
-    wrap.setAttribute('href', '#');
-    wrap.setAttribute('aria-label', label);
-
-    var inner = document.createElement('div');
-    inner.className = 'back-to-top';
-    inner.innerHTML =
-      '<svg class="back-to-top-icon" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22V2M3 7l5-5 5 5"/></svg>';
-    inner.appendChild(document.createTextNode(label));
-
-    wrap.appendChild(inner);
-    document.body.appendChild(wrap);
-
-    var gutterOk = false;
-
-    function onScroll() {
-      var shown = gutterOk && window.pageYOffset > SCROLL_THRESHOLD;
-      wrap.setAttribute('tabindex', shown ? '0' : '-1');
-      wrap.setAttribute('aria-hidden', String(!shown));
-      if (shown) {
-        wrap.classList.add('shown');
-      } else {
-        wrap.classList.remove('shown');
+    function update() {
+      frame = 0;
+      if (nav.hidden) return;
+      var y = window.scrollY;
+      nav.classList.toggle('is-visible', y > titleBottom);
+      if (y <= titleBottom) return;
+      var index = 0;
+      for (var i = 1; i < sections.length && sections[i].top <= y + 1; i++) index = i;
+      // Several short sections can share the last reachable scroll position.
+      if (index && sections[index].top === sections[index - 1].top) {
+        var selected = sections.findIndex(function (entry) {
+          return entry.link.hash === location.hash && entry.top === sections[index].top;
+        });
+        if (selected >= 0) index = selected;
+        else if (y <= 0) index = 0;
+      }
+      var section = sections[index];
+      var next = sections[index + 1];
+      var progress = section.mark;
+      if (next && next.top > section.top) {
+        var fraction = Math.max(0, Math.min(1, (y - section.top) / (next.top - section.top)));
+        progress += fraction * (next.mark - section.mark);
+      }
+      nav.style.setProperty('--outline-progress', (progress / sections[sections.length - 1].mark).toFixed(5));
+      if (section.link === current) return;
+      if (current) current.removeAttribute('aria-current');
+      current = section.link;
+      current.setAttribute('aria-current', 'location');
+      sections.forEach(function (entry, i) { entry.link.classList.toggle('is-past', i < index); });
+      if (nav.scrollHeight > nav.clientHeight && !nav.matches(':hover, :focus-within')) {
+        var bounds = nav.getBoundingClientRect();
+        var marker = current.getBoundingClientRect();
+        if (marker.top < bounds.top || marker.bottom > bounds.bottom) {
+          nav.scrollTop += marker.top - bounds.top - nav.clientHeight / 2;
+        }
       }
     }
 
     function measure() {
-      var gutter = document.body.getBoundingClientRect().left;
-      gutterOk = gutter > MIN_GUTTER;
-      wrap.style.width = gutter + 'px';
-      wrap.style.display = gutterOk ? 'block' : 'none';
-      onScroll();
+      // Read heading visibility before writing to the list. Interleaving these
+      // operations forces a layout pass per heading on long articles.
+      var visible = entries.map(function (entry) {
+        return Boolean(entry.heading && entry.heading.getClientRects().length);
+      });
+      sections = entries.filter(function (entry, index) {
+        entry.item.hidden = !visible[index];
+        return visible[index];
+      });
+      // The first entry is the article title. Require two visible H2s as well.
+      nav.hidden = sections.length < 3;
+      if (nav.hidden) return;
+      titleBottom = sections[0].heading.getBoundingClientRect().bottom + window.scrollY;
+      var limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      sections.forEach(function (entry) {
+        var inset = parseFloat(getComputedStyle(entry.heading).scrollMarginBlockStart) || 0;
+        entry.top = Math.max(0, Math.min(limit, window.scrollY + entry.heading.getBoundingClientRect().top - inset));
+      });
+      var row = sections[0].link.getBoundingClientRect().height;
+      var padding = parseFloat(getComputedStyle(nav.firstElementChild).paddingBlockStart);
+      var last = sections.length - 1;
+      var track = Math.max(last * row, nav.clientHeight - 2 * padding - row);
+      var distance = Math.max(1, sections[last].top - sections[0].top);
+      sections[0].mark = 0;
+      for (var i = 1; i <= last; i++) {
+        var previous = sections[i - 1].mark;
+        var ideal = track * (sections[i].top - sections[0].top) / distance;
+        sections[i].mark = i === last ? track : Math.max(previous + row, Math.min(ideal, track - (last - i) * row));
+        sections[i].item.style.setProperty('--outline-gap', (sections[i].mark - previous - row) + 'px');
+      }
+      update();
     }
-
-    wrap.addEventListener('click', function (e) {
-      e.preventDefault();
-      window.scroll(0, 0);
+    nav.addEventListener('click', function (event) {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+      var link = event.target.closest('a');
+      var section = sections.find(function (entry) { return entry.link === link; });
+      if (!section) return;
+      event.preventDefault();
+      if (location.hash !== link.hash) history.pushState(null, '', link.href);
+      if (!section.heading.hasAttribute('tabindex')) section.heading.tabIndex = -1;
+      section.heading.focus({preventScroll: true});
+      section.heading.scrollIntoView({block: 'start', behavior: reduced.matches ? 'instant' : 'smooth'});
       onScroll();
     });
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onResize(measure);
-    measure();
-  })();
+    function onScroll() { if (!frame) frame = requestAnimationFrame(update); }
+    function sync() {
+      if (wide.matches) {
+        measure();
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', measure);
+        if (observer) observer.observe(article);
+      } else {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', measure);
+        if (observer) observer.disconnect();
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    }
+    wide.addEventListener('change', sync);
+    sync();
+  });
 })();

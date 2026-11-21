@@ -7,6 +7,7 @@ min = "0.146.0"
 
 [params]
   sideNotes = false
+  articleOutline = false
   articleLinksNewTab = false
   articleH2UseTitleFont = false
   typography = true

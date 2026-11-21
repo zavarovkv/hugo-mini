@@ -107,8 +107,7 @@ Independent templates can omit it. The 404 page uses `beauty-reading`, while its
 optional ASCII illustration keeps its own monospace scale.
 
 A standalone layout can replace the `search` block to omit the dialog. Use
-`search = false` in front matter separately to exclude the page from the index,
-and `backToTop = false` to omit the reading control.
+`search = false` in front matter to exclude the page from the index.
 
 ### Custom header
 

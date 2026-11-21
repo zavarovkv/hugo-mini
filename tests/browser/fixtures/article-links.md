@@ -3,6 +3,7 @@ title = 'Article links'
 type = 'blog'
 hidden = true
 articleLinksNewTab = true
+articleOutline = true
 +++
 
 [Internal page](/blog/)

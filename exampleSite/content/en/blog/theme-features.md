@@ -5,6 +5,7 @@ date = "2026-03-01T12:00:00+00:00"
 description = "Dark mode, categories, new-post badges, social sharing, and other built-in features"
 categories = ["getting-started"]
 pinned = true
+articleOutline = true
 +++
 
 Beyond Markdown and shortcodes, Mini includes several features that work through configuration — no code changes needed.
@@ -145,10 +146,6 @@ Any menu item can display an inline SVG icon via `params.icon`. Built-in icon: `
   [languages.en.menu.main.params]
     icon = "telegram"
 ```
-
-## Back to Top
-
-On wide screens, hovering the left margin reveals a "Go up" label. Clicking anywhere in the left gutter scrolls back to the top — Telegram blog style. The button appears only after scrolling past 400px and only when the viewport is wide enough to have a meaningful gutter (> 130px). Set `backToTop = false` in page front matter or site parameters to disable it.
 
 ## Mobile Navigation
 

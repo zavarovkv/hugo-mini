@@ -22,7 +22,7 @@ function element(attributes = {}) {
 
 function page({ saved, blocked = false, dark = false, mobile = true, math = false, ascii, reduced = false, scrollY = 0 } = {}) {
   const root = element();
-  const body = element({ 'data-back-to-top': 'false', 'data-math': String(math) });
+  const body = element({ 'data-math': String(math) });
   const toggle = element();
   const nav = element();
   const content = element();
@@ -304,31 +304,6 @@ test('mobile heading links remain available when the Clipboard API is absent', (
   assert.equal(click.defaultPrevented, false, 'native fragment navigation must remain available');
   heading.dispatchEvent(new Event('click'));
   assert.ok(!heading.classList.contains('anchor-visible'));
-});
-
-test('back-to-top stays out of keyboard navigation until it is visible', () => {
-  const p = page();
-  let control;
-  p.body.setAttribute('data-back-to-top', 'true');
-  p.body.getBoundingClientRect = () => ({ left: 200 });
-  p.body.appendChild = (node) => { control = node; };
-  p.document.createElement = () => Object.assign(element(), { style: {}, appendChild() {} });
-  p.document.createTextNode = (text) => ({ textContent: text });
-  p.window.pageYOffset = 0;
-  p.window.scroll = () => { p.window.pageYOffset = 0; };
-  p.start();
-  assert.equal(control.getAttribute('tabindex'), '-1');
-  assert.equal(control.getAttribute('aria-hidden'), 'true');
-  assert.equal(control.getAttribute('role'), null, 'use native link keyboard semantics');
-  p.window.pageYOffset = 800;
-  p.window.dispatchEvent(new Event('scroll'));
-  assert.equal(control.getAttribute('tabindex'), '0');
-  assert.equal(control.getAttribute('aria-hidden'), 'false');
-  assert.ok(control.classList.contains('shown'));
-  control.dispatchEvent(new Event('click'));
-  assert.equal(p.window.pageYOffset, 0);
-  assert.equal(control.getAttribute('tabindex'), '-1');
-  assert.ok(!control.classList.contains('shown'));
 });
 
 test('a failed Mermaid download restores every diagram source', async () => {

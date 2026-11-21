@@ -156,7 +156,7 @@ A useful claim[^source] can reference the same note again[^source].
 [^source]: A short note naming the source.
 ```
 
-Notes are numbered by first citation and retain return links for every reference.
+The number at the start of each note links to its first citation.
 Numbers remain visible when a note starts with code, a quotation or a list.
 
 ### Optional desktop side notes
@@ -166,16 +166,19 @@ original note items sit beside their first references without widening the readi
 column or duplicating IDs. Dense notes stack, avoid wide blocks and reserve footer space.
 
 Narrow windows, mobile, print and no-JavaScript views keep endnotes. Only the margin
-layout hides an immediately preceding H2–H6 notes heading and return arrows.
+layout hides an immediately preceding H2–H6 notes heading.
 Repeated references still point to one note. Initial note URLs settle after fonts
 and images load, unless the reader has already interacted.
 
 ### Shared typography
 
 Small italic superscripts keep native links and visible keyboard focus without
-enlarging line boxes. Endnotes use muted body text, hanging numbers and no list
-indentation. See [footnote/list tokens](typography-reference.md#footnotes-and-lists)
+enlarging line boxes. Endnotes use muted body text. Wrapped lines align with the number at the start of the note. See [footnote/list tokens](typography-reference.md#footnotes-and-lists)
 for sizes, spacing and the Beauty compatibility adapter.
+
+## Article outline
+
+Set `articleOutline = true` for the site or a single post. Posts with at least two visible Markdown H2s show the outline on screens 64rem or wider, once the article title scrolls out of view. Its first dot leads to the title. Roman numerals link to sections. Hover or focus a marker for its heading. The line fills as you read. Links scroll smoothly unless reduced motion is enabled. The outline requires JavaScript.
 
 ## Heading scroll controls
 

@@ -16,9 +16,6 @@ other = "Избранные статьи"
 [home]
 other = "Главная"
 
-[go_up]
-other = "Наверх"
-
 [theme_light]
 other = "Включить светлую тему"
 
@@ -122,6 +119,9 @@ other = "Контакты"
 [sections]
 other = "Разделы"
 
+[article_sections]
+other = "Разделы статьи"
+
 [website]
 other = "Сайт"
 
@@ -166,6 +166,9 @@ one = "{{ .Count }} звезда на GitHub"
 few = "{{ .Count }} звезды на GitHub"
 many = "{{ .Count }} звезд на GitHub"
 other = "{{ .Count }} звезды на GitHub"
+
+[footnote_return]
+other = "Вернуться к ссылке {{ .Number }} в тексте"
 
 [search_close]
 other = "Закрыть"

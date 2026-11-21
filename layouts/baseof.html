@@ -112,13 +112,13 @@
          URL substitutions. Both are delivered as one fingerprinted local file. */ -}}
   {{- $fontKey := crypto.SHA256 (jsonify $fonts) -}}
   {{- $themePath := printf "css/theme.%s.css" $fontKey -}}
-  {{- $bundlePath := printf "css/main.%s.css" $fontKey -}}
   {{- $themeCSS := resources.Get "css/main.css" | resources.ExecuteAsTemplate $themePath . -}}
   {{- with resources.Get "css/beauty.css" -}}
   {{- $foundation := partialCached "beauty-compat.html" .Content (crypto.SHA256 .Content) -}}
   {{- /* FromString caches by target path; content keys keep live vendor refreshes current. */ -}}
   {{- $foundationPath := printf "css/beauty-compatible.%s.css" (crypto.SHA256 $foundation) -}}
   {{- $foundationCSS := resources.FromString $foundationPath $foundation -}}
+  {{- $bundlePath := printf "css/main.%s.css" (crypto.SHA256 (print $fontKey $foundationPath)) -}}
   {{- $css := slice $foundationCSS $themeCSS | resources.Concat $bundlePath | resources.Minify | resources.Fingerprint "sha256" -}}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{- else -}}
@@ -162,7 +162,7 @@
     {{- $mermaid = dict "src" "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js" "integrity" "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy" -}}
   {{- end -}}
 {{- end -}}
-<body class="{{ block "bodyClass" . }}{{ end }}" data-i18n="{{ $i18n | jsonify }}"{{ if .Param "headingScroll" }} data-heading-scroll="true"{{ end }}{{ if .Params.math }} data-math="true"{{ end }}{{ if eq (.Param "backToTop") false }} data-back-to-top="false"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
+<body class="{{ block "bodyClass" . }}{{ end }}" data-i18n="{{ $i18n | jsonify }}"{{ if .Param "headingScroll" }} data-heading-scroll="true"{{ end }}{{ if .Params.math }} data-math="true"{{ end }}{{ with $mermaid }} data-mermaid="{{ . | jsonify }}"{{ end }}>
   {{- with .Site.Params.yandexMetrikaId }}
   <noscript><div><img src="https://mc.yandex.ru/watch/{{ . }}" class="analytics-noscript" alt="" /></div></noscript>
   {{- end }}

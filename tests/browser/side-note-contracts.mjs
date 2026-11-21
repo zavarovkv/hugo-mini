@@ -32,14 +32,20 @@ export function sideNoteContracts({test, expect}) {
     const returnTarget = '#' + await firstRef.evaluate(ref => ref.closest('[id]').id);
     await firstRef.click();
     expect(new URL(page.url()).hash).toBe(target);
-    await expect(notes.first().locator('.footnote-backref').first()).toBeHidden();
+    const number = notes.first().locator('.beauty-footnote-number');
+    await number.click();
+    expect(new URL(page.url()).hash).toBe(returnTarget);
+    const repeatedCitation = page.locator('.footnote-ref').and(page.locator(`[href="${target}"]`)).nth(1);
+    await repeatedCitation.click();
+    expect(new URL(page.url()).hash).toBe(target);
+    await expect(notes.locator('.footnote-backref')).toHaveCount(0);
     for (const width of [1100,390,320]) {
       await page.setViewportSize({width,height:900});
       await expect(article).not.toHaveClass(/has-side-notes/);
       await expect(page.locator('.side-notes-heading')).toBeVisible();
       expect(await notes.allTextContents()).toEqual(copy);
       for (const note of await notes.all()) await expect(note).toHaveCSS('position','relative');
-      await notes.first().locator('.footnote-backref').first().click();
+      await number.click();
       expect(new URL(page.url()).hash).toBe(returnTarget);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
@@ -75,6 +81,8 @@ export function sideNoteContracts({test, expect}) {
     await page.goto(baseURL + '/side-note-checks/');
     await expect(page.locator('article')).not.toHaveClass(/has-side-notes/);
     await expect(page.locator('.footnotes > ol > li')).toHaveCount(3);
+    await page.locator('.beauty-footnote-number').first().click();
+    await expect(page).toHaveURL(/#fnref:1$/);
     await expect(page.locator('h2')).toHaveText('Notes');
     await context.close();
   });

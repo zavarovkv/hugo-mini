@@ -16,9 +16,6 @@ other = "Featured articles"
 [home]
 other = "Home"
 
-[go_up]
-other = "Go up"
-
 [theme_light]
 other = "Switch to light theme"
 
@@ -122,6 +119,9 @@ other = "Contacts"
 [sections]
 other = "Sections"
 
+[article_sections]
+other = "Article sections"
+
 [website]
 other = "Website"
 
@@ -164,6 +164,9 @@ other = "to"
 [github_stars]
 one = "{{ .Count }} star on GitHub"
 other = "{{ .Count }} stars on GitHub"
+
+[footnote_return]
+other = "Back to reference {{ .Number }}"
 
 [search_close]
 other = "Close"

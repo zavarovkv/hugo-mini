@@ -20,13 +20,15 @@ The compact layout starts at `48rem` and below (768 px with a 16 px browser defa
 | Homepage H1 | 36 px | 32 px |
 | Homepage H1 to opening paragraph | 24 px | 24 px |
 | Between introductory paragraphs | 12 px | 12 px |
-| Header to H1 | 48 px | 40 px |
-| H1 to content | 32 px | 28 px |
-| Article H2 | Theme heading scale | 24 px |
+| Header to H1 on standalone pages | 48 px | 40 px |
+| Standalone H1 to content | 32 px | 28 px |
+| Article H1 to rule / rule to text | 32 px each | 20 px each |
+| Article H2 | 26 px | 26 px |
+| Before / after an article H2 | 56–64 / 32 px | 56 / 32 px |
 | Quote attributions (`0.875em`) | 15.75 px | 16.625 px |
 | Fine print (`.beauty-fine-print`) | 14 px | 15 px |
 | Post metadata | Theme metadata scale | 14 px |
-| Footnotes / leading | 15/24 px | 16/25.6 px |
+| Footnotes / leading | 14/20 px | 15/22 px |
 | Language label | 12 px | 12 px |
 | New badge | 11 px | 11 px |
 | Content to site footer (`--footer-gap`) | 112 px | 88 px |
@@ -124,13 +126,11 @@ Beauty, and licensed fonts in the site. Print and unsupported browsers retain pl
 | Element | Contract |
 | --- | --- |
 | Reference | Italic superscript, zero line height, relative upward offset; no `vertical-align: super` |
-| Endnote | Muted body face, hanging number, no list indent; native links and keyboard focus |
+| Endnote | Muted body face, inline number linked to the first citation, flush continuation lines |
 | Ordinary list | Marker inherits text weight; `0.875rem` (14 px) item gap; `min(2.5rem, 8%)` indentation |
 | Footnote rhythm | Independent `--beauty-footnote-*` tokens, including `--beauty-footnote-line-height` |
 
-Beauty's `beauty-footnotes`, `beauty-footnote-ref` and `beauty-footnote-backref` own
-these styles. `beauty-compat.html` maps Goldmark classes without duplicating CSS or
-rewriting article HTML. Formulas and unrelated superscripts/subscripts are unaffected.
+Beauty styles the note, its reference, inline number and return links. Hugo Mini maps Goldmark classes and places the first backlink at the start of the note during the build. Formulas and unrelated superscripts/subscripts are unaffected.
 
 Desktop margin notes additionally use:
 

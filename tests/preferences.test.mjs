@@ -91,7 +91,7 @@ function page({
     'data-language-preference-entry': String(entry),
     'data-theme': dark ? 'dark' : 'light',
   });
-  const body = element({ 'data-back-to-top': 'false' });
+  const body = element();
   const themeToggle = element();
   const languageToggle = element({ 'data-lang': lang === 'ru' ? 'en' : 'ru' });
   const languageMenuLinks = menuLanguages.map((code) => element({ 'data-lang': code }));

@@ -47,8 +47,8 @@ Keep supporting descriptions compact.
 
 ## Wide images
 
-Choose `wide=true` to let an illustration expand to the right of the text column, up to 960 px.
-Wide images keep the text edge and expand right within the source and viewport limits.
+Choose `wide=true` to center an illustration across both margins, up to its source width or 960 px.
+Its caption is centered beneath it in italic.
 On mobile and in print, images fit the ordinary column. Local raster dimensions are automatic;
 SVGs and remote images need explicit `width` and `height`.
 

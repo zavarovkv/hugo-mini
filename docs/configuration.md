@@ -108,14 +108,14 @@ See [logos, menus and colors](customization.md).
 | `hangingQuotes` | Hang eligible opening quotation marks | `false` |
 | `proseNumerals` | Old-style figures in eligible prose | `false` |
 | `sideNotes` | Desktop margin notes with endnote fallbacks | `false` |
+| `articleOutline` | Show desktop reading progress and section links in posts with at least two visible H2s | `false` |
 | `articleLinksNewTab` | Open post-body destinations in new tabs | `false` |
 | `articleH2UseTitleFont` | Use the H1 face for article H2 | `false` |
 | `headingScroll` | Click-to-align H1/H2 and Option/Alt + Up/Down | `false` |
-| `backToTop` | Left-gutter control on wide screens | `true` |
 | `search` | Enable [Pagefind search](search.md); requires an index step after Hugo | `false` |
 | `showSearchButton` | Show search triggers when search is enabled | `true` |
 
-Reading options from `typography` through `backToTop` also accept page front-matter
+Reading options from `typography` through `headingScroll` also accept page front-matter
 overrides. `dropCap` and `wideCode` are per-page options, described in
 [content](content.md#front-matter). See [Typography](typography.md)
 ([на русском](typography.ru.md)) for scope and exclusions.

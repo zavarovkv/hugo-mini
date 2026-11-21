@@ -1,0 +1,22 @@
+{{- /* Hugo groups H2s under their H1 (a synthetic root for ordinary posts). */ -}}
+{{- $sections := slice -}}
+{{- range .Fragments.Headings -}}
+  {{- if eq .Level 2 -}}
+    {{- $sections = $sections | append . -}}
+  {{- else if lt .Level 2 -}}
+    {{- range where .Headings "Level" 2 -}}
+      {{- $sections = $sections | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if ge (len $sections) 2 -}}
+<nav class="article-outline" aria-label="{{ i18n "article_sections" | default "Article sections" }}" data-pagefind-ignore="all" hidden>
+  <ol role="list">
+    <li><a href="#page-title" aria-label="{{ $.Title | plainify }}"><span>{{ $.Title | plainify }}</span></a></li>
+    {{- range $sections }}
+      {{- $title := .Title | plainify | htmlUnescape -}}
+      <li><a href="#{{ .ID }}" aria-label="{{ $title }}"><span>{{ $title }}</span></a></li>
+    {{- end }}
+  </ol>
+</nav>
+{{- end -}}

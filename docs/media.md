@@ -22,6 +22,10 @@ a caption, a diagram or a wider figure.
 | `kind` | `description` (default) or `credit`; see [captions](#captions) |
 | `width`, `height` | Positive intrinsic dimensions; required when they cannot be read locally |
 
+On desktop, a wide image extends equally into both margins, up to 960 px and
+its intrinsic width. Its italic caption sits centered below it and wraps at
+50ch. On mobile and in print the image fits the text column.
+
 Mini reads dimensions from local JPEG, PNG, GIF and WebP files in page bundles or
 `static/`. Native Markdown images get these dimensions, lazy loading and asynchronous decoding.
 They remain responsive;
@@ -42,7 +46,8 @@ flowchart LR
 {{< /mermaid >}}
 ```
 
-`wide` accepts `true` or `false`; `caption` accepts Markdown. With neither option,
+`wide=true` centers the diagram on the text column and its italic caption beneath it,
+just like a wide image. `caption` accepts Markdown. With neither option,
 the shortcode keeps its plain `pre` markup. SVGs retain their aspect ratio;
 mobile and print fit the column. Without JavaScript or a successful download,
 the source remains readable.
@@ -112,7 +117,9 @@ Write `\(x_1\)` inline or place a display formula between two lines of `$$`. If 
 Both use Beauty's caption size and image gap. Unknown kinds fail the build;
 roles are never guessed from names or punctuation. Legacy `.caption` markup uses
 the description treatment; add `beauty-caption-credit` for a source credit.
-Wide-figure captions remain within the reading measure.
+Image and diagram figures have 32–56 px of space above and below them on screen.
+Their italic captions sit centered 16 px below the artwork and wrap at 50ch.
+These settings apply at both ordinary and wide sizes.
 
 ## Divider
 
@@ -140,11 +147,11 @@ label defaults to the localized `wavy_arrow_to` string (“to” / “по”);
 | Constraint | Images | Diagrams | Code |
 | --- | --- | --- | --- |
 | Desktop width | Up to source width, wide limit and available space | Up to wide limit and available space | Reading width or full available wide measure |
-| Start edge | Aligned with text | Aligned with text | Aligned with text |
+| Alignment | Centered on text column | Centered on text column | Aligned with text start |
 | Mobile (`48rem` and below), nested blocks, print | Normal column | Normal column | Normal column |
 | Without JavaScript | CSS expansion fallback | Readable source | Column-width scrolling |
 
 `--article-wide-width` defaults to `60rem` (960 px); `--article-edge-gap` reserves
-24 px at the viewport edge. Desktop figures expand toward the inline end.
+24 px at the viewport edge. Wide images and diagrams also leave room for section markers.
 Measurements refresh after resize, font/image loading and article layout changes.
 Mini owns this geometry; Beauty.css owns native typography and caption rhythm.

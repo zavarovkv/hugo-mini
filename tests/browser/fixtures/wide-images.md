@@ -4,7 +4,7 @@ type = "blog"
 hidden = true
 +++
 
-Wide pictures share the text edge and use the available space to the right.
+Wide pictures share the center of the text column.
 
 {{< image src="/browser-wide.svg" alt="First wide image" width=1200 height=800 wide=true caption="A caption stays at the reading measure." >}}
 

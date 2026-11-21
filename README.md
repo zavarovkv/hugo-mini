@@ -18,8 +18,8 @@ Mini includes **Inter**. The live demo uses separately licensed Story, Sourdine 
 
 ## Features
 
-- **Reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css) typography, quotations, margin notes and print layouts. [Authoring examples](docs/typography.md)
-- **Articles and homepages.** Highlighted, copyable code, KaTeX formulas, Mermaid diagrams and wide images. Build a homepage from featured posts, projects and reading lists.
+- **Reading.** [Beauty.css](https://github.com/zavarovkv/beauty-css) typography, quotations, margin notes, an optional desktop outline for posts with two or more H2s, and print layouts. [Authoring examples](docs/typography.md)
+- **Articles and homepages.** Highlighted, copyable code, KaTeX formulas, Mermaid diagrams and centered wide images with captions. Build a homepage from featured posts, projects and reading lists.
 - **Navigation.** Switch language or color scheme from the footer or mobile menu. Both include your social links. Keyboard shortcuts and English and Russian interface text are built in.
 - **Search.** [Pagefind](docs/search.md) searches full text in the reader’s language. The starter enables search and rebuilds the index with the site.
 - **Publishing.** Sitemap, RSS and social preview cards. Optional JSON Feed, Telegram comments, sharing controls and analytics.

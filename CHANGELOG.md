@@ -11,9 +11,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ### Added
 
 - The mobile menu includes the footer’s social links, language switcher and color-scheme toggle.
+- In posts with at least two visible H2s, the optional `articleOutline` appears in the desktop margin after the title scrolls away. A progress line connects links to the title and each section.
 
 ### Changed
 
+- Image and Mermaid figures share centered italic captions and 32–56 px of vertical space. Wide figures extend equally into both margins.
+
+- Article titles are centered above a short vertical rule on screen. Footnotes use tighter leading and begin with a number linking to the first citation, including in the desktop margin.
 - Mobile menu links and search use 24 px labels in borderless rows at least 76 px tall.
 - Archive categories use level-two headings. The compact layout, navigation and reading type now switch together at `48rem`, including when readers increase their browser’s default font size.
 - Paragraph-wrapped lists respect the configured item gap, and editorial quotes use the article’s prose numeral style.
@@ -23,6 +27,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 ### Fixed
 
 - Safari on iPhone updates the status and address bar backgrounds when readers switch colors in the open mobile menu.
+
+### Removed
+
+- Removed the desktop back-to-top panel and its `backToTop` setting.
 
 ## [4.0.0] — 2026-11-18
 

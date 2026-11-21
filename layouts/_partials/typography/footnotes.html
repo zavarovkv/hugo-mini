@@ -1,0 +1,30 @@
+{{- /* Use one return link per note. Goldmark numbers the backlinks for repeat
+       citations (fnref1, fnref2, …); the unnumbered fnref is the first one. */ -}}
+{{- $section := `<div class="footnotes" role="doc-endnotes">` -}}
+{{- $sections := split . $section -}}
+{{- $output := slice (index $sections 0) -}}
+{{- range after 1 $sections -}}
+  {{- $notes := replaceRE `(?s)(?:&#160;)?<a href="#[^"]*fnref[0-9]+:[0-9]+" class="footnote-backref" role="doc-backlink">.*?</a>` "" . -}}
+  {{- /* Keep list semantics in WebKit when the inline links supply the markers. */ -}}
+  {{- $notes = replace $notes "<ol>" `<ol role="list">` 1 -}}
+  {{- $openings := dict -}}
+  {{- range findRESubmatch `(<li id="([^"]*fn:[0-9]+)">\s*(?:<p>)?)` $notes -}}
+    {{- $openings = merge $openings (dict (index . 2) (index . 1)) -}}
+  {{- end -}}
+  {{- range findRESubmatch `(?s)(?:&#160;)?<a href="#([^"]*)fnref:([0-9]+)" class="footnote-backref" role="doc-backlink">.*?</a>` $notes -}}
+    {{- $backlink := index . 0 -}}
+    {{- $prefix := index . 1 -}}
+    {{- $number := index . 2 -}}
+    {{- with index $openings (printf "%sfn:%s" $prefix $number) -}}
+      {{- $label := i18n "footnote_return" (dict "Number" $number) | htmlEscape -}}
+      {{- $link := printf `<a href="#%sfnref:%s" class="beauty-footnote-number" role="doc-backlink" data-pagefind-ignore aria-label="%s">%s</a>` $prefix $number $label $number -}}
+      {{- /* A block-only note can end in a paragraph containing just the arrow. */ -}}
+      {{- $notes = replace $notes (printf "<p>%s</p>" $backlink) "" 1 -}}
+      {{- $notes = replace $notes $backlink "" 1 -}}
+      {{- $space := cond (strings.HasSuffix . "<p>") "&#160;" "" -}}
+      {{- $notes = replace $notes . (print . $link $space) 1 -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $output = $output | append $section $notes -}}
+{{- end -}}
+{{- return (delimit $output "" | safeHTML) -}}

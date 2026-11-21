@@ -4,16 +4,18 @@ export function layoutContracts(test, expect) {
     await page.route('**/*', route => route.request().url().startsWith(baseURL) ? route.continue() : route.abort());
   });
 
-  test('Goldmark notes inherit shared Beauty styling and keep every hanging number', async ({ page }) => {
+  test('Goldmark notes start with one linked number for every opening block', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/browser-checks/');
     const notes = page.locator('.footnotes > ol > li');
+    await expect(page.locator('.footnotes > ol')).toHaveRole('list');
     await expect(notes).toHaveCount(4);
-    const markers = await notes.evaluateAll(nodes => nodes.map(node => {
-      const marker = getComputedStyle(node, '::before');
-      return { content: marker.content, position: marker.position, size: marker.fontSize };
-    }));
-    expect(markers.every(marker => marker.content.includes('list-item') && marker.position === 'absolute')).toBe(true);
+    const numbers = notes.locator('.beauty-footnote-number');
+    await expect(numbers).toHaveText(['1', '2', '3', '4']);
+    expect(await notes.evaluateAll(nodes => nodes.every(note =>
+      getComputedStyle(note, '::before').content === 'none' &&
+      note.textContent.trimStart().startsWith(note.querySelector('.beauty-footnote-number').textContent)
+    ))).toBe(true);
     const ref = page.locator('.footnote-ref').first();
     await expect(ref).toHaveCSS('text-decoration-line', 'none');
     await expect(ref.locator('..')).toHaveCSS('vertical-align', 'baseline');
@@ -21,7 +23,11 @@ export function layoutContracts(test, expect) {
     await expect(ref).toHaveCSS('outline-style', 'solid');
     await ref.click();
     await expect(page).toHaveURL(/#fn:1$/);
-    await page.locator('.footnote-backref').first().click();
+    await numbers.first().hover();
+    await expect(numbers.first()).toHaveCSS('text-decoration-line', 'none');
+    await numbers.first().focus();
+    await expect(numbers.first()).toHaveCSS('outline-style', 'solid');
+    await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/#fnref:1$/);
     await page.emulateMedia({ media: 'print' });
     await expect(page.locator('.footnotes')).toBeVisible();

@@ -1,11 +1,14 @@
 export function wideImageContracts(test, expect) {
-  test('wide images preserve the text edge and source/viewport limits', async ({ page }) => {
+  test('wide images and captions share the center of the reading column within source and viewport limits', async ({ page }) => {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/wide-image-checks/');
     await page.evaluate(() => document.fonts.ready);
     const figures = page.locator('.article-image');
+    const caption = figures.first().locator('figcaption');
+    await expect(caption).toHaveCSS('text-align', 'center');
+    await expect(caption).toHaveCSS('font-style', 'italic');
     await expect.poll(() => figures.nth(0).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
     await expect.poll(() => figures.nth(1).evaluate(e => e.getBoundingClientRect().width)).toBe(960);
 
@@ -19,17 +22,21 @@ export function wideImageContracts(test, expect) {
             const img = node.querySelector('img');
             const image = img.getBoundingClientRect();
             const caption = node.querySelector('figcaption')?.getBoundingClientRect();
-            return { left: rect.left, articleLeft: article.left, width: rect.width, articleWidth: article.width,
+            const wide = node.classList.contains('article-image-wide');
+            const center = rect.left + rect.width / 2;
+            const alignmentError = wide ? center - (article.left + article.width / 2) : rect.left - article.left;
+            return { left: rect.left, aligned: Math.abs(alignmentError) < 0.5,
+              width: rect.width, articleWidth: article.width, wide,
               right: rect.right, viewport: document.documentElement.clientWidth,
               source: Number(img.getAttribute('width')), imageWidth: image.width,
               ratio: image.width / image.height, sourceRatio: Number(img.getAttribute('width')) / Number(img.getAttribute('height')),
-              captionWidth: caption?.width };
+              captionWidth: caption?.width, captionCentered: !caption || Math.abs(caption.left + caption.width / 2 - center) < 0.5 };
           });
         });
-        return geometry.every((r, i) => Math.abs(r.left - r.articleLeft) < 0.5 && r.right <= r.viewport &&
+        return geometry.every(r => r.aligned && r.left >= 0 && r.right <= r.viewport &&
           r.width <= Math.min(960, r.source) && Math.abs(r.imageWidth - r.width) < 0.5 &&
           Math.abs(r.ratio - r.sourceRatio) < 0.01 && (!r.captionWidth || r.captionWidth <= r.articleWidth + 1) &&
-          ((width > 768 && i < 3) || r.width <= r.articleWidth + 1));
+          r.captionCentered && ((width > 768 && r.wide) || r.width <= r.articleWidth + 1));
       }).toBe(true);
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }

@@ -7,7 +7,7 @@ sideNotes = true
 
 This first paragraph has two neighboring references[^one][^two]. A repeated reference must keep pointing to the same note[^one].
 
-The next paragraph keeps the reading column unchanged. The illustration may use the free space to its right.
+The next paragraph keeps the reading column unchanged. The illustration can extend into both margins.
 
 {{< image src="/browser-wide.svg" alt="Wide illustration" width=1200 height=800 wide=true >}}
 

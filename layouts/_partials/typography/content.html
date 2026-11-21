@@ -11,4 +11,7 @@
     {{- $html = replaceRE `^(\s*<p>\p{L})[ \t\r\n]+` "${1}&#160;" $html | safeHTML -}}
   {{- end -}}
 {{- end -}}
+{{- if in $html `<div class="footnotes" role="doc-endnotes">` -}}
+  {{- $html = partial "typography/footnotes.html" $html -}}
+{{- end -}}
 {{- return $html -}}

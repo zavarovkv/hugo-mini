@@ -163,8 +163,8 @@ weight = 1
     assert.match(post, /class=(?:"footnotes"|footnotes) role=(?:"doc-endnotes"|doc-endnotes)/,
       "source notes render in a semantic endnotes list");
     assert.ok(post.includes("A source note with a link back to the text."));
-    assert.equal([...post.matchAll(/class=(?:"footnote-backref"|footnote-backref)/g)].length, 2,
-      "each citation keeps its own return link");
+    assert.equal([...post.matchAll(/role=(?:"doc-backlink"|doc-backlink)/g)].length, 1,
+      "a note cited twice has one return link");
     const stylesheet = [...post.matchAll(/<link\b[^>]*>/g)].map((m) => m[0]).find((tag) => attribute(tag, "rel") === "stylesheet");
     const css = await readFile(join(output, new URL(attribute(stylesheet, "href"), baseURL).pathname.slice(basePath.length)), "utf8");
     for (const selector of [".beauty-emphasis", ".underline", ".beauty-caption", ".caption", ".beauty-button", ".button", ".footnote-ref", ".footnote-backref"]) {

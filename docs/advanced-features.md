@@ -15,9 +15,9 @@ Look up a setting, shortcode or template hook. Each guide includes its defaults 
 | Mobile navigation and reusable header/footer | [Templates](customization.md#templates) |
 | Stable menu labels and transitions | [Menu transitions](customization.md#menu-transitions) |
 | Older/newer article shortcuts | [Article navigation](content.md#article-keyboard-navigation) |
+| Section outline in the margin | [Article outline](typography.md#article-outline) |
 | Copyable anchors and click-to-align headings | [Heading controls](typography.md#heading-scroll-controls) |
 | Full-text search, snippets, keyboard and language support | [Pagefind search](search.md) |
-| Back-to-top | [Reading parameters](configuration.md#content-and-reading) |
 | Languages, translated links and AI labels | [Multilingual sites](configuration.md#multilingual-sites) |
 
 ## Articles and components
