@@ -64,8 +64,8 @@ headings keep their roles. Page overrides and `useDefaultFonts` remain supported
 | `--beauty-h1-hyphens` | `auto` up to 360 px; otherwise manual | `manual` |
 | `--beauty-h1-hyphen-limit` | `10 4 4` word/fragment limit | Browser-dependent |
 
-Optical shifts align glyph edges without moving the column or changing line width;
-RTL and print remain unshifted. Narrow-title hyphenation uses the document's language
+Optical shifts align the glyphs of left-aligned headings. Centered article titles, RTL and print use no shift.
+Narrow-title hyphenation uses the document's language
 and browser dictionary. Wider titles retain balanced lines; other text keeps its wrapping.
 No soft hyphens or scripts modify sources or copied text.
 

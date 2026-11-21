@@ -10,7 +10,7 @@ export function articleLinkContracts({test, expect}) {
       await expect(link).toHaveAttribute('rel',/noreferrer/);
     }
     await expect(page.locator('#raw-link')).toHaveAttribute('rel',/nofollow/);
-    for (const name of ['Local anchor','Same page anchor','Email','Download']) {
+    for (const name of ['Local anchor','Same page anchor','Authored anchor','Email','Download']) {
       await expect(article.getByRole('link',{name,exact:true})).not.toHaveAttribute('target','_blank');
     }
     await expect(article.locator('.footnote-ref')).not.toHaveAttribute('target','_blank');

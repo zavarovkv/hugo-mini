@@ -13,6 +13,7 @@ articleOutline = true
 [Email](mailto:hello@example.org)
 
 <a href="/blog/" id="raw-link" rel="nofollow">Authored HTML link</a>
+<a href="#anchor" target="_blank">Authored anchor</a>
 <a href="/browser-wide.svg" id="download-link" download>Download</a>
 
 ## Anchor

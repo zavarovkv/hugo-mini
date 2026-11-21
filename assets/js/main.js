@@ -104,11 +104,15 @@
     function apply(link) {
       if (!link || !(link instanceof HTMLAnchorElement) || link.hasAttribute('download')) return;
       var href = link.getAttribute('href');
-      if (!href || href.charAt(0) === '#') return;
+      if (!href) return;
+      if (href.charAt(0) === '#') {
+        link.removeAttribute('target');
+        return;
+      }
       var url;
       try { url = new URL(href, location.href); } catch (e) { return; }
       if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
-      if (url.hash && url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) {
+      if (href.includes('#') && url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) {
         link.removeAttribute('target');
         return;
       }
@@ -119,6 +123,13 @@
     article.addEventListener('click', function (event) { apply(event.target.closest('a[href]')); });
   });
 
+  function canUseArticleShortcut(event) {
+    if (event.defaultPrevented || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing) return false;
+    var target = event.target;
+    if (target && (target.isContentEditable || (target.closest && target.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="slider"], [role="spinbutton"]')))) return false;
+    return !document.body.classList.contains('menu-open') && !document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]:not([hidden])');
+  }
+
   // ── Article navigation: Option/Alt + arrows, no wrap at either end ────
   ready(function initArticleNavigation() {
     var article = document.querySelector('article[data-article-navigation]');
@@ -126,12 +137,8 @@
     var navigating = false;
     window.addEventListener('pageshow', function () { navigating = false; });
     document.addEventListener('keydown', function (e) {
-      if (e.defaultPrevented || !e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.isComposing) return;
       var direction = e.key === 'ArrowLeft' ? 'previous' : e.key === 'ArrowRight' ? 'next' : '';
-      if (!direction) return;
-      var target = e.target;
-      if (target && (target.isContentEditable || (target.closest && target.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="slider"], [role="spinbutton"]')))) return;
-      if (document.body.classList.contains('menu-open') || document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]:not([hidden])')) return;
+      if (!direction || !canUseArticleShortcut(e)) return;
       // Consume the shortcut even at a boundary, where Alt+Left/Right must
       // not fall through to the browser's unrelated history navigation.
       e.preventDefault();
@@ -843,12 +850,8 @@
         cancelDestination();
         document.querySelectorAll('.heading-shortcut-focus').forEach(function (link) { link.classList.remove('heading-shortcut-focus'); });
       }
-      if (event.defaultPrevented || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing) return;
       var direction = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
-      if (!direction) return;
-      var target = event.target;
-      if (target && (target.isContentEditable || (target.closest && target.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="slider"], [role="spinbutton"]')))) return;
-      if (document.body.classList.contains('menu-open') || document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]:not([hidden])')) return;
+      if (!direction || !canUseArticleShortcut(event)) return;
       event.preventDefault();
       if (event.repeat) return;
       // A key can arrive before the browser delivers a pending scroll event.
@@ -1124,10 +1127,9 @@
   (function () {
     var article = document.querySelector('article.beauty-reading');
     if (!article) return;
-    var selector = ':scope > .article-image-wide, :scope > .article-diagram-wide';
-    if (article.classList.contains('article-wide-code')) selector += ', :scope > .code-block';
-    var blocks = article.querySelectorAll(selector);
-    if (!blocks.length) return;
+    var figures = article.querySelectorAll(':scope > .article-image-wide, :scope > .article-diagram-wide');
+    var codeBlocks = article.classList.contains('article-wide-code') ? Array.from(article.querySelectorAll(':scope > .code-block')) : [];
+    if (!figures.length && !codeBlocks.length) return;
     var mobile = window.matchMedia(MOBILE_QUERY);
     var print = window.matchMedia('print');
     var queued = false;
@@ -1135,26 +1137,28 @@
     function measure() {
       queued = false;
       if (print.matches) return;
-      blocks.forEach(function (block) {
+      // Measure all examples at reading width before applying any expansion.
+      codeBlocks.forEach(function (block) {
         block.classList.remove('is-wide-code');
-        block.style.removeProperty('--article-available');
       });
       if (mobile.matches) return;
       var rtl = getComputedStyle(article).direction === 'rtl';
       var viewport = document.documentElement.clientWidth;
-      // CSS handles width limits, source size and print.
-      blocks.forEach(function (block) {
-        var isCode = block.classList.contains('code-block');
-        if (isCode) {
-          var overflowing = Array.prototype.some.call(block.querySelectorAll('pre, .highlight > div'), function (scroller) {
-            return scroller.scrollWidth > scroller.clientWidth + 1;
-          });
-          block.classList.toggle('is-wide-code', overflowing);
-        }
-        var rect = block.getBoundingClientRect();
-        var center = (rect.left + rect.right) / 2;
-        var available = isCode ? (rtl ? rect.right : viewport - rect.left) : 2 * Math.min(center, viewport - center);
-        block.style.setProperty('--article-available', Math.max(0, available) + 'px');
+      var rect = article.getBoundingClientRect();
+      var center = (rect.left + rect.right) / 2;
+      var figureRoom = Math.max(0, 2 * Math.min(center, viewport - center));
+      var codeRoom = Math.max(0, rtl ? rect.right : viewport - rect.left);
+      var overflowing = codeBlocks.filter(function (block) {
+        return Array.prototype.some.call(block.querySelectorAll('pre, .highlight > div'), function (scroller) {
+          return scroller.scrollWidth > scroller.clientWidth + 1;
+        });
+      });
+      figures.forEach(function (figure) {
+        figure.style.setProperty('--article-available', figureRoom + 'px');
+      });
+      overflowing.forEach(function (block) {
+        block.style.setProperty('--article-available', codeRoom + 'px');
+        block.classList.add('is-wide-code');
       });
     }
 

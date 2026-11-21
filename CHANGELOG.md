@@ -28,6 +28,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); this pr
 
 ### Fixed
 
+- Same-article Markdown anchors stay in the current tab, including relative and absolute links without JavaScript. Localized links preserve the entire fragment.
+- Print uses the configured text, heading and link colors in both light and dark themes.
 - Safari on iPhone updates the status and address bar backgrounds when readers switch colors in the open mobile menu.
 
 ### Removed

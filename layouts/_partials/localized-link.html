@@ -15,7 +15,14 @@
       {{- $explicitLanguage = true -}}
     {{- end -}}
   {{- end -}}
-  {{- $target := $page.GetPage $url.Path -}}
+  {{- /* GetPage resolves "." against the content tree. In a browser "./#id"
+         refers to the published article itself, even when its slug is custom. */ -}}
+  {{- $pageURL := urls.Parse $page.Permalink -}}
+  {{- $resolved := $pageURL.ResolveReference $url -}}
+  {{- $target := $page -}}
+  {{- if ne $resolved.Path $pageURL.Path -}}
+    {{- $target = $page.GetPage $url.Path -}}
+  {{- end -}}
   {{- if not $target -}}
     {{- $wanted := $url.Path -}}
     {{- if not (hasPrefix $wanted "/") -}}
@@ -35,8 +42,8 @@
     {{- $destination = $target.RelPermalink -}}
     {{- with $url.RawQuery -}}{{- $destination = printf "%s?%s" $destination . -}}{{- end -}}
     {{- /* Keep the original escaped fragment, including Unicode anchors. */ -}}
-    {{- if strings.Contains $.Destination "#" -}}
-      {{- $destination = printf "%s#%s" $destination (index (split $.Destination "#") 1) -}}
+    {{- with findRE `#.*$` $.Destination 1 -}}
+      {{- $destination = print $destination (index . 0) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

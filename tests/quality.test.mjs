@@ -108,6 +108,7 @@ ${longText}
 [Email](mailto:hello@example.org)
 [Safe URL](https://example.org/)
 [External](https://elsewhere.example/)
+[Protocol relative](//elsewhere.example/)
 `,
   });
 
@@ -119,6 +120,7 @@ ${longText}
   assert.match(html, /<a href=mailto:hello@example\.org>Email<\/a>/);
   assert.match(html, /<a href=\/>Safe URL<\/a>/, 'same-site absolute links are localized');
   assert.match(html, /<a href=https:\/\/elsewhere\.example\/ target=_blank rel="noopener noreferrer">External<\/a>/);
+  assert.ok(html.includes('<a href=//elsewhere.example/ target=_blank rel="noopener noreferrer">Protocol relative</a>'));
 
   const schema = [...html.matchAll(/<script type=application\/ld\+json>([\s\S]*?)<\/script>/g)]
     .map((match) => JSON.parse(match[1])).find((entry) => entry['@type'] === 'BlogPosting');
@@ -135,6 +137,33 @@ ${longText}
   assert.ok(!item.content_text.includes('&amp;'));
   assert.ok(!/<\/?p>|<strong>/.test(item.content_text));
   assert.ok(item.summary.length <= 300);
+});
+
+test('Markdown keeps same-document fragments in place before JavaScript runs', async (t) => {
+  for (const localize of [false, true]) {
+    const example = await site(t, `baseURL="https://example.org/sub/"
+theme="hugo-mini"
+disableKinds=["taxonomy","term"]
+[params]
+articleLinksNewTab=true
+localizeLinks=${localize}`, {
+      'blog/anchors.md': `+++\ntitle="Anchors"\n+++\n
+[Relative](./#section)
+[Absolute](https://example.org/sub/blog/anchors/#section)
+[Top](/sub/blog/anchors/#)
+[Compound](/sub/blog/anchors/#first#second)
+[Other query](?view=all#section)
+[Other origin](https://elsewhere.example/sub/blog/anchors/#section)
+`,
+    });
+    const html = await example.read('blog/anchors/index.html');
+    for (const name of ['Relative', 'Absolute', 'Top', 'Compound', 'Other query', 'Other origin']) {
+      const [, attributes] = html.match(new RegExp(`<a ([^>]+)>${name}</a>`)) || [];
+      assert.ok(attributes, name);
+      assert.equal(attributes.includes('target=_blank'), ['Other query', 'Other origin'].includes(name), `${name}, localizeLinks=${localize}: ${attributes}`);
+      if (name === 'Compound') assert.ok(attributes.includes('#first#second'), attributes);
+    }
+  }
 });
 
 test('multilingual footer offers all languages and falls back to their homepages', async (t) => {
