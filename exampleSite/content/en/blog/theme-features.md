@@ -63,7 +63,7 @@ External Markdown links in post content automatically open in a new tab with `re
 
 ## Telegram Integration
 
-Mini has two Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a Discussion comments widget, and build-time reaction/view counts next to the post date. See the dedicated [Telegram Integration](/telegram-integration/) post for the full walkthrough.
+Mini has two Telegram features that share the same `telegramChannel` + `telegram_post` configuration: a Discussion comments widget, and build-time reaction/view counts next to the post date. See the dedicated [Telegram Integration]({{< relref "/blog/telegram-integration" >}}) post for the full walkthrough.
 
 ## Multilingual
 

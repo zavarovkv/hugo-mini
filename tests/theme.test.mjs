@@ -25,6 +25,30 @@ async function versionedAssetURL(url, file) {
   return `${url}?v=${createHash("sha256").update(bytes).digest("hex")}`;
 }
 
+test("the bilingual demo keeps its article links and illustrations under its deployment path", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "mini-demo-prefix-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const themes = join(root, "themes");
+  const output = join(root, "public");
+  await mkdir(themes);
+  await symlink(themeRoot, join(themes, "hugo-mini"), "dir");
+  const base = new URL("https://example.org/handbook/");
+  execFileSync(process.env.HUGO_BIN || "hugo", ["--source", join(themeRoot, "exampleSite"),
+    "--themesDir", themes, "--destination", output, "--baseURL", base.href, "--minify"], { stdio: "pipe" });
+  for (const lang of ["", "ru/"]) {
+    for (const page of ["", "hello-world/", "shortcodes-demo/", "theme-features/"]) {
+      const route = lang + page;
+      const html = await readFile(join(output, route, "index.html"), "utf8");
+      for (const [tag] of html.matchAll(/<(?:a|img)\b[^>]*>/g)) {
+        const address = attribute(tag, tag.startsWith("<a ") ? "href" : "src");
+        if (!address) continue;
+        const target = new URL(address, new URL(route, base));
+        if (target.origin === base.origin) assert.ok(target.pathname.startsWith(base.pathname), `${route}: ${address}`);
+      }
+    }
+  }
+});
+
 for (const basePath of ["/", "/sub/"]) {
   test(`theme outputs remain consistent at ${basePath}`, async (t) => {
     const root = await mkdtemp(join(tmpdir(), "hugo-mini-test-"));
@@ -66,6 +90,7 @@ weight = 1
       `[Russian homepage](${basePath}ru/)\n\n` +
       `[Explicit Russian post](${basePath}ru/shared/?mode=2#intro)\n\n` +
       '{{< callout >}}\n**Highlighted** quotation.\n{{< /callout >}}\n\n' +
+      '[One](/), [two](/). [Three](/) words.\n\n' +
       'Footnotes stay clickable[^source], even when cited again[^source].\n\n' +
       '[^source]: A source note with a link back to the text.\n\n' +
       '```python {linenos=inline}\n' + code + '```\n\n' +
@@ -215,6 +240,7 @@ weight = 1
     assert.equal(attribute(bundleImage, "height"), "1");
     assert.ok(post.includes(`${basePath}ru/shared/?mode=1#intro`), "same-site links must select the existing translation");
     const englishPost = await readFile(join(output, "shared/index.html"), "utf8");
+    assert.match(englishPost, />One<\/a>, <a[^>]+>two<\/a>\. <a[^>]+>Three<\/a> words\./);
     assert.ok(englishPost.includes(`href=${basePath}ru/`), "an explicit language-prefixed homepage link must not be localized back to English");
     assert.ok(englishPost.includes(`${basePath}ru/shared/?mode=2#intro`), "explicit language-prefixed post links must retain their requested language and fragment");
     assert.ok(!post.includes("id=recent-sidebar") && !post.includes('id="recent-sidebar"'));

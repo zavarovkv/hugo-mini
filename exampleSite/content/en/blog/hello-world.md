@@ -29,7 +29,7 @@ Inline `code` is monospace. In prose, the `fraction` shortcode sets a fraction l
 
 ## Links
 
-Open [Articles](/blog/) in a new tab or jump to [Tables](#tables) in this article. The demo enables `articleLinksNewTab` in post bodies.
+Open [Articles]({{< relref "/blog" >}}) in a new tab or jump to [Tables](#tables) in this article. The demo enables `articleLinksNewTab` in post bodies.
 
 ## Lists
 

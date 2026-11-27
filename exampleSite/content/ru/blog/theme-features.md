@@ -63,7 +63,7 @@ Mini включает библиотеку [Likely](https://github.com/nicothin/
 
 ## Интеграция с Telegram
 
-В Mini две Telegram-фичи, которые работают поверх связки `telegramChannel` + `telegram_post`: виджет комментариев Discussion и счетчики реакций и просмотров, обновляемые при сборке рядом с датой поста. Полный разбор — в отдельном посте [«Интеграция с Telegram»](/telegram-integration/).
+В Mini две Telegram-фичи, которые работают поверх связки `telegramChannel` + `telegram_post`: виджет комментариев Discussion и счетчики реакций и просмотров, обновляемые при сборке рядом с датой поста. Полный разбор — в отдельном посте [«Интеграция с Telegram»]({{< relref "/blog/telegram-integration" >}}).
 
 ## Мультиязычность
 

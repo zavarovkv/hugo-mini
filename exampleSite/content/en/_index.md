@@ -6,7 +6,7 @@ description = "A minimal Hugo blog theme with dark mode and multilingual support
 
 A theme for personal blogs, essays and notes.
 
-Explore the [sample article](/hello-world/) to see how quotations, lists and tables look. Follow the [quick start guide](https://github.com/zavarovkv/hugo-mini/blob/main/README.md#quick-start) to set up your own blog.
+Explore the [sample article]({{< relref "/blog/hello-world" >}}) to see how quotations, lists and tables look. Follow the [quick start guide](https://github.com/zavarovkv/hugo-mini/blob/main/README.md#quick-start) to set up your own blog.
 
 {{< columns ratio="3:2" >}}
 {{< featured-posts archive="/blog/" archiveLabel="All articles" >}}

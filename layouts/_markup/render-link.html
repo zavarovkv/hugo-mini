@@ -9,3 +9,4 @@
   {{- $newTab = ne (index (split $resolved.String "#") 0) $base.String -}}
 {{- end -}}
 <a href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $newTab }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- /* Keep following punctuation and word boundaries as authored in Markdown. */ -}}

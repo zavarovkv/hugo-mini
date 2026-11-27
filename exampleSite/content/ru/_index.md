@@ -6,7 +6,7 @@ description = "Минималистичная тема для блога на Hu
 
 Тема для личных блогов, эссе и заметок.
 
-В [примере статьи](/ru/hello-world/) собраны цитаты, списки и таблицы. Чтобы запустить свой блог, начните с [инструкции](https://github.com/zavarovkv/hugo-mini/blob/main/README.ru.md#быстрый-старт) на GitHub.
+В [примере статьи]({{< relref "/blog/hello-world" >}}) собраны цитаты, списки и таблицы. Чтобы запустить свой блог, начните с [инструкции](https://github.com/zavarovkv/hugo-mini/blob/main/README.ru.md#быстрый-старт) на GitHub.
 
 {{< columns ratio="3:2" >}}
 {{< featured-posts archive="/blog/" archiveLabel="Все статьи" >}}

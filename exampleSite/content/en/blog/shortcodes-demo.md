@@ -67,10 +67,10 @@ On mobile and in print, images fit the ordinary column. Local raster dimensions 
 SVGs and remote images need explicit `width` and `height`.
 
 ```text
-{{</* image src="/images/wide-chart.svg" alt="Sample line chart" width=1200 height=600 wide=true caption="A wide illustration with a caption at the reading measure." */>}}
+{{</* image src="../images/wide-chart.svg" alt="Sample line chart" width=1200 height=600 wide=true caption="A wide illustration with a caption at the reading measure." */>}}
 ```
 
-{{< image src="/images/wide-chart.svg" alt="Sample line chart" width=1200 height=600 wide=true caption="A wide illustration with a caption at the reading measure." >}}
+{{< image src="../images/wide-chart.svg" alt="Sample line chart" width=1200 height=600 wide=true caption="A wide illustration with a caption at the reading measure." >}}
 
 ## Caption
 
@@ -126,10 +126,10 @@ The `.beauty-emphasis` CSS class creates a native wavy underline — useful for 
 The `.button` CSS class creates a styled call-to-action button with a gradient background:
 
 ```html
-<a href="/blog/" class="button beauty-button">Read Articles</a>
+<a href="../blog/" class="button beauty-button">Read Articles</a>
 ```
 
-<a href="/blog/" class="button beauty-button">Read Articles</a>
+<a href="../blog/" class="button beauty-button">Read Articles</a>
 
 ## Combining Elements
 

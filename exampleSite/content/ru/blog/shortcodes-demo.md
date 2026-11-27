@@ -67,10 +67,10 @@ featuredPosts = ["/blog/theme-features", "/blog/under-the-hood", "/blog/hello-wo
 определяются автоматически; для SVG и внешних изображений нужны явные `width` и `height`.
 
 ```text
-{{</* image src="/images/wide-chart.svg" alt="Пример линейного графика" width=1200 height=600 wide=true caption="Широкая иллюстрация с подписью в пределах текстовой колонки." */>}}
+{{</* image src="../../images/wide-chart.svg" alt="Пример линейного графика" width=1200 height=600 wide=true caption="Широкая иллюстрация с подписью в пределах текстовой колонки." */>}}
 ```
 
-{{< image src="/images/wide-chart.svg" alt="Пример линейного графика" width=1200 height=600 wide=true caption="Широкая иллюстрация с подписью в пределах текстовой колонки." >}}
+{{< image src="../../images/wide-chart.svg" alt="Пример линейного графика" width=1200 height=600 wide=true caption="Широкая иллюстрация с подписью в пределах текстовой колонки." >}}
 
 ## Caption
 
@@ -126,10 +126,10 @@ CSS-класс `.beauty-emphasis` создает волнистое подчер
 CSS-класс `.button` создает стилизованную кнопку призыва к действию с градиентным фоном:
 
 ```html
-<a href="/ru/blog/" class="button beauty-button">Читать статьи</a>
+<a href="../blog/" class="button beauty-button">Читать статьи</a>
 ```
 
-<a href="/ru/blog/" class="button beauty-button">Читать статьи</a>
+<a href="../blog/" class="button beauty-button">Читать статьи</a>
 
 ## Комбинирование элементов
 
